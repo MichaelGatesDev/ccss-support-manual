@@ -1,0 +1,10 @@
+.RoomCardsGrid-Component {}
+
+.RoomCardsGrid-Component ul {
+    list-style-type: none;
+}
+
+.RoomCardsGrid-Component ul li {
+    display: inline-block;
+    margin: 1em;
+}

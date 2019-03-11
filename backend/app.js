@@ -6,6 +6,8 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var fs = require('fs');
 
+var dbhelper = require('./dbhelper');
+
 var indexRouter = require('./routes/index');
 
 var app = express();
@@ -44,44 +46,23 @@ app.use(function (err, req, res, next) {
 // ------------------------------------------------------ \\
 // Connect to database here
 // ------------------------------------------------------ \\
-let dbConfigFile = "dbconfig.json";
-if (!fs.existsSync(dbConfigFile)) {
-  let dbConfig = {
-    username: "",
-    password: "",
-    url: "",
-    useNewParser: true
-  };
-  fs.writeFile(dbConfigFile, JSON.stringify(dbConfig), (err) => {
-    if (err) {
-      console.error(err);
-      return;
-    };
+
+dbhelper.createConfig().catch(function (e) {
+  console.log("There was an error creating the database configuration file");
+}).then(function (created) {
+  if (created) {
     console.log("Created database configuration file.");
     console.log("Please configure the file and restart the application.");
-  });
-} else {
-  var dbConfig = JSON.parse(fs.readFileSync(dbConfigFile));
-
-  if (!dbConfigFile) {
-    console.log("There was an error loading the database configuration file.");
-    return;
   }
-  let dbUsername = dbConfig.username;
-  let dbPassword = dbConfig.password;
-  let databaseURL = dbConfig.url
-    .replace("{username}", dbUsername)
-    .replace("{password}", dbPassword);
-
-  mongoose.connect(databaseURL, {
-    useNewUrlParser: true
-  }).then(function () {
-    console.log("Connected to database");
+  dbhelper.connect().then(function () {
+    console.log("Connected to the database");
   }).catch(function (e) {
-    console.log("Error connecting to database: " + e);
+    console.log("There was an error connecting to the database");
+    console.log(e);
   });
-  mongoose.Promise = global.Promise;
-}
+});
+
+
 // ------------------------------------------------------ \\
 
 module.exports = app;
