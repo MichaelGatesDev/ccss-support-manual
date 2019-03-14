@@ -5,11 +5,13 @@ const Room = require('./room');
 
 const BuildingSchema = new Schema({
     internalName: {
-        type: [String],
+        type: String,
+        unique: true,
         required: [true, 'Building must have internal name']
     },
     officialName: {
         type: String,
+        text: true,
         required: [true, 'Buildings must have an official name']
     },
     nicknames: {
