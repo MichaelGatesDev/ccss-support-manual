@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './Home.css';
 
 import NavBar from "../../Components/NavBar/NavBar";
@@ -89,16 +89,16 @@ class Home extends Component {
 
     render() {
         return (
-            <section id="home">
+            <Fragment>
                 <NavBar title="CCSS Support Manual" searchable={true} />
-
-                <div className="container">
-                    <RoomCardsGrid
-                        rooms={this.state.rooms}
-                    />
-                </div>
-
-            </section>
+                <section className="container" id="home-section">
+                    <div className="Home-Component">
+                        <RoomCardsGrid
+                            rooms={this.state.rooms}
+                        />
+                    </div>
+                </section>
+            </Fragment>
         );
     }
 }

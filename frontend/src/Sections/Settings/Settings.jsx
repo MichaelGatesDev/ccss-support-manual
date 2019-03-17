@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './Settings.css';
 
 import NavBar from "../../Components/NavBar/NavBar";
-import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 import { Button } from 'react-bootstrap';
 
 class Settings extends Component {
@@ -13,16 +12,14 @@ class Settings extends Component {
 
     render() {
         return (
-            <section id="Settings">
+            <Fragment>
                 <NavBar title="CCSS Support Manual" searchable={false} />
-
-                <div className="container">
-
-                    <Button>Sync from Excel</Button>
-
-                </div>
-
-            </section>
+                <section className="container" id="settings-section">
+                    <div className="Settings-Component">
+                        <Button>Update from spreadsheet</Button>
+                    </div>
+                </section>
+            </Fragment>
         );
     }
 }
