@@ -4,9 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
-var fs = require('fs');
 
-var dbhelper = require('./dbhelper');
+var config = require('./config');
 
 var indexRouter = require('./routes/index');
 
@@ -47,20 +46,52 @@ app.use(function (err, req, res, next) {
 // Connect to database here
 // ------------------------------------------------------ \\
 
-dbhelper.createConfig().catch(function (e) {
-  console.log("There was an error creating the database configuration file");
+// setup database
+config.create("database-config.json", {
+  username: "",
+  password: "",
+  url: "",
+  useNewParser: true
 }).then(function (created) {
   if (created) {
-    console.log("Created database configuration file.");
-    console.log("Please configure the file and restart the application.");
+    console.log("Created default database config file. Edit it and restart the app.");
+    process.exit();
+    return;
   }
-  dbhelper.connect().then(function () {
-    console.log("Connected to the database");
-  }).catch(function (e) {
-    console.log("There was an error connecting to the database");
-    console.log(e);
+
+  config.load("database-config.json").then(function (loaded) {
+    let dbUsername = loaded.username;
+    let dbPassword = loaded.password;
+    let databaseURL = loaded.url
+      .replace("{username}", dbUsername)
+      .replace("{password}", dbPassword);
+    let useNewParser = loaded.useNewParser;
+
+    mongoose.connect(databaseURL, {
+      useNewUrlParser: useNewParser
+    }).then(function () {
+      mongoose.Promise = global.Promise;
+
+      var db = mongoose.connection;
+
+      //Bind connection to error event (to get notification of connection errors)
+      db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+      console.log("Successfully connected to the database");
+
+    }).catch(function (err) {
+      console.log("There was an error connecting to the database.");
+      console.log(err);
+      process.exit();
+      return;
+    });
+  }).catch(function (err) {
+    console.log("There was an error creating the database config file.");
+    console.log(err);
+    return;
   });
 });
+
 
 
 // ------------------------------------------------------ \\
