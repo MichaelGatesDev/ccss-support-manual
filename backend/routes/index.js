@@ -5,7 +5,7 @@ const api = require('./api');
 router.use('/api', api);
 
 router.get('/', function (req, res, next) {
-  res.send("This is the primary API route");
+  res.send("This is the index page");
 });
 
 module.exports = router;
