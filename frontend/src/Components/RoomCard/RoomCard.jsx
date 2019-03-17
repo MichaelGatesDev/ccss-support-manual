@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './RoomCard.css';
 
-import { Card, Button } from 'react-bootstrap';
-
 class RoomCard extends Component {
 
     componentDidMount() {
@@ -14,7 +12,7 @@ class RoomCard extends Component {
     render() {
         return (
             <div className="RoomCard-Component">
-                <Card style={{ width: '18rem' }}>
+                {/* <Card style={{ width: '18rem' }}>
                     <Card.Img variant="top" src="img/300x200.png" />
                     <Card.Body>
                         <Card.Title>{this.props.room.name}</Card.Title>
@@ -24,7 +22,7 @@ class RoomCard extends Component {
                         </Card.Text>
                         <Button variant="primary">Read More</Button>
                     </Card.Body>
-                </Card>
+                </Card> */}
             </div>
         );
     }

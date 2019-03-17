@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './Settings.css';
 
 import NavBar from "../../Components/NavBar/NavBar";
-import { Button } from 'react-bootstrap';
+import Button from "../../Components/Button/Button";
 
 class Settings extends Component {
 

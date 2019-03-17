@@ -6,14 +6,23 @@ import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 
 class Home extends Component {
 
-    state = {
-        loading: true,
-        rooms: []
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true,
+            rooms: []
+        };
+
+        this.onSearch = this.onSearch.bind(this);
     }
 
     componentDidMount() {
+        this.fetchBuildings();
+    }
 
-        fetch('http://localhost:3001/api/v1/buildings')
+    fetchBuildings() {
+        fetch('/api/v1/buildings')
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -87,10 +96,15 @@ class Home extends Component {
             });
     }
 
+
+    onSearch(value) {
+    }
+
+
     render() {
         return (
             <Fragment>
-                <NavBar title="CCSS Support Manual" searchable={true} />
+                <NavBar title="CCSS Support Manual" searchable={true} onSearch={this.onSearch} />
                 <section className="container" id="home-section">
                     <div className="Home-Component">
                         <RoomCardsGrid

@@ -1,51 +1,61 @@
 import React, { Component } from 'react';
 import './NavBar.css';
 
-import { Navbar, Nav, Form } from 'react-bootstrap';
+import FormInput from "../FormInput/FormInput";
 
 // https://react-bootstrap.github.io/getting-started/support/
 class NavBar extends Component {
 
-    componentDidMount() {
-        this.setState({
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
             searchQuery: ''
-        });
+        };
 
         this.onSearch = this.onSearch.bind(this);
     }
 
-    onSearch(event) {
+    componentDidMount() {
+    }
+
+    onSearch(value) {
         this.setState({
-            searchQuery: event.target.value
+            searchQuery: value
         });
+        this.props.onSearch(value);
     }
 
     render() {
         return (
             <div className="NavBar-Component">
-                <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
-                    <Navbar.Brand href="/">
-                        {this.props.title}
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+                    <a className="navbar-brand" href="/">{this.props.title}</a>
+                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         {this.props.searchable &&
-                            <Nav className="justify-content-center w-100">
-                                <Form.Control
-                                    className="form-control-dark"
+                            <div className="justify-content-center w-100">
+                                <FormInput
                                     type="text"
                                     placeholder="Room Name / Room Number"
-                                    aria-describedby="inputGroupPrepend"
                                     onChange={this.onSearch}
+                                    value={this.state.searchQuery}
                                 />
-                            </Nav>
+                            </div>
                         }
-                        <Nav className="ml-auto">
-                            <Nav.Link href="/settings">Settings</Nav.Link>
-                            <Nav.Link href="/settings">Login</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
+                        <ul className="navbar-nav ml-auto" id="navbarNavDropdown">
+                            <li className="nav-item">
+                                <a className="nav-link" href="/settings">Settings</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/debug">Debug</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
         );
     }
