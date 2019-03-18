@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+
+import LinkButton from "../LinkButton/LinkButton";
 
 import './RoomCard.css';
 
@@ -10,6 +11,14 @@ class RoomCard extends Component {
         });
     }
 
+    getAbbreviatedName(name) {
+        let result = "";
+        for (const word of name.split(" ")) {
+            if (word.length < 1) continue;
+            result += word[0];
+        }
+        return result;
+    }
 
     render() {
         return (
@@ -17,10 +26,13 @@ class RoomCard extends Component {
                 <div className="card">
                     <img className="card-img-top" src="img/300x200.png" alt="Card image cap" />
                     <div className="card-body">
-                        <h5 className="card-title">{this.props.room.buildingName} {this.props.room.number}</h5>
-                        <h6 className="card-subtitle">{this.props.room.name}</h6>
+                        <p className="card-title">{this.props.room.buildingName} {this.props.room.number}</p>
+                        <p className="card-subtitle">{this.props.room.name ? this.props.room.name : <br />}</p>
                         <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <Link to={`/rooms/${this.props.room._id}`}>View Details</Link>
+                        <LinkButton
+                            title="View Details"
+                            href={`/rooms/${this.props.room._id}`}
+                        />
                     </div>
                 </div>
             </div>

@@ -7,3 +7,12 @@
 .RoomCard-Component .card-body {
     text-align: center;
 }
+
+.RoomCard-Component .card-body .card-title, .RoomCard-Component .card-body .card-subtitle {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.RoomCard-Component .card-body .card-subtitle {
+    margin-bottom: 0.25em;
+}

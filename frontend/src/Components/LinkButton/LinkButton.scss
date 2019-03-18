@@ -1,0 +1,14 @@
+@import "../../styles.scss";
+
+
+.LinkButton-Component {
+  font-family: "Roboto", sans-serif;
+}
+
+.LinkButton-Component a,
+.LinkButton-Component a:active {
+  background-color: $button-color-primary;
+  color: #ffffff;
+  padding: 0.5em 1em;
+  text-decoration: none;
+}
