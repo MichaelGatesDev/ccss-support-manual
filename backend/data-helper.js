@@ -1,3 +1,8 @@
+var Excel = require('exceljs');
+
+var Building = require('./models/building');
+var Room = require('./models/room');
+
 async function updateFromSpreadsheet(file) {
     return new Promise((resolve, reject) => {
         var workbook = new Excel.Workbook();
@@ -37,11 +42,14 @@ async function updateFromSpreadsheet(file) {
                 // skip  the first row (headers)
                 if (rowNumber == 1) return;
 
+                // building name first
+                var buildingName = row.getCell(3).text.toLowerCase();
+
                 // can't do anything with invalid rows
                 if (isBlank(buildingName)) return;
 
                 var room = new Room({
-                    buildingName: row.getCell(3).text.toLowerCase(),
+                    buildingName: buildingName,
                     lastChecked: row.getCell(1).text.toLowerCase(),
                     number: row.getCell(4).text.toLowerCase(),
                     name: row.getCell(5).text.toLowerCase(),
@@ -70,7 +78,7 @@ async function updateFromSpreadsheet(file) {
 
                 var bldg = getBuildingByName(buildings, buildingName);
                 if (bldg) {
-                    room.buildingName = bldg.internalName;
+                    room.buildingName = bldg.officialName;
                     bldg.rooms.push(room);
                     console.debug("Created room: " + bldg.officialName + " " + room.number);
                 }
@@ -85,17 +93,23 @@ async function updateFromSpreadsheet(file) {
             }
             console.debug("There are " + roomCount + " classrooms");
 
+            let promises = [];
             for (const b of buildings) {
-                Building.create(b).then(function () {
+                var promise = Building.create(b).then(function () {
                     console.debug("Added " + b.internalName + " to database");
                 }).catch(function (err) {
                     if (err) {
                         console.debug(err.errmsg);
                     }
                 });
+                promises.push(promise);
             }
 
-            return resolve(buildings);
+            Promise.all(promises).then(function () {
+                return resolve();
+            }).catch(function (err) {
+                return reject(err);
+            });
         });
     }).catch(function (err) {
         return reject(err);

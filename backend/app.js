@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var fileUpload = require('express-fileupload');
 
 var config = require('./config');
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
@@ -78,6 +80,14 @@ config.create("database-config.json", {
       db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
       console.log("Successfully connected to the database");
+
+
+      // var dataHelper = require('./data-helper');
+      // dataHelper.updateFromSpreadsheet("public/spreadsheet.xlsx").then(function (buildings) {
+      //   console.log("Finished updating data from spreadsheet");
+      // }).catch(function (err) {
+      //   console.log(err);
+      // });
 
     }).catch(function (err) {
       console.log("There was an error connecting to the database.");

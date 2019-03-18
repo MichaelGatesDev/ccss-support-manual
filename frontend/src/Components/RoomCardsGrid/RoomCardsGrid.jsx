@@ -5,9 +5,13 @@ import RoomCard from "../../Components/RoomCard/RoomCard";
 
 class RoomCardsGrid extends Component {
 
-    state = {
-        rooms: []
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            rooms: []
+        };
+    }
 
     componentDidMount() {
         this.setState({
@@ -18,7 +22,7 @@ class RoomCardsGrid extends Component {
     render() {
 
         const items = this.props.rooms.map((room) =>
-            <li key={room.id}>
+            <li key={room._id}>
                 <RoomCard room={room} />
             </li>
         );

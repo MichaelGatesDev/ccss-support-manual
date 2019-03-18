@@ -18,11 +18,11 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.fetchBuildings();
+        this.fetchRooms();
     }
 
-    fetchBuildings() {
-        fetch('/api/v1/buildings')
+    fetchRooms() {
+        fetch('/api/v1/rooms')
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -32,63 +32,48 @@ class Home extends Component {
             })
             .catch((error) => {
                 console.log(error);
-                console.log("Failed to fetch buildings, using examples..");
+                console.log("Failed to fetch rooms, using examples..");
                 this.setState({
                     rooms:
                         [
                             {
-                                id: Math.random(),
+                                _id: Math.random(),
                                 name: "Example Name",
                                 number: "101B",
                                 description: "This is an example description.",
-                                building: {
-                                    officialName: "Test Building",
-                                    nicknames: ["Test"]
-                                },
+                                buildingName: "Example Hall",
                                 images: "",
                             },
                             {
-                                id: Math.random(),
+                                _id: Math.random(),
                                 name: "Example Name",
                                 number: "101B",
                                 description: "This is an example description.",
-                                building: {
-                                    officialName: "Test Building",
-                                    nicknames: ["Test"]
-                                },
+                                buildingName: "Example Hall",
                                 images: "",
                             },
                             {
-                                id: Math.random(),
+                                _id: Math.random(),
                                 name: "Example Name",
                                 number: "101B",
                                 description: "This is an example description.",
-                                building: {
-                                    officialName: "Test Building",
-                                    nicknames: ["Test"]
-                                },
+                                buildingName: "Example Hall",
                                 images: "",
                             },
                             {
-                                id: Math.random(),
+                                _id: Math.random(),
                                 name: "Example Name",
                                 number: "101B",
                                 description: "This is an example description.",
-                                building: {
-                                    officialName: "Test Building",
-                                    nicknames: ["Test"]
-                                },
+                                buildingName: "Example Hall",
                                 images: "",
                             },
                             {
-                                id: Math.random(),
+                                _id: Math.random(),
                                 name: "Example Name",
                                 number: "101B",
                                 description: "This is an example description.",
-                                building: {
-                                    officialName: "Test Building",
-                                    nicknames: ["Test"]
-                                },
+                                buildingName: "Example Hall",
                                 images: "",
                             },
                         ]
