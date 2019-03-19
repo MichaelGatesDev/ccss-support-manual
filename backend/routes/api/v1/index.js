@@ -14,6 +14,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/rooms', function (req, res, next) {
+  Building.find({"rooms": ''})
   Building.find({}, function (err, results) {
     if (err) {
       console.log(err);

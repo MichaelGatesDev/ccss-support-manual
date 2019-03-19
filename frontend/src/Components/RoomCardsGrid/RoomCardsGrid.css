@@ -1,7 +1,9 @@
 .RoomCardsGrid-Component {}
 
 .RoomCardsGrid-Component ul {
+    text-align: center;
     list-style-type: none;
+    padding: 0;
 }
 
 .RoomCardsGrid-Component ul li {

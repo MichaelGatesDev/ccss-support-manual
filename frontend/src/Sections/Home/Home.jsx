@@ -11,7 +11,7 @@ class Home extends Component {
 
         this.state = {
             loading: true,
-            rooms: [],
+            buildings: [],
             filterSearch: ''
         };
 
@@ -19,39 +19,41 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        this.fetchRooms();
+        // this.fetchRooms();
+        this.fetchBuildings();
     }
 
-    fetchRooms() {
-        fetch('/api/v1/rooms')
+    fetchBuildings() {
+        fetch('/api/v1/buildings')
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    rooms: [...this.state.rooms, ...data],
+                    buildings: [...this.state.buildings, ...data],
                     loading: false,
                 });
             })
             .catch((error) => {
                 console.log(error);
-                console.log("Failed to fetch rooms, using examples..");
-
-                var exampleRoom = {
-                    _id: Math.random(),
-                    name: "Example Name",
-                    number: "101B",
-                    description: "This is an example description.",
-                    buildingName: "Example Hall",
-                    images: "",
-                };
-                this.setState({
-                    rooms:
-                        [
-                            exampleRoom, exampleRoom, exampleRoom,
-                            exampleRoom, exampleRoom, exampleRoom,
-                            exampleRoom, exampleRoom, exampleRoom,
-                        ]
-                });
+                console.log("Failed to fetch buildings");
             });
+    }
+
+    getAllRooms() {
+        let result = [];
+        for (const building of this.state.buildings) {
+            result = result.concat(building.rooms);
+        }
+        return result;
+    }
+
+
+    getParentBuilding(roomObj) {
+        for (const building of this.state.buildings) {
+            for (const room of building.rooms) {
+                if (room._id === roomObj._id) return building;
+            }
+        }
+        return null;
     }
 
 
@@ -71,44 +73,23 @@ class Home extends Component {
         var query = this.state.filterSearch;
         var queries = query.split(" ");
 
-        var rooms = this.state.rooms;
-        var filteredRooms = rooms;
+        var rooms = this.getAllRooms();
         for (const q of queries) {
-            filteredRooms = filteredRooms.filter(function (room) {
-                return (room.number.includes(q) || room.name.includes(q) || room.buildingName.includes(q));
+            rooms = rooms.filter(function (room) {
+                var pb = this.getParentBuilding(room);
+                if (!pb) return false;
+
+                var isNick = false;
+                for (const nick of pb.nicknames) {
+                    if (nick.includes(q)) {
+                        isNick = true;
+                        break;
+                    }
+                }
+
+                return (room.number.includes(q) || room.name.includes(q) || pb.internalName.includes(q) || pb.officialName.includes(q) || isNick);
             }, this);
         }
-
-        // var filteredRooms = rooms.filter(function (room) {
-
-        //     var query = this.state.filterSearch;
-
-        //     // no query
-        //     if (!query || query.trim().length === 0) {
-        //         return true;
-        //     }
-
-        //     // no queries
-        //     var queries = this.state.filterSearch.split(" ");
-        //     if (queries.length === 0) {
-        //         return true;
-        //     }
-
-        //     var queryMatched = false;
-
-        //     for (const q of queries) {
-        //         if (room.number.includes(q) || room.name.includes(q) || room.buildingName.includes(q)) {
-        //             queryMatched = true;
-        //         }
-        //     }
-
-        //     return queryMatched;
-
-        //     // return (
-        //     //     // filter by search query
-        //     //     (this.state.filterSearch === '' || room.number.includes(this.state.filterSearch) || room.name.includes(this.state.filterSearch) || room.buildingName.includes(this.state.filterSearch))
-        //     // );
-        // }, this);
 
         return (
             <Fragment>
@@ -117,10 +98,11 @@ class Home extends Component {
                     searchable={true}
                     onSearch={this.onSearch}
                 />
-                <section className="container" id="home-section">
+                <section className="container-fluid" id="home-section">
                     <div className="Home-Component">
                         <RoomCardsGrid
-                            rooms={filteredRooms}
+                            rooms={rooms}
+                            buildings={this.state.buildings}
                         />
                     </div>
                 </section>
