@@ -1,18 +1,38 @@
-.RoomCard-Component {}
+.RoomCard-Component {
+  transition: 0.1s ease-in-out;
+}
+
+.RoomCard-Component:hover {
+  filter: drop-shadow(0 0 0.5rem #343a40a0);
+}
+
+.RoomCard-Component a,
+.RoomCard-Component a:hover {
+  text-decoration: none;
+  color: #000000;
+}
+
+.RoomCard-Component img {
+  width: 100%;
+  height: 250px;
+
+  object-fit: cover;
+}
 
 .RoomCard-Component .card {
-    width: 350px;
+  width: 350px;
 }
 
 .RoomCard-Component .card-body {
-    text-align: center;
+  text-align: center;
 }
 
-.RoomCard-Component .card-body .card-title, .RoomCard-Component .card-body .card-subtitle {
-    text-transform: capitalize;
-    font-weight: bold;
+.RoomCard-Component .card-body .card-title,
+.RoomCard-Component .card-body .card-subtitle {
+  text-transform: capitalize;
+  font-weight: bold;
 }
 
 .RoomCard-Component .card-body .card-subtitle {
-    margin-bottom: 0.25em;
+  margin-bottom: 0.25em;
 }
