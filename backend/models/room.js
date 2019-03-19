@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const RoomSchema = new Schema({
-    buildingName: {
-        type: String,
-        required: [true, 'Building name is required']
-    },
     lastChecked: {
         type: Date
     },

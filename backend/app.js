@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var fileUpload = require('express-fileupload');
 
 var config = require('./config');
+// var testHelper = require('./test-helper');
 
 var indexRouter = require('./routes/index');
 

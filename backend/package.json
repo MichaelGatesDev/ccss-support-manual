@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "nodemon --exec \"mocha --timeout 10000 -R min \""
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -13,6 +14,7 @@
     "express": "~4.16.0",
     "express-fileupload": "^1.1.3-alpha.1",
     "http-errors": "~1.6.2",
+    "mocha": "^6.0.2",
     "mongoose": "^5.4.17",
     "morgan": "~1.9.0",
     "underscore": "^1.9.1"
