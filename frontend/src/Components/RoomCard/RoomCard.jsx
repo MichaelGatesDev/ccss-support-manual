@@ -11,14 +11,7 @@ class RoomCard extends Component {
         });
     }
 
-    getAbbreviatedName(name) {
-        let result = "";
-        for (const word of name.split(" ")) {
-            if (word.length < 1) continue;
-            result += word[0];
-        }
-        return result;
-    }
+    
 
     render() {
         return (
