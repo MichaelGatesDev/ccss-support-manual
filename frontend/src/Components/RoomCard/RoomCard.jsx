@@ -5,9 +5,11 @@ import './RoomCard.css';
 
 class RoomCard extends Component {
 
-
     constructor(props) {
         super(props);
+
+        this.state = {
+        };
     }
 
     componentDidMount() {
