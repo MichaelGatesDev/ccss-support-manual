@@ -14,6 +14,7 @@ class Home extends Component {
         this.state = {
             loading: true,
             buildings: [],
+            images: [],
             filterSearch: ''
         };
 
@@ -21,7 +22,6 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        // this.fetchRooms();
         this.fetchBuildings();
     }
 
@@ -29,16 +29,42 @@ class Home extends Component {
         fetch('/api/v1/buildings')
             .then(response => response.json())
             .then(data => {
-                data = _.sortBy(data, 'internalName');
                 this.setState({
                     buildings: [...this.state.buildings, ...data],
-                    loading: false,
+                }, function () {
+                    this.fetchAllImages();
                 });
-            })
-            .catch((error) => {
+            }).catch((error) => {
                 console.log(error);
                 console.log("Failed to fetch buildings");
             });
+    }
+
+    fetchAllImages() {
+        for (const building of this.state.buildings) {
+            for (const room of building.rooms) {
+                fetch('/api/v1/images/' + building._id + "/" + room._id)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data == null) return;
+
+                        var imagesObj = {
+                            roomID: room._id,
+                            mainImages: data.mainImages,
+                            panoramicImages: data.panoramicImages,
+                            equipmentImages: data.equipmentImages
+                        };
+
+                        this.setState({
+                            images: [...this.state.images, imagesObj],
+                            loading: false,
+                        });
+                    }).catch((error) => {
+                        console.log(error);
+                        console.log("Failed to fetch room images");
+                    });
+            }
+        }
     }
 
     getAllRooms() {
@@ -71,6 +97,7 @@ class Home extends Component {
 
         if (this.state.loading) {
             // return splashscreen
+            return <p>Loading...</p>
         }
 
         var query = this.state.filterSearch;
@@ -111,6 +138,7 @@ class Home extends Component {
                         <RoomCardsGrid
                             rooms={rooms}
                             buildings={this.state.buildings}
+                            images={this.state.images}
                         />
                     </div>
                 </section>

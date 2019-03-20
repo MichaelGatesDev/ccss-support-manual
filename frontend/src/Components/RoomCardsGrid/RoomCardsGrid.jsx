@@ -9,10 +9,10 @@ class RoomCardsGrid extends Component {
         super(props);
 
         this.state = {
-            rooms: []
         };
 
         this.getParentBuilding = this.getParentBuilding.bind(this);
+        this.getImages = this.getImages.bind(this);
     }
 
     componentDidMount() {
@@ -24,15 +24,27 @@ class RoomCardsGrid extends Component {
                 if (room._id === roomObj._id) return building;
             }
         }
-        console.log("No building for " + roomObj.number);
         return null;
+    }
+
+    getImages(room) {
+        for (const item of this.props.images) {
+            if (item.roomID === room._id) {
+                return item;
+            }
+        }
+        return [];
     }
 
     render() {
 
         const items = this.props.rooms.map((room) =>
             <li key={room._id}>
-                <RoomCard room={room} building={this.getParentBuilding(room)} />
+                <RoomCard
+                    room={room}
+                    building={this.getParentBuilding(room)}
+                    images={this.getImages(room)}
+                />
             </li>
         );
 
