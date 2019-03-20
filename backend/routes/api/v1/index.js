@@ -8,13 +8,15 @@ const Building = require('../../../models/building');
 const buildings = require('./buildings');
 router.use('/buildings/', buildings);
 
+const images = require('./images');
+router.use('/images/', images);
+
 
 router.get('/', function (req, res, next) {
   res.send("This is the primary API v1 route");
 });
 
 router.get('/rooms', function (req, res, next) {
-  Building.find({"rooms": ''})
   Building.find({}, function (err, results) {
     if (err) {
       console.log(err);

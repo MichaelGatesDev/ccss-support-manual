@@ -7,17 +7,38 @@ import './RoomCard.css';
 
 class RoomCard extends Component {
 
-    componentDidMount() {
-        this.setState({
-        });
-        this.getCoverImage();
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true,
+            mainImages: [],
+            panoramicImages: [],
+            equipmentImages: [],
+        };
     }
 
-    getCoverImage() {
-        var buildingName = this.props.building.internalName;
-        var number = this.props.room.number;
-        var dir = "img/buildings/" + buildingName + "/rooms/" + number + "/";
-        return dir + "cover.jpg";
+    componentDidMount() {
+        this.fetchImages();
+    }
+
+    fetchImages() {
+        fetch('/api/v1/images/' + this.props.building._id + "/" + this.props.room._id)
+            .then(response => response.json())
+            .then(data => {
+                if (data == null) return;
+                this.setState({
+                    loading: false,
+                    mainImages: data.mainImages,
+                    panoramicImages: data.panoramicImages,
+                    equipmentImages: data.equipmentImages,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log("Failed to fetch room images");
+            });
     }
 
     getTitle() {
@@ -25,12 +46,32 @@ class RoomCard extends Component {
     }
 
     render() {
-        return (
 
+        if (this.state.loading) {
+            return (
+                <div className="RoomCard-Component">
+                    <div className="card">
+                        <img className="card-img-top" src={"img/300x200.png"} alt={"Placeholder image"} />
+                        <div className="card-body">
+                            <p className="card-title">Loading...</p>
+                            <p className="card-subtitle"><br /></p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+
+        var coverImage = "img/300x200.png";
+        if (this.state.mainImages && this.state.mainImages.length > 0) {
+            coverImage = this.state.mainImages[0];
+        }
+
+        return (
             <div className="RoomCard-Component">
                 <Link to={"room/" + this.props.room._id}>
                     <div className="card">
-                        <img className="card-img-top" src={"img/300x200.png"} alt={"Image of " + this.getTitle()} />
+                        <img className="card-img-top" src={coverImage} alt={"Image of " + this.getTitle()} />
                         <div className="card-body">
                             <p className="card-title">{this.getTitle()}</p>
                             <p className="card-subtitle">{this.props.room.name ? this.props.room.name : <br />}</p>

@@ -4,6 +4,8 @@ import './Home.css';
 import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 
+var _ = require('underscore');
+
 class Home extends Component {
 
     constructor(props) {
@@ -27,6 +29,7 @@ class Home extends Component {
         fetch('/api/v1/buildings')
             .then(response => response.json())
             .then(data => {
+                data = _.sortBy(data, 'internalName');
                 this.setState({
                     buildings: [...this.state.buildings, ...data],
                     loading: false,
@@ -73,7 +76,12 @@ class Home extends Component {
         var query = this.state.filterSearch;
         var queries = query.split(" ");
 
-        var rooms = this.getAllRooms();
+        var rooms = _(this.getAllRooms()).chain().sortBy(function (room) {
+            return room.number;
+        }, this).sortBy(function (room) {
+            return this.getParentBuilding(room).internalName;
+        }, this).value();
+
         for (const q of queries) {
             rooms = rooms.filter(function (room) {
                 var pb = this.getParentBuilding(room);
