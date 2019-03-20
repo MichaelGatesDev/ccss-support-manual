@@ -9,8 +9,96 @@ const Building = require('../../../../models/building');
 const Room = require('../../../../models/room');
 
 
+function getParentBuilding(roomObj) {
+    for (const building of this.state.buildings) {
+        for (const room of building.rooms) {
+            if (room._id === roomObj._id) return building;
+        }
+    }
+    return null;
+}
+
 router.get("/", function (req, res) {
-    res.send("This is the main images route");
+
+    var images = [];
+
+    var rootDir = "public/img/buildings/";
+
+    if (!fs.existsSync(rootDir)) {
+        console.log("Root directory does not exist: " + rootDir)
+        return;
+    }
+
+    Building.find({}, function (err, buildings) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        let result = [];
+
+        for (const building of buildings) {
+            var buildingDir = rootDir + building.internalName + "/";
+            if (!fs.existsSync(buildingDir)) {
+                console.log("Building directory does not exist: " + buildingDir);
+                continue;
+            }
+
+            for (const room of building.rooms) {
+
+                var mainImages = [];
+                var panoramicImages = [];
+                var equipmentImages = [];
+
+                var roomDir = buildingDir + "rooms/" + room.number + "/";
+
+                // check if room dir exists
+                if (!fs.existsSync(roomDir)) {
+                    console.log("Room directory does not exist: " + roomDir);
+                    continue;
+                }
+
+                // root images
+                for (const file of fs.readdirSync(roomDir)) {
+                    var stat = fs.statSync(roomDir + file);
+                    if (!stat.isDirectory()) {
+                        mainImages.push(roomDir.replace("public/", "") + file);
+                    }
+                }
+
+                // panoramic images
+                var panoramasDir = roomDir + "panoramas/";
+                if (fs.existsSync(panoramasDir)) {
+                    for (const file of fs.readdirSync(panoramasDir)) {
+                        var stat = fs.statSync(panoramasDir + file);
+                        if (!stat.isDirectory()) {
+                            panoramicImages.push(panoramasDir.replace("public/", "") + file);
+                        }
+                    }
+                }
+
+                // equipment images
+                var equipmentDir = roomDir + "equipment/";
+                if (fs.existsSync(equipmentDir)) {
+                    for (const file of fs.readdirSync(equipmentDir)) {
+                        var stat = fs.statSync(equipmentDir + file);
+                        if (!stat.isDirectory()) {
+                            equipmentImages.push(equipmentDir.replace("public/", "") + file);
+                        }
+                    }
+                }
+
+                result.push({
+                    roomID: room._id,
+                    mainImages: mainImages,
+                    panoramicImages: panoramicImages,
+                    equipmentImages: equipmentImages
+                });
+            }
+        }
+
+        res.json(result);
+    });
 });
 
 

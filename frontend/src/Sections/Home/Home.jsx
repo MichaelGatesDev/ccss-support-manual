@@ -41,30 +41,28 @@ class Home extends Component {
     }
 
     fetchAllImages() {
-        for (const building of this.state.buildings) {
-            for (const room of building.rooms) {
-                fetch('/api/v1/images/' + building._id + "/" + room._id)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data == null) return;
+        fetch('/api/v1/images/')
+            .then(response => response.json())
+            .then(data => {
+                if (data == null) return;
 
-                        var imagesObj = {
-                            roomID: room._id,
-                            mainImages: data.mainImages,
-                            panoramicImages: data.panoramicImages,
-                            equipmentImages: data.equipmentImages
-                        };
+                for (const item of data) {
+                    var imagesObj = {
+                        roomID: item.roomID,
+                        mainImages: item.mainImages,
+                        panoramicImages: item.panoramicImages,
+                        equipmentImages: item.equipmentImages
+                    };
 
-                        this.setState({
-                            images: [...this.state.images, imagesObj],
-                            loading: false,
-                        });
-                    }).catch((error) => {
-                        console.log(error);
-                        console.log("Failed to fetch room images");
+                    this.setState({
+                        images: [...this.state.images, imagesObj],
+                        loading: false,
                     });
-            }
-        }
+                }
+            }).catch((error) => {
+                console.log(error);
+                console.log("Failed to fetch room images");
+            });
     }
 
     getAllRooms() {
