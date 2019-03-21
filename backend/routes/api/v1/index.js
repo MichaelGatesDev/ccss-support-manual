@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const Building = require('../../../models/building');
+var dataHelper = require('../../../data-helper');
 
 const buildings = require('./buildings');
 router.use('/buildings/', buildings);
@@ -23,41 +23,16 @@ router.get('/getbuilding', function (req, res, next) {
     return;
   }
 
-  Building.find({}, function (err, results) {
-    if (err) {
-      console.log(err);
-      next(new Error('Failed to get buildings'));
-      return;
-    }
-
-    for (const building of results) {
-      for (const room of building.rooms) {
-        if (room._id == req.query.roomID) {
-          res.json(building);
-          return;
-        }
+  for (const building of dataHelper.getAllBuildings()) {
+    for (const room of building.rooms) {
+      if (room.id == req.query.roomID) {
+        res.json(building);
+        return;
       }
     }
+  }
 
-    res.json(null);
-  });
+  res.json(null);
 });
-
-// router.post('/upload', function (req, res) {
-
-//   if (Object.keys(req.files).length == 0) {
-//     return res.status(400).send('No files were uploaded.');
-//   }
-
-//   console.log("Upload complete");
-//   console.log(req.files.spreadsheet);
-
-//   // dataHelper.updateFromSpreadsheet(req.file).then(function (result) {
-
-//   // }).catch(function (err) {
-//   //   console.err("There was an error using spreadsheet data.");
-//   //   console.log(err);
-//   // });
-// });
 
 module.exports = router;
