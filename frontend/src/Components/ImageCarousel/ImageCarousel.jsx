@@ -17,13 +17,13 @@ class ImageCarousel extends Component {
 
         var indicators = this.props.images.map((image, index) => {
             return (
-                <li data-target={"#" + this.props.id} data-slide-to={index} className={index === 0 ? 'active' : ''} ></li>
+                <li data-target={"#" + this.props.id} data-slide-to={index} className={index === 0 ? 'active' : ''} key={index}></li>
             );
         }, this);
 
         var items = this.props.images.map((image, index) => {
             return (
-                <div className={"carousel-item " + (index === 0 ? 'active' : '')}>
+                <div className={"carousel-item " + (index === 0 ? 'active' : '')} key={index}>
                     <img
                         className="d-block"
                         src={"/" + image}

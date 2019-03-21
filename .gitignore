@@ -1,4 +1,5 @@
 *-config.json
+*.xlsx
 
 # building/room images are stored in another github repo
 */public/img/buildings
@@ -100,7 +101,3 @@ typings/
 .history
 
 # End of https://www.gitignore.io/api/node,visualstudiocode
-
-
-dbconfig*
-*.xlsx

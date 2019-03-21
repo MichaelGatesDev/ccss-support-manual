@@ -77,7 +77,7 @@ class Home extends Component {
     getParentBuilding(roomObj) {
         for (const building of this.state.buildings) {
             for (const room of building.rooms) {
-                if (room._id === roomObj._id) return building;
+                if (room.id === roomObj.id) return building;
             }
         }
         return null;

@@ -1,14 +1,31 @@
 var Excel = require('exceljs');
+var fs = require('fs');
 
-var Building = require('./models/building');
-var Room = require('./models/room');
+let buildings = [];
 
-async function updateFromSpreadsheet(file) {
+
+function getAllBuildings() {
+    return buildings;
+}
+exports.getAllBuildings = getAllBuildings;
+
+
+function getAllRooms() {
+    let result = [];
+    for (const building of buildings) {
+        result = result.concat(building.rooms);
+    }
+    return result;
+}
+exports.getAllRooms = getAllRooms;
+
+
+async function loadDataFromSpreadsheet(file) {
     return new Promise((resolve, reject) => {
         var workbook = new Excel.Workbook();
         workbook.xlsx.readFile(file).then(function () {
 
-            let buildings = [];
+            buildings = [];
 
             // buildings
             var buildingsWS = workbook.getWorksheet("Buildings");
@@ -23,14 +40,15 @@ async function updateFromSpreadsheet(file) {
                 var nicknames = row.getCell(2).text.toLowerCase().split(",");
                 var internalName = officialName.toLowerCase().replace(/\s/g, "-");
 
-                var building = new Building({
+                var building = {
                     officialName: officialName,
                     nicknames: nicknames,
-                    internalName: internalName
-                })
+                    internalName: internalName,
+                    rooms: []
+                };
 
                 buildings.push(building);
-                console.debug("Created building: " + building.internalName);
+                console.debug("Added building (empty): " + building.internalName);
             });
 
             // rooms
@@ -48,7 +66,7 @@ async function updateFromSpreadsheet(file) {
                 // can't do anything with invalid rows
                 if (isBlank(buildingName)) return;
 
-                var room = new Room({
+                var room = {
                     buildingName: buildingName,
                     lastChecked: row.getCell(1).text.toLowerCase(),
                     number: row.getCell(4).text.toLowerCase(),
@@ -74,13 +92,14 @@ async function updateFromSpreadsheet(file) {
                     hasPrinter: row.getCell(24).text.toLowerCase() !== "n/a",
                     printerSymquestNumber: row.getCell(25).text.toLowerCase(),
                     printerCartridgeType: row.getCell(26).text.toLowerCase(),
-                });
+                };
 
-                var bldg = getBuildingByName(buildings, buildingName);
-                if (bldg) {
-                    room.buildingName = bldg.officialName;
-                    bldg.rooms.push(room);
-                    console.debug("Created room: " + bldg.officialName + " " + room.number);
+                var building = getBuildingByName(buildingName);
+                if (building) {
+                    room.buildingName = building.officialName;
+                    room.id = building.internalName + "." + room.number; // building-name.roomNumber
+                    building.rooms.push(room); // add the room to the parent building
+                    console.debug("Created room: " + building.officialName + " " + room.number);
                 }
             });
 
@@ -93,43 +112,120 @@ async function updateFromSpreadsheet(file) {
             }
             console.debug("There are " + roomCount + " classrooms");
 
-            let promises = [];
-            for (const b of buildings) {
-                var promise = Building.create(b).then(function () {
-                    console.debug("Added " + b.internalName + " to database");
-                }).catch(function (err) {
-                    if (err) {
-                        console.debug(err.errmsg);
-                    }
-                });
-                promises.push(promise);
-            }
-
-            Promise.all(promises).then(function () {
-                return resolve();
-            }).catch(function (err) {
-                return reject(err);
-            });
+            return resolve();
         });
     }).catch(function (err) {
         return reject(err);
     });
 }
-exports.updateFromSpreadsheet = updateFromSpreadsheet;
+exports.loadDataFromSpreadsheet = loadDataFromSpreadsheet;
 
 
-function getBuildingByName(allBuildings, name) {
-    for (const building of allBuildings) {
+let images = [];
+
+function getAllImages() {
+    return images;
+}
+exports.getAllImages = getAllImages;
+
+async function loadImages() {
+    return new Promise((resolve, reject) => {
+        var rootDir = "public/img/buildings/";
+
+        if (!fs.existsSync(rootDir)) {
+            console.log("Root directory does not exist: " + rootDir)
+            return;
+        }
+
+        images = [];
+        for (const building of getAllBuildings()) {
+            var buildingDir = rootDir + building.internalName + "/";
+            if (!fs.existsSync(buildingDir)) {
+                console.log("Building directory does not exist: " + buildingDir);
+                continue;
+            }
+
+            for (const room of building.rooms) {
+
+                var mainImages = [];
+                var panoramicImages = [];
+                var equipmentImages = [];
+
+                var roomDir = buildingDir + "rooms/" + room.number + "/";
+
+                // check if room dir exists
+                if (!fs.existsSync(roomDir)) {
+                    console.log("Room directory does not exist: " + roomDir);
+                    continue;
+                }
+
+                // root images
+                for (const file of fs.readdirSync(roomDir)) {
+                    var stat = fs.statSync(roomDir + file);
+                    if (!stat.isDirectory()) {
+                        mainImages.push(roomDir.replace("public/", "") + file);
+                    }
+                }
+
+                // panoramic images
+                var panoramasDir = roomDir + "panoramas/";
+                if (fs.existsSync(panoramasDir)) {
+                    for (const file of fs.readdirSync(panoramasDir)) {
+                        var stat = fs.statSync(panoramasDir + file);
+                        if (!stat.isDirectory()) {
+                            panoramicImages.push(panoramasDir.replace("public/", "") + file);
+                        }
+                    }
+                }
+
+                // equipment images
+                var equipmentDir = roomDir + "equipment/";
+                if (fs.existsSync(equipmentDir)) {
+                    for (const file of fs.readdirSync(equipmentDir)) {
+                        var stat = fs.statSync(equipmentDir + file);
+                        if (!stat.isDirectory()) {
+                            equipmentImages.push(equipmentDir.replace("public/", "") + file);
+                        }
+                    }
+                }
+
+                images.push({
+                    roomID: room.id,
+                    mainImages: mainImages,
+                    panoramicImages: panoramicImages,
+                    equipmentImages: equipmentImages
+                });
+            }
+        }
+        resolve();
+    });
+}
+exports.loadImages = loadImages;
+
+function getImagesForRoom(room) {
+    for (const item of images) {
+        if (item.roomID === room.id)
+            return item;
+    }
+    return null;
+}
+exports.getImagesForRoom = getImagesForRoom;
+
+function getBuildingByName(name) {
+    for (const building of buildings) {
         var contains = false;
-        if (building.internalName.includes(name)) contains = true;
-        if (building.officialName.includes(name)) contains = true;
-        for (const nick of building.nicknames) {
-            if (nick.includes(name)) contains = true;
-            break;
+        if (!contains && building.internalName.includes(name)) contains = true;
+        if (!contains && building.officialName.includes(name)) contains = true;
+        if (!contains) {
+            for (const nick of building.nicknames) {
+                if (nick.includes(name)) contains = true;
+                break;
+            }
         }
         if (contains) return building;
     }
 }
+exports.getBuildingByName = getBuildingByName;
 
 
 function isBlank(str) {

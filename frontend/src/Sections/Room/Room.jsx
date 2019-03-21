@@ -54,7 +54,7 @@ class Room extends Component {
     }
 
     fetchImages() {
-        fetch('/api/v1/images/' + this.state.building._id + "/" + this.state.room._id)
+        fetch('/api/v1/images/' + this.state.room.id)
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -79,7 +79,7 @@ class Room extends Component {
     getParentBuilding(roomObj) {
         for (const building of this.state.buildings) {
             for (const room of building.rooms) {
-                if (room._id === roomObj._id) return building;
+                if (room.id === roomObj.id) return building;
             }
         }
         return null;
@@ -199,7 +199,7 @@ class Room extends Component {
 
                     <hr />
 
-                    <p>ID: {this.state.room._id}</p>
+                    <p>ID: {this.state.room.id}</p>
                     <p>Last Updated: {this.state.room.lastChecked}</p>
 
                 </section>

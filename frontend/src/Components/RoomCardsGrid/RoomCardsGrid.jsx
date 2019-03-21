@@ -21,7 +21,7 @@ class RoomCardsGrid extends Component {
     getParentBuilding(roomObj) {
         for (const building of this.props.buildings) {
             for (const room of building.rooms) {
-                if (room._id === roomObj._id) return building;
+                if (room.id === roomObj.id) return building;
             }
         }
         return null;
@@ -29,7 +29,7 @@ class RoomCardsGrid extends Component {
 
     getImages(room) {
         for (const item of this.props.images) {
-            if (item.roomID === room._id) {
+            if (item.roomID === room.id) {
                 return item;
             }
         }
@@ -39,7 +39,7 @@ class RoomCardsGrid extends Component {
     render() {
 
         const items = this.props.rooms.map((room) =>
-            <li key={room._id}>
+            <li key={room.id}>
                 <RoomCard
                     room={room}
                     building={this.getParentBuilding(room)}

@@ -4,28 +4,18 @@ var router = express.Router();
 const all = require('./all');
 router.use('/', all);
 
-const Building = require('../../../../models/building');
+var dataHelper = require('../../../../data-helper');
 
 router.param('roomID', function (req, res, next, id) {
-    Building.find({}, function (err, results) {
-        if (err) {
-            console.log(err);
-            next(new Error('Failed to get buildings'));
+    for (const room of dataHelper.getAllRooms()) {
+        if (room.id == id) {
+            req.room = room;
+            next();
             return;
         }
-
-        loop1:
-        for (const building of results) {
-            for (const room of building.rooms) {
-                if (room._id == id) {
-                    req.room = room;
-                    break loop1;
-                }
-            }
-        }
-
-        next();
-    });
+    }
+    console.log(err);
+    next(new Error('Failed to find room: ' + id));
 });
 
 const single = require('./single');

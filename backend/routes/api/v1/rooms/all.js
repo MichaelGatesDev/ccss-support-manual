@@ -3,20 +3,10 @@ const router = express.Router({
     mergeParams: true
 });
 
-const Building = require('../../../../models/building');
+var dataHelper = require('../../../../data-helper');
 
 router.get('/', (req, res) => {
-    Building.find({}, function (err, results) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        let rooms = [];
-        for (const result of results) {
-            rooms = rooms.concat(result.rooms);
-        }
-        res.json(rooms);
-    });
+    res.json(dataHelper.getAllRooms());
 });
 
 module.exports = router;
