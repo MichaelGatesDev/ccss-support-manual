@@ -22,18 +22,6 @@ const BuildingSchema = new Schema({
         type: [Room.RoomSchema],
         default: []
     },
-    images: {
-        type: [String],
-        default: []
-    },
-    coverImages: {
-        type: [String],
-        default: []
-    },
-    panoramicImages: {
-        type: [String],
-        default: []
-    },
 });
 
 const Building = mongoose.model('building', BuildingSchema);

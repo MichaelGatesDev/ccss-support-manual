@@ -1,0 +1,33 @@
+h2,
+h3 {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+#room-section {
+  margin-top: 2em;
+  background-color: #f2f2f2;
+
+  border-radius: 0.75em;
+}
+
+#cover-image-row .ImageCarousel-Component {
+  margin: 0 auto;
+}
+
+.detail-header {
+  font-weight: bold;
+}
+
+.detail-header,
+.detail {
+  margin-bottom: 0.25em;
+}
+
+.capitalized {
+  text-transform: capitalize;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}

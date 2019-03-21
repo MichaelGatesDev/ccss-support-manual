@@ -94,16 +94,6 @@ const RoomSchema = new Schema({
     printerCartridgeType: {
         type: String,
     },
-
-    coverImage: {
-        type: String
-    },
-    images: {
-        type: [String]
-    },
-    panoramicImages: {
-        type: [String]
-    },
 });
 
 const Room = mongoose.model('room', RoomSchema);

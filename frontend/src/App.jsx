@@ -5,6 +5,7 @@ import './App.css';
 
 import Home from './Sections/Home/Home';
 import Settings from './Sections/Settings/Settings';
+import Room from './Sections/Room/Room';
 
 import Footer from "./Components/Footer/Footer";
 
@@ -18,7 +19,7 @@ class App extends Component {
           {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
           {/* <Route path="/buildings/:building" component={Buildings} /> */}
           {/* <Route path="/buildings/:building/rooms" component={Rooms} /> */}
-          {/* <Route path="/buildings/:building/rooms/:number" component={Room} /> */}
+          <Route path="/rooms/:roomID" component={Room} />
           <footer>
             <Footer />
           </footer>

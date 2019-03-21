@@ -1,0 +1,10 @@
+.ImageCarousel-Component {
+}
+
+.ImageCarousel-Component img {
+  background: url(/img/300x200.png) no-repeat;
+
+  width: 100%;
+
+  object-fit: cover;
+}
