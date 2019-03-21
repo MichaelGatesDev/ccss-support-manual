@@ -1,36 +1,45 @@
 var express = require('express');
 var router = express.Router();
 
-var _ = require('underscore');
-
 const Building = require('../../../models/building');
 
 const buildings = require('./buildings');
 router.use('/buildings/', buildings);
 
+const rooms = require('./rooms');
+router.use('/rooms/', rooms);
+
 const images = require('./images');
 router.use('/images/', images);
-
 
 router.get('/', function (req, res, next) {
   res.send("This is the primary API v1 route");
 });
 
-router.get('/rooms', function (req, res, next) {
+router.get('/getbuilding', function (req, res, next) {
+
+  if (!req.query.roomID) {
+    res.send("You must specify a room ID");
+    return;
+  }
+
   Building.find({}, function (err, results) {
     if (err) {
       console.log(err);
+      next(new Error('Failed to get buildings'));
       return;
     }
-    let rooms = [];
-    for (const result of results) {
-      rooms = rooms.concat(result.rooms);
+
+    for (const building of results) {
+      for (const room of building.rooms) {
+        if (room._id == req.query.roomID) {
+          res.json(building);
+          return;
+        }
+      }
     }
-    var sortedRooms = _.chain(rooms)
-      .sortBy('number')
-      .sortBy('buildingName')
-      .value();
-    res.json(sortedRooms);
+
+    res.json(null);
   });
 });
 
