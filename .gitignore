@@ -1,9 +1,10 @@
 build
 *-config.json
 *.xlsx
+*.exe
 
 # building/room images are stored in another github repo
-*/public/img/buildings
+public/
 
 # Created by https://www.gitignore.io/api/node,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,visualstudiocode
