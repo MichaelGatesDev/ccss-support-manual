@@ -170,8 +170,6 @@ async function loadSecondarySpreadsheet(file) {
                     blacklistedLocations: parseRooms(row.getCell(7).text.toLowerCase()),
                 };
 
-                console.log(troubleshootingDataObj);
-
                 results.push(troubleshootingDataObj);
             });
 
