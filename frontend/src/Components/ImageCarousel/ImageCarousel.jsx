@@ -37,11 +37,14 @@ class ImageCarousel extends Component {
         return (
             <div className="ImageCarousel-Component">
                 <div id={this.props.id} className="carousel slide" data-ride="carousel">
-                    <ol className="carousel-indicators">
-                        {
-                            indicators
-                        }
-                    </ol>
+                    {
+                        indicators.length > 1 &&
+                        <ol className="carousel-indicators">
+                            {
+                                indicators
+                            }
+                        </ol>
+                    }
                     <div className="carousel-inner">
                         {
                             items
