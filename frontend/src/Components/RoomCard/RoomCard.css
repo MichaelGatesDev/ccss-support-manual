@@ -1,14 +1,22 @@
 .RoomCard-Component {
-  transition: 0.1s ease-in-out;
+  transition: 0.15s ease-in-out;
+  filter: grayscale(100%);
 }
 
 .RoomCard-Component:hover {
-  filter: drop-shadow(0 0 0.5rem #343a40a0);
+  filter: grayscale(0%);
 }
 
 .RoomCard-Component a,
 .RoomCard-Component a:hover {
   text-decoration: none;
+}
+
+.RoomCard-Component a {
+  color: #333333;
+}
+
+.RoomCard-Component a:hover {
   color: #000000;
 }
 
