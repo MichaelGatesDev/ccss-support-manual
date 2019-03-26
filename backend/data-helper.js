@@ -2,7 +2,8 @@ var Excel = require('exceljs');
 var fs = require('fs');
 
 let buildings = [];
-
+let troubledata = [];
+let images = [];
 
 function getAllBuildings() {
     return buildings;
@@ -19,9 +20,18 @@ function getAllRooms() {
 }
 exports.getAllRooms = getAllRooms;
 
+function getAllTroubleshootingData() {
+    return troubledata;
+}
+exports.getAllTroubleshootingData = getAllTroubleshootingData;
 
-async function loadDataFromSpreadsheet(file) {
+async function loadPrimarySpreadsheet(file) {
     return new Promise((resolve, reject) => {
+
+        if (!fs.existsSync(file)) {
+            return reject("File could not be found: " + file);
+        }
+
         var workbook = new Excel.Workbook();
         workbook.xlsx.readFile(file).then(function () {
 
@@ -99,7 +109,7 @@ async function loadDataFromSpreadsheet(file) {
                     room.buildingName = building.officialName;
                     room.id = building.internalName + "." + room.number; // building-name.roomNumber
                     building.rooms.push(room); // add the room to the parent building
-                    console.debug("Created room: " + building.officialName + " " + room.number);
+                    // console.debug("Created room: " + building.officialName + " " + room.number);
                 }
             });
 
@@ -108,33 +118,112 @@ async function loadDataFromSpreadsheet(file) {
             var roomCount = 0;
             for (const b of buildings) {
                 roomCount += b.rooms.length;
-                console.debug(b.internalName + " has " + b.rooms.length + " rooms");
+                console.debug(b.internalName + " has " + b.rooms.length + " rooms: [" + b.rooms.map(function (room) {
+                    return room.number;
+                }).join(",") + "]");
             }
             console.debug("There are " + roomCount + " classrooms");
 
             return resolve();
+        }).catch(function (err) {
+            return reject(err);
         });
-    }).catch(function (err) {
-        return reject(err);
     });
 }
-exports.loadDataFromSpreadsheet = loadDataFromSpreadsheet;
+exports.loadPrimarySpreadsheet = loadPrimarySpreadsheet;
 
 
-let images = [];
+async function loadSecondarySpreadsheet(file) {
+    return new Promise((resolve, reject) => {
+
+        if (!fs.existsSync(file)) {
+            return reject("File could not be found: " + file);
+        }
+
+        var workbook = new Excel.Workbook();
+        workbook.xlsx.readFile(file).then(function () {
+
+            let results = [];
+
+            // rooms
+            var roomsWS = workbook.getWorksheet("QA");
+            roomsWS.eachRow({
+                includeEmpty: false
+            }, function (row, rowNumber) {
+
+                // skip  the first row (headers)
+                if (rowNumber == 1) return;
+
+                // building name first
+                var title = row.getCell(1).text.toLowerCase();
+
+                // can't do anything with invalid rows
+                if (isBlank(title)) return;
+
+                var troubleshootingDataObj = {
+                    title: title,
+                    description: row.getCell(2).text.toLowerCase(),
+                    solution: row.getCell(3).text.toLowerCase(),
+                    types: row.getCell(4).text.toLowerCase().split(","),
+                    tags: row.getCell(5).text.toLowerCase().split(","),
+                    whitelistedLocations: parseRooms(row.getCell(6).text.toLowerCase()),
+                    blacklistedLocations: parseRooms(row.getCell(7).text.toLowerCase()),
+                };
+
+                console.log(troubleshootingDataObj);
+
+                results.push(troubleshootingDataObj);
+            });
+
+            console.debug("There are " + results.length + " troubleshooting data segments");
+
+            return resolve();
+        }).catch(function (err) {
+            return reject(err);
+        });
+    });
+}
+exports.loadSecondarySpreadsheet = loadSecondarySpreadsheet;
+
+function parseRooms(raw) {
+
+    let results = [];
+
+    if (isBlank(raw)) return;
+
+    for (const piece of raw.split(",")) {
+        // console.log("piece " + piece);
+        var parts = piece.split("|");
+
+        var buildingName = parts[0];
+        var roomNumber = parts[1];
+
+        var building = getBuildingByName(buildingName);
+        if (!building) continue; // invalid building
+
+        var room = getRoomByBuildingNameAndNumber(buildingName, roomNumber);
+        if (!room) continue; // no location at building/room
+
+        results.push(room);
+    }
+    return results;
+}
+
+
 
 function getAllImages() {
     return images;
 }
 exports.getAllImages = getAllImages;
 
+
 async function loadImages() {
     return new Promise((resolve, reject) => {
-        var rootDir = "public/img/buildings/";
+        var rootDir = "public/images/buildings/";
 
         if (!fs.existsSync(rootDir)) {
-            console.log("Root directory does not exist: " + rootDir)
-            return;
+            console.log()
+            return reject("Image directory does not exist: " + rootDir);
         }
 
         images = [];
@@ -202,6 +291,7 @@ async function loadImages() {
 }
 exports.loadImages = loadImages;
 
+
 function getImagesForRoom(room) {
     for (const item of images) {
         if (item.roomID === room.id)
@@ -210,6 +300,7 @@ function getImagesForRoom(room) {
     return null;
 }
 exports.getImagesForRoom = getImagesForRoom;
+
 
 function getBuildingByName(name) {
     for (const building of buildings) {
@@ -226,6 +317,16 @@ function getBuildingByName(name) {
     }
 }
 exports.getBuildingByName = getBuildingByName;
+
+
+function getRoomByBuildingNameAndNumber(buildingName, roomNumber) {
+    for (const room of getAllRooms()) {
+        if (room.buildingName === buildingName.toLowerCase() && room.number === roomNumber.toLowerCase())
+            return room;
+    }
+    return null;
+}
+exports.getRoomByBuildingNameAndNumber = getRoomByBuildingNameAndNumber;
 
 
 function isBlank(str) {

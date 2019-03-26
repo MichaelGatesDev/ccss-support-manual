@@ -5,8 +5,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var dataHelper = require('./data-helper');
+var config = require('./config');
 
 var indexRouter = require('./routes/index');
+
+
+// ------------------------------------------------------ \\
+//              Configure express backend
+// ------------------------------------------------------ \\
 
 var app = express();
 
@@ -44,17 +50,64 @@ app.use(function (err, req, res, next) {
 
 
 // ------------------------------------------------------ \\
-// Load data here
+//              Application Configuration
 // ------------------------------------------------------ \\
 
-dataHelper.loadDataFromSpreadsheet('spreadsheet.xlsx').then(function () {
-  console.log("Loaded data from spreadsheet");
-  dataHelper.loadImages().then(function () {
-    console.log("Loaded images");
+var defaultAppConfig = {
+  checkForUpdates: true,
+  primary_spreadsheet: 'public/primary.xlsx',
+  secondary_spreadsheet: 'public/secondary.xlsx',
+  images_directory: 'public/images/',
+}
+
+let appConfig;
+
+// create the configs
+config.create('config.json', defaultAppConfig)
+  // after the config is created
+  .then(function (created) {
+    if (created) {
+      console.log("Created default application configuration file.");
+    }
+    // load the config
+    return config.load('config.json');
+  })
+  // after the config is loaded
+  .then(function (loadedConfig) {
+    appConfig = loadedConfig;
+    console.log("Finished loaded configuration file");
+
+    // load primary(troubleshooting) spreadsheet
+    console.log("Loading data from primary spreadsheet...");
+    return dataHelper.loadPrimarySpreadsheet(appConfig.primary_spreadsheet);
+  })
+  // after we load data from the primary spreadsheet
+  .then(function () {
+    console.log("Finished loading data from primary spreadsheet");
+
+    // load secondary(troubleshooting) spreadsheet
+    console.log("Loading data from secondary spreadsheet...");
+    return dataHelper.loadSecondarySpreadsheet(appConfig.secondary_spreadsheet);
+  })
+  // after we load data from the secondary (troubleshooting) spreadsheet
+  .then(function () {
+    console.log("Finished loading datafrom secondary spreadsheet");
+
+    // load images
+    console.log("Loading images...");
+    return dataHelper.loadImages(appConfig.images_directory);
+  })
+  // load all images
+  .then(function () {
+    console.log("Loaded application images");
+  })
+  // catch any errors
+  .catch(function (err) {
+    console.log(err);
+    process.exit();
+    return;
   });
-}).catch(function (err) {
-  console.log(err);
-});
+
 
 
 // ------------------------------------------------------ \\
