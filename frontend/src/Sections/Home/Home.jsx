@@ -35,8 +35,8 @@ class Home extends Component {
                     this.fetchAllImages();
                 });
             }).catch((error) => {
-                console.log(error);
                 console.log("Failed to fetch buildings");
+                console.log(error);
             });
     }
 

@@ -34,7 +34,7 @@ class Room extends Component {
                 });
             }).catch((error) => {
                 console.log(error);
-                console.log("Failed to fetch room images");
+                console.log("Failed to fetch room");
             });
     }
 
@@ -49,7 +49,7 @@ class Room extends Component {
                 });
             }).catch((error) => {
                 console.log(error);
-                console.log("Failed to fetch room images");
+                console.log("Failed to fetch room building");
             });
     }
 
