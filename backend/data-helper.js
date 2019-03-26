@@ -5,25 +5,6 @@ let buildings = [];
 let troubledata = [];
 let images = [];
 
-function getAllBuildings() {
-    return buildings;
-}
-exports.getAllBuildings = getAllBuildings;
-
-
-function getAllRooms() {
-    let result = [];
-    for (const building of buildings) {
-        result = result.concat(building.rooms);
-    }
-    return result;
-}
-exports.getAllRooms = getAllRooms;
-
-function getAllTroubleshootingData() {
-    return troubledata;
-}
-exports.getAllTroubleshootingData = getAllTroubleshootingData;
 
 async function loadPrimarySpreadsheet(file) {
     return new Promise((resolve, reject) => {
@@ -133,6 +114,49 @@ async function loadPrimarySpreadsheet(file) {
 exports.loadPrimarySpreadsheet = loadPrimarySpreadsheet;
 
 
+function getBuildingByName(name) {
+    for (const building of buildings) {
+        var contains = false;
+        if (!contains && building.internalName.includes(name)) contains = true;
+        if (!contains && building.officialName.includes(name)) contains = true;
+        if (!contains) {
+            for (const nick of building.nicknames) {
+                if (nick.includes(name)) contains = true;
+                break;
+            }
+        }
+        if (contains) return building;
+    }
+}
+exports.getBuildingByName = getBuildingByName;
+
+
+function getRoomByBuildingNameAndNumber(buildingName, roomNumber) {
+    for (const room of getAllRooms()) {
+        if (room.buildingName === buildingName.toLowerCase() && room.number === roomNumber.toLowerCase())
+            return room;
+    }
+    return null;
+}
+exports.getRoomByBuildingNameAndNumber = getRoomByBuildingNameAndNumber;
+
+
+function getAllBuildings() {
+    return buildings;
+}
+exports.getAllBuildings = getAllBuildings;
+
+
+function getAllRooms() {
+    let result = [];
+    for (const building of buildings) {
+        result = result.concat(building.rooms);
+    }
+    return result;
+}
+exports.getAllRooms = getAllRooms;
+
+
 async function loadSecondarySpreadsheet(file) {
     return new Promise((resolve, reject) => {
 
@@ -175,6 +199,8 @@ async function loadSecondarySpreadsheet(file) {
 
             console.debug("There are " + results.length + " troubleshooting data segments");
 
+            troubledata = results;
+
             return resolve();
         }).catch(function (err) {
             return reject(err);
@@ -182,6 +208,7 @@ async function loadSecondarySpreadsheet(file) {
     });
 }
 exports.loadSecondarySpreadsheet = loadSecondarySpreadsheet;
+
 
 function parseRooms(raw) {
 
@@ -202,17 +229,30 @@ function parseRooms(raw) {
         var room = getRoomByBuildingNameAndNumber(buildingName, roomNumber);
         if (!room) continue; // no location at building/room
 
-        results.push(room);
+        results.push(room.id);
     }
     return results;
 }
 
 
-
-function getAllImages() {
-    return images;
+function getAllTroubleshootingData() {
+    return troubledata;
 }
-exports.getAllImages = getAllImages;
+exports.getAllTroubleshootingData = getAllTroubleshootingData;
+
+
+function getTroubleshootingDataForRoom(room) {
+
+    //TODO filter troubleshooting data here
+
+
+    for (const td of troubledata) {
+        if (td.room === room.id)
+            return td;
+    }
+    return null;
+}
+exports.getTroubleshootingDataForRoom = getTroubleshootingDataForRoom;
 
 
 async function loadImages() {
@@ -290,6 +330,12 @@ async function loadImages() {
 exports.loadImages = loadImages;
 
 
+function getAllImages() {
+    return images;
+}
+exports.getAllImages = getAllImages;
+
+
 function getImagesForRoom(room) {
     for (const item of images) {
         if (item.roomID === room.id)
@@ -298,33 +344,6 @@ function getImagesForRoom(room) {
     return null;
 }
 exports.getImagesForRoom = getImagesForRoom;
-
-
-function getBuildingByName(name) {
-    for (const building of buildings) {
-        var contains = false;
-        if (!contains && building.internalName.includes(name)) contains = true;
-        if (!contains && building.officialName.includes(name)) contains = true;
-        if (!contains) {
-            for (const nick of building.nicknames) {
-                if (nick.includes(name)) contains = true;
-                break;
-            }
-        }
-        if (contains) return building;
-    }
-}
-exports.getBuildingByName = getBuildingByName;
-
-
-function getRoomByBuildingNameAndNumber(buildingName, roomNumber) {
-    for (const room of getAllRooms()) {
-        if (room.buildingName === buildingName.toLowerCase() && room.number === roomNumber.toLowerCase())
-            return room;
-    }
-    return null;
-}
-exports.getRoomByBuildingNameAndNumber = getRoomByBuildingNameAndNumber;
 
 
 function isBlank(str) {

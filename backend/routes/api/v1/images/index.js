@@ -3,8 +3,6 @@ const router = express.Router({
     mergeParams: true
 });
 
-var fs = require('fs');
-
 var dataHelper = require('../../../../data-helper');
 
 router.get("/", function (req, res) {

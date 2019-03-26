@@ -12,6 +12,9 @@ router.use('/rooms/', rooms);
 const images = require('./images');
 router.use('/images/', images);
 
+const troubelshootingData = require('./troubleshooting-data');
+router.use('/troubleshooting-data/', troubelshootingData);
+
 router.get('/', function (req, res, next) {
   res.send("This is the primary API v1 route");
 });
