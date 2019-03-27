@@ -4,7 +4,10 @@ import './Room.css';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
+import TroubleshootingFilters from "../../Components/TroubleshootingFilters/TroubleshootingFilters";
+import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
 
+var _ = require('underscore');
 
 class Room extends Component {
 
@@ -12,10 +15,12 @@ class Room extends Component {
         super(props);
 
         this.state = {
-            building: null,
-            room: null,
-            loading: true
+            loading: true,
+            activeTroubleshootingTypeFilters: [],
+            activeTroubleshootingTagFilters: []
         };
+
+        this.updateTroubleshootingFilters = this.updateTroubleshootingFilters.bind(this);
     }
 
     componentDidMount() {
@@ -58,10 +63,11 @@ class Room extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    loading: false,
                     mainImages: data.mainImages,
                     panoramicImages: data.panoramicImages,
                     equipmentImages: data.equipmentImages
+                }, function () {
+                    this.fetchTroubleshootingData()
                 });
             }).catch((error) => {
                 console.log(error);
@@ -69,20 +75,29 @@ class Room extends Component {
             });
     }
 
-    onSearch(value) {
-        this.setState({
-            filterSearch: value
-        });
+    fetchTroubleshootingData() {
+        fetch('/api/v1/troubleshooting-data/' + this.state.room.id)
+            .then(response => response.json())
+            .then(data => {
+
+                var sortedData = _.sortBy(data, function (item) {
+                    return item.types;
+                });
+
+                this.setState({
+                    loading: false,
+                    troubleshootingData: sortedData
+                });
+            }).catch((error) => {
+                console.log(error);
+                console.log("Failed to fetch room troubleshooting data");
+            });
     }
 
-
-    getParentBuilding(roomObj) {
-        for (const building of this.state.buildings) {
-            for (const room of building.rooms) {
-                if (room.id === roomObj.id) return building;
-            }
-        }
-        return null;
+    updateTroubleshootingFilters(filters) {
+        this.setState({
+            activeTroubleshootingTypeFilters: filters
+        })
     }
 
     getTitle() {
@@ -105,20 +120,60 @@ class Room extends Component {
                 />
                 <section className="container" id="room-section">
 
-                    <h2>{this.getTitle()}</h2>
-                    <h3>{this.state.room.name}</h3>
+                    <div className="row">
+                        <div className="col">
+                            <h2>{this.getTitle()}</h2>
+                        </div>
+                    </div>
 
-                    <hr />
-
-                    {this.state.panoramicImages.length > 0 &&
-                        <ImageCarousel
-                            images={this.state.panoramicImages}
-                            height={"250px"}
-                            id="panoramas-carousel"
-                        />
+                    {this.state.room.name &&
+                        <div className="row">
+                            <div className="col">
+                                <h3>{this.state.room.name}</h3>
+                            </div>
+                        </div>
                     }
 
-                    <hr />
+
+                    <div className="general-room-info">
+                        <div className="row">
+                            <div className="col-4 text-center">
+                                <h4>Room Type</h4>
+                            </div>
+                            <div className="col-4 text-center">
+                                <h4>Room Capacity</h4>
+                            </div>
+                            <div className="col-4 text-center">
+                                <h4>Room Extension</h4>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-4 text-center">
+                                <p className="capitalized">{this.state.room.type}</p>
+                            </div>
+                            <div className="col-4 text-center">
+                                <p>{parseInt(this.state.room.capacity) === -1 ? 'N/A' : this.state.room.capacity}</p>
+                            </div>
+                            <div className="col-4 text-center">
+                                <p>{parseInt(this.state.room.extension) === -1 ? 'N/A' : this.state.room.extension}</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {this.state.panoramicImages.length > 0 &&
+                        <Fragment>
+                            <div className="row panoramas">
+                                <div className="col">
+                                    <ImageCarousel
+                                        images={this.state.panoramicImages}
+                                        height={"250px"}
+                                        id="panoramas-carousel"
+                                    />
+                                </div>
+                            </div>
+                        </Fragment>
+                    }
 
                     <div className="row">
                         <div className="col-lg-4">
@@ -129,12 +184,8 @@ class Room extends Component {
                             />
                         </div>
                         <div className="col-lg-4">
-                            <p className="detail-header">Type</p>
-                            <p className="detail capitalized">{this.state.room.type}</p>
-                            <p className="detail-header">Capacity</p>
-                            <p className="detail">{this.state.room.capacity === -1 ? "N/A" : this.state.room.capacity}</p>
-                            <p className="detail-header">Extension</p>
-                            <p className="detail">{this.state.room.extension === -1 ? "N/A" : this.state.room.extension}</p>
+                            <h5>Furniture</h5>
+                            <hr />
                             <p className="detail-header">Furniture Type</p>
                             <p className="detail capitalized">{this.state.room.furnitureType}</p>
                             <p className="detail-header">Chair Count</p>
@@ -142,24 +193,45 @@ class Room extends Component {
                             <p className="detail-header">Table Count</p>
                             <p className="detail">{this.state.room.tableCount}</p>
                         </div>
+
                         <div className="col-lg-4">
+                            <h5>Technology</h5>
+                            <hr />
 
                             {/* <p className="detail-header">Has Screen</p>
                             <p className="detail">{this.state.room.hasScreen.toString()}</p> */}
 
+                            <Fragment>
+                                <p className="detail-header" data-toggle="collapse" data-target="#collapse-audio" aria-expanded="false" aria-controls="collapse-audio">
+                                    Audio
+                                </p>
+                                <div className="collapse" id="collapse-audio">
+                                    <p>Section TBD</p>
+                                </div>
+                            </Fragment>
+
                             {this.state.room.hasProjector &&
                                 <Fragment>
-                                    <p className="detail-header">Audio Requires Projector</p>
-                                    <p className="detail capitalized">{this.state.room.audioRequiresProjector.toString()}</p>
+                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-projector" aria-expanded="false" aria-controls="collapse-projector">
+                                        Projector
+                                    </p>
+                                    <div className="collapse" id="collapse-projector">
+                                        <p>Section TBD</p>
+                                    </div>
                                 </Fragment>
                             }
 
                             {this.state.room.hasTeachingStationComputer &&
                                 <Fragment>
-                                    <p className="detail-header">Teaching Station Computer Type</p>
-                                    <p className="detail capitalized">{this.state.room.teachingStationComputerType}</p>
-                                    <p className="detail-header">Teaching Station Operating System</p>
-                                    <p className="detail uppercase">{this.state.room.teachingStationComputerOS}</p>
+                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-computer" aria-expanded="false" aria-controls="collapse-computer">
+                                        Teaching Station Computer
+                                    </p>
+                                    <div className="collapse" id="collapse-computer">
+                                        <p className="detail-header">Computer Type</p>
+                                        <p className="detail capitalized">{this.state.room.teachingStationComputerType}</p>
+                                        <p className="detail-header">Operating System</p>
+                                        <p className="detail uppercase">{this.state.room.teachingStationComputerOS}</p>
+                                    </div>
                                 </Fragment>
                             }
 
@@ -168,25 +240,37 @@ class Room extends Component {
 
                             {this.state.room.hasDVDPlayer &&
                                 <Fragment>
-                                    <p className="detail-header">DVD Player Type</p>
-                                    <p className="detail uppercase">{this.state.room.dvdPlayerType}</p>
+                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-dvd-player" aria-expanded="false" aria-controls="collapse-dvd-player">
+                                        DVD Player
+                                    </p>
+                                    <div className="collapse" id="collapse-dvd-player">
+                                        <p className="detail-header">DVD Player Type</p>
+                                        <p className="detail uppercase">{this.state.room.dvdPlayerType}</p>
+                                    </div>
                                 </Fragment>
                             }
 
                             {this.state.room.hasPrinter &&
                                 <Fragment>
-                                    {this.state.room.printerSymquestNumber &&
-                                        <Fragment>
-                                            <p className="detail-header">Printer Symquest Number</p>
-                                            <p className="detail uppercase">{this.state.room.printerSymquestNumber}</p>
-                                        </Fragment>
-                                    }
-                                    {this.state.room.printerCartridgeType &&
-                                        <Fragment>
-                                            <p className="detail-header">Printer Cartridge Type</p>
-                                            <p className="detail uppercase">{this.state.room.printerCartridgeType}</p>
-                                        </Fragment>
-                                    }
+
+                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-printer" aria-expanded="false" aria-controls="collapse-printer">
+                                        Printer
+                                    </p>
+                                    <div className="collapse" id="collapse-printer">
+
+                                        {this.state.room.printerSymquestNumber &&
+                                            <Fragment>
+                                                <p className="detail-header">Printer Symquest Number</p>
+                                                <p className="detail uppercase">{this.state.room.printerSymquestNumber}</p>
+                                            </Fragment>
+                                        }
+                                        {this.state.room.printerCartridgeType &&
+                                            <Fragment>
+                                                <p className="detail-header">Printer Cartridge Type</p>
+                                                <p className="detail uppercase">{this.state.room.printerCartridgeType}</p>
+                                            </Fragment>
+                                        }
+                                    </div>
                                 </Fragment>
                             }
 
@@ -195,7 +279,21 @@ class Room extends Component {
 
                     <hr />
 
-                    <p>Troubleshooting stuff goes here..</p>
+                    <div className="row">
+                        <div className="col-sm-2">
+                            <TroubleshootingFilters
+                                troubleshootingData={this.state.troubleshootingData}
+                                onChange={this.updateTroubleshootingFilters}
+                            />
+                        </div>
+                        <div className="col">
+                            <TroubleshootingTips
+                                troubleshootingData={this.state.troubleshootingData}
+                                typeFilters={this.state.activeTroubleshootingTypeFilters}
+                                tagFilters={this.state.activeTroubleshootingTagFilters}
+                            />
+                        </div>
+                    </div>
 
                     <hr />
 

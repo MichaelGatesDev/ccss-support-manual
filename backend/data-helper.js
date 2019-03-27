@@ -156,6 +156,14 @@ function getAllRooms() {
 }
 exports.getAllRooms = getAllRooms;
 
+function getRoomByID(roomID) {
+    for (const room of getAllRooms())
+        if (room.id === roomID)
+            return room;
+    return null;
+}
+exports.getRoomByID = getRoomByID;
+
 
 async function loadSecondarySpreadsheet(file) {
     return new Promise((resolve, reject) => {
@@ -211,13 +219,9 @@ exports.loadSecondarySpreadsheet = loadSecondarySpreadsheet;
 
 
 function parseRooms(raw) {
-
     let results = [];
-
-    if (isBlank(raw)) return;
-
+    if (isBlank(raw)) return results;
     for (const piece of raw.split(",")) {
-        // console.log("piece " + piece);
         var parts = piece.split("|");
 
         var buildingName = parts[0];
@@ -241,16 +245,59 @@ function getAllTroubleshootingData() {
 exports.getAllTroubleshootingData = getAllTroubleshootingData;
 
 
-function getTroubleshootingDataForRoom(room) {
+function getTroubleshootingDataForRoom(roomID) {
+    let results = [];
 
-    //TODO filter troubleshooting data here
+    var room = getRoomByID(roomID);
 
+    if (!room) return results; // no room with that ID found
 
     for (const td of troubledata) {
-        if (td.room === room.id)
-            return td;
+
+        // trouble data doesn't apply for this room
+        if (td.blacklistedLocations.includes(roomID))
+            continue;
+
+        // whitelisted room
+        if (td.whitelistedLocations.includes(roomID))
+            results.push(td);
+
+        // audio
+        if (room.hasAudio) {
+            if (td.types.includes('audio')) {
+                results.push(td);
+            }
+        }
+        // projector
+        if (room.hasProjector) {
+            if (td.types.includes('projector')) {
+                results.push(td);
+            }
+        }
+        // computer
+        if (room.hasTeachingStationComputer) {
+            if (td.types.includes('projector')) {
+                results.push(td);
+            }
+        }
+        // dvd player
+        if (room.hasDVDPlayer) {
+            if (td.types.includes('dvd')) {
+                results.push(td);
+            }
+        }
+        // printer
+        if (room.hasPrinter) {
+            if (td.types.includes('printer')) {
+                results.push(td);
+            }
+        }
+
+        // if there are no types, it is general
+        if (td.types.length === 0)
+            results.push(td);
     }
-    return null;
+    return results;
 }
 exports.getTroubleshootingDataForRoom = getTroubleshootingDataForRoom;
 

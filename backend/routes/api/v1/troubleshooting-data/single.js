@@ -6,7 +6,7 @@ const router = express.Router({
 var dataHelper = require('../../../../data-helper');
 
 router.get('/', (req, res, next) => {
-    res.json(dataHelper.getTroubleshootingDataForRoom(req.room));
+    res.json(req.troubleshootingData);
 });
 
 module.exports = router;

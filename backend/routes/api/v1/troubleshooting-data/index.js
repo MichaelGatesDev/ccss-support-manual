@@ -7,12 +7,11 @@ const all = require('./all');
 router.use('/', all);
 
 router.param('roomID', function (req, res, next, id) {
-    for (const room of dataHelper.getAllRooms()) {
-        if (room.id == id) {
-            req.room = room;
-            next();
-            return;
-        }
+    var troubleshootingData = dataHelper.getTroubleshootingDataForRoom(id);
+    if (troubleshootingData) {
+        req.troubleshootingData = troubleshootingData;
+        next();
+        return;
     }
     console.log(err);
     next(new Error('Failed to find room: ' + id));
