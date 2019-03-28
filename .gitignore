@@ -1,11 +1,11 @@
-build
-*-config.json
 *config.json
 *.xlsx
-*.exe
 
-# building/room images are stored in another github repo
-public/
+# Final application directory after build
+app
+
+# No backend public data
+backend/public/
 
 # Created by https://www.gitignore.io/api/node,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,visualstudiocode

@@ -1,11 +1,11 @@
 {
   "name": "backend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "bin": "./bin/www",
   "scripts": {
     "start": "node ./bin/www",
-    "build": "pkg . -t"
+    "build": "pkg . -t windows,linux,osx -o application"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
