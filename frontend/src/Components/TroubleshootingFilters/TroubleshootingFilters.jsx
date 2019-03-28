@@ -11,7 +11,7 @@ class TroubleshootingFilters extends Component {
         super(props);
 
         this.state = {
-            activeFilters: []
+            activeTypeFilters: []
         };
 
         this.onFilterChange = this.onFilterChange.bind(this);
@@ -26,7 +26,9 @@ class TroubleshootingFilters extends Component {
 
     componentDidMount() {
         this.setState({
-            activeFilters: this.getAllTypes()
+            activeTypeFilters: this.getAllTypes()
+        }, function () {
+            this.props.onChange(this.state.activeTypeFilters);
         });
     }
 
@@ -42,17 +44,18 @@ class TroubleshootingFilters extends Component {
     }
 
     onFilterChange(filterName, checked) {
-        var newFilters = this.state.activeFilters;
+        var newFilters = this.state.activeTypeFilters;
         if (checked && !newFilters.includes(filterName))
             newFilters.push(filterName);
         else if (!checked && newFilters.includes(filterName))
             newFilters = this.removeFromArray(newFilters, filterName);
 
         this.setState({
-            activeFilters: newFilters
+            activeTypeFilters: newFilters
         }, function () {
             this.props.onChange(newFilters);
         });
+
     }
 
     render() {

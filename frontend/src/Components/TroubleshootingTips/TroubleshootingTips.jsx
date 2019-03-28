@@ -49,9 +49,13 @@ class TroubleshootingTips extends Component {
             <div className="TroubleshootingTips-Component">
                 <h5>Troubleshooting Tips</h5>
                 <hr />
-                <ul>
-                    {tips}
-                </ul>
+                {this.props.typeFilters.length > 0 ?
+                    <ul>
+                        {tips}
+                    </ul>
+                    :
+                    <p>There are no troubleshooting tips that match the filters.</p>
+                }
             </div>
         );
     }
