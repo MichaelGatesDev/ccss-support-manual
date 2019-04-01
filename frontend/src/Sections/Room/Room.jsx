@@ -1,6 +1,5 @@
-
 import React, { Component, Fragment } from 'react';
-import './Room.css';
+import './Room.scss';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
@@ -97,7 +96,7 @@ class Room extends Component {
     updateTroubleshootingFilters(filters) {
         this.setState({
             activeTroubleshootingTypeFilters: filters
-        })
+        });
     }
 
     getTitle() {
@@ -107,7 +106,7 @@ class Room extends Component {
     render() {
 
         if (this.state.loading) {
-            // return splashscreen
+            // TODO render splashscreen
             return <p>Loading...</p>
         }
 
@@ -122,7 +121,7 @@ class Room extends Component {
 
                     <div className="row">
                         <div className="col">
-                            <h2>{this.getTitle()}</h2>
+                            <h2 className="room-title capitalized">{this.getTitle()}</h2>
                         </div>
                     </div>
 
@@ -159,7 +158,6 @@ class Room extends Component {
                             </div>
                         </div>
                     </div>
-
 
                     {this.state.panoramicImages.length > 0 &&
                         <Fragment>
@@ -279,6 +277,7 @@ class Room extends Component {
 
                     <hr />
 
+                    {/* Troubleshooting stuff begins here */}
                     <div className="row">
                         <div className="col-sm-2">
                             <TroubleshootingFilters

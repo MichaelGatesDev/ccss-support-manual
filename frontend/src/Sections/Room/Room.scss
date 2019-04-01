@@ -1,0 +1,32 @@
+#room-section {
+    padding-top: 1.5em;
+}
+
+#room-section {
+
+    h2,
+    h3 {
+        text-align: center;
+    }
+
+    h3::before,
+    h3::after {
+        content: "\""
+    }
+
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: bold;
+    }
+
+    .panoramas {
+        padding-bottom: 2em;
+    }
+
+    .general-room-info {
+        padding: 1em 0;
+    }
+}
