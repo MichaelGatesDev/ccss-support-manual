@@ -55,7 +55,10 @@ class TroubleshootingFilters extends Component {
         }, function () {
             this.props.onChange(newFilters);
         });
+    }
 
+    resetFilters(){
+        
     }
 
     render() {
@@ -81,6 +84,11 @@ class TroubleshootingFilters extends Component {
                     <div className="right">
                         {checkboxes}
                     </div>
+
+                    <button className="btn btn-primary w-100" onClick={this.resetFilters}>
+                        Reset Filters
+                    </button>
+
                 </div>
             </div>
         );
