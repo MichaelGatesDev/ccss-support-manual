@@ -4,8 +4,8 @@ import './Room.scss';
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
 
-import TroubleshootingFilters from "../../Components/TroubleshootingFilters/TroubleshootingFilters";
 import TypeFilters from "../../Components/TroubleshootingFilters/TypeFilters/TypeFilters";
+import TagFilters from "../../Components/TroubleshootingFilters/TagFilters/TagFilters";
 
 
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
@@ -25,6 +25,7 @@ class Room extends Component {
 
         this.updateTroubleshootingFilters = this.updateTroubleshootingFilters.bind(this);
         this.onTypeFilterChange = this.onTypeFilterChange.bind(this);
+        this.onTagFilterChange = this.onTagFilterChange.bind(this);
     }
 
     componentDidMount() {
@@ -83,14 +84,10 @@ class Room extends Component {
         fetch('/api/v1/troubleshooting-data/' + this.state.room.id)
             .then(response => response.json())
             .then(data => {
-
-                var sortedData = _.sortBy(data, function (item) {
-                    return item.types;
-                });
-
+                var sortedTypes = _.sortBy(data, function (item) { return item.types; });
                 this.setState({
                     loading: false,
-                    troubleshootingData: sortedData
+                    troubleshootingData: sortedTypes
                 });
             }).catch((error) => {
                 console.log(error);
@@ -108,13 +105,23 @@ class Room extends Component {
         return this.state.building.officialName + " " + this.state.room.number;
     }
 
-
     getAllTroubleshootingDataTypes() {
         let results = [];
         for (const td of this.state.troubleshootingData) {
             for (const type of td.types) {
                 if (!results.includes(type.toLowerCase()))
-                    results.push(type);
+                    results.push(type.toLowerCase());
+            }
+        }
+        return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
+    }
+
+    getAllTroubleshootingDataTags() {
+        let results = [];
+        for (const td of this.state.troubleshootingData) {
+            for (const tag of td.tags) {
+                if (!results.includes(tag.toLowerCase()))
+                    results.push(tag.toLowerCase());
             }
         }
         return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
@@ -126,13 +133,20 @@ class Room extends Component {
         });
     }
 
+    onTagFilterChange(activeTagFilters) {
+        this.setState({
+            activeTroubleshootingTagFilters: activeTagFilters
+        });
+    }
+
     render() {
 
         if (this.state.loading) {
             // TODO render splashscreen
-            return <p>Loading...</p>
+            return (
+                <p>Loading...</p>
+            );
         }
-
 
         return (
             <Fragment>
@@ -307,6 +321,10 @@ class Room extends Component {
                             <TypeFilters
                                 types={this.getAllTroubleshootingDataTypes()}
                                 onChange={this.onTypeFilterChange}
+                            />
+                            <TagFilters
+                                tags={this.getAllTroubleshootingDataTags()}
+                                onChange={this.onTagFilterChange}
                             />
                         </div>
                         <div className="col">

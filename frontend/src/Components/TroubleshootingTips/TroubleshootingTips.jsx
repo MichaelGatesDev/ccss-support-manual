@@ -18,7 +18,7 @@ class TroubleshootingTips extends Component {
 
         var data = this.props.troubleshootingData;
 
-        if (this.props.typeFilters.length > 0) {
+        if (this.props.typeFilters && this.props.typeFilters.length > 0) {
             data = data.filter(function (item) {
                 for (const typeFilter of this.props.typeFilters)
                     if (item.types.includes(typeFilter))
@@ -27,7 +27,7 @@ class TroubleshootingTips extends Component {
             }, this);
         }
 
-        if (this.props.tagFilters.length > 0) {
+        if (this.props.tagFilters && this.props.tagFilters.length > 0) {
             data = data.filter(function (item) {
                 for (const tagFilter of this.props.tagFilters)
                     if (item.tags.includes(tagFilter))

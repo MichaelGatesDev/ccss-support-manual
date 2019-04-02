@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import './TypeFilters.scss';
+import './TagFilters.scss';
 
-import TypeFilter from '../TypeFilter/TypeFilter';
+import TagFilter from '../TagFilter/TagFilter';
 
 var _ = require('underscore');
 
-class TypeFilters extends Component {
+class TagFilters extends Component {
 
     constructor(props) {
         super(props);
@@ -27,9 +27,9 @@ class TypeFilters extends Component {
             activeFilters: []
         }, function () {
             this.setState({
-                activeFilters: this.props.types
+                activeFilters: this.props.tags
             }, function () {
-                console.log("Reset tag filters");
+                console.log("Reset type filters");
                 this.props.onChange(this.state.activeFilters);
             });
         });
@@ -64,14 +64,14 @@ class TypeFilters extends Component {
 
     render() {
 
-        var sortedTypes = _.sortBy(this.props.types, function (type) { return type; });
+        var sortedTags = _.sortBy(this.props.tags, function (type) { return type; });
 
-        var typeFilters = sortedTypes.map(function (value, index) {
+        var tagFilters = sortedTags.map(function (value, index) {
 
             var selected = this.isSelected(value);
 
             return (
-                <TypeFilter
+                <TagFilter
                     name={value}
                     key={index}
                     onChange={this.onFilterChange}
@@ -81,20 +81,21 @@ class TypeFilters extends Component {
         }, this);
 
         return (
-            <div className="TypeFilters-Component">
+            <div className="TagFilters-Component">
                 <div className="text-center">
-                    <h5>Type Filters</h5>
+                    <h5>Tag Filters</h5>
                     <hr />
-                    {typeFilters.length > 0 ?
-                        <Fragment>
-                            <div className="col">
-                                {typeFilters}
-                            </div>
-                            <hr />
-                            <button className="btn btn-primary w-100" onClick={this.resetFilters}>Reset Filters</button>
-                        </Fragment>
-                        :
-                        <p>There are no types to filter.</p>
+                    {
+                        tagFilters.length > 0 ?
+                            <Fragment>
+                                <div className="col">
+                                    {tagFilters}
+                                </div>
+                                <hr />
+                                <button className="btn btn-primary w-100" onClick={this.resetFilters}>Reset Filters</button>
+                            </Fragment>
+                            :
+                            <p>There are no tags to filter.</p>
                     }
                 </div>
             </div>
@@ -102,4 +103,4 @@ class TypeFilters extends Component {
     }
 }
 
-export default TypeFilters;
+export default TagFilters;

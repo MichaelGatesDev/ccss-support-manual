@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './TypeFilter.scss';
+import './TagFilter.scss';
 
 var _ = require('underscore');
 
-class TypeFilter extends Component {
+class TagFilter extends Component {
 
     constructor(props) {
         super(props);
@@ -20,7 +20,7 @@ class TypeFilter extends Component {
 
     render() {
         return (
-            <div className="TypeFilter-Component row" onClick={this.onSelect}>
+            <div className="TagFilter-Component row" onClick={this.onSelect}>
                 <div className="col capitalized">{this.props.name}</div>
                 <div className="col-mr">
                     <input type="checkbox"
@@ -33,4 +33,4 @@ class TypeFilter extends Component {
     }
 }
 
-export default TypeFilter;
+export default TagFilter;

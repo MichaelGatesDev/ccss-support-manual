@@ -194,12 +194,12 @@ async function loadSecondarySpreadsheet(file) {
 
                 var troubleshootingDataObj = {
                     title: title,
-                    description: row.getCell(2).text.toLowerCase(),
-                    solution: row.getCell(3).text.toLowerCase(),
-                    types: row.getCell(4).text.toLowerCase().split(","),
-                    tags: row.getCell(5).text.toLowerCase().split(","),
-                    whitelistedLocations: parseRooms(row.getCell(6).text.toLowerCase()),
-                    blacklistedLocations: parseRooms(row.getCell(7).text.toLowerCase()),
+                    description: row.getCell(2).text.toLowerCase().trim(),
+                    solution: row.getCell(3).text.toLowerCase().trim(),
+                    types: parseListFromString(row.getCell(4).text),
+                    tags: parseListFromString(row.getCell(5).text),
+                    whitelistedLocations: parseRooms(row.getCell(6).text.trim().toLowerCase()),
+                    blacklistedLocations: parseRooms(row.getCell(7).text.trim().toLowerCase()),
                 };
 
                 results.push(troubleshootingDataObj);
@@ -233,6 +233,11 @@ function parseRooms(raw) {
         results.push(room.id);
     }
     return results;
+}
+
+function parseListFromString(str, delim) {
+    if (isBlank(str)) return [];
+    return str.toLowerCase().trim().split(",");
 }
 
 
