@@ -29,7 +29,7 @@ class TagFilters extends Component {
             this.setState({
                 activeFilters: this.props.tags
             }, function () {
-                console.log("Reset type filters");
+                console.log("Reset tag filters");
                 this.props.onChange(this.state.activeFilters);
             });
         });
