@@ -4,6 +4,8 @@ import './Room.scss';
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
 
+import FilterBox from "../../Components/FilterBox/FilterBox";
+
 import TypeFilters from "../../Components/TroubleshootingFilters/TypeFilters/TypeFilters";
 import TagFilters from "../../Components/TroubleshootingFilters/TagFilters/TagFilters";
 
@@ -318,14 +320,20 @@ class Room extends Component {
 
                     <div className="row">
                         <div className="col-sm-3">
-                            <TypeFilters
-                                types={this.getAllTroubleshootingDataTypes()}
+                            <FilterBox
+                                label={"Type Filters"}
+                                keys={this.getAllTroubleshootingDataTypes()}
+                                buttonText={"Reset"}
                                 onChange={this.onTypeFilterChange}
+                                enabledByDefault={true}
                             />
-                            <TagFilters
-                                tags={this.getAllTroubleshootingDataTags()}
+                            <FilterBox
+                                label={"Tag Filters"}
+                                keys={this.getAllTroubleshootingDataTags()}
+                                buttonText={"Reset"}
                                 onChange={this.onTagFilterChange}
-                            />
+                                enabledByDefault={false}
+                            />  
                         </div>
                         <div className="col">
                             <TroubleshootingTips
