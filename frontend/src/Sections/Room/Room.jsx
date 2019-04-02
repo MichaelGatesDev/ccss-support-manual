@@ -1,10 +1,13 @@
-
 import React, { Component, Fragment } from 'react';
-import './Room.css';
+import './Room.scss';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
+
 import TroubleshootingFilters from "../../Components/TroubleshootingFilters/TroubleshootingFilters";
+import TypeFilters from "../../Components/TroubleshootingFilters/TypeFilters/TypeFilters";
+
+
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
 
 var _ = require('underscore');
@@ -21,6 +24,7 @@ class Room extends Component {
         };
 
         this.updateTroubleshootingFilters = this.updateTroubleshootingFilters.bind(this);
+        this.onTypeFilterChange = this.onTypeFilterChange.bind(this);
     }
 
     componentDidMount() {
@@ -97,17 +101,35 @@ class Room extends Component {
     updateTroubleshootingFilters(filters) {
         this.setState({
             activeTroubleshootingTypeFilters: filters
-        })
+        });
     }
 
     getTitle() {
         return this.state.building.officialName + " " + this.state.room.number;
     }
 
+
+    getAllTroubleshootingDataTypes() {
+        let results = [];
+        for (const td of this.state.troubleshootingData) {
+            for (const type of td.types) {
+                if (!results.includes(type.toLowerCase()))
+                    results.push(type);
+            }
+        }
+        return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
+    }
+
+    onTypeFilterChange(activeTypeFilters) {
+        this.setState({
+            activeTroubleshootingTypeFilters: activeTypeFilters
+        });
+    }
+
     render() {
 
         if (this.state.loading) {
-            // return splashscreen
+            // TODO render splashscreen
             return <p>Loading...</p>
         }
 
@@ -122,7 +144,7 @@ class Room extends Component {
 
                     <div className="row">
                         <div className="col">
-                            <h2>{this.getTitle()}</h2>
+                            <h2 className="room-title capitalized">{this.getTitle()}</h2>
                         </div>
                     </div>
 
@@ -159,7 +181,6 @@ class Room extends Component {
                             </div>
                         </div>
                     </div>
-
 
                     {this.state.panoramicImages.length > 0 &&
                         <Fragment>
@@ -279,11 +300,13 @@ class Room extends Component {
 
                     <hr />
 
+                    {/* Troubleshooting stuff begins here */}
+
                     <div className="row">
-                        <div className="col-sm-2">
-                            <TroubleshootingFilters
-                                troubleshootingData={this.state.troubleshootingData}
-                                onChange={this.updateTroubleshootingFilters}
+                        <div className="col-sm-3">
+                            <TypeFilters
+                                types={this.getAllTroubleshootingDataTypes()}
+                                onChange={this.onTypeFilterChange}
                             />
                         </div>
                         <div className="col">
