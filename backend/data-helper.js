@@ -117,11 +117,11 @@ exports.loadPrimarySpreadsheet = loadPrimarySpreadsheet;
 function getBuildingByName(name) {
     for (const building of buildings) {
         var contains = false;
-        if (!contains && building.internalName.includes(name)) contains = true;
-        if (!contains && building.officialName.includes(name)) contains = true;
+        if (!contains && building.internalName.toLowerCase().includes(name.toLowerCase())) contains = true;
+        if (!contains && building.officialName.toLowerCase().includes(name.toLowerCase())) contains = true;
         if (!contains) {
             for (const nick of building.nicknames) {
-                if (nick.includes(name)) contains = true;
+                if (nick.toLowerCase().includes(name.toLowerCase())) contains = true;
                 break;
             }
         }
@@ -133,7 +133,7 @@ exports.getBuildingByName = getBuildingByName;
 
 function getRoomByBuildingNameAndNumber(buildingName, roomNumber) {
     for (const room of getAllRooms()) {
-        if (room.buildingName === buildingName.toLowerCase() && room.number === roomNumber.toLowerCase())
+        if (getBuildingByName(room.buildingName) === getBuildingByName(buildingName) && room.number === roomNumber.toLowerCase())
             return room;
     }
     return null;
@@ -227,9 +227,6 @@ function parseRooms(raw) {
         var buildingName = parts[0];
         var roomNumber = parts[1];
 
-        var building = getBuildingByName(buildingName);
-        if (!building) continue; // invalid building
-
         var room = getRoomByBuildingNameAndNumber(buildingName, roomNumber);
         if (!room) continue; // no location at building/room
 
@@ -259,8 +256,12 @@ function getTroubleshootingDataForRoom(roomID) {
             continue;
 
         // whitelisted room
-        if (td.whitelistedLocations.includes(roomID))
-            results.push(td);
+        if (td.whitelistedLocations.length > 0) {
+            if (td.whitelistedLocations.includes(roomID))
+                results.push(td);
+            else
+                continue;
+        }
 
         // audio
         if (room.hasAudio) {
@@ -276,7 +277,7 @@ function getTroubleshootingDataForRoom(roomID) {
         }
         // computer
         if (room.hasTeachingStationComputer) {
-            if (td.types.includes('projector')) {
+            if (td.types.includes('computer')) {
                 results.push(td);
             }
         }
