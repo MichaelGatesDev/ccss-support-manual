@@ -3,13 +3,8 @@ import './Room.scss';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
-
+import FormInput from "../../Components/FormInput/FormInput";
 import FilterBox from "../../Components/FilterBox/FilterBox";
-
-import TypeFilters from "../../Components/TroubleshootingFilters/TypeFilters/TypeFilters";
-import TagFilters from "../../Components/TroubleshootingFilters/TagFilters/TagFilters";
-
-
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
 
 var _ = require('underscore');
@@ -22,12 +17,14 @@ class Room extends Component {
         this.state = {
             loading: true,
             activeTroubleshootingTypeFilters: [],
-            activeTroubleshootingTagFilters: []
+            activeTroubleshootingTagFilters: [],
+            activeSearchQuery: ''
         };
 
         this.updateTroubleshootingFilters = this.updateTroubleshootingFilters.bind(this);
         this.onTypeFilterChange = this.onTypeFilterChange.bind(this);
         this.onTagFilterChange = this.onTagFilterChange.bind(this);
+        this.onFilterSearch = this.onFilterSearch.bind(this);
     }
 
     componentDidMount() {
@@ -138,6 +135,12 @@ class Room extends Component {
     onTagFilterChange(activeTagFilters) {
         this.setState({
             activeTroubleshootingTagFilters: activeTagFilters
+        });
+    }
+
+    onFilterSearch(query) {
+        this.setState({
+            activeSearchQuery: query
         });
     }
 
@@ -320,6 +323,17 @@ class Room extends Component {
 
                     <div className="row">
                         <div className="col-sm-3">
+
+                            <div className="text-center">
+                                <h5>Search</h5>
+                                <FormInput
+                                    type="text"
+                                    placeholder="Search by title"
+                                    onChange={this.onFilterSearch}
+                                    value={this.state.searchQuery}
+                                />
+                            </div>
+
                             <FilterBox
                                 label={"Type Filters"}
                                 keys={this.getAllTroubleshootingDataTypes()}
@@ -333,13 +347,14 @@ class Room extends Component {
                                 buttonText={"Reset"}
                                 onChange={this.onTagFilterChange}
                                 enabledByDefault={false}
-                            />  
+                            />
                         </div>
                         <div className="col">
                             <TroubleshootingTips
                                 troubleshootingData={this.state.troubleshootingData}
                                 typeFilters={this.state.activeTroubleshootingTypeFilters}
                                 tagFilters={this.state.activeTroubleshootingTagFilters}
+                                search={this.state.activeSearchQuery}
                             />
                         </div>
                     </div>

@@ -36,6 +36,15 @@ class TroubleshootingTips extends Component {
             }, this);
         }
 
+
+        var queries = this.props.search.split(" ");
+        for (const q of queries) {
+            data = data.filter(function (item) {
+                return item.title.includes(q) || item.description.includes(q);
+            }, this);
+        }
+
+
         var tips = data.map(function (value, index) {
             return (
                 <TroubleshootingTip
@@ -49,12 +58,13 @@ class TroubleshootingTips extends Component {
             <div className="TroubleshootingTips-Component">
                 <h5>Troubleshooting Tips</h5>
                 <hr />
-                {this.props.typeFilters.length > 0 ?
-                    <ul>
-                        {tips}
-                    </ul>
-                    :
-                    <p>There are no troubleshooting tips that match the filters.</p>
+                {
+                    this.props.typeFilters.length > 0 ?
+                        <ul>
+                            {tips}
+                        </ul>
+                        :
+                        <p>There are no troubleshooting tips that match the filters.</p>
                 }
             </div>
         );
