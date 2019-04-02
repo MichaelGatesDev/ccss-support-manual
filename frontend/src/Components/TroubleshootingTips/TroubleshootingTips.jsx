@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './TroubleshootingTips.css';
 
-import TroubleshootingTip from '../TroubleshootingTip/TroubleshootingTip';
+import TroubleshootingTip from './TroubleshootingTip/TroubleshootingTip';
 
 // var _ = require('underscore');
 
