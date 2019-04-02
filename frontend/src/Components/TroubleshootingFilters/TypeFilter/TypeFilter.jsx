@@ -21,7 +21,7 @@ class TypeFilters extends Component {
     render() {
         return (
             <div className="TypeFilter-Component row" onClick={this.onSelect}>
-                <div className="col">{this.props.name}</div>
+                <div className="col capitalized">{this.props.name}</div>
                 <div className="col-mr">
                     <input type="checkbox"
                         checked={this.props.selected}
