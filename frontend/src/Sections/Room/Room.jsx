@@ -3,11 +3,8 @@ import './Room.scss';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
-
-import TroubleshootingFilters from "../../Components/TroubleshootingFilters/TroubleshootingFilters";
-import TypeFilters from "../../Components/TroubleshootingFilters/TypeFilters/TypeFilters";
-
-
+import FormInput from "../../Components/FormInput/FormInput";
+import FilterBox from "../../Components/FilterBox/FilterBox";
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
 
 var _ = require('underscore');
@@ -20,11 +17,14 @@ class Room extends Component {
         this.state = {
             loading: true,
             activeTroubleshootingTypeFilters: [],
-            activeTroubleshootingTagFilters: []
+            activeTroubleshootingTagFilters: [],
+            activeSearchQuery: ''
         };
 
         this.updateTroubleshootingFilters = this.updateTroubleshootingFilters.bind(this);
         this.onTypeFilterChange = this.onTypeFilterChange.bind(this);
+        this.onTagFilterChange = this.onTagFilterChange.bind(this);
+        this.onFilterSearch = this.onFilterSearch.bind(this);
     }
 
     componentDidMount() {
@@ -83,14 +83,10 @@ class Room extends Component {
         fetch('/api/v1/troubleshooting-data/' + this.state.room.id)
             .then(response => response.json())
             .then(data => {
-
-                var sortedData = _.sortBy(data, function (item) {
-                    return item.types;
-                });
-
+                var sortedTypes = _.sortBy(data, function (item) { return item.types; });
                 this.setState({
                     loading: false,
-                    troubleshootingData: sortedData
+                    troubleshootingData: sortedTypes
                 });
             }).catch((error) => {
                 console.log(error);
@@ -108,13 +104,23 @@ class Room extends Component {
         return this.state.building.officialName + " " + this.state.room.number;
     }
 
-
     getAllTroubleshootingDataTypes() {
         let results = [];
         for (const td of this.state.troubleshootingData) {
             for (const type of td.types) {
                 if (!results.includes(type.toLowerCase()))
-                    results.push(type);
+                    results.push(type.toLowerCase());
+            }
+        }
+        return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
+    }
+
+    getAllTroubleshootingDataTags() {
+        let results = [];
+        for (const td of this.state.troubleshootingData) {
+            for (const tag of td.tags) {
+                if (!results.includes(tag.toLowerCase()))
+                    results.push(tag.toLowerCase());
             }
         }
         return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
@@ -126,13 +132,26 @@ class Room extends Component {
         });
     }
 
+    onTagFilterChange(activeTagFilters) {
+        this.setState({
+            activeTroubleshootingTagFilters: activeTagFilters
+        });
+    }
+
+    onFilterSearch(query) {
+        this.setState({
+            activeSearchQuery: query
+        });
+    }
+
     render() {
 
         if (this.state.loading) {
             // TODO render splashscreen
-            return <p>Loading...</p>
+            return (
+                <p>Loading...</p>
+            );
         }
-
 
         return (
             <Fragment>
@@ -304,9 +323,30 @@ class Room extends Component {
 
                     <div className="row">
                         <div className="col-sm-3">
-                            <TypeFilters
-                                types={this.getAllTroubleshootingDataTypes()}
+
+                            <div className="text-center">
+                                <h5>Search</h5>
+                                <FormInput
+                                    type="text"
+                                    placeholder="Search by title"
+                                    onChange={this.onFilterSearch}
+                                    value={this.state.searchQuery}
+                                />
+                            </div>
+
+                            <FilterBox
+                                label={"Type Filters"}
+                                keys={this.getAllTroubleshootingDataTypes()}
+                                buttonText={"Reset"}
                                 onChange={this.onTypeFilterChange}
+                                enabledByDefault={true}
+                            />
+                            <FilterBox
+                                label={"Tag Filters"}
+                                keys={this.getAllTroubleshootingDataTags()}
+                                buttonText={"Reset"}
+                                onChange={this.onTagFilterChange}
+                                enabledByDefault={false}
                             />
                         </div>
                         <div className="col">
@@ -314,6 +354,7 @@ class Room extends Component {
                                 troubleshootingData={this.state.troubleshootingData}
                                 typeFilters={this.state.activeTroubleshootingTypeFilters}
                                 tagFilters={this.state.activeTroubleshootingTagFilters}
+                                search={this.state.activeSearchQuery}
                             />
                         </div>
                     </div>

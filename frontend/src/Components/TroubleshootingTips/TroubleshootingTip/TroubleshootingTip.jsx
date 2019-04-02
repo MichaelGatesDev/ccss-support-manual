@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './TroubleshootingTip.css';
+import './TroubleshootingTip.scss';
 
 class TroubleshootingTip extends Component {
 

@@ -117,11 +117,11 @@ exports.loadPrimarySpreadsheet = loadPrimarySpreadsheet;
 function getBuildingByName(name) {
     for (const building of buildings) {
         var contains = false;
-        if (!contains && building.internalName.includes(name)) contains = true;
-        if (!contains && building.officialName.includes(name)) contains = true;
+        if (!contains && building.internalName.toLowerCase().includes(name.toLowerCase())) contains = true;
+        if (!contains && building.officialName.toLowerCase().includes(name.toLowerCase())) contains = true;
         if (!contains) {
             for (const nick of building.nicknames) {
-                if (nick.includes(name)) contains = true;
+                if (nick.toLowerCase().includes(name.toLowerCase())) contains = true;
                 break;
             }
         }
@@ -133,7 +133,7 @@ exports.getBuildingByName = getBuildingByName;
 
 function getRoomByBuildingNameAndNumber(buildingName, roomNumber) {
     for (const room of getAllRooms()) {
-        if (room.buildingName === buildingName.toLowerCase() && room.number === roomNumber.toLowerCase())
+        if (getBuildingByName(room.buildingName) === getBuildingByName(buildingName) && room.number === roomNumber.toLowerCase())
             return room;
     }
     return null;
@@ -194,12 +194,12 @@ async function loadSecondarySpreadsheet(file) {
 
                 var troubleshootingDataObj = {
                     title: title,
-                    description: row.getCell(2).text.toLowerCase(),
-                    solution: row.getCell(3).text.toLowerCase(),
-                    types: row.getCell(4).text.toLowerCase().split(","),
-                    tags: row.getCell(5).text.toLowerCase().split(","),
-                    whitelistedLocations: parseRooms(row.getCell(6).text.toLowerCase()),
-                    blacklistedLocations: parseRooms(row.getCell(7).text.toLowerCase()),
+                    description: row.getCell(2).text.toLowerCase().trim(),
+                    solution: row.getCell(3).text.toLowerCase().trim(),
+                    types: parseListFromString(row.getCell(4).text),
+                    tags: parseListFromString(row.getCell(5).text),
+                    whitelistedLocations: parseRooms(row.getCell(6).text.trim().toLowerCase()),
+                    blacklistedLocations: parseRooms(row.getCell(7).text.trim().toLowerCase()),
                 };
 
                 results.push(troubleshootingDataObj);
@@ -227,15 +227,17 @@ function parseRooms(raw) {
         var buildingName = parts[0];
         var roomNumber = parts[1];
 
-        var building = getBuildingByName(buildingName);
-        if (!building) continue; // invalid building
-
         var room = getRoomByBuildingNameAndNumber(buildingName, roomNumber);
         if (!room) continue; // no location at building/room
 
         results.push(room.id);
     }
     return results;
+}
+
+function parseListFromString(str, delim) {
+    if (isBlank(str)) return [];
+    return str.toLowerCase().trim().split(",");
 }
 
 
@@ -259,8 +261,12 @@ function getTroubleshootingDataForRoom(roomID) {
             continue;
 
         // whitelisted room
-        if (td.whitelistedLocations.includes(roomID))
-            results.push(td);
+        if (td.whitelistedLocations.length > 0) {
+            if (td.whitelistedLocations.includes(roomID))
+                results.push(td);
+            else
+                continue;
+        }
 
         // audio
         if (room.hasAudio) {
@@ -276,7 +282,7 @@ function getTroubleshootingDataForRoom(roomID) {
         }
         // computer
         if (room.hasTeachingStationComputer) {
-            if (td.types.includes('projector')) {
+            if (td.types.includes('computer')) {
                 results.push(td);
             }
         }
