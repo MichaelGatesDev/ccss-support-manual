@@ -326,7 +326,7 @@ class Room extends Component {
                                 label={"Search"}
                                 buttonText={"Clear"}
                                 onChange={this.onFilterSearch}
-                                value={this.state.searchQuery}
+                                value={this.state.activeSearchQuery}
                             />
                             <FilterBox
                                 label={"Type Filters"}

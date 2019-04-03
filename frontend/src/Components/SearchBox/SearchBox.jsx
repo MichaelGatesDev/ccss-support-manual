@@ -9,6 +9,8 @@ class SearchBox extends Component {
 
     constructor(props) {
         super(props);
+
+        this.resetFilters = this.resetFilters.bind(this);
     }
 
     componentDidMount() {
@@ -16,11 +18,7 @@ class SearchBox extends Component {
 
 
     resetFilters() {
-        this.setState({
-            activeFilters: this.props.enabledByDefault ? this.props.keys : []
-        }, function () {
-            this.props.onChange(this.state.activeFilters);
-        });
+        this.props.onChange('');
     }
 
     render() {
@@ -33,7 +31,7 @@ class SearchBox extends Component {
                         type="text"
                         placeholder="Search by title"
                         onChange={this.props.onChange}
-                        value={this.props.searchQuery}
+                        value={this.props.value}
                     />
                     <button className="btn btn-primary w-100" onClick={this.resetFilters}>{this.props.buttonText}</button>
                 </div>
