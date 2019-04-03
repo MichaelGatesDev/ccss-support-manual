@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './Filter.scss';
 
-var _ = require('underscore');
-
 class Filter extends Component {
 
     constructor(props) {
