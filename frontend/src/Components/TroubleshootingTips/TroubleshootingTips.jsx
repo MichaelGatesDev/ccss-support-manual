@@ -36,11 +36,10 @@ class TroubleshootingTips extends Component {
             }, this);
         }
 
-
         var queries = this.props.search.split(" ");
         for (const q of queries) {
             data = data.filter(function (item) {
-                return item.title.includes(q) || item.description.includes(q);
+                return item.title.includes(q) || item.description.includes(q) || item.types.includes(q) || item.tags.includes(q);
             }, this);
         }
 
