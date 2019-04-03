@@ -8,11 +8,15 @@ import Settings from './Sections/Settings/Settings';
 import Room from './Sections/Room/Room';
 
 import Footer from "./Components/Footer/Footer";
+import BackToTopButton from "./Components/BackToTopButton/BackToTopButton";
 
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
+        <BackToTopButton
+        minScrollAmt={50}
+        />
         <div className="App">
           <Route exact path="/" component={Home} />
           <Route exact path="/settings" component={Settings} />
