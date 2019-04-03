@@ -48,13 +48,13 @@ class NavBar extends Component {
                         }
                         <ul className="navbar-nav ml-auto" id="navbarNavDropdown">
                             <li className="nav-item">
-                                <a className="nav-link" href="https://banner.plattsburgh.edu/pls/prod/psu_genweb.master_sched_search" target="_blank">Master Schedule</a>
+                                <a className="nav-link" href="https://banner.plattsburgh.edu/pls/prod/psu_genweb.master_sched_search" target="_blank" rel="noopener noreferrer">Master Schedule</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="https://booking.plattsburgh.edu/Web/schedule.php" target="_blank">Room Schedule</a>
+                                <a className="nav-link" href="https://booking.plattsburgh.edu/Web/schedule.php" target="_blank" rel="noopener noreferrer">Room Schedule</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="https://suny.service-now.com/navpage.do" target="_blank">ServiceNow</a>
+                                <a className="nav-link" href="https://suny.service-now.com/navpage.do" target="_blank" rel="noopener noreferrer">ServiceNow</a>
                             </li>
                         </ul>
                     </div>
