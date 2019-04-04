@@ -65,7 +65,6 @@ class FilterBox extends Component {
                                 <div className="col">
                                     {filters}
                                 </div>
-                                <hr />
                                 <button className="btn btn-primary w-100" onClick={this.resetFilters}>{this.props.buttonText}</button>
                             </Fragment>
                             :

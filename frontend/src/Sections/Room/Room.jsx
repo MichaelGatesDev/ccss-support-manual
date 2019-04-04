@@ -3,9 +3,9 @@ import './Room.scss';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
-import FormInput from "../../Components/FormInput/FormInput";
 import FilterBox from "../../Components/FilterBox/FilterBox";
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
+import SearchBox from '../../Components/SearchBox/SearchBox';
 
 var _ = require('underscore');
 
@@ -30,7 +30,6 @@ class Room extends Component {
     componentDidMount() {
         this.fetchRoom();
     }
-
 
     fetchRoom() {
         fetch('/api/v1/rooms/' + this.props.match.params.roomID)
@@ -323,17 +322,12 @@ class Room extends Component {
 
                     <div className="row">
                         <div className="col-sm-3">
-
-                            <div className="text-center">
-                                <h5>Search</h5>
-                                <FormInput
-                                    type="text"
-                                    placeholder="Search by title"
-                                    onChange={this.onFilterSearch}
-                                    value={this.state.searchQuery}
-                                />
-                            </div>
-
+                            <SearchBox
+                                label={"Search"}
+                                buttonText={"Clear"}
+                                onChange={this.onFilterSearch}
+                                value={this.state.activeSearchQuery}
+                            />
                             <FilterBox
                                 label={"Type Filters"}
                                 keys={this.getAllTroubleshootingDataTypes()}
