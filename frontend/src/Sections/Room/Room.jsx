@@ -241,12 +241,26 @@ class Room extends Component {
                             <p className="detail">{this.state.room.hasScreen.toString()}</p> */}
 
                             <Fragment>
-                                <p className="detail-header" data-toggle="collapse" data-target="#collapse-audio" aria-expanded="false" aria-controls="collapse-audio">
+                                <p className="detail-header">
                                     Audio
                                 </p>
-                                <div className="collapse" id="collapse-audio">
-                                    <p>Section TBD</p>
-                                </div>
+                                <span>
+                                    {this.state.room.audioRequiresProjector ?
+                                        <i
+                                            className="fas fa-volume-up"
+                                            style={{ color: 'red' }}
+                                            data-toggle="tooltip"
+                                            title="Audio requires projector"
+                                        />
+                                        :
+                                        <i
+                                            className="fas fa-volume-up"
+                                            style={{ color: 'green' }}
+                                            data-toggle="tooltip"
+                                            title="Audio requires projector"
+                                        />
+                                    }
+                                </span>
                             </Fragment>
 
                             {this.state.room.hasProjector &&
@@ -262,15 +276,69 @@ class Room extends Component {
 
                             {this.state.room.hasTeachingStationComputer &&
                                 <Fragment>
-                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-computer" aria-expanded="false" aria-controls="collapse-computer">
+                                    <p className="detail-header">
                                         Teaching Station Computer
                                     </p>
-                                    <div className="collapse" id="collapse-computer">
-                                        <p className="detail-header">Computer Type</p>
-                                        <p className="detail capitalized">{this.state.room.teachingStationComputerType}</p>
-                                        <p className="detail-header">Operating System</p>
-                                        <p className="detail uppercase">{this.state.room.teachingStationComputerOS}</p>
-                                    </div>
+
+                                    {/* Computer Type */}
+                                    <span>
+                                        {this.state.room.teachingStationComputerType === 'all-in-one' &&
+                                            <i
+                                                className="fas fa-desktop"
+                                                data-toggle="tooltip"
+                                                title="All-In-One"
+                                            />
+                                        }
+                                        {this.state.room.teachingStationComputerType === 'tower' &&
+                                            <i
+                                                className="fas fa-server"
+                                                data-toggle="tooltip"
+                                                title={this.state.room.teachingStationComputerType}
+                                            />
+                                        }
+                                        {this.state.room.teachingStationComputerType === 'mini-pc' &&
+                                            <i
+                                                className="fas fa-hdd"
+                                                data-toggle="tooltip"
+                                                title={this.state.room.teachingStationComputerType}
+                                            />
+                                        }
+                                        {this.state.room.teachingStationComputerType === 'imac' &&
+                                            <i
+                                                className="fas fa-tv"
+                                                data-toggle="tooltip"
+                                                title={this.state.room.teachingStationComputerType}
+                                            />
+                                        }
+                                        {this.state.room.teachingStationComputerType === 'laptop' &&
+                                            <i
+                                                className="fas fa-laptop"
+                                                data-toggle="tooltip"
+                                                title={this.state.room.teachingStationComputerType}
+                                            />
+                                        }
+                                    </span>
+
+                                    {/* Operating System */}
+                                    <span>
+                                        {this.state.room.teachingStationComputerOS.includes('windows') &&
+                                            <i
+                                                className="fab fa-windows"
+                                                data-toggle="tooltip"
+                                                title={this.state.room.teachingStationComputerOS}
+                                            />
+                                        }
+                                        {this.state.room.teachingStationComputerOS === 'osx' &&
+                                            <i
+                                                className="fab fa-apple"
+                                                data-toggle="tooltip"
+                                                title={this.state.room.teachingStationComputerOS}
+                                            />
+                                        }
+                                        {this.state.room.teachingStationComputerOS.includes('linux') &&
+                                            <i className="fab fa-linux" />
+                                        }
+                                    </span>
                                 </Fragment>
                             }
 
