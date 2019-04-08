@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var dataHelper = require('./data-helper');
 var config = require('./config');
+var gdriveDownloader = require('./gdrive-downloader');
 
 var indexRouter = require('./routes/index');
 
@@ -54,9 +55,20 @@ app.use(function (err, req, res, next) {
 // ------------------------------------------------------ \\
 
 var defaultAppConfig = {
-  checkForUpdates: true,
-  primary_spreadsheet: 'public/primary.xlsx',
-  secondary_spreadsheet: 'public/secondary.xlsx',
+
+  checkForDataUpdates: false,
+  checkForProgramUpdates: false,
+
+  primarySpreadsheet: {
+    docID: '',
+    path: 'public/primary.xlsx'
+  },
+
+  secondarySpreadsheet: {
+    docID: '',
+    path: 'public/secondary.xlsx'
+  },
+
   images_directory: 'public/images/',
 }
 
@@ -73,13 +85,56 @@ config.create('config.json', defaultAppConfig)
     return config.load('config.json');
   })
   // after the config is loaded
-  .then(function (loadedConfig) {
+  .then(async function (loadedConfig) {
     appConfig = loadedConfig;
     console.log("Finished loaded configuration file");
 
+
+    if (appConfig.checkForDataUpdates) {
+      console.log("Checking for updates to primary spreadsheet...");
+      // check for updates to spreadsheets
+      await gdriveDownloader.downloadSpreadsheet(
+          appConfig.primarySpreadsheet.docID,
+          "xlsx",
+          appConfig.primarySpreadsheet.path,
+          false
+        )
+        .then(function (downloaded) {
+          if (downloaded)
+            console.log("Finished downloading primary spreadsheet.");
+          else
+            console.log("Primary spreadsheet already exists.");
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+
+      console.log("Checking for updates to secondary spreadsheet...");
+      await gdriveDownloader.downloadSpreadsheet(
+          appConfig.secondarySpreadsheet.docID,
+          "xlsx",
+          appConfig.secondarySpreadsheet.path,
+          false
+        )
+        .then(function (downloaded) {
+          if (downloaded)
+            console.log("Finished downloading secondary spreadsheet.");
+          else
+            console.log("Secondary spreadsheet already exists.");
+        })
+        .catch(function (err) {
+          console.error(err);
+        });
+    }
+
+    if (appConfig.checkForProgramUpdates) {
+      // check for program updates
+    }
+
+
     // load primary(troubleshooting) spreadsheet
     console.log("Loading data from primary spreadsheet...");
-    return dataHelper.loadPrimarySpreadsheet(appConfig.primary_spreadsheet);
+    return dataHelper.loadPrimarySpreadsheet(appConfig.primarySpreadsheet.path);
   })
   // after we load data from the primary spreadsheet
   .then(function () {
@@ -87,7 +142,7 @@ config.create('config.json', defaultAppConfig)
 
     // load secondary(troubleshooting) spreadsheet
     console.log("Loading data from secondary spreadsheet...");
-    return dataHelper.loadSecondarySpreadsheet(appConfig.secondary_spreadsheet);
+    return dataHelper.loadSecondarySpreadsheet(appConfig.secondarySpreadsheet.path);
   })
   // after we load data from the secondary (troubleshooting) spreadsheet
   .then(function () {
