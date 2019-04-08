@@ -263,7 +263,7 @@ class Room extends Component {
                                 </span>
                             </Fragment>
 
-                            {this.state.room.hasProjector &&
+                            {/* {this.state.room.hasProjector &&
                                 <Fragment>
                                     <p className="detail-header" data-toggle="collapse" data-target="#collapse-projector" aria-expanded="false" aria-controls="collapse-projector">
                                         Projector
@@ -272,7 +272,7 @@ class Room extends Component {
                                         <p>Section TBD</p>
                                     </div>
                                 </Fragment>
-                            }
+                            } */}
 
                             {this.state.room.hasTeachingStationComputer &&
                                 <Fragment>
