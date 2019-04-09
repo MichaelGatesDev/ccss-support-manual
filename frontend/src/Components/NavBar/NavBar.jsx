@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './NavBar.css';
+import './NavBar.scss';
 
 import FormInput from "../FormInput/FormInput";
 
@@ -30,22 +30,40 @@ class NavBar extends Component {
     render() {
         return (
             <div className="NavBar-Component">
-                <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-                    <a className="navbar-brand" href="/">{this.props.title}</a>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <nav className="navbar fixed-top navbar-expand-md navbar-dark bg-dark" role="navigation">
+
+                    {/* Left */}
+                    <div className="navbar-collapse collapse order-0 dual-collapse2">
+                        <a className="navbar-brand" href="/">{this.props.title}</a>
+                    </div>
+
+                    {/* Center */}
+                    <div className="mx-auto order-1 w-75">
+
                         {this.props.searchable &&
-                            <div className="justify-content-center w-100">
-                                <FormInput
-                                    type="text"
-                                    placeholder="Search for building, room name, or room number.."
-                                    onChange={this.onSearch}
-                                    value={this.state.searchQuery}
-                                />
-                            </div>
+                            <FormInput
+                                type="text"
+                                placeholder="Search for building, room name, or room number.."
+                                onChange={this.onSearch}
+                                value={this.state.searchQuery}
+                            />
                         }
+                        <button
+                            className="navbar-toggler w-100"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation"
+                        >
+                            <span className="navbar-toggler-icon" />
+                        </button>
+                    </div>
+
+                    {/* Right */}
+                    <div className="navbar-collapse collapse order-2 dual-collapse2" id="navbarSupportedContent">
                         <ul className="navbar-nav ml-auto" id="navbarNavDropdown">
                             <li className="nav-item">
                                 <a className="nav-link" href="https://banner.plattsburgh.edu/pls/prod/psu_genweb.master_sched_search" target="_blank" rel="noopener noreferrer">Master Schedule</a>
@@ -58,6 +76,7 @@ class NavBar extends Component {
                             </li>
                         </ul>
                     </div>
+
                 </nav>
             </div>
         );

@@ -1,8 +1,6 @@
 #room-section {
-    padding-top: 1.5em;
-}
 
-#room-section {
+    padding-top: 1.5em;
 
     h2,
     h3 {
@@ -28,5 +26,9 @@
 
     .general-room-info {
         padding: 1em 0;
+    }
+
+    i {
+        padding: 0 0.25em;
     }
 }
