@@ -34,12 +34,12 @@ class NavBar extends Component {
                 <nav className="navbar fixed-top navbar-expand-md navbar-dark bg-dark" role="navigation">
 
                     {/* Left */}
-                    <div className="navbar-collapse collapse w-100 order-0 dual-collapse2">
+                    <div className="navbar-collapse collapse order-0 dual-collapse2">
                         <a className="navbar-brand" href="/">{this.props.title}</a>
                     </div>
 
                     {/* Center */}
-                    <div className="mx-auto order-1 w-100">
+                    <div className="mx-auto order-1 w-75">
 
                         {this.props.searchable &&
                             <FormInput
@@ -63,7 +63,7 @@ class NavBar extends Component {
                     </div>
 
                     {/* Right */}
-                    <div className="collapse navbar-collapse w-100 order-2 dual-collapse2" id="navbarSupportedContent">
+                    <div className="navbar-collapse collapse order-2 dual-collapse2" id="navbarSupportedContent">
                         <ul className="navbar-nav ml-auto" id="navbarNavDropdown">
                             <li className="nav-item">
                                 <a className="nav-link" href="https://banner.plattsburgh.edu/pls/prod/psu_genweb.master_sched_search" target="_blank" rel="noopener noreferrer">Master Schedule</a>
