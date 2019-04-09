@@ -248,16 +248,16 @@ class Room extends Component {
                                     {this.state.room.audioRequiresProjector ?
                                         <i
                                             className="fas fa-volume-up"
-                                            style={{ color: 'red' }}
+                                            style={{ color: 'orange' }}
                                             data-toggle="tooltip"
                                             title="Audio requires projector"
                                         />
                                         :
                                         <i
                                             className="fas fa-volume-up"
-                                            style={{ color: 'green' }}
+                                            style={{ color: 'gray' }}
                                             data-toggle="tooltip"
-                                            title="Audio requires projector"
+                                            title="Audio does not require projector"
                                         />
                                     }
                                 </span>
