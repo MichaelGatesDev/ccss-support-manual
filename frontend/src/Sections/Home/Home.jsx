@@ -46,19 +46,10 @@ class Home extends Component {
             .then(data => {
                 if (data == null) return;
 
-                for (const item of data) {
-                    var imagesObj = {
-                        roomID: item.roomID,
-                        mainImages: item.mainImages,
-                        panoramicImages: item.panoramicImages,
-                        equipmentImages: item.equipmentImages
-                    };
-
-                    this.setState({
-                        images: [...this.state.images, imagesObj],
-                        loading: false,
-                    });
-                }
+                this.setState({
+                    images: data,
+                    loading: false,
+                });
             }).catch((error) => {
                 console.log(error);
                 console.log("Failed to fetch room images");
