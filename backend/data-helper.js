@@ -70,7 +70,7 @@ async function loadPrimarySpreadsheet(file) {
                     tableCount: row.getCell(11).text,
                     extension: row.getCell(12).text,
                     phoneStatus: row.getCell(13).text.toLowerCase(),
-                    audioRequiresProjector: row.getCell(14).text.toLowerCase(),
+                    audioRequiresProjector: (row.getCell(14).text.toLowerCase() === "true"),
                     hasProjector: row.getCell(15).text.toLowerCase() !== "n/a",
                     hasAudio: row.getCell(16).text.toLowerCase() !== "n/a",
                     hasScreen: row.getCell(17).text.toLowerCase() !== "n/a",
