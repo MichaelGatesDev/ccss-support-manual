@@ -28,9 +28,7 @@ cd ..
 
 # Setup app folder
 cd app
-mkdir public
-mkdir public/images
 
-echo "The application will not work properly without the primary and secondary excel sheets and 'buildings' images" > README.txt
+echo "Make sure to create a 'public' folder which holds an 'images' folder with all of the images." > README.txt
 
 echo "Finished building application!"
