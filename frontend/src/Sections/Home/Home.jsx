@@ -121,6 +121,7 @@ class Home extends Component {
                     title="CCSS Support Manual"
                     searchable={true}
                     onSearch={this.onSearch}
+                    fixed={true}
                 />
                 <section className="container-fluid" id="home-section">
                     <div className="Home-Component">

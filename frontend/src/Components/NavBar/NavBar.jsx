@@ -31,7 +31,7 @@ class NavBar extends Component {
         return (
             <div className="NavBar-Component">
 
-                <nav className="navbar fixed-top navbar-expand-md navbar-dark bg-dark" role="navigation">
+                <nav className={"navbar " + (this.props.fixed ? 'fixed-top ' : '') + "navbar-expand-md navbar-dark bg-dark"} role="navigation">
 
                     {/* Left */}
                     <div className="navbar-collapse collapse order-0 dual-collapse2">
