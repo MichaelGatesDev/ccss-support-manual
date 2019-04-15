@@ -7,6 +7,8 @@ import FilterBox from "../../Components/FilterBox/FilterBox";
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
 import SearchBox from '../../Components/SearchBox/SearchBox';
 
+import GeneralInfo from './GeneralInfo/GeneralInfo';
+
 var _ = require('underscore');
 
 class Room extends Component {
@@ -160,45 +162,10 @@ class Room extends Component {
                 />
                 <section className="container" id="room-section">
 
-                    <div className="row">
-                        <div className="col">
-                            <h2 className="room-title capitalized">{this.getTitle()}</h2>
-                        </div>
-                    </div>
-
-                    {this.state.room.name &&
-                        <div className="row">
-                            <div className="col">
-                                <h3>{this.state.room.name}</h3>
-                            </div>
-                        </div>
-                    }
-
-
-                    <div className="general-room-info">
-                        <div className="row">
-                            <div className="col-4 text-center">
-                                <h4>Room Type</h4>
-                            </div>
-                            <div className="col-4 text-center">
-                                <h4>Room Capacity</h4>
-                            </div>
-                            <div className="col-4 text-center">
-                                <h4>Room Extension</h4>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-4 text-center">
-                                <p className="capitalized">{this.state.room.type}</p>
-                            </div>
-                            <div className="col-4 text-center">
-                                <p>{parseInt(this.state.room.capacity) === -1 ? 'N/A' : this.state.room.capacity}</p>
-                            </div>
-                            <div className="col-4 text-center">
-                                <p>{parseInt(this.state.room.extension) === -1 ? 'N/A' : this.state.room.extension}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <GeneralInfo
+                        title={this.getTitle()}
+                        room={this.state.room}
+                    />
 
                     {this.state.panoramicImages.length > 0 &&
                         <Fragment>
