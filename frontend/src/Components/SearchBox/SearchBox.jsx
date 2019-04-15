@@ -1,9 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './SearchBox.scss';
 
 import FormInput from "../../Components/FormInput/FormInput";
-
-var _ = require('underscore');
 
 class SearchBox extends Component {
 
