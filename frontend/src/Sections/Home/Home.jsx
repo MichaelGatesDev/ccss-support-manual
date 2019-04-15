@@ -3,6 +3,7 @@ import './Home.css';
 
 import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
+import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
 var _ = require('underscore');
 
@@ -86,7 +87,10 @@ class Home extends Component {
 
         if (this.state.loading) {
             // return splashscreen
-            return <p>Loading...</p>
+            return (
+                <LoadingSplash
+                />
+            );
         }
 
         var query = this.state.filterSearch;
