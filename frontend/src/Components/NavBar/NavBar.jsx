@@ -18,6 +18,7 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
+
     }
 
     onSearch(value) {
@@ -47,6 +48,8 @@ class NavBar extends Component {
                                 placeholder="Search for building, room name, or room number.."
                                 onChange={this.onSearch}
                                 value={this.state.searchQuery}
+                                selectedByDefault={true}
+                                alwaysSelected={true}
                             />
                         }
                         <button
