@@ -6,6 +6,7 @@ import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
 import FilterBox from "../../Components/FilterBox/FilterBox";
 import TroubleshootingTips from '../../Components/TroubleshootingTips/TroubleshootingTips';
 import SearchBox from '../../Components/SearchBox/SearchBox';
+import LoadingSplash from '../../Components/LoadingSplash/LoadingSplash';
 
 import GeneralInfo from './GeneralInfo/GeneralInfo';
 
@@ -148,9 +149,10 @@ class Room extends Component {
     render() {
 
         if (this.state.loading) {
-            // TODO render splashscreen
+            // return splashscreen
             return (
-                <p>Loading...</p>
+                <LoadingSplash
+                />
             );
         }
 
