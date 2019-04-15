@@ -30,7 +30,7 @@ class RoomCard extends Component {
 
         return (
             <div className="RoomCard-Component">
-                <Link to={"rooms/" + this.props.room.id}>
+                <Link to={"rooms/" + this.props.room.id} target="_blank">
                     <div className="card">
                         <img className="card-img-top" src={coverImage} alt={"Image of " + this.getTitle()} />
                         <div className="card-body">
