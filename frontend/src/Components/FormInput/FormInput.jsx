@@ -12,6 +12,23 @@ class FormInput extends Component {
     componentDidMount() {
         this.setState({
         });
+
+        if (this.props.selectedByDefault) {
+            this.textInput.focus();
+        }
+
+        this.onFocus = this.onFocus.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+    }
+
+    onFocus() {
+
+    }
+
+    onBlur() {
+        if (this.props.alwaysSelected) {
+            this.textInput.focus();
+        }
     }
 
     onChange(e) {
@@ -20,6 +37,7 @@ class FormInput extends Component {
     }
 
     render() {
+
         return (
             <div className="FormInput-Component">
                 <input
@@ -28,6 +46,9 @@ class FormInput extends Component {
                     placeholder={this.props.placeholder}
                     onChange={this.onChange}
                     value={this.props.value}
+                    ref={elem => (this.textInput = elem)}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}
                 />
             </div>
         );
