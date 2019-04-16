@@ -8,6 +8,8 @@
     "react-dom": "^16.8.4",
     "react-router-dom": "^4.4.0",
     "react-scripts": "2.1.8",
+    "react-spring": "^8.0.19",
+    "react-transition-group": "^2.9.0",
     "underscore": "^1.9.1"
   },
   "devDependencies": {

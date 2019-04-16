@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './RoomCardsGrid.css';
+import './RoomCardsGrid.scss';
 
 import RoomCard from "../../Components/RoomCard/RoomCard";
 
@@ -38,15 +38,18 @@ class RoomCardsGrid extends Component {
 
     render() {
 
-        const items = this.props.rooms.map((room) =>
-            <li key={room.id}>
-                <RoomCard
-                    room={room}
-                    building={this.getParentBuilding(room)}
-                    images={this.getImages(room)}
-                />
-            </li>
-        );
+        const items = this.props.rooms.map((room) => {
+            return (
+                <li key={room.id}>
+                    <RoomCard
+                        room={room}
+                        building={this.getParentBuilding(room)}
+                        images={this.getImages(room)}
+                    />
+                </li>
+            );
+        });
+
 
         return (
             <div className="RoomCardsGrid-Component">

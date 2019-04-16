@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './BackToTopButton.scss';
 
+import { Transition, animated } from 'react-spring/renderprops'
+
 class BackToTopButton extends Component {
 
     constructor(props) {
@@ -33,21 +35,32 @@ class BackToTopButton extends Component {
     }
 
     render() {
-        if (!this.state.visible) {
-            return null;
-        }
         return (
-            <div className="BackToTopButton-Component">
-                <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={this.onClick}
-                    data-toggle="tooltip"
-                    title="Back to Top"
-                >
-                    <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up"></i></label>
-                </button>
-            </div>
+            <Transition
+                native
+                items={this.state.visible}
+                from={{ opacity: 0 }}
+                enter={{ opacity: 1 }}
+                leave={{ opacity: 0 }}
+            >
+                {(item => item && (styles =>
+                    (
+                        <animated.div style={styles}>
+                            <div className="BackToTopButton-Component">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    onClick={this.onClick}
+                                    data-toggle="tooltip"
+                                    title="Back to Top"
+                                >
+                                    <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up"></i></label>
+                                </button>
+                            </div>
+                        </animated.div>
+                    ))
+                )}
+            </Transition>
         );
     }
 }

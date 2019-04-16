@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 
-import './RoomCard.css';
+import './RoomCard.scss';
 
 class RoomCard extends Component {
 
