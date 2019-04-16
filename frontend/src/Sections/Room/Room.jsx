@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import './Room.scss';
 
+import { Transition, animated } from 'react-spring/renderprops'
+
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
 import FilterBox from "../../Components/FilterBox/FilterBox";
@@ -148,91 +150,104 @@ class Room extends Component {
 
     render() {
 
-        if (this.state.loading) {
-            // return splashscreen
-            return (
-                <LoadingSplash
-                />
-            );
-        }
-
         return (
+
             <Fragment>
-                <NavBar
-                    title="CCSS Support Manual"
-                    searchable={false}
-                />
-                <section className="container" id="room-section">
 
-                    <GeneralInfo
-                        title={this.getTitle()}
-                        room={this.state.room}
-                    />
+                <Transition
+                    native
+                    items={this.state.loading}
+                    // from={{ opacity: 0 }}
+                    enter={{ opacity: 1 }}
+                    leave={{ opacity: 0 }}
+                >
+                    {(item => item && (styles =>
+                        (
+                            <animated.div style={styles}>
+                                <LoadingSplash />
+                            </animated.div>
+                        ))
+                    )}
+                </Transition>
 
-                    {this.state.panoramicImages.length > 0 &&
-                        <Fragment>
-                            <div className="row panoramas">
-                                <div className="col">
+
+                {!this.state.loading &&
+                    <Fragment>
+                        <NavBar
+                            title="CCSS Support Manual"
+                            searchable={false}
+                        />
+                        <section className="container" id="room-section">
+
+                            <GeneralInfo
+                                title={this.getTitle()}
+                                room={this.state.room}
+                            />
+
+                            {this.state.panoramicImages.length > 0 &&
+                                <Fragment>
+                                    <div className="row panoramas">
+                                        <div className="col">
+                                            <ImageCarousel
+                                                images={this.state.panoramicImages}
+                                                height={"250px"}
+                                                id="panoramas-carousel"
+                                            />
+                                        </div>
+                                    </div>
+                                </Fragment>
+                            }
+
+                            <div className="row">
+                                <div className="col-lg-4">
                                     <ImageCarousel
-                                        images={this.state.panoramicImages}
-                                        height={"250px"}
-                                        id="panoramas-carousel"
+                                        images={this.state.mainImages}
+                                        height={"350px"}
+                                        id="main-carousel"
                                     />
                                 </div>
-                            </div>
-                        </Fragment>
-                    }
+                                <div className="col-lg-4">
+                                    <h5>Furniture</h5>
+                                    <hr />
+                                    <p className="detail-header">Furniture Type</p>
+                                    <p className="detail capitalized">{this.state.room.furnitureType}</p>
+                                    <p className="detail-header">Chair Count</p>
+                                    <p className="detail">{this.state.room.chairCount}</p>
+                                    <p className="detail-header">Table Count</p>
+                                    <p className="detail">{this.state.room.tableCount}</p>
+                                </div>
 
-                    <div className="row">
-                        <div className="col-lg-4">
-                            <ImageCarousel
-                                images={this.state.mainImages}
-                                height={"350px"}
-                                id="main-carousel"
-                            />
-                        </div>
-                        <div className="col-lg-4">
-                            <h5>Furniture</h5>
-                            <hr />
-                            <p className="detail-header">Furniture Type</p>
-                            <p className="detail capitalized">{this.state.room.furnitureType}</p>
-                            <p className="detail-header">Chair Count</p>
-                            <p className="detail">{this.state.room.chairCount}</p>
-                            <p className="detail-header">Table Count</p>
-                            <p className="detail">{this.state.room.tableCount}</p>
-                        </div>
+                                <div className="col-lg-4">
+                                    <h5>Technology</h5>
+                                    <hr />
 
-                        <div className="col-lg-4">
-                            <h5>Technology</h5>
-                            <hr />
-
-                            {/* <p className="detail-header">Has Screen</p>
+                                    {/* <p className="detail-header">Has Screen</p>
                             <p className="detail">{this.state.room.hasScreen.toString()}</p> */}
 
-                            <Fragment>
-                                <p className="detail-header">
-                                    Audio
+                                    <Fragment>
+                                        <p className="detail-header">
+                                            Audio
                                 </p>
-                                <span>
-                                    {this.state.room.audioRequiresProjector ?
-                                        <i
-                                            className="fas fa-volume-up"
-                                            style={{ color: 'orange' }}
-                                            data-toggle="tooltip"
-                                            title="Audio requires projector"
-                                        />
-                                        :
-                                        <i
-                                            className="fas fa-volume-up"
-                                            style={{ color: 'gray' }}
-                                            data-toggle="tooltip"
-                                            title="Audio does not require projector"
-                                        />
-                                    }
-                                </span>
-                            </Fragment>
+                                        <span>
+                                            {this.state.room.audioRequiresProjector ?
+                                                <i
+                                                    className="fas fa-volume-up"
+                                                    style={{ color: 'orange' }}
+                                                    data-toggle="tooltip"
+                                                    title="Audio requires projector"
+                                                />
+                                                :
+                                                <i
+                                                    className="fas fa-volume-up"
+                                                    style={{ color: 'gray' }}
+                                                    data-toggle="tooltip"
+                                                    title="Audio does not require projector"
+                                                />
+                                            }
+                                        </span>
+                                    </Fragment>
 
-                            {/* {this.state.room.hasProjector &&
+                                    {/* {this.state.room.hasProjector &&
                                 <Fragment>
                                     <p className="detail-header" data-toggle="collapse" data-target="#collapse-projector" aria-expanded="false" aria-controls="collapse-projector">
                                         Projector
@@ -243,159 +258,161 @@ class Room extends Component {
                                 </Fragment>
                             } */}
 
-                            {this.state.room.hasTeachingStationComputer &&
-                                <Fragment>
-                                    <p className="detail-header">
-                                        Teaching Station Computer
+                                    {this.state.room.hasTeachingStationComputer &&
+                                        <Fragment>
+                                            <p className="detail-header">
+                                                Teaching Station Computer
                                     </p>
 
-                                    {/* Computer Type */}
-                                    <span>
-                                        {this.state.room.teachingStationComputerType === 'all-in-one' &&
-                                            <i
-                                                className="fas fa-desktop"
-                                                data-toggle="tooltip"
-                                                title="All-In-One"
-                                            />
-                                        }
-                                        {this.state.room.teachingStationComputerType === 'tower' &&
-                                            <i
-                                                className="fas fa-server"
-                                                data-toggle="tooltip"
-                                                title={this.state.room.teachingStationComputerType}
-                                            />
-                                        }
-                                        {this.state.room.teachingStationComputerType === 'mini-pc' &&
-                                            <i
-                                                className="fas fa-hdd"
-                                                data-toggle="tooltip"
-                                                title={this.state.room.teachingStationComputerType}
-                                            />
-                                        }
-                                        {this.state.room.teachingStationComputerType === 'imac' &&
-                                            <i
-                                                className="fas fa-tv"
-                                                data-toggle="tooltip"
-                                                title={this.state.room.teachingStationComputerType}
-                                            />
-                                        }
-                                        {this.state.room.teachingStationComputerType === 'laptop' &&
-                                            <i
-                                                className="fas fa-laptop"
-                                                data-toggle="tooltip"
-                                                title={this.state.room.teachingStationComputerType}
-                                            />
-                                        }
-                                    </span>
+                                            {/* Computer Type */}
+                                            <span>
+                                                {this.state.room.teachingStationComputerType === 'all-in-one' &&
+                                                    <i
+                                                        className="fas fa-desktop"
+                                                        data-toggle="tooltip"
+                                                        title="All-In-One"
+                                                    />
+                                                }
+                                                {this.state.room.teachingStationComputerType === 'tower' &&
+                                                    <i
+                                                        className="fas fa-server"
+                                                        data-toggle="tooltip"
+                                                        title={this.state.room.teachingStationComputerType}
+                                                    />
+                                                }
+                                                {this.state.room.teachingStationComputerType === 'mini-pc' &&
+                                                    <i
+                                                        className="fas fa-hdd"
+                                                        data-toggle="tooltip"
+                                                        title={this.state.room.teachingStationComputerType}
+                                                    />
+                                                }
+                                                {this.state.room.teachingStationComputerType === 'imac' &&
+                                                    <i
+                                                        className="fas fa-tv"
+                                                        data-toggle="tooltip"
+                                                        title={this.state.room.teachingStationComputerType}
+                                                    />
+                                                }
+                                                {this.state.room.teachingStationComputerType === 'laptop' &&
+                                                    <i
+                                                        className="fas fa-laptop"
+                                                        data-toggle="tooltip"
+                                                        title={this.state.room.teachingStationComputerType}
+                                                    />
+                                                }
+                                            </span>
 
-                                    {/* Operating System */}
-                                    <span>
-                                        {this.state.room.teachingStationComputerOS.includes('windows') &&
-                                            <i
-                                                className="fab fa-windows"
-                                                data-toggle="tooltip"
-                                                title={this.state.room.teachingStationComputerOS}
-                                            />
-                                        }
-                                        {this.state.room.teachingStationComputerOS === 'osx' &&
-                                            <i
-                                                className="fab fa-apple"
-                                                data-toggle="tooltip"
-                                                title={this.state.room.teachingStationComputerOS}
-                                            />
-                                        }
-                                        {this.state.room.teachingStationComputerOS.includes('linux') &&
-                                            <i className="fab fa-linux" />
-                                        }
-                                    </span>
-                                </Fragment>
-                            }
+                                            {/* Operating System */}
+                                            <span>
+                                                {this.state.room.teachingStationComputerOS.includes('windows') &&
+                                                    <i
+                                                        className="fab fa-windows"
+                                                        data-toggle="tooltip"
+                                                        title={this.state.room.teachingStationComputerOS}
+                                                    />
+                                                }
+                                                {this.state.room.teachingStationComputerOS === 'osx' &&
+                                                    <i
+                                                        className="fab fa-apple"
+                                                        data-toggle="tooltip"
+                                                        title={this.state.room.teachingStationComputerOS}
+                                                    />
+                                                }
+                                                {this.state.room.teachingStationComputerOS.includes('linux') &&
+                                                    <i className="fab fa-linux" />
+                                                }
+                                            </span>
+                                        </Fragment>
+                                    }
 
-                            {/* <p className="detail-header">Has Document Camera</p>
+                                    {/* <p className="detail-header">Has Document Camera</p>
                             <p className="detail">{this.state.room.hasDocCam.toString()}</p> */}
 
-                            {this.state.room.hasDVDPlayer &&
-                                <Fragment>
-                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-dvd-player" aria-expanded="false" aria-controls="collapse-dvd-player">
-                                        DVD Player
+                                    {this.state.room.hasDVDPlayer &&
+                                        <Fragment>
+                                            <p className="detail-header" data-toggle="collapse" data-target="#collapse-dvd-player" aria-expanded="false" aria-controls="collapse-dvd-player">
+                                                DVD Player
                                     </p>
-                                    <div className="collapse" id="collapse-dvd-player">
-                                        <p className="detail-header">DVD Player Type</p>
-                                        <p className="detail uppercase">{this.state.room.dvdPlayerType}</p>
-                                    </div>
-                                </Fragment>
-                            }
+                                            <div className="collapse" id="collapse-dvd-player">
+                                                <p className="detail-header">DVD Player Type</p>
+                                                <p className="detail uppercase">{this.state.room.dvdPlayerType}</p>
+                                            </div>
+                                        </Fragment>
+                                    }
 
-                            {this.state.room.hasPrinter &&
-                                <Fragment>
+                                    {this.state.room.hasPrinter &&
+                                        <Fragment>
 
-                                    <p className="detail-header" data-toggle="collapse" data-target="#collapse-printer" aria-expanded="false" aria-controls="collapse-printer">
-                                        Printer
+                                            <p className="detail-header" data-toggle="collapse" data-target="#collapse-printer" aria-expanded="false" aria-controls="collapse-printer">
+                                                Printer
                                     </p>
-                                    <div className="collapse" id="collapse-printer">
+                                            <div className="collapse" id="collapse-printer">
 
-                                        {this.state.room.printerSymquestNumber &&
-                                            <Fragment>
-                                                <p className="detail-header">Printer Symquest Number</p>
-                                                <p className="detail uppercase">{this.state.room.printerSymquestNumber}</p>
-                                            </Fragment>
-                                        }
-                                        {this.state.room.printerCartridgeType &&
-                                            <Fragment>
-                                                <p className="detail-header">Printer Cartridge Type</p>
-                                                <p className="detail uppercase">{this.state.room.printerCartridgeType}</p>
-                                            </Fragment>
-                                        }
-                                    </div>
-                                </Fragment>
-                            }
+                                                {this.state.room.printerSymquestNumber &&
+                                                    <Fragment>
+                                                        <p className="detail-header">Printer Symquest Number</p>
+                                                        <p className="detail uppercase">{this.state.room.printerSymquestNumber}</p>
+                                                    </Fragment>
+                                                }
+                                                {this.state.room.printerCartridgeType &&
+                                                    <Fragment>
+                                                        <p className="detail-header">Printer Cartridge Type</p>
+                                                        <p className="detail uppercase">{this.state.room.printerCartridgeType}</p>
+                                                    </Fragment>
+                                                }
+                                            </div>
+                                        </Fragment>
+                                    }
 
-                        </div>
-                    </div>
+                                </div>
+                            </div>
 
-                    <hr />
+                            <hr />
 
-                    {/* Troubleshooting stuff begins here */}
+                            {/* Troubleshooting stuff begins here */}
 
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <SearchBox
-                                label={"Search"}
-                                buttonText={"Clear"}
-                                onChange={this.onFilterSearch}
-                                value={this.state.activeSearchQuery}
-                            />
-                            <FilterBox
-                                label={"Type Filters"}
-                                keys={this.getAllTroubleshootingDataTypes()}
-                                buttonText={"Reset"}
-                                onChange={this.onTypeFilterChange}
-                                enabledByDefault={true}
-                            />
-                            <FilterBox
-                                label={"Tag Filters"}
-                                keys={this.getAllTroubleshootingDataTags()}
-                                buttonText={"Reset"}
-                                onChange={this.onTagFilterChange}
-                                enabledByDefault={false}
-                            />
-                        </div>
-                        <div className="col">
-                            <TroubleshootingTips
-                                troubleshootingData={this.state.troubleshootingData}
-                                typeFilters={this.state.activeTroubleshootingTypeFilters}
-                                tagFilters={this.state.activeTroubleshootingTagFilters}
-                                search={this.state.activeSearchQuery}
-                            />
-                        </div>
-                    </div>
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <SearchBox
+                                        label={"Search"}
+                                        buttonText={"Clear"}
+                                        onChange={this.onFilterSearch}
+                                        value={this.state.activeSearchQuery}
+                                    />
+                                    <FilterBox
+                                        label={"Type Filters"}
+                                        keys={this.getAllTroubleshootingDataTypes()}
+                                        buttonText={"Reset"}
+                                        onChange={this.onTypeFilterChange}
+                                        enabledByDefault={true}
+                                    />
+                                    <FilterBox
+                                        label={"Tag Filters"}
+                                        keys={this.getAllTroubleshootingDataTags()}
+                                        buttonText={"Reset"}
+                                        onChange={this.onTagFilterChange}
+                                        enabledByDefault={false}
+                                    />
+                                </div>
+                                <div className="col">
+                                    <TroubleshootingTips
+                                        troubleshootingData={this.state.troubleshootingData}
+                                        typeFilters={this.state.activeTroubleshootingTypeFilters}
+                                        tagFilters={this.state.activeTroubleshootingTagFilters}
+                                        search={this.state.activeSearchQuery}
+                                    />
+                                </div>
+                            </div>
 
-                    <hr />
+                            <hr />
 
-                    <p>ID: {this.state.room.id}</p>
-                    <p>Last Updated: {this.state.room.lastChecked}</p>
+                            <p>ID: {this.state.room.id}</p>
+                            <p>Last Updated: {this.state.room.lastChecked}</p>
 
-                </section>
+                        </section>
+                    </Fragment>
+                }
             </Fragment>
         );
     }
