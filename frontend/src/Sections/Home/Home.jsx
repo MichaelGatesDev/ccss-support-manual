@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import './Home.css';
+import './Home.scss';
+
+import { Transition, animated } from 'react-spring/renderprops'
 
 import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
@@ -46,7 +48,6 @@ class Home extends Component {
             .then(response => response.json())
             .then(data => {
                 if (data == null) return;
-
                 this.setState({
                     images: data,
                     loading: false,
@@ -85,14 +86,6 @@ class Home extends Component {
 
     render() {
 
-        if (this.state.loading) {
-            // return splashscreen
-            return (
-                <LoadingSplash
-                />
-            );
-        }
-
         var query = this.state.filterSearch;
         var queries = query.split(" ");
 
@@ -121,21 +114,42 @@ class Home extends Component {
 
         return (
             <Fragment>
-                <NavBar
-                    title="CCSS Support Manual"
-                    searchable={true}
-                    onSearch={this.onSearch}
-                    fixed={true}
-                />
-                <section className="container-fluid" id="home-section">
-                    <div className="Home-Component">
-                        <RoomCardsGrid
-                            rooms={rooms}
-                            buildings={this.state.buildings}
-                            images={this.state.images}
+
+                <Transition
+                    native
+                    items={this.state.loading}
+                    // from={{ opacity: 0 }}
+                    enter={{ opacity: 1 }}
+                    leave={{ opacity: 0 }}
+                >
+                    {(item => item && (styles =>
+                        (
+                            <animated.div style={styles}>
+                                <LoadingSplash />
+                            </animated.div>
+                        ))
+                    )}
+                </Transition>
+
+                {!this.state.loading &&
+                    <Fragment>
+                        <NavBar
+                            title="CCSS Support Manual"
+                            searchable={true}
+                            onSearch={this.onSearch}
+                            fixed={true}
                         />
-                    </div>
-                </section>
+                        <section className="container-fluid" id="home-section">
+                            <div className="Home-Component">
+                                <RoomCardsGrid
+                                    rooms={rooms}
+                                    buildings={this.state.buildings}
+                                    images={this.state.images}
+                                />
+                            </div>
+                        </section>
+                    </Fragment>
+                }
             </Fragment>
         );
     }

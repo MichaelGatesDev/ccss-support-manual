@@ -16,12 +16,10 @@ class LoadingSplash extends Component {
     render() {
         return (
             <div className="LoadingSplash-Component">
-                <div>
-                    <p className="text">Loading... </p>
-                    <p className="loading-icon-container">
-                        <i className="fas fa-spinner loading-icon"></i>
-                    </p>
-                </div>
+                <p className="text">Loading... </p>
+                <p className="loading-icon-container">
+                    <i className="fas fa-spinner loading-icon"></i>
+                </p>
             </div>
         );
     }

@@ -15,7 +15,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <BackToTopButton
-        minScrollAmt={50}
+          minScrollAmt={50}
         />
         <div className="App">
           <Route exact path="/" component={Home} />

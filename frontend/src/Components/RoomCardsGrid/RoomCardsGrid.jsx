@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './RoomCardsGrid.scss';
 
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-
 import RoomCard from "../../Components/RoomCard/RoomCard";
 
 class RoomCardsGrid extends Component {
@@ -40,26 +38,7 @@ class RoomCardsGrid extends Component {
 
     render() {
 
-        const animatedItems = this.props.rooms.slice(0, 6).map((room) => {
-            return (
-                <CSSTransition
-                    in={true}
-                    timeout={300}
-                    classNames="fade"
-                    key={room.id}
-                >
-                    <li key={room.id}>
-                        <RoomCard
-                            room={room}
-                            building={this.getParentBuilding(room)}
-                            images={this.getImages(room)}
-                        />
-                    </li>
-                </CSSTransition>
-            );
-        });
-
-        const items = this.props.rooms.slice(6).map((room) => {
+        const items = this.props.rooms.map((room) => {
             return (
                 <li key={room.id}>
                     <RoomCard
@@ -71,12 +50,10 @@ class RoomCardsGrid extends Component {
             );
         });
 
+
         return (
             <div className="RoomCardsGrid-Component">
                 <ul>
-                    <TransitionGroup >
-                        {animatedItems}
-                    </TransitionGroup>
                     {items}
                 </ul>
             </div>
