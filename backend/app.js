@@ -61,7 +61,41 @@ var defaultAppConfig = {
 
   primarySpreadsheet: {
     docID: '',
-    path: 'public/primary.xlsx'
+    path: 'public/primary.xlsx',
+
+    buildingsSheetName: 'Buildings',
+    officialNameHeader: 'Official Name',
+    nicknamesHeader: 'Nicknames',
+
+    roomsSheetName: 'Rooms',
+    roomTimestampHeader: 'Timestamp',
+    roomBuildingHeader: 'Building',
+    roomNumberHeader: 'Number',
+    roomNameHeader: 'Name',
+    roomTypeHeader: 'Type',
+    roomLockTypeHeader: 'Lock Type',
+    roomCapacityHeader: 'Capacity',
+
+    roomFurnitureTypeHeader: 'Furniture Type',
+    roomChairCountHeader: 'Chair Count',
+    roomTableCountHeader: 'Table Count',
+    roomPhoneExtensionHeader: 'Phone Extension',
+    roomPhoneStatusHeader: 'Phone Status',
+
+    roomAudioRequiresProjectorHeader: 'Audio Requires Projector',
+    roomProjectorHeader: 'Projector',
+    roomAudioHeader: 'Audio',
+    roomScreenHeader: 'Screen',
+    roomTeachingStationComputerHeader: 'TS Computer',
+    roomTeachingStationComputerTypeHeader: 'TS Computer Type',
+    roomTeachingStationComputerOSHeader: 'TS Computer Operating System',
+    roomDocumentCameraHeader: 'Doc Cam',
+    roomDVDPlayerHeader: 'DVD Player',
+    roomDVDPlayerTypeHeader: 'DVD Player Type',
+    roomPrinterHeader: 'Printer',
+    roomPrinterSymquestNumberHeader: 'Printer Symquest Number',
+    roomPrinterCartridgeTypeHeader: 'Printer Cartridge Type',
+    roomNotesHeader: 'Other Notes'
   },
 
   secondarySpreadsheet: {
@@ -134,7 +168,7 @@ config.create('config.json', defaultAppConfig)
 
     // load primary(troubleshooting) spreadsheet
     console.log("Loading data from primary spreadsheet...");
-    return dataHelper.loadPrimarySpreadsheet(appConfig.primarySpreadsheet.path);
+    return dataHelper.loadPrimarySpreadsheet(appConfig.primarySpreadsheet);
   })
   // after we load data from the primary spreadsheet
   .then(function () {
@@ -142,7 +176,7 @@ config.create('config.json', defaultAppConfig)
 
     // load secondary(troubleshooting) spreadsheet
     console.log("Loading data from secondary spreadsheet...");
-    return dataHelper.loadSecondarySpreadsheet(appConfig.secondarySpreadsheet.path);
+    return dataHelper.loadSecondarySpreadsheet(appConfig.secondarySpreadsheet);
   })
   // after we load data from the secondary (troubleshooting) spreadsheet
   .then(function () {
