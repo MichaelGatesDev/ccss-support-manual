@@ -31,7 +31,7 @@ class Building {
      * @param nicknames Nicknames/abbreviations that a building may have.
      * @param internalName Internal Name which used used by the program to identify the building.
      */
-    constructor(officialName: string, nicknames: string[], internalName: string) {
+    constructor(officialName: string, nicknames: string[]) {
         this.officialName = officialName;
         this.nicknames = nicknames;
         this.internalName = this.createInternalName();
