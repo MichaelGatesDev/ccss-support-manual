@@ -93,6 +93,18 @@ class Building {
     public getRooms() {
         return this.rooms;
     }
+
+    /**
+     * Checks if the building has the specified name
+     * 
+     * @param name The name (or partial word) to check for
+     */
+    public hasName(name: string) {
+        if (this.internalName.toLowerCase().includes(name.toLowerCase())) return true;
+        if (this.officialName.toLowerCase().includes(name.toLowerCase())) return true;
+        for (const nick of this.nicknames) { if (nick.toLowerCase().includes(name.toLowerCase())) return true; }
+        return false;
+    }
 }
 
 export {

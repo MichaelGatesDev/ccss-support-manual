@@ -1,195 +1,140 @@
-var Excel = require('exceljs');
-var fs = require('fs');
+import Excel = require('exceljs');
+import fs = require('fs');
 
-var Room = require('./models/Room');
+import { BuildingManager } from './BuildingManager';
+import { RoomManager } from './RoomManager';
+import { Building } from './models/Building';
+import { Room, RoomType, LockType } from './models/Room';
+// import { EnumUtils } from './EnumUtils';
 
-let buildings = [];
-let troubledata = [];
-let images = [];
+
+class DataHelper {
+    private buildingManager: BuildingManager;
+    private roomManager: RoomManager;
+    // private imageManager: ImageManager;
+    // private troubleDataManager: TroubleDataManager;
+
+    // private troubledata: string[];
+
+    constructor() {
+        this.buildingManager = new BuildingManager();
+        this.roomManager = new RoomManager(this.buildingManager);
+        // this.imageManager = new ImageManager();
+    }
+
+    public getBuildingManager() { return this.buildingManager; }
+    public getRoomManager() { return this.roomManager; }
+    // public getImageManager(){ return this.imageManager; }
 
 
-function getCellByColumnName(row, name) {}
+    private generateColumns(sheet: Excel.Worksheet, headerRowIndex: number) {
+        let row = sheet.getRow(headerRowIndex);
 
-async function loadPrimarySpreadsheet(spreadsheet) {
-    return new Promise((resolve, reject) => {
+        if (row === null || !row.values || !row.values.length) return [];
 
-        if (!fs.existsSync(spreadsheet.path)) {
-            return reject("File could not be found: " + spreadsheet.path);
+        let headers = [];
+        for (let i: number = 1; i < row.values.length; i++) {
+            let cell = row.getCell(i);
+            headers.push(cell.text);
         }
 
-        var workbook = new Excel.Workbook();
-        workbook.xlsx.readFile(spreadsheet.path).then(function () {
+        const numCols = sheet.actualColumnCount;
+        for (let i: number = 0; i < numCols; i++) {
+            sheet.getColumn(i + 1).key = headers[i];
+            // console.log(`Column ${i + 1} key is ${headers[i]}`);
+        }
+    }
 
-            buildings = [];
+    private loadBuildings(sheet: Excel.Worksheet) {
+        this.generateColumns(sheet, 1);
 
-            var buildingsHeaders = [];
+        var self = this;
+        sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
+            if (rowNumber == 1) return; // skip headers row
 
-            // buildings
-            var buildingsWS = workbook.getWorksheet("Buildings");
-            buildingsWS.eachRow({
-                includeEmpty: false
-            }, function (row, rowNumber) {
+            let officialName = row.getCell('Official Name').text;
+            let nicknames = row.getCell('Nicknames').text;
 
+            let building = new Building(
+                officialName,
+                nicknames.split(","),
+            );
 
-                var rowCells = row.values;
-
-                // skip  the first row (headers)
-                if (rowNumber == 1) {
-                    for (var i = 1; i < row.values.length; i++) {
-                        var cell = row.getCell(i);
-                        console.log("Cell #" + i + " = " + cell.text);
-                    }
-                    return;
-                }
-
-                var officialName = row.getCell(1).text.toLowerCase();
-                var nicknames = row.getCell(2).text.toLowerCase().split(",");
-                var internalName = officialName.toLowerCase().replace(/\s/g, "-");
-
-                var building = {
-                    officialName: officialName,
-                    nicknames: nicknames,
-                    internalName: internalName,
-                    rooms: []
-                };
-
-                buildings.push(building);
-                console.debug("Added building (empty): " + building.internalName);
-            });
-
-            // rooms
-            var roomsWS = workbook.getWorksheet("Rooms");
-            roomsWS.eachRow({
-                includeEmpty: false
-            }, function (row, rowNumber) {
-
-                var rowCells = row.values;
-
-                // skip  the first row (headers)
-                if (rowNumber == 1) {
-                    for (var i = 1; i < row.values.length; i++) {
-                        var cell = row.getCell(i);
-                        console.log("Cell #" + i + " = " + cell.text);
-                    }
-                    return;
-                }
-
-                // building name first
-                var buildingName = row.getCell(3).text.toLowerCase();
-
-                // can't do anything with invalid rows
-                if (isBlank(buildingName)) return;
-
-                var fetched = getCellByColumnName(row, 'Building Name');
-
-                var room = {
-                    buildingName: buildingName,
-                    lastChecked: row.getCell(1).text.toLowerCase(),
-                    number: row.getCell(4).text.toLowerCase(),
-                    name: row.getCell(5).text.toLowerCase(),
-                    type: row.getCell(6).text.toLowerCase(),
-                    lockType: row.getCell(7).text.toLowerCase(),
-                    capacity: row.getCell(8).text,
-                    furnitureType: row.getCell(9).text,
-                    chairCount: row.getCell(10).text,
-                    tableCount: row.getCell(11).text,
-                    extension: row.getCell(12).text,
-                    phoneStatus: row.getCell(13).text.toLowerCase(),
-                    audioRequiresProjector: (row.getCell(14).text.toLowerCase() === "true"),
-                    hasProjector: row.getCell(15).text.toLowerCase() !== "n/a",
-                    hasAudio: row.getCell(16).text.toLowerCase() !== "n/a",
-                    hasScreen: row.getCell(17).text.toLowerCase() !== "n/a",
-                    hasTeachingStationComputer: row.getCell(18).text.toLowerCase() !== "n/a",
-                    teachingStationComputerType: row.getCell(19).text.toLowerCase(),
-                    teachingStationComputerOS: row.getCell(20).text.toLowerCase(),
-                    hasDocCam: row.getCell(21).text.toLowerCase() !== "n/a",
-                    hasDVDPlayer: row.getCell(22).text.toLowerCase() !== "n/a",
-                    dvdPlayerType: row.getCell(23).text.toLowerCase(),
-                    hasPrinter: row.getCell(24).text.toLowerCase() !== "n/a",
-                    printerSymquestNumber: row.getCell(25).text.toLowerCase(),
-                    printerCartridgeType: row.getCell(26).text.toLowerCase(),
-                };
-
-                var building = getBuildingByName(buildingName);
-                if (building) {
-                    room.buildingName = building.officialName;
-                    room.id = building.internalName + "." + room.number; // building-name.roomNumber
-                    building.rooms.push(room); // add the room to the parent building
-                    // console.debug("Created room: " + building.officialName + " " + room.number);
-                }
-            });
-
-            console.debug("There are " + buildings.length + " buildings");
-
-            var roomCount = 0;
-            for (const b of buildings) {
-                roomCount += b.rooms.length;
-                console.debug(b.internalName + " has " + b.rooms.length + " rooms: [" + b.rooms.map(function (room) {
-                    return room.number;
-                }).join(",") + "]");
-            }
-            console.debug("There are " + roomCount + " classrooms");
-
-            return resolve();
-        }).catch(function (err) {
-            return reject(err);
+            self.buildingManager.addBuilding(building);
         });
-    });
-}
-exports.loadPrimarySpreadsheet = loadPrimarySpreadsheet;
+        console.log(`Loaded ${this.buildingManager.getBuildings().length} buildings!`);
+    }
 
+    private loadRooms(sheet: Excel.Worksheet) {
+        this.generateColumns(sheet, 1);
 
-function getBuildingByName(name) {
-    for (const building of buildings) {
-        var contains = false;
-        if (!contains && building.internalName.toLowerCase().includes(name.toLowerCase())) contains = true;
-        if (!contains && building.officialName.toLowerCase().includes(name.toLowerCase())) contains = true;
-        if (!contains) {
-            for (const nick of building.nicknames) {
-                if (nick.toLowerCase().includes(name.toLowerCase())) contains = true;
-                break;
+        var self = this;
+        sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
+            if (rowNumber == 1) return; // skip headers row
+            if (row.getCell(1) === undefined || row.getCell(1).text === '') return; // skip if row is empty. exceljs doesn't work well for some reason.
+
+            var buildingNameCell = row.getCell('Building');
+            if (!buildingNameCell) {
+                console.log(`Building name cell empty at row ${rowNumber}`);
+                return;
             }
-        }
-        if (contains) return building;
+
+            let buildingName = row.getCell('Building').text;
+            var building = self.buildingManager.getBuildingByName(buildingName);
+
+            if (!building) {
+                console.log(`No such building exists: ${buildingName}`);
+                return;
+            }
+
+            let number = row.getCell('Number').text;
+
+            let rawType: string = row.getCell('Type').text;
+
+            // let room = new Room(
+            //     building,
+            //     number,
+            //     type,
+            // );
+
+            // room.setLastChecked(row.getCell('Timestamp').text);
+            // room.setName(row.getCell('Name').text);
+
+            // let rawLockType = row.getCell('Type').text;
+            // let lockType: LockType = (<any>LockType)[rawLockType];
+            // room.setLockType(lockType);
+
+
+            // building.addRoom(room);
+        });
+        console.log(`Loaded ${this.roomManager.getRooms().length} rooms!`);
+    }
+
+    async loadPrimarySpreadsheet(spreadsheet: any) {
+        return new Promise((resolve, reject) => {
+
+            if (!fs.existsSync(spreadsheet.path)) {
+                return reject("File could not be found: " + spreadsheet.path);
+            }
+
+            var self = this;
+            var workbook = new Excel.Workbook();
+            workbook.xlsx.readFile(spreadsheet.path).then(function () {
+
+                self.loadBuildings(workbook.getWorksheet('Buildings'));
+                self.loadRooms(workbook.getWorksheet('Rooms'));
+
+                return resolve();
+            }).catch(function (err) {
+                return reject(err);
+            });
+        });
     }
 }
-exports.getBuildingByName = getBuildingByName;
+let dataHelper = new DataHelper();
+export = dataHelper;
 
-
-function getRoomByBuildingNameAndNumber(buildingName, roomNumber) {
-    for (const room of getAllRooms()) {
-        if (getBuildingByName(room.buildingName) === getBuildingByName(buildingName) && room.number === roomNumber.toLowerCase())
-            return room;
-    }
-    return null;
-}
-exports.getRoomByBuildingNameAndNumber = getRoomByBuildingNameAndNumber;
-
-
-function getAllBuildings() {
-    return buildings;
-}
-exports.getAllBuildings = getAllBuildings;
-
-
-function getAllRooms() {
-    let result = [];
-    for (const building of buildings) {
-        result = result.concat(building.rooms);
-    }
-    return result;
-}
-exports.getAllRooms = getAllRooms;
-
-function getRoomByID(roomID) {
-    for (const room of getAllRooms())
-        if (room.id === roomID)
-            return room;
-    return null;
-}
-exports.getRoomByID = getRoomByID;
-
-
+/*
 async function loadSecondarySpreadsheet(file) {
     return new Promise((resolve, reject) => {
 
@@ -427,3 +372,4 @@ exports.getImagesForRoom = getImagesForRoom;
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
 }
+*/

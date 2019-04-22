@@ -13,7 +13,7 @@ var Building = /** @class */ (function () {
      * @param nicknames Nicknames/abbreviations that a building may have.
      * @param internalName Internal Name which used used by the program to identify the building.
      */
-    function Building(officialName, nicknames, internalName) {
+    function Building(officialName, nicknames) {
         this.officialName = officialName;
         this.nicknames = nicknames;
         this.internalName = this.createInternalName();
@@ -67,6 +67,23 @@ var Building = /** @class */ (function () {
      */
     Building.prototype.getRooms = function () {
         return this.rooms;
+    };
+    /**
+     * Checks if the building has the specified name
+     *
+     * @param name The name (or partial word) to check for
+     */
+    Building.prototype.hasName = function (name) {
+        if (this.internalName.toLowerCase().includes(name.toLowerCase()))
+            return true;
+        if (this.officialName.toLowerCase().includes(name.toLowerCase()))
+            return true;
+        for (var _i = 0, _a = this.nicknames; _i < _a.length; _i++) {
+            var nick = _a[_i];
+            if (nick.toLowerCase().includes(name.toLowerCase()))
+                return true;
+        }
+        return false;
     };
     return Building;
 }());

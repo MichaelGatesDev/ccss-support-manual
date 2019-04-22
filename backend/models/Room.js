@@ -82,35 +82,35 @@ var RoomType;
     /**
      * Standard classroom
      */
-    RoomType[RoomType["Classroom"] = 0] = "Classroom";
+    RoomType["Classroom"] = "classroom";
     /**
      * A classroom which has computers (may be called a computer lab)
      */
-    RoomType[RoomType["ComputerClassroom"] = 1] = "ComputerClassroom";
+    RoomType["ComputerClassroom"] = "computer classroom";
     /**
      * A room which is used for conferences and includes conference technology (cameras, etc.)
      */
-    RoomType[RoomType["ConferenceRoom"] = 2] = "ConferenceRoom";
+    RoomType["ConferenceRoom"] = "conference room";
     /**
      * A room which is used for meetings
      */
-    RoomType[RoomType["MeetingRoom"] = 3] = "MeetingRoom";
+    RoomType["MeetingRoom"] = "meeting room";
     /**
      * A classroom which is a lecture hall
      */
-    RoomType[RoomType["LectureHall"] = 4] = "LectureHall";
+    RoomType["LectureHall"] = "lecture hall";
     /**
      * A room which is not used for standard instruction but can be used by students working on projects or relaxing
      */
-    RoomType[RoomType["ProjectRoom"] = 5] = "ProjectRoom";
+    RoomType["ProjectRoom"] = "project room";
     /**
      * A specific room used for seminars
      */
-    RoomType[RoomType["SeminarRoom"] = 6] = "SeminarRoom";
+    RoomType["SeminarRoom"] = "seminar room";
     /**
      * A classroom which contains SMART (board, etc.) equipment
      */
-    RoomType[RoomType["SmartClassroom"] = 7] = "SmartClassroom";
+    RoomType["SmartClassroom"] = "smart classroom";
 })(RoomType || (RoomType = {}));
 exports.RoomType = RoomType;
 /**

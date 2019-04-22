@@ -184,35 +184,35 @@ enum RoomType {
     /**
      * Standard classroom
      */
-    Classroom,
+    Classroom = "classroom",
     /**
      * A classroom which has computers (may be called a computer lab)
      */
-    ComputerClassroom,
+    ComputerClassroom = "computer classroom",
     /**
      * A room which is used for conferences and includes conference technology (cameras, etc.)
      */
-    ConferenceRoom,
+    ConferenceRoom = "conference room",
     /**
      * A room which is used for meetings
      */
-    MeetingRoom,
+    MeetingRoom = "meeting room",
     /**
      * A classroom which is a lecture hall
      */
-    LectureHall,
+    LectureHall = "lecture hall",
     /**
      * A room which is not used for standard instruction but can be used by students working on projects or relaxing
      */
-    ProjectRoom,
+    ProjectRoom = "project room",
     /**
      * A specific room used for seminars
      */
-    SeminarRoom,
+    SeminarRoom = "seminar room",
     /**
      * A classroom which contains SMART (board, etc.) equipment
      */
-    SmartClassroom,
+    SmartClassroom = "smart classroom"
 }
 
 /**
@@ -631,5 +631,7 @@ export {
     DVDPlayerType,
     DVDPlayer,
     Printer,
-    Phone
+    Phone,
 }
+
+
