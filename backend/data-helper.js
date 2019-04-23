@@ -187,71 +187,274 @@ var DataHelper = /** @class */ (function () {
     DataHelper.prototype.loadImages = function () {
         return __awaiter(this, void 0, void 0, function () {
             var self;
-            var _this = this;
             return __generator(this, function (_a) {
                 self = this;
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         var rootDir = "public/images/buildings/";
-                        if (!fs.existsSync(rootDir)) {
-                            console.debug();
-                            return reject("Image directory does not exist: " + rootDir);
-                        }
-                        for (var _i = 0, _a = _this.buildingManager.getBuildings(); _i < _a.length; _i++) {
-                            var building = _a[_i];
-                            var buildingDir = rootDir + building.getInternalName() + "/";
-                            if (!fs.existsSync(buildingDir)) {
-                                console.debug("Building directory does not exist:" + buildingDir);
-                                continue;
-                            }
-                            for (var _b = 0, _c = building.getRooms(); _b < _c.length; _b++) {
-                                var room = _c[_b];
-                                var roomDir = buildingDir + "rooms/" + room.getNumber() + "/";
-                                if (!fs.existsSync(roomDir)) {
-                                    console.debug("Room directory does not exist: " + roomDir);
-                                    continue;
-                                }
-                                var roomImages = new ImageManager_1.RoomImages(room.getID());
-                                // root images
-                                for (var _d = 0, _e = fs.readdirSync(roomDir); _d < _e.length; _d++) {
-                                    var file = _e[_d];
-                                    var stat = fs.statSync(roomDir + file);
-                                    if (!stat.isDirectory()) {
-                                        var url = roomDir.replace("public/", "") + file;
-                                        var image = new ImageManager_1.Image(url);
-                                        roomImages.addMainImage(image);
+                        fs.promises.access(rootDir, fs.constants.R_OK).then(function () {
+                            return __awaiter(this, void 0, void 0, function () {
+                                var _loop_1, buildingDir, _i, _a, building;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            _loop_1 = function (building) {
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            buildingDir = rootDir + building.getInternalName() + "/";
+                                                            return [4 /*yield*/, fs.promises.access(buildingDir, fs.constants.R_OK).then(function () {
+                                                                    return __awaiter(this, void 0, void 0, function () {
+                                                                        var _loop_2, roomDir, _i, _a, room;
+                                                                        return __generator(this, function (_b) {
+                                                                            switch (_b.label) {
+                                                                                case 0:
+                                                                                    _loop_2 = function (room) {
+                                                                                        return __generator(this, function (_a) {
+                                                                                            switch (_a.label) {
+                                                                                                case 0:
+                                                                                                    roomDir = buildingDir + "rooms/" + room.getNumber().toLocaleLowerCase() + "/";
+                                                                                                    return [4 /*yield*/, fs.promises.access(roomDir, fs.constants.R_OK).then(function () {
+                                                                                                            return __awaiter(this, void 0, void 0, function () {
+                                                                                                                var roomImages, panoramasDir, equipmentDir;
+                                                                                                                return __generator(this, function (_a) {
+                                                                                                                    switch (_a.label) {
+                                                                                                                        case 0:
+                                                                                                                            roomImages = new ImageManager_1.RoomImages(room.getID());
+                                                                                                                            // console.log("ACCESSING ROOM DIR " + roomDir);
+                                                                                                                            // root images
+                                                                                                                            return [4 /*yield*/, fs.promises.readdir(roomDir).then(function (files) {
+                                                                                                                                    return __awaiter(this, void 0, void 0, function () {
+                                                                                                                                        var _loop_3, _i, files_1, file;
+                                                                                                                                        return __generator(this, function (_a) {
+                                                                                                                                            switch (_a.label) {
+                                                                                                                                                case 0:
+                                                                                                                                                    _loop_3 = function (file) {
+                                                                                                                                                        return __generator(this, function (_a) {
+                                                                                                                                                            switch (_a.label) {
+                                                                                                                                                                case 0: return [4 /*yield*/, fs.promises.stat(roomDir + file).then(function (stat) {
+                                                                                                                                                                        if (stat.isFile) {
+                                                                                                                                                                            var url = roomDir.replace("public/", "") + file;
+                                                                                                                                                                            var image = new ImageManager_1.Image(url);
+                                                                                                                                                                            roomImages.addMainImage(image);
+                                                                                                                                                                        }
+                                                                                                                                                                    })];
+                                                                                                                                                                case 1:
+                                                                                                                                                                    _a.sent();
+                                                                                                                                                                    return [2 /*return*/];
+                                                                                                                                                            }
+                                                                                                                                                        });
+                                                                                                                                                    };
+                                                                                                                                                    _i = 0, files_1 = files;
+                                                                                                                                                    _a.label = 1;
+                                                                                                                                                case 1:
+                                                                                                                                                    if (!(_i < files_1.length)) return [3 /*break*/, 4];
+                                                                                                                                                    file = files_1[_i];
+                                                                                                                                                    return [5 /*yield**/, _loop_3(file)];
+                                                                                                                                                case 2:
+                                                                                                                                                    _a.sent();
+                                                                                                                                                    _a.label = 3;
+                                                                                                                                                case 3:
+                                                                                                                                                    _i++;
+                                                                                                                                                    return [3 /*break*/, 1];
+                                                                                                                                                case 4: return [2 /*return*/];
+                                                                                                                                            }
+                                                                                                                                        });
+                                                                                                                                    });
+                                                                                                                                }).catch(function (err) {
+                                                                                                                                    console.log("Error reading root images at " + roomDir);
+                                                                                                                                })];
+                                                                                                                        case 1:
+                                                                                                                            // console.log("ACCESSING ROOM DIR " + roomDir);
+                                                                                                                            // root images
+                                                                                                                            _a.sent();
+                                                                                                                            panoramasDir = roomDir + "panoramas/";
+                                                                                                                            return [4 /*yield*/, fs.promises.access(panoramasDir, fs.constants.R_OK).then(function () {
+                                                                                                                                    return __awaiter(this, void 0, void 0, function () {
+                                                                                                                                        return __generator(this, function (_a) {
+                                                                                                                                            switch (_a.label) {
+                                                                                                                                                case 0: return [4 /*yield*/, fs.promises.readdir(panoramasDir).then(function (files) {
+                                                                                                                                                        return __awaiter(this, void 0, void 0, function () {
+                                                                                                                                                            var _loop_4, _i, files_2, file;
+                                                                                                                                                            return __generator(this, function (_a) {
+                                                                                                                                                                switch (_a.label) {
+                                                                                                                                                                    case 0:
+                                                                                                                                                                        _loop_4 = function (file) {
+                                                                                                                                                                            return __generator(this, function (_a) {
+                                                                                                                                                                                switch (_a.label) {
+                                                                                                                                                                                    case 0: return [4 /*yield*/, fs.promises.stat(panoramasDir + file).then(function (stat) {
+                                                                                                                                                                                            if (stat.isFile) {
+                                                                                                                                                                                                var url = panoramasDir.replace("public/", "") + file;
+                                                                                                                                                                                                var image = new ImageManager_1.Image(url);
+                                                                                                                                                                                                roomImages.addPanoramicImage(image);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        })];
+                                                                                                                                                                                    case 1:
+                                                                                                                                                                                        _a.sent();
+                                                                                                                                                                                        return [2 /*return*/];
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                        };
+                                                                                                                                                                        _i = 0, files_2 = files;
+                                                                                                                                                                        _a.label = 1;
+                                                                                                                                                                    case 1:
+                                                                                                                                                                        if (!(_i < files_2.length)) return [3 /*break*/, 4];
+                                                                                                                                                                        file = files_2[_i];
+                                                                                                                                                                        return [5 /*yield**/, _loop_4(file)];
+                                                                                                                                                                    case 2:
+                                                                                                                                                                        _a.sent();
+                                                                                                                                                                        _a.label = 3;
+                                                                                                                                                                    case 3:
+                                                                                                                                                                        _i++;
+                                                                                                                                                                        return [3 /*break*/, 1];
+                                                                                                                                                                    case 4: return [2 /*return*/];
+                                                                                                                                                                }
+                                                                                                                                                            });
+                                                                                                                                                        });
+                                                                                                                                                    }).catch(function (err) {
+                                                                                                                                                        console.log("Error reading panoramic images at " + panoramasDir);
+                                                                                                                                                    })];
+                                                                                                                                                case 1:
+                                                                                                                                                    _a.sent();
+                                                                                                                                                    return [2 /*return*/];
+                                                                                                                                            }
+                                                                                                                                        });
+                                                                                                                                    });
+                                                                                                                                }).catch(function () {
+                                                                                                                                    console.log("Error accessing panoramic directory at " + panoramasDir);
+                                                                                                                                })];
+                                                                                                                        case 2:
+                                                                                                                            _a.sent();
+                                                                                                                            equipmentDir = roomDir + "equipment/";
+                                                                                                                            return [4 /*yield*/, fs.promises.access(equipmentDir, fs.constants.R_OK).then(function () {
+                                                                                                                                    return __awaiter(this, void 0, void 0, function () {
+                                                                                                                                        return __generator(this, function (_a) {
+                                                                                                                                            switch (_a.label) {
+                                                                                                                                                case 0: return [4 /*yield*/, fs.promises.readdir(equipmentDir).then(function (files) {
+                                                                                                                                                        return __awaiter(this, void 0, void 0, function () {
+                                                                                                                                                            var _loop_5, _i, files_3, file;
+                                                                                                                                                            return __generator(this, function (_a) {
+                                                                                                                                                                switch (_a.label) {
+                                                                                                                                                                    case 0:
+                                                                                                                                                                        _loop_5 = function (file) {
+                                                                                                                                                                            return __generator(this, function (_a) {
+                                                                                                                                                                                switch (_a.label) {
+                                                                                                                                                                                    case 0: return [4 /*yield*/, fs.promises.stat(equipmentDir + file).then(function (stat) {
+                                                                                                                                                                                            if (stat.isFile) {
+                                                                                                                                                                                                var url = equipmentDir.replace("public/", "") + file;
+                                                                                                                                                                                                var image = new ImageManager_1.Image(url);
+                                                                                                                                                                                                roomImages.addEquipmentImage(image);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        })];
+                                                                                                                                                                                    case 1:
+                                                                                                                                                                                        _a.sent();
+                                                                                                                                                                                        return [2 /*return*/];
+                                                                                                                                                                                }
+                                                                                                                                                                            });
+                                                                                                                                                                        };
+                                                                                                                                                                        _i = 0, files_3 = files;
+                                                                                                                                                                        _a.label = 1;
+                                                                                                                                                                    case 1:
+                                                                                                                                                                        if (!(_i < files_3.length)) return [3 /*break*/, 4];
+                                                                                                                                                                        file = files_3[_i];
+                                                                                                                                                                        return [5 /*yield**/, _loop_5(file)];
+                                                                                                                                                                    case 2:
+                                                                                                                                                                        _a.sent();
+                                                                                                                                                                        _a.label = 3;
+                                                                                                                                                                    case 3:
+                                                                                                                                                                        _i++;
+                                                                                                                                                                        return [3 /*break*/, 1];
+                                                                                                                                                                    case 4: return [2 /*return*/];
+                                                                                                                                                                }
+                                                                                                                                                            });
+                                                                                                                                                        });
+                                                                                                                                                    }).catch(function (err) {
+                                                                                                                                                        console.log("Error reading panoramic images at " + equipmentDir);
+                                                                                                                                                    })];
+                                                                                                                                                case 1:
+                                                                                                                                                    _a.sent();
+                                                                                                                                                    return [2 /*return*/];
+                                                                                                                                            }
+                                                                                                                                        });
+                                                                                                                                    });
+                                                                                                                                }).catch(function () {
+                                                                                                                                    console.log("Error accessing equipment directory at " + equipmentDir);
+                                                                                                                                })];
+                                                                                                                        case 3:
+                                                                                                                            _a.sent();
+                                                                                                                            self.imageManager.setRoomImages(room.getID(), roomImages);
+                                                                                                                            console.debug("Loaded " + roomImages.size() + " images for " + room.getDisplayName());
+                                                                                                                            return [2 /*return*/];
+                                                                                                                    }
+                                                                                                                });
+                                                                                                            });
+                                                                                                        }).catch(function (err) {
+                                                                                                            return __awaiter(this, void 0, void 0, function () {
+                                                                                                                return __generator(this, function (_a) {
+                                                                                                                    console.error("Unable to access room dir " + roomDir);
+                                                                                                                    return [2 /*return*/];
+                                                                                                                });
+                                                                                                            });
+                                                                                                        })];
+                                                                                                case 1:
+                                                                                                    _a.sent();
+                                                                                                    return [2 /*return*/];
+                                                                                            }
+                                                                                        });
+                                                                                    };
+                                                                                    _i = 0, _a = building.getRooms();
+                                                                                    _b.label = 1;
+                                                                                case 1:
+                                                                                    if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                                                                    room = _a[_i];
+                                                                                    return [5 /*yield**/, _loop_2(room)];
+                                                                                case 2:
+                                                                                    _b.sent();
+                                                                                    _b.label = 3;
+                                                                                case 3:
+                                                                                    _i++;
+                                                                                    return [3 /*break*/, 1];
+                                                                                case 4: return [2 /*return*/];
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                }).catch(function (err) {
+                                                                    return __awaiter(this, void 0, void 0, function () {
+                                                                        return __generator(this, function (_a) {
+                                                                            console.error(err);
+                                                                            return [2 /*return*/];
+                                                                        });
+                                                                    });
+                                                                })];
+                                                        case 1:
+                                                            _a.sent();
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            };
+                                            _i = 0, _a = self.buildingManager.getBuildings();
+                                            _b.label = 1;
+                                        case 1:
+                                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                            building = _a[_i];
+                                            return [5 /*yield**/, _loop_1(building)];
+                                        case 2:
+                                            _b.sent();
+                                            _b.label = 3;
+                                        case 3:
+                                            _i++;
+                                            return [3 /*break*/, 1];
+                                        case 4: return [2 /*return*/, resolve()];
                                     }
-                                }
-                                // panoramic images
-                                var panoramasDir = roomDir + "panoramas/";
-                                if (fs.existsSync(panoramasDir)) {
-                                    for (var _f = 0, _g = fs.readdirSync(panoramasDir); _f < _g.length; _f++) {
-                                        var file = _g[_f];
-                                        var stat = fs.statSync(panoramasDir + file);
-                                        if (!stat.isDirectory()) {
-                                            var url = panoramasDir.replace("public/", "") + file;
-                                            var image = new ImageManager_1.Image(url);
-                                            roomImages.addPanoramicImage(image);
-                                        }
-                                    }
-                                }
-                                // equipment images
-                                var equipmentDir = roomDir + "equipment/";
-                                if (fs.existsSync(equipmentDir)) {
-                                    for (var _h = 0, _j = fs.readdirSync(equipmentDir); _h < _j.length; _h++) {
-                                        var file = _j[_h];
-                                        var stat = fs.statSync(equipmentDir + file);
-                                        if (!stat.isDirectory()) {
-                                            var url = equipmentDir.replace("public/", "") + file;
-                                            var image = new ImageManager_1.Image(url);
-                                            roomImages.addEquipmentImage(image);
-                                        }
-                                    }
-                                }
-                                self.imageManager.setRoomImages(room.getID(), roomImages);
-                                console.debug("Loaded " + roomImages.size() + " images for " + room.getDisplayName());
-                            }
-                        }
-                        return resolve();
+                                });
+                            });
+                        }).catch(function (err) {
+                            return __awaiter(this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    console.error(err);
+                                    return [2 /*return*/];
+                                });
+                            });
+                        });
                     })];
             });
         });
