@@ -39,15 +39,18 @@ var fs = require("fs");
 var BuildingManager_1 = require("./BuildingManager");
 var RoomManager_1 = require("./RoomManager");
 var Building_1 = require("./models/Building");
-// import { EnumUtils } from './EnumUtils';
+var Room_1 = require("./models/Room");
+var StringUtils_1 = require("./StringUtils");
+var ImageManager_1 = require("./ImageManager");
 var DataHelper = /** @class */ (function () {
-    // private imageManager: ImageManager;
-    // private troubledata: string[];
-    // private images: string[];
     function DataHelper() {
+        // private troubleDataManager: TroubleDataManager;
+        this.roomTypes = [];
+        this.lockTypes = [];
+        this.furnitureTypes = [];
         this.buildingManager = new BuildingManager_1.BuildingManager();
         this.roomManager = new RoomManager_1.RoomManager(this.buildingManager);
-        // this.imageManager = new ImageManager();
+        this.imageManager = new ImageManager_1.ImageManager();
     }
     DataHelper.prototype.getBuildingManager = function () { return this.buildingManager; };
     DataHelper.prototype.getRoomManager = function () { return this.roomManager; };
@@ -63,8 +66,8 @@ var DataHelper = /** @class */ (function () {
         }
         var numCols = sheet.actualColumnCount;
         for (var i = 0; i < numCols; i++) {
-            sheet.getColumn(i + 1).key = headers[i];
-            console.log("Column " + (i + 1) + " key is " + headers[i]);
+            sheet.getColumn(i + 1).key = headers[i].toLocaleLowerCase();
+            // console.debug(`Column ${i + 1} key is ${headers[i]}`);
         }
     };
     DataHelper.prototype.loadBuildings = function (sheet) {
@@ -73,12 +76,22 @@ var DataHelper = /** @class */ (function () {
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
             if (rowNumber == 1)
                 return; // skip headers row
-            var officialName = row.getCell('Official Name').text;
-            var nicknames = row.getCell('Nicknames').text;
+            var officialName = row.getCell('official name').text;
+            var nicknames = row.getCell('nicknames').text;
             var building = new Building_1.Building(officialName, nicknames.split(","));
             self.buildingManager.addBuilding(building);
         });
-        console.log("Loaded " + this.buildingManager.getBuildings().length + " buildings!");
+        console.debug("Loaded " + this.buildingManager.getBuildings().length + " buildings!");
+    };
+    DataHelper.prototype.loadSingleColumnValues = function (sheet) {
+        var values = [];
+        sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
+            var type = row.getCell(1).text;
+            if (type && !StringUtils_1.StringUtils.isBlank(type) && !values.includes(type)) {
+                values.push(type);
+            }
+        });
+        return values;
     };
     DataHelper.prototype.loadRooms = function (sheet) {
         this.generateColumns(sheet, 1);
@@ -88,57 +101,38 @@ var DataHelper = /** @class */ (function () {
                 return; // skip headers row
             if (row.getCell(1) === undefined || row.getCell(1).text === '')
                 return; // skip if row is empty. exceljs doesn't work well for some reason.
-            var buildingNameCell = row.getCell('Building');
-            if (!buildingNameCell) {
-                console.log("Building name cell empty at row " + rowNumber);
-                return;
-            }
-            var buildingName = row.getCell('Building').text;
+            var buildingName = row.getCell('building').text;
             var building = self.buildingManager.getBuildingByName(buildingName);
             if (!building) {
-                console.log("No such building exists: " + buildingName);
+                console.debug("No such building exists: " + buildingName);
                 return;
             }
-            // var roomA = {
-            //     name: row.getCell(5).text.toLowerCase(),
-            //     lockType: row.getCell(7).text.toLowerCase(),
-            //     capacity: row.getCell(8).text,
-            //     furnitureType: row.getCell(9).text,
-            //     chairCount: row.getCell(10).text,
-            //     tableCount: row.getCell(11).text,
-            //     extension: row.getCell(12).text,
-            //     phoneStatus: row.getCell(13).text.toLowerCase(),
-            //     audioRequiresProjector: (row.getCell(14).text.toLowerCase() === "true"),
-            //     hasProjector: row.getCell(15).text.toLowerCase() !== "n/a",
-            //     hasAudio: row.getCell(16).text.toLowerCase() !== "n/a",
-            //     hasScreen: row.getCell(17).text.toLowerCase() !== "n/a",
-            //     hasTeachingStationComputer: row.getCell(18).text.toLowerCase() !== "n/a",
-            //     teachingStationComputerType: row.getCell(19).text.toLowerCase(),
-            //     teachingStationComputerOS: row.getCell(20).text.toLowerCase(),
-            //     hasDocCam: row.getCell(21).text.toLowerCase() !== "n/a",
-            //     hasDVDPlayer: row.getCell(22).text.toLowerCase() !== "n/a",
-            //     dvdPlayerType: row.getCell(23).text.toLowerCase(),
-            //     hasPrinter: row.getCell(24).text.toLowerCase() !== "n/a",
-            //     printerSymquestNumber: row.getCell(25).text.toLowerCase(),
-            //     printerCartridgeType: row.getCell(26).text.toLowerCase(),
-            // };
-            var number = row.getCell('Number').text;
-            var rawType = row.getCell('Type').text;
-            // const type: RoomType = EnumUtils.parseEnum(RoomType, rawType);
-            // console.log(`Raw type is: ${rawType}, parsed type is: ${type}`);
-            // let room = new Room(
-            //     building,
-            //     number,
-            //     type,
-            // );
-            // room.setLastChecked(row.getCell('Timestamp').text);
-            // room.setName(row.getCell('Name').text);
-            // let rawLockType = row.getCell('Type').text;
-            // let lockType: LockType = (<any>LockType)[rawLockType];
-            // room.setLockType(lockType);
-            // building.addRoom(room);
+            var number = row.getCell('number').text;
+            if (StringUtils_1.StringUtils.isBlank(number) || !StringUtils_1.StringUtils.isValidRoomNumber(number)) {
+                console.debug("Room number is blank or invalid: " + number);
+                return;
+            }
+            var type = row.getCell('type').text;
+            if (StringUtils_1.StringUtils.isBlank(number) || !self.roomTypes.includes(type)) {
+                console.debug("Room type is blank or invalid: " + type);
+                return;
+            }
+            var room = new Room_1.Room(building, number, type);
+            room.setLastChecked(row.getCell('timestamp').text);
+            room.setName(row.getCell('name').text);
+            room.setLockType(row.getCell('lock type').text);
+            room.setCapacity(parseInt(row.getCell('capacity').text));
+            room.setPhone(row.getCell('phone extension').text, row.getCell('phone display').text, row.getCell('phone speaker').text);
+            // room.setProjector(); 
+            room.setAudio(new Room_1.Audio(StringUtils_1.StringUtils.parseBoolean(row.getCell('audio requires projector').text)));
+            // room.setScreen();
+            room.setTeachingStationComputer(new Room_1.Computer(row.getCell('ts computer type').text, row.getCell('ts computer operating system').text));
+            // room.setDocumentCamera();
+            // room.setDVDPlayer();
+            // room.setPrinter();
+            building.addRoom(room);
         });
-        console.log("Loaded " + this.roomManager.getRooms().length + " rooms!");
+        console.debug("Loaded " + this.roomManager.getRooms().length + " rooms!");
     };
     DataHelper.prototype.loadPrimarySpreadsheet = function (spreadsheet) {
         return __awaiter(this, void 0, void 0, function () {
@@ -152,11 +146,112 @@ var DataHelper = /** @class */ (function () {
                         var workbook = new Excel.Workbook();
                         workbook.xlsx.readFile(spreadsheet.path).then(function () {
                             self.loadBuildings(workbook.getWorksheet('Buildings'));
+                            var roomTypes = self.loadSingleColumnValues(workbook.getWorksheet('Room Types'));
+                            self.roomTypes = roomTypes;
+                            // console.debug(`Loaded ${roomTypes.length} room types!`);
+                            var lockTypes = self.loadSingleColumnValues(workbook.getWorksheet('Lock Types'));
+                            self.lockTypes = lockTypes;
+                            // console.debug(`Loaded ${lockTypes.length} room types!`);
+                            var furnitureTypes = self.loadSingleColumnValues(workbook.getWorksheet('Furniture Types'));
+                            self.furnitureTypes = furnitureTypes;
+                            // console.debug(`Loaded ${furnitureTypes.length} room types!`);
                             self.loadRooms(workbook.getWorksheet('Rooms'));
                             return resolve();
                         }).catch(function (err) {
                             return reject(err);
                         });
+                    })];
+            });
+        });
+    };
+    DataHelper.prototype.loadSecondarySpreadsheet = function (spreadsheet) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        if (!fs.existsSync(spreadsheet.path)) {
+                            return reject("File could not be found: " + spreadsheet.path);
+                        }
+                        var self = _this;
+                        var workbook = new Excel.Workbook();
+                        workbook.xlsx.readFile(spreadsheet.path).then(function () {
+                            // self.loadRooms(workbook.getWorksheet('Rooms'));
+                            return resolve();
+                        }).catch(function (err) {
+                            return reject(err);
+                        });
+                    })];
+            });
+        });
+    };
+    DataHelper.prototype.loadImages = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var self;
+            var _this = this;
+            return __generator(this, function (_a) {
+                self = this;
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        var rootDir = "public/images/buildings/";
+                        if (!fs.existsSync(rootDir)) {
+                            console.debug();
+                            return reject("Image directory does not exist: " + rootDir);
+                        }
+                        for (var _i = 0, _a = _this.buildingManager.getBuildings(); _i < _a.length; _i++) {
+                            var building = _a[_i];
+                            var buildingDir = rootDir + building.getInternalName() + "/";
+                            if (!fs.existsSync(buildingDir)) {
+                                console.debug("Building directory does not exist:" + buildingDir);
+                                continue;
+                            }
+                            for (var _b = 0, _c = building.getRooms(); _b < _c.length; _b++) {
+                                var room = _c[_b];
+                                var roomDir = buildingDir + "rooms/" + room.getNumber() + "/";
+                                if (!fs.existsSync(roomDir)) {
+                                    console.debug("Room directory does not exist: " + roomDir);
+                                    continue;
+                                }
+                                var roomImages = new ImageManager_1.RoomImages(room.getID());
+                                // root images
+                                for (var _d = 0, _e = fs.readdirSync(roomDir); _d < _e.length; _d++) {
+                                    var file = _e[_d];
+                                    var stat = fs.statSync(roomDir + file);
+                                    if (!stat.isDirectory()) {
+                                        var url = roomDir.replace("public/", "") + file;
+                                        var image = new ImageManager_1.Image(url);
+                                        roomImages.addMainImage(image);
+                                    }
+                                }
+                                // panoramic images
+                                var panoramasDir = roomDir + "panoramas/";
+                                if (fs.existsSync(panoramasDir)) {
+                                    for (var _f = 0, _g = fs.readdirSync(panoramasDir); _f < _g.length; _f++) {
+                                        var file = _g[_f];
+                                        var stat = fs.statSync(panoramasDir + file);
+                                        if (!stat.isDirectory()) {
+                                            var url = panoramasDir.replace("public/", "") + file;
+                                            var image = new ImageManager_1.Image(url);
+                                            roomImages.addPanoramicImage(image);
+                                        }
+                                    }
+                                }
+                                // equipment images
+                                var equipmentDir = roomDir + "equipment/";
+                                if (fs.existsSync(equipmentDir)) {
+                                    for (var _h = 0, _j = fs.readdirSync(equipmentDir); _h < _j.length; _h++) {
+                                        var file = _j[_h];
+                                        var stat = fs.statSync(equipmentDir + file);
+                                        if (!stat.isDirectory()) {
+                                            var url = equipmentDir.replace("public/", "") + file;
+                                            var image = new ImageManager_1.Image(url);
+                                            roomImages.addEquipmentImage(image);
+                                        }
+                                    }
+                                }
+                                self.imageManager.setRoomImages(room.getID(), roomImages);
+                                console.debug("Loaded " + roomImages.size() + " images for " + room.getDisplayName());
+                            }
+                        }
+                        return resolve();
                     })];
             });
         });
@@ -308,99 +403,4 @@ function getTroubleshootingDataForRoom(roomID) {
 }
 exports.getTroubleshootingDataForRoom = getTroubleshootingDataForRoom;
 
-
-async function loadImages() {
-    return new Promise((resolve, reject) => {
-        var rootDir = "public/images/buildings/";
-
-        if (!fs.existsSync(rootDir)) {
-            console.log()
-            return reject("Image directory does not exist: " + rootDir);
-        }
-
-        images = [];
-        for (const building of getAllBuildings()) {
-            var buildingDir = rootDir + building.internalName + "/";
-            if (!fs.existsSync(buildingDir)) {
-                console.log("Building directory does not exist: " + buildingDir);
-                continue;
-            }
-
-            for (const room of building.rooms) {
-
-                var mainImages = [];
-                var panoramicImages = [];
-                var equipmentImages = [];
-
-                var roomDir = buildingDir + "rooms/" + room.number + "/";
-
-                // check if room dir exists
-                if (!fs.existsSync(roomDir)) {
-                    console.log("Room directory does not exist: " + roomDir);
-                    continue;
-                }
-
-                // root images
-                for (const file of fs.readdirSync(roomDir)) {
-                    var stat = fs.statSync(roomDir + file);
-                    if (!stat.isDirectory()) {
-                        mainImages.push(roomDir.replace("public/", "") + file);
-                    }
-                }
-
-                // panoramic images
-                var panoramasDir = roomDir + "panoramas/";
-                if (fs.existsSync(panoramasDir)) {
-                    for (const file of fs.readdirSync(panoramasDir)) {
-                        var stat = fs.statSync(panoramasDir + file);
-                        if (!stat.isDirectory()) {
-                            panoramicImages.push(panoramasDir.replace("public/", "") + file);
-                        }
-                    }
-                }
-
-                // equipment images
-                var equipmentDir = roomDir + "equipment/";
-                if (fs.existsSync(equipmentDir)) {
-                    for (const file of fs.readdirSync(equipmentDir)) {
-                        var stat = fs.statSync(equipmentDir + file);
-                        if (!stat.isDirectory()) {
-                            equipmentImages.push(equipmentDir.replace("public/", "") + file);
-                        }
-                    }
-                }
-
-                images.push({
-                    roomID: room.id,
-                    mainImages: mainImages,
-                    panoramicImages: panoramicImages,
-                    equipmentImages: equipmentImages
-                });
-            }
-        }
-        resolve();
-    });
-}
-exports.loadImages = loadImages;
-
-
-function getAllImages() {
-    return images;
-}
-exports.getAllImages = getAllImages;
-
-
-function getImagesForRoom(room) {
-    for (const item of images) {
-        if (item.roomID === room.id)
-            return item;
-    }
-    return null;
-}
-exports.getImagesForRoom = getImagesForRoom;
-
-
-function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
-}
 */ 

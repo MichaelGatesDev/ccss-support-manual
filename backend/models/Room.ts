@@ -28,32 +28,27 @@ class Room {
     /**
      * The type of room
      */
-    private type: RoomType;
+    private type: string;
 
     /**
      * The type of lock which must be unlocked to enter the room
      */
-    private lockType !: LockType;
+    private lockType !: string;
 
     /**
      * The capacity or 'max number of people allowed' in the room or -1 if N/A
      */
     private capacity !: number;
 
-    /**
-     * The furniture within the room (tables, chairs, etc.)
-     */
-    private furniture !: FurnitureSetup;
+    // /**
+    //  * The furniture within the room (tables, chairs, etc.)
+    //  */
+    // private furniture !: FurnitureSetup;
 
     /**
      * The phone in the room
      */
     private phone !: Phone;
-
-    /**
-     * If the audio system requires the control panel to be on
-     */
-    private audioRequiresProjector !: boolean;
 
     /**
      * The projector
@@ -98,267 +93,212 @@ class Room {
      * @param number The building-unique number which represents the room
      * @param type The type of room
      */
-    constructor(building: Building, number: string, type: RoomType) {
+    constructor(building: Building, number: string, type: string) {
         this.building = building;
         this.number = number;
         this.type = type;
     }
 
-    /**
-     * Gets the parent building
-     */
-    public getBuilding() { return this.building; }
+    public getID() {
+        return this.building.getInternalName() + "-" + this.number;
+    }
 
-    /**
-     * Sets the timestamp when the room was last checked/updated
-     */
+    public getDisplayName() {
+        return this.building.getOfficialName() + " " + this.number.toLocaleUpperCase();
+    }
+
+    public getBuilding() {
+        return this.building;
+    }
+
+
     public setLastChecked(timestamp: string) {
         this.lastChecked = timestamp;
     }
 
-    /**
-     * Gets the last time that the room was checked or information was updated.
-     */
-    public getLastChecked() { return this.lastChecked; }
 
-    /**
-     * Gets the room number or unique identifier (e.g. 103F)
-     */
-    public getNumber() { return this.number; }
+    public getLastChecked() {
+        return this.lastChecked;
+    }
 
-    /**
-     * Sets the room name
-     */
-    public setName(name: string) { this.name = name; }
 
-    /**
-     * Gets the room name
-     */
-    public getName() { return this.name; }
+    public getNumber() {
+        return this.number;
+    }
 
-    /**
-     * Gets the type of room
-     */
-    public getType() { return this.type; }
 
-    /**
-     * Sets the type of lock which must be unlocked to enter the room
-     * @param lockType The type of lock
-     */
-    public setLockType(lockType: LockType) { this.lockType = lockType; }
+    public setName(name: string) {
+        this.name = name;
+    }
 
-    /**
-     * Gets the type of lock which must be unlocked to enter the room
-     */
-    public getLockType() { return this.lockType; }
+
+    public getName() {
+        return this.name;
+    }
+
+
+    public getType() {
+        return this.type;
+    }
+
+
+    public setLockType(lockType: string) {
+        this.lockType = lockType;
+    }
+
+    public getLockType() {
+        return this.lockType;
+    }
 
     /**
      * Sets the max number of people allowed in the room or -1 if N/A
      * @param num The number of people allowed or -1 if none
      */
-    public setCapacity(num: number) { this.capacity = num; }
+    public setCapacity(num: number) {
+        this.capacity = num;
+    }
 
     /**
      * Gets the max number of people allowed in the room or -1 if N/A
      */
-    public getCapacity() { return this.capacity; }
-
-    /**
-     * Sets the furniture within the room (tables, chairs, etc.)
-     * @param setup The furniture setup
-     */
-    public setFurnitureSetup(setup: FurnitureSetup) { this.furniture = setup; }
-
-    /**
-     * Gets the furniture within the room (tables, chairs, etc.)
-     */
-    public getFurnitureSetup() { return this.furniture; }
-
-
-}
-
-/**
- * A type of room
- */
-enum RoomType {
-    /**
-     * Standard classroom
-     */
-    Classroom = "classroom",
-    /**
-     * A classroom which has computers (may be called a computer lab)
-     */
-    ComputerClassroom = "computer classroom",
-    /**
-     * A room which is used for conferences and includes conference technology (cameras, etc.)
-     */
-    ConferenceRoom = "conference room",
-    /**
-     * A room which is used for meetings
-     */
-    MeetingRoom = "meeting room",
-    /**
-     * A classroom which is a lecture hall
-     */
-    LectureHall = "lecture hall",
-    /**
-     * A room which is not used for standard instruction but can be used by students working on projects or relaxing
-     */
-    ProjectRoom = "project room",
-    /**
-     * A specific room used for seminars
-     */
-    SeminarRoom = "seminar room",
-    /**
-     * A classroom which contains SMART (board, etc.) equipment
-     */
-    SmartClassroom = "smart classroom"
-}
-
-/**
- * The type of lock which allows entry to a room
- */
-enum LockType {
-    /**
-     * No lock (this is rare)
-     */
-    None,
-    /**
-     * A lock in which the correct key must be inserted into a keyhole to unlock
-     */
-    Key,
-    /**
-     * A lock in which a programmed card can be swiped to unlock
-     */
-    Swipe,
-    /**
-     * A lock in which a programmed card can be tapped or placed in proximity to unlock
-     */
-    Electronic,
-    /**
-     * A lock in which a button sequence must be pressed in a specific order to unlock
-     */
-    Button
-}
-
-/**
- * The type of furniture layout
- */
-enum FurnitureLayoutType {
-    /**
-     * Lecture Hall
-     */
-    LectureHall,
-    /**
-     * Chair & Table
-     */
-    ChairTable,
-    /**
-     * Chair/Desk combo
-     */
-    ChairDeskCombo,
-    /**
-     * Chair & Desk
-     */
-    ChairDesk,
-    /**
-     * Stool
-     */
-    Stools,
-    /**
-     * Other type of furniture layout
-     */
-    Other,
-    /**
-     * No furniture layout or unknown
-     */
-    None
-}
-
-/**
- * A type of furniture item (can be almost anything)
- */
-enum FurnitureItem {
-    /**
-     * A stool
-     */
-    Stool,
-    /**
-     * A chair (stools don't count)
-     */
-    Chair,
-    /**
-     * A couch
-     */
-    Couch,
-    /**
-     * A desk
-     */
-    Desk,
-    /**
-     * A chair/desk which are connected
-     */
-    ChairDesk,
-    /**
-     * A table
-     */
-    Table,
-    /**
-     * Some other tpe of furniture item
-     */
-    Other
-}
-
-/**
- * The furniture setup for the room (type, amounts, etc.)
- */
-class FurnitureSetup {
-
-    /**
-     * The actual items (chairs, tables, etc.) and their counts
-     */
-    private items: Map<FurnitureItem, number>;
-
-    /**
-     * The type of furniture present in a room
-     */
-    private type: FurnitureLayoutType;
-
-    /**
-     * @param type The type of furniture present in a room
-     */
-    constructor(type: FurnitureLayoutType) {
-        this.type = type;
-        this.items = new Map<FurnitureItem, number>();
+    public getCapacity() {
+        return this.capacity;
     }
 
-    /**
-     * Sets the furniture type and counts
-     * @param item The item to add
-     * @param amt The amount of the item to add
-     */
-    public setItems(item: FurnitureItem, amt: number) {
-        this.items.set(item, amt);
+    // /**
+    //  * Sets the furniture within the room (tables, chairs, etc.)
+    //  * @param setup The furniture setup
+    //  */
+    // public setFurnitureSetup(setup: FurnitureSetup) { this.furniture = setup; }
+
+    // /**
+    //  * Gets the furniture within the room (tables, chairs, etc.)
+    //  */
+    // public getFurnitureSetup() { return this.furniture; }
+
+
+    public getPhone() {
+        return this.phone;
     }
 
-    /**
-     * Gets the total number of a specific item present
-     * @param item the item to fetch the count of
-     */
-    public getItemCount(item: FurnitureItem) {
-        return this.items.has(item) ? this.items.get(item) : -1;
+    public setPhone(extension: string, display: string, speaker: string) {
+        this.phone = new Phone(extension, display, speaker);
     }
 
-    /**
-     * Sets the type of furniture present
-     */
-    public setFurnitureType(type: FurnitureLayoutType) { return this.type }
 
-    /**
-     * Gets the type of furniture present
-     */
-    public getFurnitureType() { return this.type; }
+    public getProjector() {
+        return this.projector;
+    }
+
+    public setProjector() {
+        //TODO
+    }
+
+
+    public getAudio() {
+        return this.audio;
+    }
+
+    public setAudio(audio: Audio) {
+        this.audio = audio;
+    }
+
+
+    public getScreen() {
+        return this.screen;
+    }
+
+    public setScreen() {
+        //TODO
+    }
+
+
+    public getTeachingStationComputer() {
+        return this.teachingStationComputer;
+    }
+
+    public setTeachingStationComputer(computer: Computer) {
+        this.teachingStationComputer = computer;
+    }
+
+
+    public getDocumentCamera() {
+        return this.documentCamera;
+    }
+
+    public setDocumentCamera(docCam: DocumentCamera) {
+        this.documentCamera = docCam;
+    }
+
+
+    public getDVDPlayer() {
+        return this.dvdPlayer;
+    }
+
+    public setDVDPlayer(dvdPlayer: DVDPlayer) {
+        this.dvdPlayer = dvdPlayer;
+    }
+
+
+    public getPrinter() {
+        return this.printer;
+    }
+
+    public setPrinter(printer: Printer) {
+        this.printer = printer;
+    }
 }
+
+// /**
+//  * The furniture setup for the room (type, amounts, etc.)
+//  */
+// class FurnitureSetup {
+
+//     /**
+//      * The actual items (chairs, tables, etc.) and their counts
+//      */
+//     private items: Map<FurnitureItem, number>;
+
+//     /**
+//      * The type of furniture present in a room
+//      */
+//     private type: FurnitureLayoutType;
+
+//     /**
+//      * @param type The type of furniture present in a room
+//      */
+//     constructor(type: FurnitureLayoutType) {
+//         this.type = type;
+//         this.items = new Map<FurnitureItem, number>();
+//     }
+
+//     /**
+//      * Sets the furniture type and counts
+//      * @param item The item to add
+//      * @param amt The amount of the item to add
+//      */
+//     public setItems(item: FurnitureItem, amt: number) {
+//         this.items.set(item, amt);
+//     }
+
+//     /**
+//      * Gets the total number of a specific item present
+//      * @param item the item to fetch the count of
+//      */
+//     public getItemCount(item: FurnitureItem) {
+//         return this.items.has(item) ? this.items.get(item) : -1;
+//     }
+
+//     /**
+//      * Sets the type of furniture present
+//      */
+//     public setFurnitureType(type: FurnitureLayoutType) { return this.type }
+
+//     /**
+//      * Gets the type of furniture present
+//      */
+//     public getFurnitureType() { return this.type; }
+// }
 
 /**
  * 
@@ -369,7 +309,20 @@ class Projector { }
  * 
  */
 class Audio {
-    //TODO requires system to be on 
+
+    private systemDependent: boolean;
+
+    constructor(systemDependent: boolean) {
+        this.systemDependent = systemDependent;
+    }
+
+    public setSystemDependent(requires: boolean) {
+        this.systemDependent = requires;
+    }
+
+    public isSystemDependent() {
+        return this.systemDependent;
+    }
 }
 
 /**
@@ -380,58 +333,6 @@ class Screen {
 }
 
 /**
- * The physical structure or type of a Computer
- */
-enum ComputerType {
-    /**
-     * A tower (also known as a desktop)
-     */
-    Tower,
-    /**
-     * A computer which is modular and self-contained. The screen is connected to the internals to be one block
-     */
-    AllInOne,
-    /**
-     * A computer which is very small and portable with weaker hardware. Typically used for meeting rooms.
-     */
-    Mini,
-    /**
-     * A computer whose purpose is to run as a server
-     */
-    Server,
-    /**
-     * Another type of computer
-     */
-    Other
-}
-
-/**
- * The operating system that a computer runs
- */
-enum OperatingSystem {
-    /**
-     * OSX is the operating system used by Macintosh (Mac) computers.
-     */
-    OSX,
-    /**
-     * Linux is a very broad way of naming various Linux distributions (e.g. Mint, Ubuntu)
-     */
-    Linux,
-    /**
-     * Microsoft Windows 7
-     */
-    Windows7,
-    /**
-     * Microsoft Windows 10
-     */
-    Windows10,
-    /**
-     * Some other type of operating system
-     */
-    Other
-}
-
-/**
  * A Computer
  */
 class Computer {
@@ -439,18 +340,18 @@ class Computer {
     /**
      *  The physical structure of a computer
      */
-    private type: ComputerType;
+    private type: string;
 
     /**
      * The operating system run by the computer
      */
-    private operatingSystem: OperatingSystem;
+    private operatingSystem: string;
 
     /**
      * @param type The physical structure of a computer 
      * @param operatingSystem The operating system run by the computer
      */
-    constructor(type: ComputerType, operatingSystem: OperatingSystem) {
+    constructor(type: string, operatingSystem: string) {
         this.type = type;
         this.operatingSystem = operatingSystem;
     }
@@ -469,33 +370,10 @@ class Computer {
 /**
  * A Document Camera
  */
-class DocumentCamera { }
+class DocumentCamera {
 
-/**
- * Type of DVD Player
- */
-enum DVDPlayerType {
-    /**
-     * DVD played through computer
-     */
-    Computer,
-    /**
-     * Standard DVD player
-     */
-    DVD,
-    /**
-     * DVD/VCR Combo
-     */
-    DVD_VCR,
-    /**
-     * DVD/BLURAY Combo
-     */
-    DVD_BLURAY,
-    /**
-     * DVD/VCR/BLURAY Combo
-     */
-    DVD_VCR_BLURAY,
 }
+
 
 /**
  * A DVD Player
@@ -505,12 +383,12 @@ class DVDPlayer {
     /**
      * The type of player (pc, player, etc.)
      */
-    private type: DVDPlayerType;
+    private type: string;
 
     /**
      * @param type The type of player (pc, player, etc.)
      */
-    constructor(type: DVDPlayerType) {
+    constructor(type: string) {
         this.type = type;
     }
 
@@ -571,26 +449,19 @@ class Phone {
     private containsDisplay: boolean;
 
     /**
-     * If the display on the phone is legible
+     * If the phone has a speaker
      */
-    private displayLegible: boolean;
-
-    /**
-     * If the speaker phone function works
-     */
-    private speakerWorks: boolean;
+    private containsSpeaker: boolean;
 
     /**
      * @param extension The last 4 digits of the phone number
      * @param containsDisplay If the phone has a display
-     * @param displayLegible If the display on the phone is legible
-     * @param speakerWorks If the speaker phone function works
+     * @param containsSpeaker If the phone has a speaker
      */
-    constructor(extension: string, containsDisplay: boolean, displayLegible: boolean, speakerWorks: boolean) {
+    constructor(extension: string, displayStatus: string, speakerStatus: string) {
         this.extension = extension;
-        this.containsDisplay = containsDisplay;
-        this.displayLegible = displayLegible;
-        this.speakerWorks = speakerWorks;
+        this.containsDisplay = displayStatus !== 'N/A';
+        this.containsSpeaker = speakerStatus !== 'N/A';
     }
 
     /**
@@ -604,34 +475,21 @@ class Phone {
     public hasDisplay() { return this.containsDisplay; }
 
     /**
-     * Returns true if the display is legible 
+     * Returns true if the phone has a speaker
      */
-    public isDisplayLegible() { return this.displayLegible; }
-
-    /**
-     * Returns true if the speaker (speakerphone) works
-     */
-    public doesSpeakerWork() { return this.speakerWorks; }
+    public hasSpeaker() { return this.containsSpeaker; }
 }
 
 export {
     Room,
-    RoomType,
-    LockType,
-    FurnitureLayoutType,
-    FurnitureItem,
-    FurnitureSetup,
+    // FurnitureItem,
+    // FurnitureSetup,
     Projector,
     Audio,
     Screen,
-    ComputerType,
-    OperatingSystem,
     Computer,
     DocumentCamera,
-    DVDPlayerType,
     DVDPlayer,
     Printer,
     Phone,
 }
-
-
