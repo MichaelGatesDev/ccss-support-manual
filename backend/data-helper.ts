@@ -301,7 +301,7 @@ class DataHelper {
                 }
                 return resolve();
             }).catch(async function (err) {
-                console.error(err);
+                return reject(err);
             });
         });
     }

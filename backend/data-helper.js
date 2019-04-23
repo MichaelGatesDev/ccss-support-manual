@@ -450,8 +450,7 @@ var DataHelper = /** @class */ (function () {
                         }).catch(function (err) {
                             return __awaiter(this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
-                                    console.error(err);
-                                    return [2 /*return*/];
+                                    return [2 /*return*/, reject(err)];
                                 });
                             });
                         });
