@@ -381,35 +381,3 @@ class DataHelper {
 
 let dataHelper = new DataHelper();
 export = dataHelper;
-/*
-function parseRooms(raw) {
-    let results = [];
-    if (isBlank(raw)) return results;
-    for (const piece of raw.split(",")) {
-        var parts = piece.split("|");
-
-        var buildingName = parts[0];
-        var roomNumber = parts[1];
-
-        var room = getRoomByBuildingNameAndNumber(buildingName, roomNumber);
-        if (!room) continue; // no location at building/room
-
-        results.push(room.id);
-    }
-    return results;
-}
-
-function parseListFromString(str, delim) {
-    if (isBlank(str)) return [];
-    return str.toLowerCase().trim().split(",");
-}
-
-
-function getAllTroubleshootingData() {
-    return troubledata;
-}
-exports.getAllTroubleshootingData = getAllTroubleshootingData;
-
-
-
-*/
