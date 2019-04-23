@@ -42,19 +42,30 @@ var Building_1 = require("./models/Building");
 var Room_1 = require("./models/Room");
 var StringUtils_1 = require("./StringUtils");
 var ImageManager_1 = require("./ImageManager");
+var TroubleshootingData_1 = require("./models/TroubleshootingData");
+var TroubleshootingDataManager_1 = require("./TroubleshootingDataManager");
 var DataHelper = /** @class */ (function () {
     function DataHelper() {
-        // private troubleDataManager: TroubleDataManager;
         this.roomTypes = [];
         this.lockTypes = [];
         this.furnitureTypes = [];
         this.buildingManager = new BuildingManager_1.BuildingManager();
         this.roomManager = new RoomManager_1.RoomManager(this.buildingManager);
         this.imageManager = new ImageManager_1.ImageManager();
+        this.troubleshootingDataManager = new TroubleshootingDataManager_1.TroubleshootingDataManager(this.roomManager);
     }
-    DataHelper.prototype.getBuildingManager = function () { return this.buildingManager; };
-    DataHelper.prototype.getRoomManager = function () { return this.roomManager; };
-    // public getImageManager(){ return this.imageManager; }
+    DataHelper.prototype.getBuildingManager = function () {
+        return this.buildingManager;
+    };
+    DataHelper.prototype.getRoomManager = function () {
+        return this.roomManager;
+    };
+    DataHelper.prototype.getImageManager = function () {
+        return this.imageManager;
+    };
+    DataHelper.prototype.getTroubleshootingDataManager = function () {
+        return this.troubleshootingDataManager;
+    };
     DataHelper.prototype.generateColumns = function (sheet, headerRowIndex) {
         var row = sheet.getRow(headerRowIndex);
         if (row === null || !row.values || !row.values.length)
@@ -124,7 +135,7 @@ var DataHelper = /** @class */ (function () {
             room.setCapacity(parseInt(row.getCell('capacity').text));
             room.setPhone(row.getCell('phone extension').text, row.getCell('phone display').text, row.getCell('phone speaker').text);
             // room.setProjector(); 
-            room.setAudio(new Room_1.Audio(StringUtils_1.StringUtils.parseBoolean(row.getCell('audio requires projector').text)));
+            room.setAudio(new Room_1.Audio(StringUtils_1.StringUtils.parseBoolean(row.getCell('audio requires system').text)));
             // room.setScreen();
             room.setTeachingStationComputer(new Room_1.Computer(row.getCell('ts computer type').text, row.getCell('ts computer operating system').text));
             // room.setDocumentCamera();
@@ -136,13 +147,13 @@ var DataHelper = /** @class */ (function () {
     };
     DataHelper.prototype.loadPrimarySpreadsheet = function (spreadsheet) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
+            var self;
             return __generator(this, function (_a) {
+                self = this;
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         if (!fs.existsSync(spreadsheet.path)) {
                             return reject("File could not be found: " + spreadsheet.path);
                         }
-                        var self = _this;
                         var workbook = new Excel.Workbook();
                         workbook.xlsx.readFile(spreadsheet.path).then(function () {
                             self.loadBuildings(workbook.getWorksheet('Buildings'));
@@ -164,18 +175,68 @@ var DataHelper = /** @class */ (function () {
             });
         });
     };
+    DataHelper.prototype.parseRooms = function (raw) {
+        var results = [];
+        if (!StringUtils_1.StringUtils.isBlank(raw)) {
+            for (var _i = 0, _a = raw.split(","); _i < _a.length; _i++) {
+                var piece = _a[_i];
+                var parts = piece.split("|");
+                var buildingName = parts[0];
+                var roomNumber = parts[1];
+                var room = this.roomManager.getRoomByBuildingNameAndNumber(buildingName, roomNumber);
+                if (!room)
+                    continue; // no location at building/room
+                results.push(room);
+            }
+        }
+        return results;
+    };
+    DataHelper.prototype.loadTroubleshootingData = function (sheet) {
+        this.generateColumns(sheet, 1);
+        var self = this;
+        sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
+            if (rowNumber == 1)
+                return; // skip headers row
+            if (row.getCell(1) === undefined || row.getCell(1).text === '')
+                return; // skip if row is empty. exceljs doesn't work well for some reason.
+            var title = row.getCell('incident').text;
+            var description = row.getCell('description').text;
+            var solution = row.getCell('solution').text;
+            var types = row.getCell('types').text.split(",");
+            var tags = row.getCell('tags').text.split(",");
+            var data = new TroubleshootingData_1.TroubleshootingData(title, description, solution);
+            data.setTypes(types);
+            data.setTags(tags);
+            var rawWhitelisted = row.getCell('whitelisted rooms').text;
+            var whitelisted = self.parseRooms(rawWhitelisted);
+            for (var _i = 0, whitelisted_1 = whitelisted; _i < whitelisted_1.length; _i++) {
+                var room = whitelisted_1[_i];
+                data.addWhitelistedRoom(room);
+            }
+            var rawBlacklisted = row.getCell('blacklisted rooms').text;
+            var blacklisted = self.parseRooms(rawBlacklisted);
+            for (var _a = 0, blacklisted_1 = blacklisted; _a < blacklisted_1.length; _a++) {
+                var room = blacklisted_1[_a];
+                data.addWhitelistedRoom(room);
+            }
+            self.troubleshootingDataManager.addTroubleshootingData(data);
+            // self.troubleshootingDataManager.getTroubleshootingData();
+            //TODO add troubleshooting data to collection
+        });
+        console.log("Loaded " + self.troubleshootingDataManager.getTroubleshootingData().length + " troubleshooting data blocks!");
+    };
     DataHelper.prototype.loadSecondarySpreadsheet = function (spreadsheet) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
+            var self;
             return __generator(this, function (_a) {
+                self = this;
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         if (!fs.existsSync(spreadsheet.path)) {
                             return reject("File could not be found: " + spreadsheet.path);
                         }
-                        var self = _this;
                         var workbook = new Excel.Workbook();
                         workbook.xlsx.readFile(spreadsheet.path).then(function () {
-                            // self.loadRooms(workbook.getWorksheet('Rooms'));
+                            self.loadTroubleshootingData(workbook.getWorksheet('QA'));
                             return resolve();
                         }).catch(function (err) {
                             return reject(err);
@@ -382,7 +443,6 @@ var DataHelper = /** @class */ (function () {
                                                                                                                         case 3:
                                                                                                                             _a.sent();
                                                                                                                             self.imageManager.setRoomImages(room.getID(), roomImages);
-                                                                                                                            console.debug("Loaded " + roomImages.size() + " images for " + room.getDisplayName());
                                                                                                                             return [2 /*return*/];
                                                                                                                     }
                                                                                                                 });
@@ -463,59 +523,6 @@ var DataHelper = /** @class */ (function () {
 var dataHelper = new DataHelper();
 module.exports = dataHelper;
 /*
-async function loadSecondarySpreadsheet(file) {
-    return new Promise((resolve, reject) => {
-
-        if (!fs.existsSync(file)) {
-            return reject("File could not be found: " + file);
-        }
-
-        var workbook = new Excel.Workbook();
-        workbook.xlsx.readFile(file).then(function () {
-
-            let results = [];
-
-            // rooms
-            var roomsWS = workbook.getWorksheet("QA");
-            roomsWS.eachRow({
-                includeEmpty: false
-            }, function (row, rowNumber) {
-
-                // skip  the first row (headers)
-                if (rowNumber == 1) return;
-
-                // building name first
-                var title = row.getCell(1).text.toLowerCase();
-
-                // can't do anything with invalid rows
-                if (isBlank(title)) return;
-
-                var troubleshootingDataObj = {
-                    title: title,
-                    description: row.getCell(2).text.toLowerCase().trim(),
-                    solution: row.getCell(3).text.toLowerCase().trim(),
-                    types: parseListFromString(row.getCell(4).text),
-                    tags: parseListFromString(row.getCell(5).text),
-                    whitelistedLocations: parseRooms(row.getCell(6).text.trim().toLowerCase()),
-                    blacklistedLocations: parseRooms(row.getCell(7).text.trim().toLowerCase()),
-                };
-
-                results.push(troubleshootingDataObj);
-            });
-
-            console.debug("There are " + results.length + " troubleshooting data segments");
-
-            troubledata = results;
-
-            return resolve();
-        }).catch(function (err) {
-            return reject(err);
-        });
-    });
-}
-exports.loadSecondarySpreadsheet = loadSecondarySpreadsheet;
-
-
 function parseRooms(raw) {
     let results = [];
     if (isBlank(raw)) return results;
@@ -545,64 +552,5 @@ function getAllTroubleshootingData() {
 exports.getAllTroubleshootingData = getAllTroubleshootingData;
 
 
-function getTroubleshootingDataForRoom(roomID) {
-    let results = [];
-
-    var room = getRoomByID(roomID);
-
-    if (!room) return results; // no room with that ID found
-
-    for (const td of troubledata) {
-
-        // trouble data doesn't apply for this room
-        if (td.blacklistedLocations.includes(roomID))
-            continue;
-
-        // whitelisted room
-        if (td.whitelistedLocations.length > 0) {
-            if (td.whitelistedLocations.includes(roomID))
-                results.push(td);
-            else
-                continue;
-        }
-
-        // audio
-        if (room.hasAudio) {
-            if (td.types.includes('audio')) {
-                results.push(td);
-            }
-        }
-        // projector
-        if (room.hasProjector) {
-            if (td.types.includes('projector')) {
-                results.push(td);
-            }
-        }
-        // computer
-        if (room.hasTeachingStationComputer) {
-            if (td.types.includes('computer')) {
-                results.push(td);
-            }
-        }
-        // dvd player
-        if (room.hasDVDPlayer) {
-            if (td.types.includes('dvd')) {
-                results.push(td);
-            }
-        }
-        // printer
-        if (room.hasPrinter) {
-            if (td.types.includes('printer')) {
-                results.push(td);
-            }
-        }
-
-        // if there are no types, it is general
-        if (td.types.length === 0)
-            results.push(td);
-    }
-    return results;
-}
-exports.getTroubleshootingDataForRoom = getTroubleshootingDataForRoom;
 
 */ 

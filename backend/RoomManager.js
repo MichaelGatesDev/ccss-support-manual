@@ -33,6 +33,18 @@ var RoomManager = /** @class */ (function () {
         }
         return null;
     };
+    /**
+     * Gets a room by its ID
+     * @param roomID The ID of the room to get
+     */
+    RoomManager.prototype.getRoomByID = function (roomID) {
+        for (var _i = 0, _a = this.getRooms(); _i < _a.length; _i++) {
+            var room = _a[_i];
+            if (room.getID() === roomID)
+                return room;
+        }
+        return null;
+    };
     return RoomManager;
 }());
 exports.RoomManager = RoomManager;

@@ -7,13 +7,15 @@ import { Building } from './models/Building';
 import { Room, Computer, Audio } from './models/Room';
 import { StringUtils } from './StringUtils';
 import { ImageManager, Image, RoomImages } from './ImageManager';
+import { TroubleshootingData } from './models/TroubleshootingData';
+import { TroubleshootingDataManager } from './TroubleshootingDataManager';
 
 
 class DataHelper {
     private buildingManager: BuildingManager;
     private roomManager: RoomManager;
     private imageManager: ImageManager;
-    // private troubleDataManager: TroubleDataManager;
+    private troubleshootingDataManager: TroubleshootingDataManager;
 
     private roomTypes: string[] = [];
     private lockTypes: string[] = [];
@@ -23,11 +25,21 @@ class DataHelper {
         this.buildingManager = new BuildingManager();
         this.roomManager = new RoomManager(this.buildingManager);
         this.imageManager = new ImageManager();
+        this.troubleshootingDataManager = new TroubleshootingDataManager(this.roomManager);
     }
 
-    public getBuildingManager() { return this.buildingManager; }
-    public getRoomManager() { return this.roomManager; }
-    // public getImageManager(){ return this.imageManager; }
+    public getBuildingManager() {
+        return this.buildingManager;
+    }
+    public getRoomManager() {
+        return this.roomManager;
+    }
+    public getImageManager() {
+        return this.imageManager;
+    }
+    public getTroubleshootingDataManager() {
+        return this.troubleshootingDataManager;
+    }
 
 
     private generateColumns(sheet: Excel.Worksheet, headerRowIndex: number) {
@@ -125,7 +137,7 @@ class DataHelper {
 
             room.setAudio(
                 new Audio(
-                    StringUtils.parseBoolean(row.getCell('audio requires projector').text)
+                    StringUtils.parseBoolean(row.getCell('audio requires system').text)
                 )
             );
 
@@ -150,13 +162,13 @@ class DataHelper {
     }
 
     async loadPrimarySpreadsheet(spreadsheet: any) {
+        var self = this;
         return new Promise((resolve, reject) => {
 
             if (!fs.existsSync(spreadsheet.path)) {
                 return reject("File could not be found: " + spreadsheet.path);
             }
 
-            var self = this;
             var workbook = new Excel.Workbook();
             workbook.xlsx.readFile(spreadsheet.path).then(function () {
 
@@ -183,18 +195,77 @@ class DataHelper {
         });
     }
 
+
+    private parseRooms(raw: string) {
+        let results: Room[] = [];
+        if (!StringUtils.isBlank(raw)) {
+            for (const piece of raw.split(",")) {
+                var parts = piece.split("|");
+
+                var buildingName = parts[0];
+                var roomNumber = parts[1];
+
+                let room: Room | null = this.roomManager.getRoomByBuildingNameAndNumber(buildingName, roomNumber);
+                if (!room) continue; // no location at building/room
+
+                results.push(room);
+            }
+        }
+        return results;
+    }
+
+    private loadTroubleshootingData(sheet: Excel.Worksheet) {
+        this.generateColumns(sheet, 1);
+        var self = this;
+        sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
+            if (rowNumber == 1) return; // skip headers row
+            if (row.getCell(1) === undefined || row.getCell(1).text === '') return; // skip if row is empty. exceljs doesn't work well for some reason.
+
+
+            let title: string = row.getCell('incident').text;
+            let description: string = row.getCell('description').text;
+            let solution: string = row.getCell('solution').text;
+            let types: string[] = row.getCell('types').text.split(",");
+            let tags: string[] = row.getCell('tags').text.split(",");
+
+            let data = new TroubleshootingData(
+                title,
+                description,
+                solution
+            );
+
+            data.setTypes(types);
+            data.setTags(tags);
+
+            let rawWhitelisted: string = row.getCell('whitelisted rooms').text;
+            let whitelisted: Room[] = self.parseRooms(rawWhitelisted);
+            for (const room of whitelisted) {
+                data.addWhitelistedRoom(room);
+            }
+
+            let rawBlacklisted: string = row.getCell('blacklisted rooms').text;
+            let blacklisted: Room[] = self.parseRooms(rawBlacklisted);
+            for (const room of blacklisted) {
+                data.addWhitelistedRoom(room);
+            }
+
+            self.troubleshootingDataManager.addTroubleshootingData(data);
+        });
+        console.log(`Loaded ${self.troubleshootingDataManager.getTroubleshootingData().length} troubleshooting data blocks!`);
+    }
+
     async loadSecondarySpreadsheet(spreadsheet: any) {
+        var self = this;
         return new Promise((resolve, reject) => {
 
             if (!fs.existsSync(spreadsheet.path)) {
                 return reject("File could not be found: " + spreadsheet.path);
             }
 
-            var self = this;
             var workbook = new Excel.Workbook();
             workbook.xlsx.readFile(spreadsheet.path).then(function () {
 
-                // self.loadRooms(workbook.getWorksheet('Rooms'));
+                self.loadTroubleshootingData(workbook.getWorksheet('QA'));
 
                 return resolve();
             }).catch(function (err) {
@@ -289,7 +360,7 @@ class DataHelper {
                                 });
 
                                 self.imageManager.setRoomImages(room.getID(), roomImages);
-                                console.debug(`Loaded ${roomImages.size()} images for ` + room.getDisplayName());
+                                // console.debug(`Loaded ${roomImages.size()} images for ` + room.getDisplayName());
 
                             }).catch(async function (err) {
                                 console.error("Unable to access room dir " + roomDir);
@@ -310,61 +381,7 @@ class DataHelper {
 
 let dataHelper = new DataHelper();
 export = dataHelper;
-
 /*
-async function loadSecondarySpreadsheet(file) {
-    return new Promise((resolve, reject) => {
-
-        if (!fs.existsSync(file)) {
-            return reject("File could not be found: " + file);
-        }
-
-        var workbook = new Excel.Workbook();
-        workbook.xlsx.readFile(file).then(function () {
-
-            let results = [];
-
-            // rooms
-            var roomsWS = workbook.getWorksheet("QA");
-            roomsWS.eachRow({
-                includeEmpty: false
-            }, function (row, rowNumber) {
-
-                // skip  the first row (headers)
-                if (rowNumber == 1) return;
-
-                // building name first
-                var title = row.getCell(1).text.toLowerCase();
-
-                // can't do anything with invalid rows
-                if (isBlank(title)) return;
-
-                var troubleshootingDataObj = {
-                    title: title,
-                    description: row.getCell(2).text.toLowerCase().trim(),
-                    solution: row.getCell(3).text.toLowerCase().trim(),
-                    types: parseListFromString(row.getCell(4).text),
-                    tags: parseListFromString(row.getCell(5).text),
-                    whitelistedLocations: parseRooms(row.getCell(6).text.trim().toLowerCase()),
-                    blacklistedLocations: parseRooms(row.getCell(7).text.trim().toLowerCase()),
-                };
-
-                results.push(troubleshootingDataObj);
-            });
-
-            console.debug("There are " + results.length + " troubleshooting data segments");
-
-            troubledata = results;
-
-            return resolve();
-        }).catch(function (err) {
-            return reject(err);
-        });
-    });
-}
-exports.loadSecondarySpreadsheet = loadSecondarySpreadsheet;
-
-
 function parseRooms(raw) {
     let results = [];
     if (isBlank(raw)) return results;
@@ -394,64 +411,5 @@ function getAllTroubleshootingData() {
 exports.getAllTroubleshootingData = getAllTroubleshootingData;
 
 
-function getTroubleshootingDataForRoom(roomID) {
-    let results = [];
-
-    var room = getRoomByID(roomID);
-
-    if (!room) return results; // no room with that ID found
-
-    for (const td of troubledata) {
-
-        // trouble data doesn't apply for this room
-        if (td.blacklistedLocations.includes(roomID))
-            continue;
-
-        // whitelisted room
-        if (td.whitelistedLocations.length > 0) {
-            if (td.whitelistedLocations.includes(roomID))
-                results.push(td);
-            else
-                continue;
-        }
-
-        // audio
-        if (room.hasAudio) {
-            if (td.types.includes('audio')) {
-                results.push(td);
-            }
-        }
-        // projector
-        if (room.hasProjector) {
-            if (td.types.includes('projector')) {
-                results.push(td);
-            }
-        }
-        // computer
-        if (room.hasTeachingStationComputer) {
-            if (td.types.includes('computer')) {
-                results.push(td);
-            }
-        }
-        // dvd player
-        if (room.hasDVDPlayer) {
-            if (td.types.includes('dvd')) {
-                results.push(td);
-            }
-        }
-        // printer
-        if (room.hasPrinter) {
-            if (td.types.includes('printer')) {
-                results.push(td);
-            }
-        }
-
-        // if there are no types, it is general
-        if (td.types.length === 0)
-            results.push(td);
-    }
-    return results;
-}
-exports.getTroubleshootingDataForRoom = getTroubleshootingDataForRoom;
 
 */
