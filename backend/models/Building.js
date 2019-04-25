@@ -69,6 +69,18 @@ var Building = /** @class */ (function () {
         return this.rooms;
     };
     /**
+     * Gets a room within the building with the specified number
+     * @param number The room number
+     */
+    Building.prototype.getRoom = function (number) {
+        for (var _i = 0, _a = this.getRooms(); _i < _a.length; _i++) {
+            var room = _a[_i];
+            if (room.getNumber() === number)
+                return room;
+        }
+        return null;
+    };
+    /**
      * Checks if the building has the specified name
      *
      * @param name The name (or partial word) to check for

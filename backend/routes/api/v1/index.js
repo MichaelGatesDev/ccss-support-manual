@@ -1,41 +1,26 @@
-var express = require('express');
-var router = express.Router();
-
-var dataHelper = require('../../../data-helper');
-
-const buildings = require('./buildings');
-router.use('/buildings/', buildings);
-
-const rooms = require('./rooms');
-router.use('/rooms/', rooms);
-
-const images = require('./images');
-router.use('/images/', images);
-
-const troubelshootingData = require('./troubleshooting-data');
-router.use('/troubleshooting-data/', troubelshootingData);
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var express_1 = require("express");
+var App_1 = __importDefault(require("../../../App"));
+var router = express_1.Router();
+var buildings_1 = __importDefault(require("./buildings"));
+router.use('/buildings/', buildings_1.default);
+var buildings_2 = __importDefault(require("./buildings"));
+router.use('/rooms/', buildings_2.default);
+var images_1 = __importDefault(require("./images"));
+router.use('/images/', images_1.default);
+var troubleshooting_data_1 = __importDefault(require("./troubleshooting-data"));
+router.use('/troubleshooting-data/', troubleshooting_data_1.default);
 router.get('/', function (req, res, next) {
-  res.send("This is the primary API v1 route");
+    res.send("This is the primary API v1 route");
 });
-
 router.get('/getbuilding', function (req, res, next) {
-
-  if (!req.query.roomID) {
-    res.send("You must specify a room ID");
-    return;
-  }
-
-  for (const building of dataHelper.getAllBuildings()) {
-    for (const room of building.rooms) {
-      if (room.id == req.query.roomID) {
-        res.json(building);
+    if (!req.query.roomID) {
+        res.send("You must specify a room ID");
         return;
-      }
     }
-  }
-
-  res.json(null);
+    res.json(App_1.default.getDataManager().getRoomManager().getRoomByID(req.query.roomID));
 });
-
 module.exports = router;

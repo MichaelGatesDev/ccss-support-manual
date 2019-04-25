@@ -1,12 +1,11 @@
-const express = require('express');
-const router = express.Router({
-    mergeParams: true
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var express_1 = require("express");
+var App_1 = __importDefault(require("../../../../App"));
+var router = express_1.Router();
+router.get('/', function (req, res) {
+    res.json(App_1.default.getDataManager().getTroubleshootingDataManager().getTroubleshootingData());
 });
-
-var dataHelper = require('../../../../data-helper');
-
-router.get('/', (req, res) => {
-    res.json(dataHelper.getAllTroubleshootingData());
-});
-
 module.exports = router;

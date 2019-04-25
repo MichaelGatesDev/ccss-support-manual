@@ -1,6 +1,7 @@
 import Excel = require('exceljs');
 import fs = require('fs');
 
+import { ConfigManager } from './ConfigManager';
 import { BuildingManager } from './BuildingManager';
 import { RoomManager } from './RoomManager';
 import { Building } from './models/Building';
@@ -9,9 +10,11 @@ import { StringUtils } from './StringUtils';
 import { ImageManager, Image, RoomImages } from './ImageManager';
 import { TroubleshootingData } from './models/TroubleshootingData';
 import { TroubleshootingDataManager } from './TroubleshootingDataManager';
+import { PrimarySpreadsheetConfig, SecondarySpreadsheetConfig } from 'models/Config';
 
 
-class DataHelper {
+class DataManager {
+    // private configManager: ConfigManager;
     private buildingManager: BuildingManager;
     private roomManager: RoomManager;
     private imageManager: ImageManager;
@@ -22,10 +25,15 @@ class DataHelper {
     private furnitureTypes: string[] = [];
 
     constructor() {
+        // this.configManager = new ConfigManager();
         this.buildingManager = new BuildingManager();
         this.roomManager = new RoomManager(this.buildingManager);
         this.imageManager = new ImageManager();
         this.troubleshootingDataManager = new TroubleshootingDataManager(this.roomManager);
+    }
+
+    public getConfigManager() {
+        // return this.configManager;
     }
 
     public getBuildingManager() {
@@ -67,6 +75,7 @@ class DataHelper {
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
             if (rowNumber == 1) return; // skip headers row
 
+            // self.configManager.getPrimarySpreadsheetConfig().buildingOfficialNameHeader
             let officialName = row.getCell('official name').text;
             let nicknames = row.getCell('nicknames').text;
 
@@ -376,8 +385,8 @@ class DataHelper {
             });
         });
     }
-
 }
 
-let dataHelper = new DataHelper();
-export = dataHelper;
+export {
+    DataManager
+}

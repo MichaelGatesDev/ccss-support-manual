@@ -33,6 +33,9 @@ var ImageManager = /** @class */ (function () {
     };
     ImageManager.prototype.setRoomImages = function (roomID, images) {
     };
+    ImageManager.prototype.getImagesForRoom = function (room) {
+        return null;
+    };
     return ImageManager;
 }());
 exports.ImageManager = ImageManager;

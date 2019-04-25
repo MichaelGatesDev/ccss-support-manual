@@ -34,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var Excel = require("exceljs");
 var fs = require("fs");
 var BuildingManager_1 = require("./BuildingManager");
@@ -44,29 +45,33 @@ var StringUtils_1 = require("./StringUtils");
 var ImageManager_1 = require("./ImageManager");
 var TroubleshootingData_1 = require("./models/TroubleshootingData");
 var TroubleshootingDataManager_1 = require("./TroubleshootingDataManager");
-var DataHelper = /** @class */ (function () {
-    function DataHelper() {
+var DataManager = /** @class */ (function () {
+    function DataManager() {
         this.roomTypes = [];
         this.lockTypes = [];
         this.furnitureTypes = [];
+        // this.configManager = new ConfigManager();
         this.buildingManager = new BuildingManager_1.BuildingManager();
         this.roomManager = new RoomManager_1.RoomManager(this.buildingManager);
         this.imageManager = new ImageManager_1.ImageManager();
         this.troubleshootingDataManager = new TroubleshootingDataManager_1.TroubleshootingDataManager(this.roomManager);
     }
-    DataHelper.prototype.getBuildingManager = function () {
+    DataManager.prototype.getConfigManager = function () {
+        // return this.configManager;
+    };
+    DataManager.prototype.getBuildingManager = function () {
         return this.buildingManager;
     };
-    DataHelper.prototype.getRoomManager = function () {
+    DataManager.prototype.getRoomManager = function () {
         return this.roomManager;
     };
-    DataHelper.prototype.getImageManager = function () {
+    DataManager.prototype.getImageManager = function () {
         return this.imageManager;
     };
-    DataHelper.prototype.getTroubleshootingDataManager = function () {
+    DataManager.prototype.getTroubleshootingDataManager = function () {
         return this.troubleshootingDataManager;
     };
-    DataHelper.prototype.generateColumns = function (sheet, headerRowIndex) {
+    DataManager.prototype.generateColumns = function (sheet, headerRowIndex) {
         var row = sheet.getRow(headerRowIndex);
         if (row === null || !row.values || !row.values.length)
             return [];
@@ -81,12 +86,13 @@ var DataHelper = /** @class */ (function () {
             // console.debug(`Column ${i + 1} key is ${headers[i]}`);
         }
     };
-    DataHelper.prototype.loadBuildings = function (sheet) {
+    DataManager.prototype.loadBuildings = function (sheet) {
         this.generateColumns(sheet, 1);
         var self = this;
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
             if (rowNumber == 1)
                 return; // skip headers row
+            // self.configManager.getPrimarySpreadsheetConfig().buildingOfficialNameHeader
             var officialName = row.getCell('official name').text;
             var nicknames = row.getCell('nicknames').text;
             var building = new Building_1.Building(officialName, nicknames.split(","));
@@ -94,7 +100,7 @@ var DataHelper = /** @class */ (function () {
         });
         console.debug("Loaded " + this.buildingManager.getBuildings().length + " buildings!");
     };
-    DataHelper.prototype.loadSingleColumnValues = function (sheet) {
+    DataManager.prototype.loadSingleColumnValues = function (sheet) {
         var values = [];
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
             var type = row.getCell(1).text;
@@ -104,7 +110,7 @@ var DataHelper = /** @class */ (function () {
         });
         return values;
     };
-    DataHelper.prototype.loadRooms = function (sheet) {
+    DataManager.prototype.loadRooms = function (sheet) {
         this.generateColumns(sheet, 1);
         var self = this;
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
@@ -145,7 +151,7 @@ var DataHelper = /** @class */ (function () {
         });
         console.debug("Loaded " + this.roomManager.getRooms().length + " rooms!");
     };
-    DataHelper.prototype.loadPrimarySpreadsheet = function (spreadsheet) {
+    DataManager.prototype.loadPrimarySpreadsheet = function (spreadsheet) {
         return __awaiter(this, void 0, void 0, function () {
             var self;
             return __generator(this, function (_a) {
@@ -175,7 +181,7 @@ var DataHelper = /** @class */ (function () {
             });
         });
     };
-    DataHelper.prototype.parseRooms = function (raw) {
+    DataManager.prototype.parseRooms = function (raw) {
         var results = [];
         if (!StringUtils_1.StringUtils.isBlank(raw)) {
             for (var _i = 0, _a = raw.split(","); _i < _a.length; _i++) {
@@ -191,7 +197,7 @@ var DataHelper = /** @class */ (function () {
         }
         return results;
     };
-    DataHelper.prototype.loadTroubleshootingData = function (sheet) {
+    DataManager.prototype.loadTroubleshootingData = function (sheet) {
         this.generateColumns(sheet, 1);
         var self = this;
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
@@ -220,12 +226,10 @@ var DataHelper = /** @class */ (function () {
                 data.addWhitelistedRoom(room);
             }
             self.troubleshootingDataManager.addTroubleshootingData(data);
-            // self.troubleshootingDataManager.getTroubleshootingData();
-            //TODO add troubleshooting data to collection
         });
         console.log("Loaded " + self.troubleshootingDataManager.getTroubleshootingData().length + " troubleshooting data blocks!");
     };
-    DataHelper.prototype.loadSecondarySpreadsheet = function (spreadsheet) {
+    DataManager.prototype.loadSecondarySpreadsheet = function (spreadsheet) {
         return __awaiter(this, void 0, void 0, function () {
             var self;
             return __generator(this, function (_a) {
@@ -245,7 +249,7 @@ var DataHelper = /** @class */ (function () {
             });
         });
     };
-    DataHelper.prototype.loadImages = function () {
+    DataManager.prototype.loadImages = function () {
         return __awaiter(this, void 0, void 0, function () {
             var self;
             return __generator(this, function (_a) {
@@ -518,39 +522,6 @@ var DataHelper = /** @class */ (function () {
             });
         });
     };
-    return DataHelper;
+    return DataManager;
 }());
-var dataHelper = new DataHelper();
-module.exports = dataHelper;
-/*
-function parseRooms(raw) {
-    let results = [];
-    if (isBlank(raw)) return results;
-    for (const piece of raw.split(",")) {
-        var parts = piece.split("|");
-
-        var buildingName = parts[0];
-        var roomNumber = parts[1];
-
-        var room = getRoomByBuildingNameAndNumber(buildingName, roomNumber);
-        if (!room) continue; // no location at building/room
-
-        results.push(room.id);
-    }
-    return results;
-}
-
-function parseListFromString(str, delim) {
-    if (isBlank(str)) return [];
-    return str.toLowerCase().trim().split(",");
-}
-
-
-function getAllTroubleshootingData() {
-    return troubledata;
-}
-exports.getAllTroubleshootingData = getAllTroubleshootingData;
-
-
-
-*/ 
+exports.DataManager = DataManager;

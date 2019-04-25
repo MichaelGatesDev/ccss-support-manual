@@ -1,10 +1,9 @@
-import { StringUtils } from "StringUtils";
+import { Room } from "./models/Room";
 
 /**
  * A utility class for managing images
  */
 class ImageManager {
-
     /**
      * An array of all images
      */
@@ -47,6 +46,12 @@ class ImageManager {
     public setRoomImages(roomID: string, images: RoomImages) {
 
     }
+
+
+    public getImagesForRoom(room: Room): RoomImages | null {
+        return null;
+    }
+
 }
 
 

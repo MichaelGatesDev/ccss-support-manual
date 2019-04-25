@@ -95,6 +95,18 @@ class Building {
     }
 
     /**
+     * Gets a room within the building with the specified number
+     * @param number The room number
+     */
+    public getRoom(number: string) {
+        for (const room of this.getRooms()) {
+            if (room.getNumber() === number)
+                return room;
+        }
+        return null;
+    }
+
+    /**
      * Checks if the building has the specified name
      * 
      * @param name The name (or partial word) to check for
