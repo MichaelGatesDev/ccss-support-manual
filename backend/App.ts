@@ -26,12 +26,14 @@ class App {
   }
 
   public initialize() {
+
+    // Setup express stuff
     console.debug("Setting up express server...");
     this.setupExpress();
     console.debug("Finished setting up express server.");
 
-    // Get our data 
-
+    // Setup data
+    this.dataManager.initialize();
   }
 
   public setupExpress() {

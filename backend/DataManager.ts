@@ -10,11 +10,12 @@ import { StringUtils } from './StringUtils';
 import { ImageManager, Image, RoomImages } from './ImageManager';
 import { TroubleshootingData } from './models/TroubleshootingData';
 import { TroubleshootingDataManager } from './TroubleshootingDataManager';
-import { PrimarySpreadsheetConfig, SecondarySpreadsheetConfig } from 'models/Config';
+import { GoogleDriveDownloader } from 'Downloader';
 
 
 class DataManager {
-    // private configManager: ConfigManager;
+
+    private configManager: ConfigManager;
     private buildingManager: BuildingManager;
     private roomManager: RoomManager;
     private imageManager: ImageManager;
@@ -25,15 +26,36 @@ class DataManager {
     private furnitureTypes: string[] = [];
 
     constructor() {
-        // this.configManager = new ConfigManager();
+        this.configManager = new ConfigManager();
         this.buildingManager = new BuildingManager();
         this.roomManager = new RoomManager(this.buildingManager);
         this.imageManager = new ImageManager();
         this.troubleshootingDataManager = new TroubleshootingDataManager(this.roomManager);
     }
 
+    public initialize() {
+
+        // configs
+        this.configManager.initialize();
+
+        // do downloads
+        /*
+        let gdriveDownloader = new GoogleDriveDownloader();
+        gdriveDownloader.downloadSpreadsheet(
+            primaryDocID,
+            'xlsx',
+            primaryDocDest
+        );
+        gdriveDownloader.downloadSpreadsheet(
+            secondaryDocID,
+            'xlsx',
+            secondaryDocDest
+        );
+        */
+    }
+
     public getConfigManager() {
-        // return this.configManager;
+        return this.configManager;
     }
 
     public getBuildingManager() {

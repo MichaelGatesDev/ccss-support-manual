@@ -20,10 +20,12 @@ var App = /** @class */ (function () {
         this.dataManager = new DataManager_1.DataManager();
     }
     App.prototype.initialize = function () {
+        // Setup express stuff
         console.debug("Setting up express server...");
         this.setupExpress();
         console.debug("Finished setting up express server.");
-        // Get our data 
+        // Setup data
+        this.dataManager.initialize();
     };
     App.prototype.setupExpress = function () {
         console.debug("Setting up views");

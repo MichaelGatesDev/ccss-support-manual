@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Excel = require("exceljs");
 var fs = require("fs");
+var ConfigManager_1 = require("./ConfigManager");
 var BuildingManager_1 = require("./BuildingManager");
 var RoomManager_1 = require("./RoomManager");
 var Building_1 = require("./models/Building");
@@ -50,14 +51,32 @@ var DataManager = /** @class */ (function () {
         this.roomTypes = [];
         this.lockTypes = [];
         this.furnitureTypes = [];
-        // this.configManager = new ConfigManager();
+        this.configManager = new ConfigManager_1.ConfigManager();
         this.buildingManager = new BuildingManager_1.BuildingManager();
         this.roomManager = new RoomManager_1.RoomManager(this.buildingManager);
         this.imageManager = new ImageManager_1.ImageManager();
         this.troubleshootingDataManager = new TroubleshootingDataManager_1.TroubleshootingDataManager(this.roomManager);
     }
+    DataManager.prototype.initialize = function () {
+        // configs
+        this.configManager.initialize();
+        // do downloads
+        /*
+        let gdriveDownloader = new GoogleDriveDownloader();
+        gdriveDownloader.downloadSpreadsheet(
+            primaryDocID,
+            'xlsx',
+            primaryDocDest
+        );
+        gdriveDownloader.downloadSpreadsheet(
+            secondaryDocID,
+            'xlsx',
+            secondaryDocDest
+        );
+        */
+    };
     DataManager.prototype.getConfigManager = function () {
-        // return this.configManager;
+        return this.configManager;
     };
     DataManager.prototype.getBuildingManager = function () {
         return this.buildingManager;
