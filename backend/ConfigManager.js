@@ -67,7 +67,7 @@ var ConfigManager = /** @class */ (function () {
         }).catch(function (err) {
             console.error(err);
         });
-        // Create secondary config
+        // Create primary config
         ConfigManager.createIfNotExistsAndLoad('public/primary-spreadsheet-config.json', PrimarySpreadsheetConfig, [
             'myDocID',
             'public/primary-spreadsheet-config.json'
@@ -78,6 +78,20 @@ var ConfigManager = /** @class */ (function () {
             }
             self.primarySpreadsheetConfig = resultObj.loaded;
             console.log("Loaded primary spreadsheet config");
+        }).catch(function (err) {
+            console.error(err);
+        });
+        // Create secondary config
+        ConfigManager.createIfNotExistsAndLoad('public/secondary-spreadsheet-config.json', SecondarySpreadsheetConfig, [
+            'myDocID',
+            'public/secondary-spreadsheet-config.json'
+        ])
+            .then(function (resultObj) {
+            if (resultObj.created) {
+                console.log("Created secondary spreadsheet config!");
+            }
+            self.secondarySpreadsheetConfig = resultObj.loaded;
+            console.log("Loaded secondary spreadsheet config");
         }).catch(function (err) {
             console.error(err);
         });
@@ -287,9 +301,28 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
 var SecondarySpreadsheetConfig = /** @class */ (function (_super) {
     __extends(SecondarySpreadsheetConfig, _super);
     function SecondarySpreadsheetConfig(docID, path) {
-        return _super.call(this, docID, path) || this;
+        var _this = _super.call(this, docID, path) || this;
+        _this.troubleshootingSheetName = 'Troubleshooting';
+        _this.troubleshootingSheetHeaderRow = 1;
+        _this.troubleshootingTitleHeader = 'Incident';
+        _this.troubleshootingDescriptionHeader = 'Description';
+        _this.troubleshootingSolutionHeader = 'Solution';
+        _this.troubleshootingTypesHeader = 'Types';
+        _this.troubleshootingTagsHeader = 'Tags';
+        _this.troubleshootingWhitelistedRoomsHeader = 'Whitelisted Rooms';
+        _this.troubleshootingBlacklistedRoomsHeader = 'Blacklisted Rooms';
+        return _this;
     }
     SecondarySpreadsheetConfig.prototype.deserialize = function (input) {
+        this.troubleshootingSheetName = input.troubleshootingSheetName;
+        this.troubleshootingSheetHeaderRow = input.troubleshootingSheetHeaderRow;
+        this.troubleshootingTitleHeader = input.troubleshootingTitleHeader;
+        this.troubleshootingDescriptionHeader = input.troubleshootingDescriptionHeader;
+        this.troubleshootingSolutionHeader = input.troubleshootingSolutionHeader;
+        this.troubleshootingTypesHeader = input.troubleshootingTypesHeader;
+        this.troubleshootingTagsHeader = input.troubleshootingTagsHeader;
+        this.troubleshootingWhitelistedRoomsHeader = input.troubleshootingWhitelistedRoomsHeader;
+        this.troubleshootingBlacklistedRoomsHeader = input.troubleshootingBlacklistedRoomsHeader;
         return this;
     };
     return SecondarySpreadsheetConfig;

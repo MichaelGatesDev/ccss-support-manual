@@ -36,11 +36,11 @@ export class ConfigManager {
 
         // Create primary config
         ConfigManager.createIfNotExistsAndLoad<PrimarySpreadsheetConfig>(
-            'public/primary-spreadsheet-config.json',
+            'public/primary-config.json',
             PrimarySpreadsheetConfig,
             [
                 'myDocID',
-                'public/primary-spreadsheet-config.json'
+                'public/primary-config.json'
             ]
         )
             .then(function (resultObj: any) {
@@ -55,11 +55,11 @@ export class ConfigManager {
 
         // Create secondary config
         ConfigManager.createIfNotExistsAndLoad<SecondarySpreadsheetConfig>(
-            'public/secondary-spreadsheet-config.json',
+            'public/secondary-config.json',
             SecondarySpreadsheetConfig,
             [
                 'myDocID',
-                'public/secondary-spreadsheet-config.json'
+                'public/secondary-config.json'
             ]
         )
             .then(function (resultObj: any) {
@@ -282,11 +282,32 @@ class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
 
 class SecondarySpreadsheetConfig extends GoogleSpreadsheetConfig {
 
+    public troubleshootingSheetName: string = 'Troubleshooting';
+    public troubleshootingSheetHeaderRow: number = 1;
+    public troubleshootingTitleHeader: string = 'Incident';
+    public troubleshootingDescriptionHeader: string = 'Description';
+    public troubleshootingSolutionHeader: string = 'Solution';
+    public troubleshootingTypesHeader: string = 'Types';
+    public troubleshootingTagsHeader: string = 'Tags';
+    public troubleshootingWhitelistedRoomsHeader: string = 'Whitelisted Rooms';
+    public troubleshootingBlacklistedRoomsHeader: string = 'Blacklisted Rooms';
+
     constructor(docID: string, path: string) {
         super(docID, path);
     }
 
     public deserialize(input: any): ConfigBase {
+
+        this.troubleshootingSheetName = input.troubleshootingSheetName;
+        this.troubleshootingSheetHeaderRow = input.troubleshootingSheetHeaderRow;
+        this.troubleshootingTitleHeader = input.troubleshootingTitleHeader;
+        this.troubleshootingDescriptionHeader = input.troubleshootingDescriptionHeader;
+        this.troubleshootingSolutionHeader = input.troubleshootingSolutionHeader;
+        this.troubleshootingTypesHeader = input.troubleshootingTypesHeader;
+        this.troubleshootingTagsHeader = input.troubleshootingTagsHeader;
+        this.troubleshootingWhitelistedRoomsHeader = input.troubleshootingWhitelistedRoomsHeader;
+        this.troubleshootingBlacklistedRoomsHeader = input.troubleshootingBlacklistedRoomsHeader;
+
         return this;
     }
 }
