@@ -13,64 +13,70 @@ export class ConfigManager {
     constructor() {
     }
 
-    public initialize() {
-        let self = this;
+    public async initialize() {
+        return new Promise(async (resolve, reject) => {
+            let self = this;
 
-        // Create primary config
-        ConfigManager.createIfNotExistsAndLoad<AppConfig>(
-            'public/app-config.json',
-            AppConfig,
-            [
-                'public/app-config.json'
-            ]
-        )
-            .then(function (resultObj: any) {
-                if (resultObj.created) {
-                    console.log("Created app config!");
-                }
-                self.appConfig = resultObj.loaded;
-                console.log("Loaded app config");
-            }).catch(function (err) {
-                console.error(err);
-            });
+            // Create primary config
+            await ConfigManager.createIfNotExistsAndLoad<AppConfig>(
+                'public/app-config.json',
+                AppConfig,
+                [
+                    'public/app-config.json'
+                ]
+            )
+                .then(function (resultObj: any) {
+                    if (resultObj.created) {
+                        console.log("Created app config!");
+                    }
+                    self.appConfig = resultObj.loaded;
+                    console.log("Loaded app config");
+                }).catch(function (err) {
+                    return reject(err);
+                });
 
-        // Create primary config
-        ConfigManager.createIfNotExistsAndLoad<PrimarySpreadsheetConfig>(
-            'public/primary-config.json',
-            PrimarySpreadsheetConfig,
-            [
-                'myDocID',
-                'public/primary-config.json'
-            ]
-        )
-            .then(function (resultObj: any) {
-                if (resultObj.created) {
-                    console.log("Created primary spreadsheet config!");
-                }
-                self.primarySpreadsheetConfig = resultObj.loaded as PrimarySpreadsheetConfig;
-                console.log("Loaded primary spreadsheet config");
-            }).catch(function (err) {
-                console.error(err);
-            });
+            // Create primary config
+            await ConfigManager.createIfNotExistsAndLoad<PrimarySpreadsheetConfig>(
+                'public/primary-config.json',
+                PrimarySpreadsheetConfig,
+                [
+                    'public/primary-config.json',
+                    '',
+                    'public/primary.xlsx'
+                ]
+            )
+                .then(function (resultObj: any) {
+                    if (resultObj.created) {
+                        console.log("Created primary spreadsheet config!");
+                    }
+                    self.primarySpreadsheetConfig = resultObj.loaded as PrimarySpreadsheetConfig;
+                    console.log("Loaded primary spreadsheet config");
+                }).catch(function (err) {
+                    return reject(err);
+                });
 
-        // Create secondary config
-        ConfigManager.createIfNotExistsAndLoad<SecondarySpreadsheetConfig>(
-            'public/secondary-config.json',
-            SecondarySpreadsheetConfig,
-            [
-                'myDocID',
-                'public/secondary-config.json'
-            ]
-        )
-            .then(function (resultObj: any) {
-                if (resultObj.created) {
-                    console.log("Created secondary spreadsheet config!");
-                }
-                self.secondarySpreadsheetConfig = resultObj.loaded as SecondarySpreadsheetConfig;
-                console.log("Loaded secondary spreadsheet config");
-            }).catch(function (err) {
-                console.error(err);
-            });
+            // Create secondary config
+            await ConfigManager.createIfNotExistsAndLoad<SecondarySpreadsheetConfig>(
+                'public/secondary-config.json',
+                SecondarySpreadsheetConfig,
+                [
+                    'public/secondary-config.json',
+                    '',
+                    'public/secondary.xlsx'
+                ]
+            )
+                .then(function (resultObj: any) {
+                    if (resultObj.created) {
+                        console.log("Created secondary spreadsheet config!");
+                    }
+                    self.secondarySpreadsheetConfig = resultObj.loaded as SecondarySpreadsheetConfig;
+                    console.log("Loaded secondary spreadsheet config");
+                }).catch(function (err) {
+                    return reject(err);
+                });
+
+            return resolve();
+        });
     }
 
     public static async createIfNotExists<T extends ConfigBase>(path: string, base: { new(...args: any[]): T; }, baseArgs: any[]): Promise<boolean> {
@@ -145,10 +151,10 @@ export class ConfigManager {
 
 abstract class ConfigBase implements Serializable<ConfigBase> {
 
-    private filePath: string;
+    private configPath: string;
 
-    constructor(filePath: string) {
-        this.filePath = filePath;
+    constructor(configPath: string) {
+        this.configPath = configPath;
     }
 
     public abstract deserialize(input: any): ConfigBase;
@@ -157,7 +163,7 @@ abstract class ConfigBase implements Serializable<ConfigBase> {
         let self = this;
         return new Promise((resolve, reject) => {
             // writes the file asynchronously with 4-spaced tabbing
-            fs.promises.writeFile(self.filePath, JSON.stringify(self, null, 4), null)
+            fs.promises.writeFile(self.configPath, JSON.stringify(self, null, 4), null)
                 .then(function () {
                     return resolve();
                 }).catch(function (err) {
@@ -166,8 +172,8 @@ abstract class ConfigBase implements Serializable<ConfigBase> {
         });
     }
 
-    public getPath() {
-        return this.filePath;
+    public getConfigPath() {
+        return this.configPath;
     }
 }
 
@@ -186,23 +192,31 @@ class AppConfig extends ConfigBase {
 
 abstract class GoogleSpreadsheetConfig extends ConfigBase {
     private docID: string;
+    private sheetPath: string;
 
-    constructor(docID: string, path: string) {
-        super(path);
+    constructor(configPath: string, docID: string, sheetPath: string) {
+        super(configPath);
         this.docID = docID;
+        this.sheetPath = sheetPath;
+    }
+
+    public deserialize(input: any): GoogleSpreadsheetConfig {
+        this.sheetPath = input.sheetPath;
+        this.docID = input.docID;
+        return this;
     }
 
     public getDocID() {
         return this.docID;
     }
+
+    public getSheetPath() {
+        return this.sheetPath;
+    }
 }
 
 
 class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
-
-    constructor(docID: string, path: string) {
-        super(docID, path);
-    }
 
     public buildingsSheetName: string = 'Buildings';
     public buildingsSheetHeaderRow: number = 1;
@@ -239,6 +253,7 @@ class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
     public roomsNotesHeader: string = 'Other Notes';
 
     public deserialize(input: any): PrimarySpreadsheetConfig {
+        super.deserialize(input).getDocID();
 
         this.buildingsSheetName = input.buildingsSheetName;
         this.buildingsSheetHeaderRow = input.buildingsSheetHeaderRow;
@@ -292,11 +307,8 @@ class SecondarySpreadsheetConfig extends GoogleSpreadsheetConfig {
     public troubleshootingWhitelistedRoomsHeader: string = 'Whitelisted Rooms';
     public troubleshootingBlacklistedRoomsHeader: string = 'Blacklisted Rooms';
 
-    constructor(docID: string, path: string) {
-        super(docID, path);
-    }
-
-    public deserialize(input: any): ConfigBase {
+    public deserialize(input: any): SecondarySpreadsheetConfig {
+        super.deserialize(input);
 
         this.troubleshootingSheetName = input.troubleshootingSheetName;
         this.troubleshootingSheetHeaderRow = input.troubleshootingSheetHeaderRow;

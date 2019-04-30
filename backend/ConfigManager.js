@@ -53,47 +53,72 @@ var ConfigManager = /** @class */ (function () {
     function ConfigManager() {
     }
     ConfigManager.prototype.initialize = function () {
-        var self = this;
-        // Create primary config
-        ConfigManager.createIfNotExistsAndLoad('public/app-config.json', AppConfig, [
-            'public/app-config.json'
-        ])
-            .then(function (resultObj) {
-            if (resultObj.created) {
-                console.log("Created app config!");
-            }
-            self.appConfig = resultObj.loaded;
-            console.log("Loaded app config");
-        }).catch(function (err) {
-            console.error(err);
-        });
-        // Create primary config
-        ConfigManager.createIfNotExistsAndLoad('public/primary-spreadsheet-config.json', PrimarySpreadsheetConfig, [
-            'myDocID',
-            'public/primary-spreadsheet-config.json'
-        ])
-            .then(function (resultObj) {
-            if (resultObj.created) {
-                console.log("Created primary spreadsheet config!");
-            }
-            self.primarySpreadsheetConfig = resultObj.loaded;
-            console.log("Loaded primary spreadsheet config");
-        }).catch(function (err) {
-            console.error(err);
-        });
-        // Create secondary config
-        ConfigManager.createIfNotExistsAndLoad('public/secondary-spreadsheet-config.json', SecondarySpreadsheetConfig, [
-            'myDocID',
-            'public/secondary-spreadsheet-config.json'
-        ])
-            .then(function (resultObj) {
-            if (resultObj.created) {
-                console.log("Created secondary spreadsheet config!");
-            }
-            self.secondarySpreadsheetConfig = resultObj.loaded;
-            console.log("Loaded secondary spreadsheet config");
-        }).catch(function (err) {
-            console.error(err);
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                        var self;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    self = this;
+                                    // Create primary config
+                                    return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/app-config.json', AppConfig, [
+                                            'public/app-config.json'
+                                        ])
+                                            .then(function (resultObj) {
+                                            if (resultObj.created) {
+                                                console.log("Created app config!");
+                                            }
+                                            self.appConfig = resultObj.loaded;
+                                            console.log("Loaded app config");
+                                        }).catch(function (err) {
+                                            return reject(err);
+                                        })];
+                                case 1:
+                                    // Create primary config
+                                    _a.sent();
+                                    // Create primary config
+                                    return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/primary-config.json', PrimarySpreadsheetConfig, [
+                                            'public/primary-config.json',
+                                            '',
+                                            'public/primary.xlsx'
+                                        ])
+                                            .then(function (resultObj) {
+                                            if (resultObj.created) {
+                                                console.log("Created primary spreadsheet config!");
+                                            }
+                                            self.primarySpreadsheetConfig = resultObj.loaded;
+                                            console.log("Loaded primary spreadsheet config");
+                                        }).catch(function (err) {
+                                            return reject(err);
+                                        })];
+                                case 2:
+                                    // Create primary config
+                                    _a.sent();
+                                    // Create secondary config
+                                    return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/secondary-config.json', SecondarySpreadsheetConfig, [
+                                            'public/secondary-config.json',
+                                            '',
+                                            'public/secondary.xlsx'
+                                        ])
+                                            .then(function (resultObj) {
+                                            if (resultObj.created) {
+                                                console.log("Created secondary spreadsheet config!");
+                                            }
+                                            self.secondarySpreadsheetConfig = resultObj.loaded;
+                                            console.log("Loaded secondary spreadsheet config");
+                                        }).catch(function (err) {
+                                            return reject(err);
+                                        })];
+                                case 3:
+                                    // Create secondary config
+                                    _a.sent();
+                                    return [2 /*return*/, resolve()];
+                            }
+                        });
+                    }); })];
+            });
         });
     };
     ConfigManager.createIfNotExists = function (path, base, baseArgs) {
@@ -171,8 +196,8 @@ var ConfigManager = /** @class */ (function () {
 }());
 exports.ConfigManager = ConfigManager;
 var ConfigBase = /** @class */ (function () {
-    function ConfigBase(filePath) {
-        this.filePath = filePath;
+    function ConfigBase(configPath) {
+        this.configPath = configPath;
     }
     ConfigBase.prototype.save = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -181,7 +206,7 @@ var ConfigBase = /** @class */ (function () {
                 self = this;
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         // writes the file asynchronously with 4-spaced tabbing
-                        fs.promises.writeFile(self.filePath, JSON.stringify(self, null, 4), null)
+                        fs.promises.writeFile(self.configPath, JSON.stringify(self, null, 4), null)
                             .then(function () {
                             return resolve();
                         }).catch(function (err) {
@@ -191,8 +216,8 @@ var ConfigBase = /** @class */ (function () {
             });
         });
     };
-    ConfigBase.prototype.getPath = function () {
-        return this.filePath;
+    ConfigBase.prototype.getConfigPath = function () {
+        return this.configPath;
     };
     return ConfigBase;
 }());
@@ -213,20 +238,29 @@ var AppConfig = /** @class */ (function (_super) {
 }(ConfigBase));
 var GoogleSpreadsheetConfig = /** @class */ (function (_super) {
     __extends(GoogleSpreadsheetConfig, _super);
-    function GoogleSpreadsheetConfig(docID, path) {
-        var _this = _super.call(this, path) || this;
+    function GoogleSpreadsheetConfig(configPath, docID, sheetPath) {
+        var _this = _super.call(this, configPath) || this;
         _this.docID = docID;
+        _this.sheetPath = sheetPath;
         return _this;
     }
+    GoogleSpreadsheetConfig.prototype.deserialize = function (input) {
+        this.sheetPath = input.sheetPath;
+        this.docID = input.docID;
+        return this;
+    };
     GoogleSpreadsheetConfig.prototype.getDocID = function () {
         return this.docID;
+    };
+    GoogleSpreadsheetConfig.prototype.getSheetPath = function () {
+        return this.sheetPath;
     };
     return GoogleSpreadsheetConfig;
 }(ConfigBase));
 var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
     __extends(PrimarySpreadsheetConfig, _super);
-    function PrimarySpreadsheetConfig(docID, path) {
-        var _this = _super.call(this, docID, path) || this;
+    function PrimarySpreadsheetConfig() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.buildingsSheetName = 'Buildings';
         _this.buildingsSheetHeaderRow = 1;
         _this.buildingOfficialNameHeader = 'Official Name';
@@ -262,6 +296,7 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
         return _this;
     }
     PrimarySpreadsheetConfig.prototype.deserialize = function (input) {
+        _super.prototype.deserialize.call(this, input).getDocID();
         this.buildingsSheetName = input.buildingsSheetName;
         this.buildingsSheetHeaderRow = input.buildingsSheetHeaderRow;
         this.buildingOfficialNameHeader = input.buildingOfficialNameHeader;
@@ -300,8 +335,8 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
 }(GoogleSpreadsheetConfig));
 var SecondarySpreadsheetConfig = /** @class */ (function (_super) {
     __extends(SecondarySpreadsheetConfig, _super);
-    function SecondarySpreadsheetConfig(docID, path) {
-        var _this = _super.call(this, docID, path) || this;
+    function SecondarySpreadsheetConfig() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.troubleshootingSheetName = 'Troubleshooting';
         _this.troubleshootingSheetHeaderRow = 1;
         _this.troubleshootingTitleHeader = 'Incident';
@@ -314,6 +349,7 @@ var SecondarySpreadsheetConfig = /** @class */ (function (_super) {
         return _this;
     }
     SecondarySpreadsheetConfig.prototype.deserialize = function (input) {
+        _super.prototype.deserialize.call(this, input);
         this.troubleshootingSheetName = input.troubleshootingSheetName;
         this.troubleshootingSheetHeaderRow = input.troubleshootingSheetHeaderRow;
         this.troubleshootingTitleHeader = input.troubleshootingTitleHeader;
