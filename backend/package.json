@@ -4,7 +4,7 @@
   "private": true,
   "bin": "./bin/www",
   "scripts": {
-    "start": "tsc && node ./bin/www",
+    "start": "tsc && node ./Server",
     "build": "pkg . -t windows,linux,osx -o application",
     "tsc": "tsc"
   },

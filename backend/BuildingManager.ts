@@ -36,11 +36,10 @@ class BuildingManager {
      * Gets a building by the specified name
      * @param name The name of the building
      */
-    public getBuildingByName(name: string) {
+    public getBuildingByName(name: string): Building | undefined {
         for (const building of this.buildings) {
             if (building.hasName(name)) return building;
         }
-        return null;
     }
 
     /**

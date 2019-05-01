@@ -34,7 +34,6 @@ var BuildingManager = /** @class */ (function () {
             if (building.hasName(name))
                 return building;
         }
-        return null;
     };
     /**
      * Gets all buildings

@@ -1,4 +1,5 @@
 import { Building } from './Building';
+import { app } from '../App';
 
 /**
  * A room within a building
@@ -8,7 +9,7 @@ class Room {
     /**
      * The actual Building object which this room is contained within
      */
-    private building: Building;
+    private buildingName: string;
 
     /**
      * The last time that the room was checked or information was updated.
@@ -93,36 +94,35 @@ class Room {
      * @param number The building-unique number which represents the room
      * @param type The type of room
      */
-    constructor(building: Building, number: string, type: string) {
-        this.building = building;
+    constructor(buildingName: string, number: string, type: string) {
+        this.buildingName = buildingName;
         this.number = number;
         this.type = type;
     }
 
-    public getID() {
-        return this.building.getInternalName() + "-" + this.number;
+    public getBuilding(): Building | undefined {
+        return app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
     }
 
-    public getDisplayName() {
-        return this.building.getOfficialName() + " " + this.number.toLocaleUpperCase();
+    public getID(): string {
+        return this.getBuilding()!.getInternalName() + "-" + this.number;
     }
 
-    public getBuilding() {
-        return this.building;
+    public getDisplayName(): string {
+        return this.getBuilding()!.getOfficialName() + " " + this.number.toLocaleUpperCase();
     }
-
 
     public setLastChecked(timestamp: string) {
         this.lastChecked = timestamp;
     }
 
 
-    public getLastChecked() {
+    public getLastChecked(): string {
         return this.lastChecked;
     }
 
 
-    public getNumber() {
+    public getNumber(): string {
         return this.number;
     }
 
@@ -132,12 +132,12 @@ class Room {
     }
 
 
-    public getName() {
+    public getName(): string {
         return this.name;
     }
 
 
-    public getType() {
+    public getType(): string {
         return this.type;
     }
 
@@ -146,7 +146,7 @@ class Room {
         this.lockType = lockType;
     }
 
-    public getLockType() {
+    public getLockType(): string {
         return this.lockType;
     }
 

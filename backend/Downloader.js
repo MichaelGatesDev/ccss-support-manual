@@ -88,7 +88,7 @@ exports.WebDownloader = WebDownloader;
 var GoogleDriveDownloader = /** @class */ (function () {
     function GoogleDriveDownloader() {
     }
-    GoogleDriveDownloader.prototype.downloadSpreadsheet = function (docID, format, destination) {
+    GoogleDriveDownloader.downloadSpreadsheet = function (docID, format, destination) {
         return __awaiter(this, void 0, void 0, function () {
             var self;
             var _this = this;
@@ -114,6 +114,7 @@ var GoogleDriveDownloader = /** @class */ (function () {
                                 console.log("Beginning download...");
                                 downloader.download().then(function () {
                                     console.log("Download complete!");
+                                    return resolve();
                                 }).catch(function (err) {
                                     console.log("Download failed!");
                                     return reject(err);

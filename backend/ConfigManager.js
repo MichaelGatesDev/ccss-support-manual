@@ -81,7 +81,7 @@ var ConfigManager = /** @class */ (function () {
                                     // Create primary config
                                     return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/primary-config.json', PrimarySpreadsheetConfig, [
                                             'public/primary-config.json',
-                                            '',
+                                            '1k2T8gm4JGOtp3B_Ko-dZBMc0sV5Mv1FjQjNt5NLc9hE',
                                             'public/primary.xlsx'
                                         ])
                                             .then(function (resultObj) {
@@ -99,7 +99,7 @@ var ConfigManager = /** @class */ (function () {
                                     // Create secondary config
                                     return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/secondary-config.json', SecondarySpreadsheetConfig, [
                                             'public/secondary-config.json',
-                                            '',
+                                            '1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY',
                                             'public/secondary.xlsx'
                                         ])
                                             .then(function (resultObj) {
@@ -236,6 +236,7 @@ var AppConfig = /** @class */ (function (_super) {
     };
     return AppConfig;
 }(ConfigBase));
+exports.AppConfig = AppConfig;
 var GoogleSpreadsheetConfig = /** @class */ (function (_super) {
     __extends(GoogleSpreadsheetConfig, _super);
     function GoogleSpreadsheetConfig(configPath, docID, sheetPath) {
@@ -257,14 +258,15 @@ var GoogleSpreadsheetConfig = /** @class */ (function (_super) {
     };
     return GoogleSpreadsheetConfig;
 }(ConfigBase));
+exports.GoogleSpreadsheetConfig = GoogleSpreadsheetConfig;
 var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
     __extends(PrimarySpreadsheetConfig, _super);
     function PrimarySpreadsheetConfig() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.buildingsSheetName = 'Buildings';
         _this.buildingsSheetHeaderRow = 1;
-        _this.buildingOfficialNameHeader = 'Official Name';
-        _this.buildingNicknamesHeader = 'Nicknames';
+        _this.buildingsOfficialNameHeader = 'Official Name';
+        _this.buildingsNicknamesHeader = 'Nicknames';
         _this.roomsSheetName = 'Rooms';
         _this.roomsSheetHeaderRow = 1;
         _this.roomsTimestampHeader = 'Timestamp';
@@ -278,8 +280,9 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
         _this.roomsChairCountHeader = 'Chair Count';
         _this.roomsTableCountHeader = 'Table Count';
         _this.roomsPhoneExtensionHeader = 'Phone Extension';
-        _this.roomsPhoneStatusHeader = 'Phone Status';
-        _this.roomsAudioRequiresProjectorHeader = 'Audio Requires Projector';
+        _this.roomsPhoneDisplayHeader = 'Phone Display';
+        _this.roomsPhoneSpeakerHeader = 'Phone Speaker';
+        _this.roomsAudioRequiresSystemHeader = 'Audio Requires System';
         _this.roomsProjectorHeader = 'Projector';
         _this.roomsAudioHeader = 'Audio';
         _this.roomsScreenHeader = 'Screen';
@@ -293,14 +296,17 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
         _this.roomsPrinterSymquestNumberHeader = 'Printer Symquest Number';
         _this.roomsPrinterCartridgeTypeHeader = 'Printer Cartridge Type';
         _this.roomsNotesHeader = 'Other Notes';
+        _this.roomTypesSheetName = 'Room Types';
+        _this.lockTypesSheetName = 'Lock Types';
+        _this.furnitureTypesSheetName = 'Furniture Types';
         return _this;
     }
     PrimarySpreadsheetConfig.prototype.deserialize = function (input) {
         _super.prototype.deserialize.call(this, input).getDocID();
         this.buildingsSheetName = input.buildingsSheetName;
         this.buildingsSheetHeaderRow = input.buildingsSheetHeaderRow;
-        this.buildingOfficialNameHeader = input.buildingOfficialNameHeader;
-        this.buildingNicknamesHeader = input.buildingNicknamesHeader;
+        this.buildingsOfficialNameHeader = input.buildingsOfficialNameHeader;
+        this.buildingsNicknamesHeader = input.buildingsNicknamesHeader;
         this.roomsSheetName = input.roomsSheetName;
         this.roomsSheetHeaderRow = input.roomsSheetHeaderRow;
         this.roomsTimestampHeader = input.roomsTimestampHeader;
@@ -314,8 +320,9 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
         this.roomsChairCountHeader = input.roomsChairCountHeader;
         this.roomsTableCountHeader = input.roomsTableCountHeader;
         this.roomsPhoneExtensionHeader = input.roomsPhoneExtensionHeader;
-        this.roomsPhoneStatusHeader = input.roomsPhoneStatusHeader;
-        this.roomsAudioRequiresProjectorHeader = input.roomsAudioRequiresProjectorHeader;
+        this.roomsPhoneDisplayHeader = input.roomsPhoneDisplayHeader;
+        this.roomsPhoneSpeakerHeader = input.roomsPhoneSpeakerHeader;
+        this.roomsAudioRequiresSystemHeader = input.roomsAudioRequiresSystemHeader;
         this.roomsProjectorHeader = input.roomsProjectorHeader;
         this.roomsAudioHeader = input.roomsAudioHeader;
         this.roomsScreenHeader = input.roomsScreenHeader;
@@ -329,10 +336,14 @@ var PrimarySpreadsheetConfig = /** @class */ (function (_super) {
         this.roomsPrinterSymquestNumberHeader = input.roomsPrinterSymquestNumberHeader;
         this.roomsPrinterCartridgeTypeHeader = input.roomsPrinterCartridgeTypeHeader;
         this.roomsNotesHeader = input.roomsNotesHeader;
+        this.roomTypesSheetName = input.roomTypesSheetName;
+        this.lockTypesSheetName = input.lockTypesSheetName;
+        this.furnitureTypesSheetName = input.furnitureTypesSheetName;
         return this;
     };
     return PrimarySpreadsheetConfig;
 }(GoogleSpreadsheetConfig));
+exports.PrimarySpreadsheetConfig = PrimarySpreadsheetConfig;
 var SecondarySpreadsheetConfig = /** @class */ (function (_super) {
     __extends(SecondarySpreadsheetConfig, _super);
     function SecondarySpreadsheetConfig() {
@@ -363,3 +374,4 @@ var SecondarySpreadsheetConfig = /** @class */ (function (_super) {
     };
     return SecondarySpreadsheetConfig;
 }(GoogleSpreadsheetConfig));
+exports.SecondarySpreadsheetConfig = SecondarySpreadsheetConfig;

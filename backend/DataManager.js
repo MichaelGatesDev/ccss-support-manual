@@ -46,6 +46,7 @@ var StringUtils_1 = require("./StringUtils");
 var ImageManager_1 = require("./ImageManager");
 var TroubleshootingData_1 = require("./models/TroubleshootingData");
 var TroubleshootingDataManager_1 = require("./TroubleshootingDataManager");
+var Downloader_1 = require("./Downloader");
 var DataManager = /** @class */ (function () {
     function DataManager() {
         this.roomTypes = [];
@@ -58,37 +59,92 @@ var DataManager = /** @class */ (function () {
         this.troubleshootingDataManager = new TroubleshootingDataManager_1.TroubleshootingDataManager(this.roomManager);
     }
     DataManager.prototype.initialize = function () {
-        // configs
-        this.configManager.initialize();
-        // do downloads
-        /*
-        let gdriveDownloader = new GoogleDriveDownloader();
-        gdriveDownloader.downloadSpreadsheet(
-            primaryDocID,
-            'xlsx',
-            primaryDocDest
-        );
-        gdriveDownloader.downloadSpreadsheet(
-            secondaryDocID,
-            'xlsx',
-            secondaryDocDest
-        );
-        */
+        return __awaiter(this, void 0, void 0, function () {
+            var self;
+            var _this = this;
+            return __generator(this, function (_a) {
+                self = this;
+                return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                        var config;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: 
+                                // configs
+                                return [4 /*yield*/, self.configManager.initialize()];
+                                case 1:
+                                    // configs
+                                    _a.sent();
+                                    config = self.configManager.getAppConfig();
+                                    if (!config) {
+                                        return [2 /*return*/, reject(new Error("No app config found"))];
+                                    }
+                                    if (!config.checkForDataUpdates) return [3 /*break*/, 4];
+                                    console.log("Checking for data updates...");
+                                    return [4 /*yield*/, self.downloadSpreadsheet(self.configManager.getPrimarySpreadsheetConfig())
+                                            .then(function () {
+                                            console.log("Downloaded primary spreadsheet!");
+                                        })
+                                            .catch(function (err) {
+                                            console.error("There was an error downloading the primary spreadsheet!");
+                                            return reject(err);
+                                        })];
+                                case 2:
+                                    _a.sent();
+                                    return [4 /*yield*/, self.downloadSpreadsheet(self.configManager.getSecondarySpreadsheetConfig())
+                                            .then(function () {
+                                            console.log("Downloaded secondary spreadsheet!");
+                                        })
+                                            .catch(function (err) {
+                                            console.error("There was an error downloading the secondary spreadsheet!");
+                                            return reject(err);
+                                        })];
+                                case 3:
+                                    _a.sent();
+                                    _a.label = 4;
+                                case 4: 
+                                // load data
+                                return [4 /*yield*/, self.loadPrimarySpreadsheet().then(function () {
+                                        console.log("Loaded primary spreadsheet");
+                                    }).catch(function (err) {
+                                        console.error("There was an error loading the primary spreadsheet");
+                                        return reject(err);
+                                    })];
+                                case 5:
+                                    // load data
+                                    _a.sent();
+                                    return [4 /*yield*/, self.loadSecondarySpreadsheet().then(function () {
+                                            console.log("Loaded secondary spreadsheet");
+                                        }).catch(function (err) {
+                                            console.error("There was an error loading the secondary spreadsheet");
+                                            return reject(err);
+                                        })];
+                                case 6:
+                                    _a.sent();
+                                    return [2 /*return*/, resolve()];
+                            }
+                        });
+                    }); })];
+            });
+        });
     };
-    DataManager.prototype.getConfigManager = function () {
-        return this.configManager;
-    };
-    DataManager.prototype.getBuildingManager = function () {
-        return this.buildingManager;
-    };
-    DataManager.prototype.getRoomManager = function () {
-        return this.roomManager;
-    };
-    DataManager.prototype.getImageManager = function () {
-        return this.imageManager;
-    };
-    DataManager.prototype.getTroubleshootingDataManager = function () {
-        return this.troubleshootingDataManager;
+    DataManager.prototype.downloadSpreadsheet = function (config) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        if (!config) {
+                            return reject(new Error("Config invalid or not found"));
+                        }
+                        if (StringUtils_1.StringUtils.isBlank(config.getDocID())) {
+                            return reject(new Error("No docID specified"));
+                        }
+                        Downloader_1.GoogleDriveDownloader.downloadSpreadsheet(config.getDocID(), 'xlsx', config.getSheetPath()).then(function () {
+                            return resolve();
+                        }).catch(function (err) {
+                            return reject(err);
+                        });
+                    })];
+            });
+        });
     };
     DataManager.prototype.generateColumns = function (sheet, headerRowIndex) {
         var row = sheet.getRow(headerRowIndex);
@@ -106,14 +162,16 @@ var DataManager = /** @class */ (function () {
         }
     };
     DataManager.prototype.loadBuildings = function (sheet) {
-        this.generateColumns(sheet, 1);
         var self = this;
+        var config = self.configManager.getPrimarySpreadsheetConfig();
+        this.generateColumns(sheet, config.buildingsSheetHeaderRow);
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
-            if (rowNumber == 1)
+            if (rowNumber == config.buildingsSheetHeaderRow)
                 return; // skip headers row
-            // self.configManager.getPrimarySpreadsheetConfig().buildingOfficialNameHeader
-            var officialName = row.getCell('official name').text;
-            var nicknames = row.getCell('nicknames').text;
+            if (row.getCell(1) === undefined || row.getCell(1).text === '')
+                return; // skip if row is empty. exceljs doesn't work well for some reason.
+            var officialName = row.getCell(config.buildingsOfficialNameHeader.toLocaleLowerCase()).text;
+            var nicknames = row.getCell(config.buildingsNicknamesHeader.toLocaleLowerCase()).text;
             var building = new Building_1.Building(officialName, nicknames.split(","));
             self.buildingManager.addBuilding(building);
         });
@@ -130,68 +188,75 @@ var DataManager = /** @class */ (function () {
         return values;
     };
     DataManager.prototype.loadRooms = function (sheet) {
-        this.generateColumns(sheet, 1);
         var self = this;
+        var config = self.configManager.getPrimarySpreadsheetConfig();
+        this.generateColumns(sheet, config.roomsSheetHeaderRow);
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
-            if (rowNumber == 1)
+            if (rowNumber == config.roomsSheetHeaderRow)
                 return; // skip headers row
             if (row.getCell(1) === undefined || row.getCell(1).text === '')
                 return; // skip if row is empty. exceljs doesn't work well for some reason.
-            var buildingName = row.getCell('building').text;
-            var building = self.buildingManager.getBuildingByName(buildingName);
-            if (!building) {
+            var buildingName = row.getCell(config.roomsBuildingHeader.toLocaleLowerCase()).text;
+            if (!buildingName) {
                 console.debug("No such building exists: " + buildingName);
                 return;
             }
-            var number = row.getCell('number').text;
+            var number = row.getCell(config.roomsNumberHeader.toLocaleLowerCase()).text;
             if (StringUtils_1.StringUtils.isBlank(number) || !StringUtils_1.StringUtils.isValidRoomNumber(number)) {
                 console.debug("Room number is blank or invalid: " + number);
                 return;
             }
-            var type = row.getCell('type').text;
+            var type = row.getCell(config.roomsTypeHeader.toLocaleLowerCase()).text;
             if (StringUtils_1.StringUtils.isBlank(number) || !self.roomTypes.includes(type)) {
                 console.debug("Room type is blank or invalid: " + type);
                 return;
             }
-            var room = new Room_1.Room(building, number, type);
-            room.setLastChecked(row.getCell('timestamp').text);
-            room.setName(row.getCell('name').text);
-            room.setLockType(row.getCell('lock type').text);
-            room.setCapacity(parseInt(row.getCell('capacity').text));
-            room.setPhone(row.getCell('phone extension').text, row.getCell('phone display').text, row.getCell('phone speaker').text);
+            var room = new Room_1.Room(buildingName, number, type);
+            if (!room.getBuilding()) {
+                console.debug("Room building is not valid!");
+                return;
+            }
+            room.setLastChecked(row.getCell(config.roomsTimestampHeader.toLocaleLowerCase()).text);
+            room.setName(row.getCell(config.roomsNameHeader.toLocaleLowerCase()).text);
+            room.setLockType(row.getCell(config.roomsLockTypeHeader.toLocaleLowerCase()).text);
+            room.setCapacity(parseInt(row.getCell(config.roomsCapacityHeader.toLocaleLowerCase()).text));
+            room.setPhone(row.getCell(config.roomsPhoneExtensionHeader.toLocaleLowerCase()).text, row.getCell(config.roomsPhoneDisplayHeader.toLocaleLowerCase()).text, row.getCell(config.roomsPhoneSpeakerHeader.toLocaleLowerCase()).text);
             // room.setProjector(); 
-            room.setAudio(new Room_1.Audio(StringUtils_1.StringUtils.parseBoolean(row.getCell('audio requires system').text)));
+            room.setAudio(new Room_1.Audio(StringUtils_1.StringUtils.parseBoolean(row.getCell(config.roomsAudioRequiresSystemHeader.toLocaleLowerCase()).text)));
             // room.setScreen();
-            room.setTeachingStationComputer(new Room_1.Computer(row.getCell('ts computer type').text, row.getCell('ts computer operating system').text));
+            if (row.getCell(config.roomsTeachingStationComputerHeader.toLocaleLowerCase())) {
+                room.setTeachingStationComputer(new Room_1.Computer(row.getCell(config.roomsTeachingStationComputerTypeHeader.toLocaleLowerCase()).text, row.getCell(config.roomsTeachingStationComputerOSHeader.toLocaleLowerCase()).text));
+            }
             // room.setDocumentCamera();
             // room.setDVDPlayer();
             // room.setPrinter();
-            building.addRoom(room);
+            room.getBuilding().addRoom(room);
         });
         console.debug("Loaded " + this.roomManager.getRooms().length + " rooms!");
     };
-    DataManager.prototype.loadPrimarySpreadsheet = function (spreadsheet) {
+    DataManager.prototype.loadPrimarySpreadsheet = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var self;
+            var self, config;
             return __generator(this, function (_a) {
                 self = this;
+                config = this.configManager.getPrimarySpreadsheetConfig();
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        if (!fs.existsSync(spreadsheet.path)) {
-                            return reject("File could not be found: " + spreadsheet.path);
+                        if (!fs.existsSync(config.getSheetPath())) {
+                            return reject("File could not be found: " + config.getSheetPath());
                         }
                         var workbook = new Excel.Workbook();
-                        workbook.xlsx.readFile(spreadsheet.path).then(function () {
-                            self.loadBuildings(workbook.getWorksheet('Buildings'));
-                            var roomTypes = self.loadSingleColumnValues(workbook.getWorksheet('Room Types'));
+                        workbook.xlsx.readFile(config.getSheetPath()).then(function () {
+                            self.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
+                            var roomTypes = self.loadSingleColumnValues(workbook.getWorksheet(config.roomTypesSheetName));
                             self.roomTypes = roomTypes;
                             // console.debug(`Loaded ${roomTypes.length} room types!`);
-                            var lockTypes = self.loadSingleColumnValues(workbook.getWorksheet('Lock Types'));
+                            var lockTypes = self.loadSingleColumnValues(workbook.getWorksheet(config.lockTypesSheetName));
                             self.lockTypes = lockTypes;
                             // console.debug(`Loaded ${lockTypes.length} room types!`);
-                            var furnitureTypes = self.loadSingleColumnValues(workbook.getWorksheet('Furniture Types'));
+                            var furnitureTypes = self.loadSingleColumnValues(workbook.getWorksheet(config.furnitureTypesSheetName));
                             self.furnitureTypes = furnitureTypes;
                             // console.debug(`Loaded ${furnitureTypes.length} room types!`);
-                            self.loadRooms(workbook.getWorksheet('Rooms'));
+                            self.loadRooms(workbook.getWorksheet(config.roomsSheetName));
                             return resolve();
                         }).catch(function (err) {
                             return reject(err);
@@ -217,28 +282,29 @@ var DataManager = /** @class */ (function () {
         return results;
     };
     DataManager.prototype.loadTroubleshootingData = function (sheet) {
-        this.generateColumns(sheet, 1);
         var self = this;
+        var config = this.configManager.getSecondarySpreadsheetConfig();
+        this.generateColumns(sheet, config.troubleshootingSheetHeaderRow);
         sheet.eachRow({ includeEmpty: false }, function (row, rowNumber) {
-            if (rowNumber == 1)
+            if (rowNumber == config.troubleshootingSheetHeaderRow)
                 return; // skip headers row
             if (row.getCell(1) === undefined || row.getCell(1).text === '')
                 return; // skip if row is empty. exceljs doesn't work well for some reason.
-            var title = row.getCell('incident').text;
-            var description = row.getCell('description').text;
-            var solution = row.getCell('solution').text;
-            var types = row.getCell('types').text.split(",");
-            var tags = row.getCell('tags').text.split(",");
+            var title = row.getCell(config.troubleshootingTitleHeader.toLocaleLowerCase()).text;
+            var description = row.getCell(config.troubleshootingDescriptionHeader.toLocaleLowerCase()).text;
+            var solution = row.getCell(config.troubleshootingSolutionHeader.toLocaleLowerCase()).text;
+            var types = row.getCell(config.troubleshootingTypesHeader.toLocaleLowerCase()).text.split(",");
+            var tags = row.getCell(config.troubleshootingTagsHeader.toLocaleLowerCase()).text.split(",");
             var data = new TroubleshootingData_1.TroubleshootingData(title, description, solution);
             data.setTypes(types);
             data.setTags(tags);
-            var rawWhitelisted = row.getCell('whitelisted rooms').text;
+            var rawWhitelisted = row.getCell(config.troubleshootingWhitelistedRoomsHeader.toLocaleLowerCase()).text;
             var whitelisted = self.parseRooms(rawWhitelisted);
             for (var _i = 0, whitelisted_1 = whitelisted; _i < whitelisted_1.length; _i++) {
                 var room = whitelisted_1[_i];
                 data.addWhitelistedRoom(room);
             }
-            var rawBlacklisted = row.getCell('blacklisted rooms').text;
+            var rawBlacklisted = row.getCell(config.troubleshootingBlacklistedRoomsHeader.toLocaleLowerCase()).text;
             var blacklisted = self.parseRooms(rawBlacklisted);
             for (var _a = 0, blacklisted_1 = blacklisted; _a < blacklisted_1.length; _a++) {
                 var room = blacklisted_1[_a];
@@ -248,18 +314,19 @@ var DataManager = /** @class */ (function () {
         });
         console.log("Loaded " + self.troubleshootingDataManager.getTroubleshootingData().length + " troubleshooting data blocks!");
     };
-    DataManager.prototype.loadSecondarySpreadsheet = function (spreadsheet) {
+    DataManager.prototype.loadSecondarySpreadsheet = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var self;
+            var self, config;
             return __generator(this, function (_a) {
                 self = this;
+                config = this.configManager.getSecondarySpreadsheetConfig();
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        if (!fs.existsSync(spreadsheet.path)) {
-                            return reject("File could not be found: " + spreadsheet.path);
+                        if (!fs.existsSync(config.getSheetPath())) {
+                            return reject("File could not be found: " + config.getSheetPath());
                         }
                         var workbook = new Excel.Workbook();
-                        workbook.xlsx.readFile(spreadsheet.path).then(function () {
-                            self.loadTroubleshootingData(workbook.getWorksheet('QA'));
+                        workbook.xlsx.readFile(config.getSheetPath()).then(function () {
+                            self.loadTroubleshootingData(workbook.getWorksheet(config.troubleshootingSheetName));
                             return resolve();
                         }).catch(function (err) {
                             return reject(err);
@@ -540,6 +607,21 @@ var DataManager = /** @class */ (function () {
                     })];
             });
         });
+    };
+    DataManager.prototype.getConfigManager = function () {
+        return this.configManager;
+    };
+    DataManager.prototype.getBuildingManager = function () {
+        return this.buildingManager;
+    };
+    DataManager.prototype.getRoomManager = function () {
+        return this.roomManager;
+    };
+    DataManager.prototype.getImageManager = function () {
+        return this.imageManager;
+    };
+    DataManager.prototype.getTroubleshootingDataManager = function () {
+        return this.troubleshootingDataManager;
     };
     return DataManager;
 }());

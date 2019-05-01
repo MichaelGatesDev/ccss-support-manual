@@ -2,7 +2,7 @@ import fs from 'fs';
 import https from 'https';
 import { StringUtils } from './StringUtils';
 
-class WebDownloader {
+export class WebDownloader {
     private url: string;
     private destination: string;
 
@@ -40,12 +40,12 @@ class WebDownloader {
     }
 }
 
-class GoogleDriveDownloader {
+export class GoogleDriveDownloader {
 
     private static BASE_URL: string = "https://docs.google.com/spreadsheets/d/{docID}/export?format={format}";
     private static SHEET_URL: string = "https://docs.google.com/spreadsheets/d/{docID}/export?format={format}&gid={sheetID}";
 
-    async downloadSpreadsheet(docID: string, format: string, destination: string) {
+    public static async downloadSpreadsheet(docID: string, format: string, destination: string): Promise<any> {
         let self = this;
         return new Promise(async (resolve, reject) => {
 
@@ -73,6 +73,7 @@ class GoogleDriveDownloader {
                 console.log("Beginning download...");
                 downloader.download().then(function () {
                     console.log("Download complete!");
+                    return resolve();
                 }).catch(function (err) {
                     console.log("Download failed!");
                     return reject(err);
@@ -80,12 +81,4 @@ class GoogleDriveDownloader {
             });
         });
     }
-}
-
-
-
-
-export {
-    WebDownloader,
-    GoogleDriveDownloader
 }

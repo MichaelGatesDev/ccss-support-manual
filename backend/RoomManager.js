@@ -31,7 +31,6 @@ var RoomManager = /** @class */ (function () {
                 room.getNumber() === roomNumber.toLowerCase().trim())
                 return room;
         }
-        return null;
     };
     /**
      * Gets a room by its ID

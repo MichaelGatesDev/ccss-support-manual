@@ -20,7 +20,7 @@ class RoomManager {
     /**
      * Gets every room across all buildings
      */
-    public getRooms() {
+    public getRooms(): Room[] {
         let result: Room[] = [];
         for (const building of this.buildingManager.getBuildings()) {
             result = result.concat(building.getRooms());
@@ -34,15 +34,14 @@ class RoomManager {
      * @param buildingName The name of the building
      * @param roomNumber The room number
      */
-    public getRoomByBuildingNameAndNumber(buildingName: string, roomNumber: string) {
+    public getRoomByBuildingNameAndNumber(buildingName: string, roomNumber: string): Room | undefined {
         for (const room of this.getRooms()) {
             if (
-                room.getBuilding().hasName(buildingName) &&
+                room.getBuilding()!.hasName(buildingName) &&
                 room.getNumber() === roomNumber.toLowerCase().trim()
             )
                 return room;
         }
-        return null;
     }
 
     /**

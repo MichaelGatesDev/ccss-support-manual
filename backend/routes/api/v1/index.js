@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var express_1 = require("express");
-var App_1 = __importDefault(require("../../../App"));
+var App_1 = require("../../../App");
 var router = express_1.Router();
 var buildings_1 = __importDefault(require("./buildings"));
 router.use('/buildings/', buildings_1.default);
@@ -21,6 +21,6 @@ router.get('/getbuilding', function (req, res, next) {
         res.send("You must specify a room ID");
         return;
     }
-    res.json(App_1.default.getDataManager().getRoomManager().getRoomByID(req.query.roomID));
+    res.json(App_1.app.getDataManager().getRoomManager().getRoomByID(req.query.roomID));
 });
 module.exports = router;

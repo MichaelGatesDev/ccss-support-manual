@@ -6,9 +6,9 @@ interface Serializable<T> {
 
 export class ConfigManager {
 
-    private appConfig?: AppConfig;
-    private primarySpreadsheetConfig?: PrimarySpreadsheetConfig;
-    private secondarySpreadsheetConfig?: SecondarySpreadsheetConfig;
+    private appConfig!: AppConfig;
+    private primarySpreadsheetConfig!: PrimarySpreadsheetConfig;
+    private secondarySpreadsheetConfig!: SecondarySpreadsheetConfig;
 
     constructor() {
     }
@@ -41,7 +41,7 @@ export class ConfigManager {
                 PrimarySpreadsheetConfig,
                 [
                     'public/primary-config.json',
-                    '',
+                    '1k2T8gm4JGOtp3B_Ko-dZBMc0sV5Mv1FjQjNt5NLc9hE',
                     'public/primary.xlsx'
                 ]
             )
@@ -61,7 +61,7 @@ export class ConfigManager {
                 SecondarySpreadsheetConfig,
                 [
                     'public/secondary-config.json',
-                    '',
+                    '1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY',
                     'public/secondary.xlsx'
                 ]
             )
@@ -140,11 +140,11 @@ export class ConfigManager {
         return this.appConfig;
     }
 
-    public getPrimarySpreadsheetConfig() {
+    public getPrimarySpreadsheetConfig(): PrimarySpreadsheetConfig {
         return this.primarySpreadsheetConfig;
     }
 
-    public getSecondarySpreadsheetConfig() {
+    public getSecondarySpreadsheetConfig(): SecondarySpreadsheetConfig {
         return this.secondarySpreadsheetConfig;
     }
 }
@@ -178,7 +178,7 @@ abstract class ConfigBase implements Serializable<ConfigBase> {
 }
 
 
-class AppConfig extends ConfigBase {
+export class AppConfig extends ConfigBase {
     public checkForProgramUpdates?: boolean = true;
     public checkForDataUpdates?: boolean = true;
 
@@ -190,7 +190,7 @@ class AppConfig extends ConfigBase {
 }
 
 
-abstract class GoogleSpreadsheetConfig extends ConfigBase {
+export abstract class GoogleSpreadsheetConfig extends ConfigBase {
     private docID: string;
     private sheetPath: string;
 
@@ -216,12 +216,12 @@ abstract class GoogleSpreadsheetConfig extends ConfigBase {
 }
 
 
-class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
+export class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
 
     public buildingsSheetName: string = 'Buildings';
     public buildingsSheetHeaderRow: number = 1;
-    public buildingOfficialNameHeader: string = 'Official Name';
-    public buildingNicknamesHeader: string = 'Nicknames';
+    public buildingsOfficialNameHeader: string = 'Official Name';
+    public buildingsNicknamesHeader: string = 'Nicknames';
 
     public roomsSheetName: string = 'Rooms';
     public roomsSheetHeaderRow: number = 1;
@@ -236,8 +236,9 @@ class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
     public roomsChairCountHeader: string = 'Chair Count';
     public roomsTableCountHeader: string = 'Table Count';
     public roomsPhoneExtensionHeader: string = 'Phone Extension';
-    public roomsPhoneStatusHeader: string = 'Phone Status';
-    public roomsAudioRequiresProjectorHeader: string = 'Audio Requires Projector';
+    public roomsPhoneDisplayHeader: string = 'Phone Display';
+    public roomsPhoneSpeakerHeader: string = 'Phone Speaker';
+    public roomsAudioRequiresSystemHeader: string = 'Audio Requires System';
     public roomsProjectorHeader: string = 'Projector';
     public roomsAudioHeader: string = 'Audio';
     public roomsScreenHeader: string = 'Screen';
@@ -252,13 +253,17 @@ class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
     public roomsPrinterCartridgeTypeHeader: string = 'Printer Cartridge Type';
     public roomsNotesHeader: string = 'Other Notes';
 
+    public roomTypesSheetName: string = 'Room Types';
+    public lockTypesSheetName: string = 'Lock Types';
+    public furnitureTypesSheetName: string = 'Furniture Types';
+
     public deserialize(input: any): PrimarySpreadsheetConfig {
         super.deserialize(input).getDocID();
 
         this.buildingsSheetName = input.buildingsSheetName;
         this.buildingsSheetHeaderRow = input.buildingsSheetHeaderRow;
-        this.buildingOfficialNameHeader = input.buildingOfficialNameHeader;
-        this.buildingNicknamesHeader = input.buildingNicknamesHeader;
+        this.buildingsOfficialNameHeader = input.buildingsOfficialNameHeader;
+        this.buildingsNicknamesHeader = input.buildingsNicknamesHeader;
 
         this.roomsSheetName = input.roomsSheetName;
         this.roomsSheetHeaderRow = input.roomsSheetHeaderRow;
@@ -273,8 +278,9 @@ class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
         this.roomsChairCountHeader = input.roomsChairCountHeader;
         this.roomsTableCountHeader = input.roomsTableCountHeader;
         this.roomsPhoneExtensionHeader = input.roomsPhoneExtensionHeader;
-        this.roomsPhoneStatusHeader = input.roomsPhoneStatusHeader;
-        this.roomsAudioRequiresProjectorHeader = input.roomsAudioRequiresProjectorHeader;
+        this.roomsPhoneDisplayHeader = input.roomsPhoneDisplayHeader;
+        this.roomsPhoneSpeakerHeader = input.roomsPhoneSpeakerHeader;
+        this.roomsAudioRequiresSystemHeader = input.roomsAudioRequiresSystemHeader;
         this.roomsProjectorHeader = input.roomsProjectorHeader;
         this.roomsAudioHeader = input.roomsAudioHeader;
         this.roomsScreenHeader = input.roomsScreenHeader;
@@ -289,13 +295,17 @@ class PrimarySpreadsheetConfig extends GoogleSpreadsheetConfig {
         this.roomsPrinterCartridgeTypeHeader = input.roomsPrinterCartridgeTypeHeader;
         this.roomsNotesHeader = input.roomsNotesHeader;
 
+        this.roomTypesSheetName = input.roomTypesSheetName;
+        this.lockTypesSheetName = input.lockTypesSheetName;
+        this.furnitureTypesSheetName = input.furnitureTypesSheetName;
+
         return this;
     }
 
 }
 
 
-class SecondarySpreadsheetConfig extends GoogleSpreadsheetConfig {
+export class SecondarySpreadsheetConfig extends GoogleSpreadsheetConfig {
 
     public troubleshootingSheetName: string = 'Troubleshooting';
     public troubleshootingSheetHeaderRow: number = 1;

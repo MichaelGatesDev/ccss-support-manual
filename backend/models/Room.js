@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var App_1 = require("../App");
 /**
  * A room within a building
  */
@@ -9,19 +10,19 @@ var Room = /** @class */ (function () {
      * @param number The building-unique number which represents the room
      * @param type The type of room
      */
-    function Room(building, number, type) {
-        this.building = building;
+    function Room(buildingName, number, type) {
+        this.buildingName = buildingName;
         this.number = number;
         this.type = type;
     }
+    Room.prototype.getBuilding = function () {
+        return App_1.app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
+    };
     Room.prototype.getID = function () {
-        return this.building.getInternalName() + "-" + this.number;
+        return this.getBuilding().getInternalName() + "-" + this.number;
     };
     Room.prototype.getDisplayName = function () {
-        return this.building.getOfficialName() + " " + this.number.toLocaleUpperCase();
-    };
-    Room.prototype.getBuilding = function () {
-        return this.building;
+        return this.getBuilding().getOfficialName() + " " + this.number.toLocaleUpperCase();
     };
     Room.prototype.setLastChecked = function (timestamp) {
         this.lastChecked = timestamp;

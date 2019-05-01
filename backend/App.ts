@@ -17,7 +17,7 @@ class App {
   //              Configure express backend
   // ------------------------------------------------------ \\
 
-  public app: express.Application = express();
+  public expressApp: express.Application = express();
 
   private dataManager: DataManager;
 
@@ -25,7 +25,7 @@ class App {
     this.dataManager = new DataManager();
   }
 
-  public initialize() {
+  public async initialize(): Promise<void> {
 
     // Setup express stuff
     console.debug("Setting up express server...");
@@ -33,58 +33,64 @@ class App {
     console.debug("Finished setting up express server.");
 
     // Setup data
-    this.dataManager.initialize();
+    await this.dataManager.initialize()
+      .then(function () {
+        console.log("Finished initializing data");
+      }).catch(function (err) {
+        console.error("Failed to initialize data");
+        console.error(err);
+      });
   }
 
-  public setupExpress() {
+  public setupExpress(): void {
     console.debug("Setting up views");
     this.setupViews();
 
     console.debug("Using dev logger");
-    this.app.use(logger('dev'));
+    this.expressApp.use(logger('dev'));
 
     console.debug("Setting up middleware");
     this.setupMiddleware();
 
     console.debug("Setting up static directories");
-    this.app.use(express.static(path.join(__dirname, 'public')));
-    this.app.use(express.static(path.join(__dirname, 'build')));
+    this.expressApp.use(express.static(path.join(__dirname, 'public')));
+    this.expressApp.use(express.static(path.join(__dirname, 'build')));
 
     console.debug("Setting up routes");
-    this.app.use('/', indexRoute);
+    this.expressApp.use('/', indexRoute);
 
     console.debug("Setting up static files to serve");
-    this.app.use('*', (req, res) => res.sendFile(path.join(__dirname, 'build', 'index.html')));
+    this.expressApp.use('*', (req, res) => res.sendFile(path.join(__dirname, 'build', 'index.html')));
 
     console.debug("Setting up error handling");
     this.setupErrorHandling();
   }
 
-  public setupViews() {
+  public setupViews(): void {
     // view engine setup
-    this.app.set('views', path.join(__dirname, 'views'));
-    this.app.set('view engine', 'ejs');
+    this.expressApp.set('views', path.join(__dirname, 'views'));
+    this.expressApp.set('view engine', 'ejs');
   }
 
-  public setupMiddleware() {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({
+  public setupMiddleware(): void {
+    this.expressApp.use(express.json());
+    this.expressApp.use(express.urlencoded({
       extended: false
     }));
-    this.app.use(cookieParser());
+    this.expressApp.use(cookieParser());
   }
 
-  public setupErrorHandling() {
+  public setupErrorHandling(): void {
     //catch 404 and forward to error handler
-    this.app.use((req: Request, res: Response, next: NextFunction) => {
+    this.expressApp.use((req: Request, res: Response, next: NextFunction) => {
       next(createError(404));
     });
 
     // development error handler
     // will print stacktrace
-    if (this.app.get('env') === 'development') {
+    if (this.expressApp.get('env') === 'development') {
 
-      this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+      this.expressApp.use((err: any, req: Request, res: Response, next: NextFunction) => {
         res.status(err['status'] || 500);
         res.render('error', {
           message: err.message,
@@ -95,7 +101,7 @@ class App {
 
     // production error handler
     // no stacktraces leaked to user
-    this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    this.expressApp.use((err: any, req: Request, res: Response, next: NextFunction) => {
       res.status(err.status || 500);
       res.render('error', {
         message: err.message,
@@ -104,71 +110,19 @@ class App {
     });
   }
 
-  public getDataManager() {
+  public getDataManager(): DataManager {
     return this.dataManager;
   }
 }
 
-/*
-// create the configs
-config.create('config.json', defaultAppConfig)
-  // after the config is created
-  .then(function (created) {
-    if (created) {
-      console.log("Created default application configuration file.");
-    }
-    // load the config
-    return config.load('config.json');
-  })
-  // after the config is loaded
-  .then(async function (loadedConfig) {
-    appConfig = loadedConfig;
-    console.log("Finished loaded configuration file");
+const app = new App();
+app.initialize();
+
+export default app.expressApp;
+export { app };
 
 
-    if (appConfig.checkForDataUpdates) {
-      console.log("Checking for updates to primary spreadsheet...");
-      // check for updates to spreadsheets
-      await gdriveDownloader.downloadSpreadsheet(
-        appConfig.primarySpreadsheet.docID,
-        "xlsx",
-        appConfig.primarySpreadsheet.path,
-        false
-      )
-        .then(function (downloaded) {
-          if (downloaded)
-            console.log("Finished downloading primary spreadsheet.");
-          else
-            console.log("Primary spreadsheet already exists.");
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
-
-      console.log("Checking for updates to secondary spreadsheet...");
-      await gdriveDownloader.downloadSpreadsheet(
-        appConfig.secondarySpreadsheet.docID,
-        "xlsx",
-        appConfig.secondarySpreadsheet.path,
-        false
-      )
-        .then(function (downloaded) {
-          if (downloaded)
-            console.log("Finished downloading secondary spreadsheet.");
-          else
-            console.log("Secondary spreadsheet already exists.");
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
-    }
-
-    if (appConfig.checkForProgramUpdates) {
-      // check for program updates
-    }
-
-
-    // load primary(troubleshooting) spreadsheet
+/*    // load primary(troubleshooting) spreadsheet
     console.log("Loading data from primary spreadsheet...");
     return dataHelper.loadPrimarySpreadsheet(appConfig.primarySpreadsheet);
   })
@@ -202,8 +156,3 @@ config.create('config.json', defaultAppConfig)
 
 
 // ------------------------------------------------------ \\
-
-let app = new App();
-app.initialize();
-
-export = app;
