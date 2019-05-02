@@ -21,12 +21,12 @@ class Room extends Component {
 
         this.state = {
             loading: true,
+            images: undefined,
             activeTroubleshootingTypeFilters: [],
             activeTroubleshootingTagFilters: [],
             activeSearchQuery: ''
         };
 
-        this.updateTroubleshootingFilters = this.updateTroubleshootingFilters.bind(this);
         this.onTypeFilterChange = this.onTypeFilterChange.bind(this);
         this.onTagFilterChange = this.onTagFilterChange.bind(this);
         this.onFilterSearch = this.onFilterSearch.bind(this);
@@ -37,7 +37,7 @@ class Room extends Component {
     }
 
     fetchRoom() {
-        fetch('/api/v1/rooms/' + this.props.match.params.roomID)
+        fetch('/api/v1/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -52,7 +52,7 @@ class Room extends Component {
     }
 
     fetchBuilding() {
-        fetch('/api/v1/getbuilding?roomID=' + this.props.match.params.roomID)
+        fetch('/api/v1/buildings/' + this.props.match.params.buildingName)
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -67,13 +67,11 @@ class Room extends Component {
     }
 
     fetchImages() {
-        fetch('/api/v1/images/' + this.state.room.id)
+        fetch('/api/v1/images/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    mainImages: data.mainImages,
-                    panoramicImages: data.panoramicImages,
-                    equipmentImages: data.equipmentImages
+                    images: data
                 }, function () {
                     this.fetchTroubleshootingData()
                 });
@@ -84,7 +82,7 @@ class Room extends Component {
     }
 
     fetchTroubleshootingData() {
-        fetch('/api/v1/troubleshooting-data/' + this.state.room.id)
+        fetch('/api/v1/troubleshooting-data/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
                 var sortedTypes = _.sortBy(data, function (item) { return item.types; });
@@ -96,12 +94,6 @@ class Room extends Component {
                 console.log(error);
                 console.log("Failed to fetch room troubleshooting data");
             });
-    }
-
-    updateTroubleshootingFilters(filters) {
-        this.setState({
-            activeTroubleshootingTypeFilters: filters
-        });
     }
 
     getTitle() {
@@ -148,6 +140,14 @@ class Room extends Component {
         });
     }
 
+    imagesAsArray(imagesObject) {
+        let result = [];
+        for (const item of imagesObject) {
+            result.push(item.url);
+        }
+        return result;
+    }
+
     render() {
 
         return (
@@ -184,12 +184,12 @@ class Room extends Component {
                                 room={this.state.room}
                             />
 
-                            {this.state.panoramicImages.length > 0 &&
+                            {this.state.images.panoramicImages.length > 0 &&
                                 <Fragment>
                                     <div className="row panoramas">
                                         <div className="col">
                                             <ImageCarousel
-                                                images={this.state.panoramicImages}
+                                                images={this.imagesAsArray(this.state.images.panoramicImages)}
                                                 height={"250px"}
                                                 id="panoramas-carousel"
                                             />
@@ -201,7 +201,7 @@ class Room extends Component {
                             <div className="row">
                                 <div className="col-lg-4">
                                     <ImageCarousel
-                                        images={this.state.mainImages}
+                                        images={this.imagesAsArray(this.state.images.rootImages)}
                                         height={"350px"}
                                         id="main-carousel"
                                     />
@@ -407,7 +407,6 @@ class Room extends Component {
 
                             <hr />
 
-                            <p>ID: {this.state.room.id}</p>
                             <p>Last Updated: {this.state.room.lastChecked}</p>
 
                         </section>

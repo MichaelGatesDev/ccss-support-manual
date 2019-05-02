@@ -120,6 +120,16 @@ var DataManager = /** @class */ (function () {
                                         })];
                                 case 6:
                                     _a.sent();
+                                    // load images
+                                    return [4 /*yield*/, self.loadImages().then(function () {
+                                            console.log("Loaded " + self.imageManager.getTotalSize() + " images!");
+                                        }).catch(function (err) {
+                                            console.error("There was an error loading images");
+                                            return reject(err);
+                                        })];
+                                case 7:
+                                    // load images
+                                    _a.sent();
                                     return [2 /*return*/, resolve()];
                             }
                         });
@@ -201,6 +211,11 @@ var DataManager = /** @class */ (function () {
                 console.debug("No such building exists: " + buildingName);
                 return;
             }
+            var building = self.buildingManager.getBuildingByName(buildingName);
+            if (!building) {
+                console.debug("No such building exists: " + buildingName);
+                return;
+            }
             var number = row.getCell(config.roomsNumberHeader.toLocaleLowerCase()).text;
             if (StringUtils_1.StringUtils.isBlank(number) || !StringUtils_1.StringUtils.isValidRoomNumber(number)) {
                 console.debug("Room number is blank or invalid: " + number);
@@ -211,7 +226,7 @@ var DataManager = /** @class */ (function () {
                 console.debug("Room type is blank or invalid: " + type);
                 return;
             }
-            var room = new Room_1.Room(buildingName, number, type);
+            var room = new Room_1.Room(building.getInternalName(), number, type);
             if (!room.getBuilding()) {
                 console.debug("Room building is not valid!");
                 return;
@@ -273,9 +288,9 @@ var DataManager = /** @class */ (function () {
                 var parts = piece.split("|");
                 var buildingName = parts[0];
                 var roomNumber = parts[1];
-                var room = this.roomManager.getRoomByBuildingNameAndNumber(buildingName, roomNumber);
+                var room = this.roomManager.getRoom(buildingName, roomNumber);
                 if (!room)
-                    continue; // no location at building/room
+                    continue;
                 results.push(room);
             }
         }
@@ -290,25 +305,39 @@ var DataManager = /** @class */ (function () {
                 return; // skip headers row
             if (row.getCell(1) === undefined || row.getCell(1).text === '')
                 return; // skip if row is empty. exceljs doesn't work well for some reason.
-            var title = row.getCell(config.troubleshootingTitleHeader.toLocaleLowerCase()).text;
-            var description = row.getCell(config.troubleshootingDescriptionHeader.toLocaleLowerCase()).text;
-            var solution = row.getCell(config.troubleshootingSolutionHeader.toLocaleLowerCase()).text;
-            var types = row.getCell(config.troubleshootingTypesHeader.toLocaleLowerCase()).text.split(",");
-            var tags = row.getCell(config.troubleshootingTagsHeader.toLocaleLowerCase()).text.split(",");
-            var data = new TroubleshootingData_1.TroubleshootingData(title, description, solution);
+            var title = row.getCell(config.troubleshootingTitleHeader.toLocaleLowerCase()).text.trim();
+            var description = row.getCell(config.troubleshootingDescriptionHeader.toLocaleLowerCase()).text.trim();
+            var solution = row.getCell(config.troubleshootingSolutionHeader.toLocaleLowerCase()).text.trim();
+            var types = [];
+            var rawTypes = row.getCell(config.troubleshootingTypesHeader.toLocaleLowerCase()).text.trim().split(",");
+            for (var _i = 0, rawTypes_1 = rawTypes; _i < rawTypes_1.length; _i++) {
+                var type = rawTypes_1[_i];
+                if (!StringUtils_1.StringUtils.isBlank(type)) {
+                    types.push(type.toLocaleLowerCase());
+                }
+            }
+            var tags = [];
+            var rawTags = row.getCell(config.troubleshootingTagsHeader.toLocaleLowerCase()).text.trim().split(",");
+            for (var _a = 0, rawTags_1 = rawTags; _a < rawTags_1.length; _a++) {
+                var tag = rawTags_1[_a];
+                if (!StringUtils_1.StringUtils.isBlank(tag)) {
+                    tags.push(tag.toLocaleLowerCase());
+                }
+            }
+            var data = new TroubleshootingData_1.TroubleshootingData(title.toLocaleLowerCase(), description.toLocaleLowerCase(), solution.toLocaleLowerCase());
             data.setTypes(types);
             data.setTags(tags);
             var rawWhitelisted = row.getCell(config.troubleshootingWhitelistedRoomsHeader.toLocaleLowerCase()).text;
             var whitelisted = self.parseRooms(rawWhitelisted);
-            for (var _i = 0, whitelisted_1 = whitelisted; _i < whitelisted_1.length; _i++) {
-                var room = whitelisted_1[_i];
+            for (var _b = 0, whitelisted_1 = whitelisted; _b < whitelisted_1.length; _b++) {
+                var room = whitelisted_1[_b];
                 data.addWhitelistedRoom(room);
             }
             var rawBlacklisted = row.getCell(config.troubleshootingBlacklistedRoomsHeader.toLocaleLowerCase()).text;
             var blacklisted = self.parseRooms(rawBlacklisted);
-            for (var _a = 0, blacklisted_1 = blacklisted; _a < blacklisted_1.length; _a++) {
-                var room = blacklisted_1[_a];
-                data.addWhitelistedRoom(room);
+            for (var _c = 0, blacklisted_1 = blacklisted; _c < blacklisted_1.length; _c++) {
+                var room = blacklisted_1[_c];
+                data.addBlacklistedRoom(room);
             }
             self.troubleshootingDataManager.addTroubleshootingData(data);
         });
@@ -337,11 +366,12 @@ var DataManager = /** @class */ (function () {
     };
     DataManager.prototype.loadImages = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var self;
+            var self, config;
             return __generator(this, function (_a) {
                 self = this;
+                config = this.configManager.getImagesConfig();
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var rootDir = "public/images/buildings/";
+                        var rootDir = config.imagesDirectory + "buildings/";
                         fs.promises.access(rootDir, fs.constants.R_OK).then(function () {
                             return __awaiter(this, void 0, void 0, function () {
                                 var _loop_1, buildingDir, _i, _a, building;
@@ -370,7 +400,7 @@ var DataManager = /** @class */ (function () {
                                                                                                                 return __generator(this, function (_a) {
                                                                                                                     switch (_a.label) {
                                                                                                                         case 0:
-                                                                                                                            roomImages = new ImageManager_1.RoomImages(room.getID());
+                                                                                                                            roomImages = new ImageManager_1.RoomImages(building.getInternalName(), room.getNumber());
                                                                                                                             // console.log("ACCESSING ROOM DIR " + roomDir);
                                                                                                                             // root images
                                                                                                                             return [4 /*yield*/, fs.promises.readdir(roomDir).then(function (files) {
@@ -383,7 +413,7 @@ var DataManager = /** @class */ (function () {
                                                                                                                                                         return __generator(this, function (_a) {
                                                                                                                                                             switch (_a.label) {
                                                                                                                                                                 case 0: return [4 /*yield*/, fs.promises.stat(roomDir + file).then(function (stat) {
-                                                                                                                                                                        if (stat.isFile) {
+                                                                                                                                                                        if (!stat.isDirectory()) {
                                                                                                                                                                             var url = roomDir.replace("public/", "") + file;
                                                                                                                                                                             var image = new ImageManager_1.Image(url);
                                                                                                                                                                             roomImages.addMainImage(image);
@@ -433,7 +463,7 @@ var DataManager = /** @class */ (function () {
                                                                                                                                                                             return __generator(this, function (_a) {
                                                                                                                                                                                 switch (_a.label) {
                                                                                                                                                                                     case 0: return [4 /*yield*/, fs.promises.stat(panoramasDir + file).then(function (stat) {
-                                                                                                                                                                                            if (stat.isFile) {
+                                                                                                                                                                                            if (!stat.isDirectory()) {
                                                                                                                                                                                                 var url = panoramasDir.replace("public/", "") + file;
                                                                                                                                                                                                 var image = new ImageManager_1.Image(url);
                                                                                                                                                                                                 roomImages.addPanoramicImage(image);
@@ -490,7 +520,7 @@ var DataManager = /** @class */ (function () {
                                                                                                                                                                             return __generator(this, function (_a) {
                                                                                                                                                                                 switch (_a.label) {
                                                                                                                                                                                     case 0: return [4 /*yield*/, fs.promises.stat(equipmentDir + file).then(function (stat) {
-                                                                                                                                                                                            if (stat.isFile) {
+                                                                                                                                                                                            if (!stat.isDirectory()) {
                                                                                                                                                                                                 var url = equipmentDir.replace("public/", "") + file;
                                                                                                                                                                                                 var image = new ImageManager_1.Image(url);
                                                                                                                                                                                                 roomImages.addEquipmentImage(image);
@@ -532,7 +562,7 @@ var DataManager = /** @class */ (function () {
                                                                                                                                 })];
                                                                                                                         case 3:
                                                                                                                             _a.sent();
-                                                                                                                            self.imageManager.setRoomImages(room.getID(), roomImages);
+                                                                                                                            self.imageManager.addRoomImages(roomImages);
                                                                                                                             return [2 /*return*/];
                                                                                                                     }
                                                                                                                 });

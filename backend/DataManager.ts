@@ -84,11 +84,20 @@ class DataManager {
                 return reject(err);
             });
 
+
+            // load images
+            await self.loadImages().then(function () {
+                console.log(`Loaded ${self.imageManager.getTotalSize()} images!`);
+            }).catch(function (err) {
+                console.error("There was an error loading images");
+                return reject(err);
+            })
+
             return resolve();
         });
     }
 
-    public async downloadSpreadsheet(config: GoogleSpreadsheetConfig) {
+    private async downloadSpreadsheet(config: GoogleSpreadsheetConfig) {
         return new Promise((resolve, reject) => {
             if (!config) {
                 return reject(new Error("Config invalid or not found"));
@@ -173,6 +182,12 @@ class DataManager {
                 return;
             }
 
+            let building: Building | undefined = self.buildingManager.getBuildingByName(buildingName);
+            if (!building) {
+                console.debug(`No such building exists: ${buildingName}`);
+                return;
+            }
+
             let number = row.getCell(config.roomsNumberHeader.toLocaleLowerCase()).text;
             if (StringUtils.isBlank(number) || !StringUtils.isValidRoomNumber(number)) {
                 console.debug(`Room number is blank or invalid: ${number}`);
@@ -186,7 +201,7 @@ class DataManager {
             }
 
             let room = new Room(
-                buildingName,
+                building.getInternalName(),
                 number,
                 type,
             );
@@ -236,7 +251,7 @@ class DataManager {
         console.debug(`Loaded ${this.roomManager.getRooms().length} rooms!`);
     }
 
-    async loadPrimarySpreadsheet() {
+    private async loadPrimarySpreadsheet() {
         var self = this;
         let config = this.configManager.getPrimarySpreadsheetConfig();
 
@@ -282,8 +297,8 @@ class DataManager {
                 var buildingName = parts[0];
                 var roomNumber = parts[1];
 
-                let room: Room | undefined = this.roomManager.getRoomByBuildingNameAndNumber(buildingName, roomNumber);
-                if (!room) continue; // no location at building/room
+                let room: Room | undefined = this.roomManager.getRoom(buildingName, roomNumber);
+                if (!room) continue;
 
                 results.push(room);
             }
@@ -299,16 +314,30 @@ class DataManager {
             if (rowNumber == config.troubleshootingSheetHeaderRow) return; // skip headers row
             if (row.getCell(1) === undefined || row.getCell(1).text === '') return; // skip if row is empty. exceljs doesn't work well for some reason.
 
-            let title: string = row.getCell(config.troubleshootingTitleHeader.toLocaleLowerCase()).text;
-            let description: string = row.getCell(config.troubleshootingDescriptionHeader.toLocaleLowerCase()).text;
-            let solution: string = row.getCell(config.troubleshootingSolutionHeader.toLocaleLowerCase()).text;
-            let types: string[] = row.getCell(config.troubleshootingTypesHeader.toLocaleLowerCase()).text.split(",");
-            let tags: string[] = row.getCell(config.troubleshootingTagsHeader.toLocaleLowerCase()).text.split(",");
+            let title: string = row.getCell(config.troubleshootingTitleHeader.toLocaleLowerCase()).text.trim();
+            let description: string = row.getCell(config.troubleshootingDescriptionHeader.toLocaleLowerCase()).text.trim();
+            let solution: string = row.getCell(config.troubleshootingSolutionHeader.toLocaleLowerCase()).text.trim();
+
+            let types: string[] = [];
+            let rawTypes = row.getCell(config.troubleshootingTypesHeader.toLocaleLowerCase()).text.trim().split(",");
+            for (const type of rawTypes) {
+                if (!StringUtils.isBlank(type)) {
+                    types.push(type.toLocaleLowerCase());
+                }
+            }
+
+            let tags: string[] = [];
+            let rawTags = row.getCell(config.troubleshootingTagsHeader.toLocaleLowerCase()).text.trim().split(",");
+            for (const tag of rawTags) {
+                if (!StringUtils.isBlank(tag)) {
+                    tags.push(tag.toLocaleLowerCase());
+                }
+            }
 
             let data = new TroubleshootingData(
-                title,
-                description,
-                solution
+                title.toLocaleLowerCase(),
+                description.toLocaleLowerCase(),
+                solution.toLocaleLowerCase()
             );
 
             data.setTypes(types);
@@ -323,7 +352,7 @@ class DataManager {
             let rawBlacklisted: string = row.getCell(config.troubleshootingBlacklistedRoomsHeader.toLocaleLowerCase()).text;
             let blacklisted: Room[] = self.parseRooms(rawBlacklisted);
             for (const room of blacklisted) {
-                data.addWhitelistedRoom(room);
+                data.addBlacklistedRoom(room);
             }
 
             self.troubleshootingDataManager.addTroubleshootingData(data);
@@ -331,7 +360,7 @@ class DataManager {
         console.log(`Loaded ${self.troubleshootingDataManager.getTroubleshootingData().length} troubleshooting data blocks!`);
     }
 
-    async loadSecondarySpreadsheet() {
+    private async loadSecondarySpreadsheet() {
         var self = this;
         let config = this.configManager.getSecondarySpreadsheetConfig();
         return new Promise((resolve, reject) => {
@@ -352,11 +381,12 @@ class DataManager {
         });
     }
 
-    async loadImages() {
+    private async loadImages() {
         const self = this;
+        const config = this.configManager.getImagesConfig();
         return new Promise((resolve, reject) => {
 
-            var rootDir = "public/images/buildings/";
+            var rootDir = config.imagesDirectory + "buildings/";
 
             fs.promises.access(rootDir, fs.constants.R_OK).then(async function () {
 
@@ -375,7 +405,7 @@ class DataManager {
                             var roomDir = buildingDir + "rooms/" + room.getNumber().toLocaleLowerCase() + "/";
 
                             await fs.promises.access(roomDir, fs.constants.R_OK).then(async function () {
-                                let roomImages = new RoomImages(room.getID());
+                                let roomImages = new RoomImages(building.getInternalName(), room.getNumber());
 
                                 // console.log("ACCESSING ROOM DIR " + roomDir);
 
@@ -384,7 +414,7 @@ class DataManager {
                                 await fs.promises.readdir(roomDir).then(async function (files) {
                                     for (const file of files) {
                                         await fs.promises.stat(roomDir + file).then(function (stat) {
-                                            if (stat.isFile) {
+                                            if (!stat.isDirectory()) {
                                                 let url: string = roomDir.replace("public/", "") + file;
                                                 let image: Image = new Image(url);
                                                 roomImages.addMainImage(image);
@@ -402,7 +432,7 @@ class DataManager {
                                     await fs.promises.readdir(panoramasDir).then(async function (files) {
                                         for (const file of files) {
                                             await fs.promises.stat(panoramasDir + file).then(function (stat) {
-                                                if (stat.isFile) {
+                                                if (!stat.isDirectory()) {
                                                     let url: string = panoramasDir.replace("public/", "") + file;
                                                     let image: Image = new Image(url);
                                                     roomImages.addPanoramicImage(image);
@@ -423,7 +453,7 @@ class DataManager {
                                     await fs.promises.readdir(equipmentDir).then(async function (files) {
                                         for (const file of files) {
                                             await fs.promises.stat(equipmentDir + file).then(function (stat) {
-                                                if (stat.isFile) {
+                                                if (!stat.isDirectory()) {
                                                     let url: string = equipmentDir.replace("public/", "") + file;
                                                     let image: Image = new Image(url);
                                                     roomImages.addEquipmentImage(image);
@@ -437,7 +467,7 @@ class DataManager {
                                     console.log("Error accessing equipment directory at " + equipmentDir);
                                 });
 
-                                self.imageManager.setRoomImages(room.getID(), roomImages);
+                                self.imageManager.addRoomImages(roomImages);
                                 // console.debug(`Loaded ${roomImages.size()} images for ` + room.getDisplayName());
 
                             }).catch(async function (err) {

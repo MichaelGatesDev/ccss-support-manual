@@ -1,61 +1,64 @@
-import { Room } from "./models/Room";
-
 /**
  * A utility class for managing images
  */
-class ImageManager {
-    /**
-     * An array of all images
-     */
-    private images: Image[];
+export class ImageManager {
 
+    private buildingImages: BuildingImages[];
     private roomImages: RoomImages[];
 
     constructor() {
-        this.images = [];
+        this.buildingImages = [];
         this.roomImages = [];
     }
 
-    /**
-     * Adds a image to the array
-     * @param image Image to add
-     */
-    public addImage(image: Image) {
-        this.images.push(image);
+    public addBuildingImages(images: BuildingImages) {
+        this.buildingImages.push(images);
     }
 
-    /**
-     * Removes a image from the array
-     * @param image Image to remove
-     */
-    public removeImage(image: Image) {
-        const index = this.images.indexOf(image, 0);
-        if (index > -1) {
-            this.images.splice(index, 1);
+    public addRoomImages(images: RoomImages) {
+        this.roomImages.push(images);
+    }
+
+    public getImagesForBuilding(buildingName: string): BuildingImages | undefined {
+        for (const images of this.buildingImages) {
+            if (images.getBuildingID() === buildingName) return images;
         }
     }
 
-    /**
-     * Gets all images
-     */
-    public getImages() {
-        return this.images;
+    public getImagesForRoom(buildingName: string, roomNumber: string): RoomImages | undefined {
+        for (const images of this.roomImages) {
+            if (images.getBuildingName() === buildingName && images.getRoomNumber() === roomNumber) return images;
+        }
     }
 
+    public getTotalSize() {
+        let size = 0;
 
-    public setRoomImages(roomID: string, images: RoomImages) {
+        for (const images of this.roomImages) {
+            size += images.size();
+        }
 
+        return size;
     }
 
-
-    public getImagesForRoom(room: Room): RoomImages | null {
-        return null;
+    public getAllImages() {
+        return {
+            buildingImages: this.buildingImages,
+            roomImages: this.roomImages
+        };
     }
 
+    public getBuildingImages() {
+        return this.buildingImages;
+    }
+
+    public getRoomImages() {
+        return this.roomImages;
+    }
 }
 
 
-class Image {
+export class Image {
 
     private url: string;
 
@@ -70,21 +73,71 @@ class Image {
 }
 
 
-class RoomImages {
-    private roomID: string;
+export class BuildingImages {
+    private buildingName: string;
+    private rootImages: Image[];
+    private panoramicImages: Image[];
+
+    constructor(buildingName: string) {
+        this.buildingName = buildingName;
+        this.rootImages = [];
+        this.panoramicImages = [];
+    }
+
+    public getBuildingID() {
+        return this.buildingName;
+    }
+
+    public addMainImage(image: Image) {
+        this.rootImages.push(image);
+    }
+
+    public getMainImages() {
+        return this.rootImages;
+    }
+
+    public addPanoramicImage(image: Image) {
+        this.panoramicImages.push(image);
+    }
+
+    public getPanoramicImages() {
+        return this.panoramicImages;
+    }
+
+    public getAllImages() {
+        return this.rootImages
+            .concat(this.panoramicImages);
+    }
+
+    public size() {
+        return (
+            this.rootImages.length +
+            this.panoramicImages.length
+        );
+    }
+}
+
+export class RoomImages {
+    private buildingName: string;
+    private roomNumber: string;
     private rootImages: Image[];
     private panoramicImages: Image[];
     private equipmentImages: Image[];
 
-    constructor(roomID: string) {
-        this.roomID = roomID;
+    constructor(buildingName: string, roomNumber: string) {
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
         this.rootImages = [];
         this.panoramicImages = [];
         this.equipmentImages = [];
     }
 
-    public getRoomID() {
-        return this.roomID;
+    public getBuildingName() {
+        return this.buildingName;
+    }
+
+    public getRoomNumber() {
+        return this.roomNumber;
     }
 
     public addMainImage(image: Image) {
@@ -124,11 +177,4 @@ class RoomImages {
             this.equipmentImages.length
         );
     }
-}
-
-
-export {
-    ImageManager,
-    Image,
-    RoomImages,
 }

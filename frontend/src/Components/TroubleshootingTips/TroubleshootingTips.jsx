@@ -3,31 +3,32 @@ import './TroubleshootingTips.css';
 
 import TroubleshootingTip from './TroubleshootingTip/TroubleshootingTip';
 
-// var _ = require('underscore');
+// let _ = require('underscore');
 
 class TroubleshootingTips extends Component {
 
-    // constructor(props) {
-    //     super(props);
-    // }
+    constructor(props) {
+        super(props);
+    }
 
-    // componentDidMount() {
-    // }
+    componentDidMount() {
+    }
 
     render() {
 
-        var data = this.props.troubleshootingData;
+        let data = this.props.troubleshootingData;
 
-        if (this.props.typeFilters && this.props.typeFilters.length > 0) {
-            data = data.filter(function (item) {
-                for (const typeFilter of this.props.typeFilters)
-                    if (item.types.includes(typeFilter))
-                        return true;
-                return false;
-            }, this);
-        }
+        data = data.filter(function (item) {
+            if (item.types.length === 0) return true;
+            for (const typeFilter of this.props.typeFilters) {
+                if (item.types.includes(typeFilter))
+                    return true;
+            }
+            return false;
+        }, this);
 
-        if (this.props.tagFilters && this.props.tagFilters.length > 0) {
+
+        if (this.props.tagFilters.length > 0) {
             data = data.filter(function (item) {
                 for (const tagFilter of this.props.tagFilters)
                     if (item.tags.includes(tagFilter))
@@ -36,15 +37,15 @@ class TroubleshootingTips extends Component {
             }, this);
         }
 
-        var queries = this.props.search.split(" ");
+
+        let queries = this.props.search.split(" ");
         for (const q of queries) {
             data = data.filter(function (item) {
                 return item.title.includes(q) || item.description.includes(q) || item.types.includes(q) || item.tags.includes(q);
             }, this);
         }
 
-
-        var tips = data.map(function (value, index) {
+        let tips = data.map(function (value, index) {
             return (
                 <TroubleshootingTip
                     data={value}
@@ -58,7 +59,7 @@ class TroubleshootingTips extends Component {
                 <h5>Troubleshooting Tips</h5>
                 <hr />
                 {
-                    this.props.typeFilters.length > 0 ?
+                    tips.length > 0 ?
                         <ul>
                             {tips}
                         </ul>

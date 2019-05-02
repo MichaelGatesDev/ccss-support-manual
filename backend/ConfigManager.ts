@@ -9,6 +9,7 @@ export class ConfigManager {
     private appConfig!: AppConfig;
     private primarySpreadsheetConfig!: PrimarySpreadsheetConfig;
     private secondarySpreadsheetConfig!: SecondarySpreadsheetConfig;
+    private imagesConfig!: ImagesConfig;
 
     constructor() {
     }
@@ -17,7 +18,7 @@ export class ConfigManager {
         return new Promise(async (resolve, reject) => {
             let self = this;
 
-            // Create primary config
+            // Create app config
             await ConfigManager.createIfNotExistsAndLoad<AppConfig>(
                 'public/app-config.json',
                 AppConfig,
@@ -71,6 +72,25 @@ export class ConfigManager {
                     }
                     self.secondarySpreadsheetConfig = resultObj.loaded as SecondarySpreadsheetConfig;
                     console.log("Loaded secondary spreadsheet config");
+                }).catch(function (err) {
+                    return reject(err);
+                });
+
+
+            // Create images config
+            await ConfigManager.createIfNotExistsAndLoad<ImagesConfig>(
+                'public/images-config.json',
+                ImagesConfig,
+                [
+                    'public/images-config.json'
+                ]
+            )
+                .then(function (resultObj: any) {
+                    if (resultObj.created) {
+                        console.log("Created images config!");
+                    }
+                    self.imagesConfig = resultObj.loaded as ImagesConfig;
+                    console.log("Loaded images config");
                 }).catch(function (err) {
                     return reject(err);
                 });
@@ -136,7 +156,7 @@ export class ConfigManager {
         });
     }
 
-    public getAppConfig() {
+    public getAppConfig(): AppConfig {
         return this.appConfig;
     }
 
@@ -146,6 +166,10 @@ export class ConfigManager {
 
     public getSecondarySpreadsheetConfig(): SecondarySpreadsheetConfig {
         return this.secondarySpreadsheetConfig;
+    }
+
+    public getImagesConfig(): ImagesConfig {
+        return this.imagesConfig;
     }
 }
 
@@ -185,6 +209,17 @@ export class AppConfig extends ConfigBase {
     public deserialize(input: any): AppConfig {
         this.checkForProgramUpdates = input.checkForProgramUpdates;
         this.checkForDataUpdates = input.checkForDataUpdates;
+        return this;
+    }
+}
+
+export class ImagesConfig extends ConfigBase {
+    public checkForImageUpdates?: boolean = true;
+    public imagesDirectory?: string = 'public/images/';
+
+    public deserialize(input: any): AppConfig {
+        this.checkForImageUpdates = input.checkForImageUpdates;
+        this.imagesDirectory = input.imagesDirectory;
         return this;
     }
 }

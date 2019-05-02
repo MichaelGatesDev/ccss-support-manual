@@ -62,7 +62,7 @@ var ConfigManager = /** @class */ (function () {
                             switch (_a.label) {
                                 case 0:
                                     self = this;
-                                    // Create primary config
+                                    // Create app config
                                     return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/app-config.json', AppConfig, [
                                             'public/app-config.json'
                                         ])
@@ -76,7 +76,7 @@ var ConfigManager = /** @class */ (function () {
                                             return reject(err);
                                         })];
                                 case 1:
-                                    // Create primary config
+                                    // Create app config
                                     _a.sent();
                                     // Create primary config
                                     return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/primary-config.json', PrimarySpreadsheetConfig, [
@@ -113,6 +113,22 @@ var ConfigManager = /** @class */ (function () {
                                         })];
                                 case 3:
                                     // Create secondary config
+                                    _a.sent();
+                                    // Create images config
+                                    return [4 /*yield*/, ConfigManager.createIfNotExistsAndLoad('public/images-config.json', ImagesConfig, [
+                                            'public/images-config.json'
+                                        ])
+                                            .then(function (resultObj) {
+                                            if (resultObj.created) {
+                                                console.log("Created images config!");
+                                            }
+                                            self.imagesConfig = resultObj.loaded;
+                                            console.log("Loaded images config");
+                                        }).catch(function (err) {
+                                            return reject(err);
+                                        })];
+                                case 4:
+                                    // Create images config
                                     _a.sent();
                                     return [2 /*return*/, resolve()];
                             }
@@ -192,6 +208,9 @@ var ConfigManager = /** @class */ (function () {
     ConfigManager.prototype.getSecondarySpreadsheetConfig = function () {
         return this.secondarySpreadsheetConfig;
     };
+    ConfigManager.prototype.getImagesConfig = function () {
+        return this.imagesConfig;
+    };
     return ConfigManager;
 }());
 exports.ConfigManager = ConfigManager;
@@ -237,6 +256,22 @@ var AppConfig = /** @class */ (function (_super) {
     return AppConfig;
 }(ConfigBase));
 exports.AppConfig = AppConfig;
+var ImagesConfig = /** @class */ (function (_super) {
+    __extends(ImagesConfig, _super);
+    function ImagesConfig() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.checkForImageUpdates = true;
+        _this.imagesDirectory = 'public/images/';
+        return _this;
+    }
+    ImagesConfig.prototype.deserialize = function (input) {
+        this.checkForImageUpdates = input.checkForImageUpdates;
+        this.imagesDirectory = input.imagesDirectory;
+        return this;
+    };
+    return ImagesConfig;
+}(ConfigBase));
+exports.ImagesConfig = ImagesConfig;
 var GoogleSpreadsheetConfig = /** @class */ (function (_super) {
     __extends(GoogleSpreadsheetConfig, _super);
     function GoogleSpreadsheetConfig(configPath, docID, sheetPath) {

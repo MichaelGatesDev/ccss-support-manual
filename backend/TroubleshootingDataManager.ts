@@ -1,7 +1,7 @@
 import { TroubleshootingData } from "models/TroubleshootingData";
 import { RoomManager } from "RoomManager";
 
-class TroubleshootingDataManager {
+export class TroubleshootingDataManager {
 
     private roomManager: RoomManager;
     private troubleshootingData: TroubleshootingData[];
@@ -26,67 +26,69 @@ class TroubleshootingDataManager {
     }
 
 
-    public getTroubleshootingDataForRoom(roomID: string) {
+    public getTroubleshootingDataForRoom(buildingName: string, roomNumber: string) {
         let results: TroubleshootingData[] = [];
 
-        let room = this.roomManager.getRoomByID(roomID);
+        let room = this.roomManager.getRoom(buildingName, roomNumber);
 
         if (!room) return results; // no room with that ID found
 
         for (const td of this.getTroubleshootingData()) {
 
             // trouble data doesn't apply for this room
-            if (td.getBlacklistedRoomIDs().includes(roomID))
-                continue;
+            if (td.isRoomBlacklisted(buildingName, roomNumber)) continue;
 
             //TODO DON'T HARDCODE THSE IF POSSIBLE
 
             // whitelisted room
-            if (td.getWhitelistedRoomIDs().length > 0) {
-                if (!td.getWhitelistedRoomIDs().includes(roomID))
-                    continue;
+            if (td.isRoomWhitelisted(buildingName, roomNumber)) {
                 results.push(td);
+                continue;
             }
 
             // audio
             if (room.getAudio()) {
                 if (td.getTypes().includes('audio')) {
                     results.push(td);
+                    continue;
                 }
             }
             // projector
             if (room.getProjector()) {
                 if (td.getTypes().includes('projector')) {
                     results.push(td);
+                    continue;
                 }
             }
             // computer
             if (room.getTeachingStationComputer()) {
                 if (td.getTypes().includes('computer')) {
                     results.push(td);
+                    continue;
                 }
             }
             // dvd player
             if (room.getDVDPlayer()) {
                 if (td.getTypes().includes('dvd')) {
                     results.push(td);
+                    continue;
                 }
             }
             // printer
             if (room.getPrinter()) {
                 if (td.getTypes().includes('printer')) {
                     results.push(td);
+                    continue;
                 }
             }
 
             // if there are no types, it is general
-            if (td.getTypes().length === 0)
+            if (td.getTypes().length === 0) {
                 results.push(td);
+                continue;
+            }
         }
+
         return results;
     }
-}
-
-export {
-    TroubleshootingDataManager
 }

@@ -7,8 +7,8 @@ var TroubleshootingData = /** @class */ (function () {
         this.solution = solution;
         this.types = [];
         this.tags = [];
-        this.whitelistedRoomIDs = [];
-        this.blacklistedRoomIDs = [];
+        this.whitelistedRooms = [];
+        this.blacklistedRooms = [];
     }
     TroubleshootingData.prototype.setTypes = function (types) {
         this.types = types;
@@ -17,10 +17,10 @@ var TroubleshootingData = /** @class */ (function () {
         this.tags = tags;
     };
     TroubleshootingData.prototype.addWhitelistedRoom = function (room) {
-        this.whitelistedRoomIDs.push(room.getID());
+        this.whitelistedRooms.push(room.getSimplified());
     };
     TroubleshootingData.prototype.addBlacklistedRoom = function (room) {
-        this.blacklistedRoomIDs.push(room.getID());
+        this.blacklistedRooms.push(room.getSimplified());
     };
     TroubleshootingData.prototype.getTitle = function () {
         return this.title;
@@ -37,11 +37,27 @@ var TroubleshootingData = /** @class */ (function () {
     TroubleshootingData.prototype.getTags = function () {
         return this.tags;
     };
-    TroubleshootingData.prototype.getWhitelistedRoomIDs = function () {
-        return this.whitelistedRoomIDs;
+    TroubleshootingData.prototype.getWhitelistedRooms = function () {
+        return this.whitelistedRooms;
     };
-    TroubleshootingData.prototype.getBlacklistedRoomIDs = function () {
-        return this.blacklistedRoomIDs;
+    TroubleshootingData.prototype.isRoomWhitelisted = function (buildingName, roomNumber) {
+        for (var _i = 0, _a = this.whitelistedRooms; _i < _a.length; _i++) {
+            var room = _a[_i];
+            if (room.getBuildingName() === buildingName && room.getRoomNumber() === roomNumber)
+                return true;
+        }
+        return false;
+    };
+    TroubleshootingData.prototype.getBlacklistedRooms = function () {
+        return this.blacklistedRooms;
+    };
+    TroubleshootingData.prototype.isRoomBlacklisted = function (buildingName, roomNumber) {
+        for (var _i = 0, _a = this.blacklistedRooms; _i < _a.length; _i++) {
+            var room = _a[_i];
+            if (room.getBuildingName() === buildingName && room.getRoomNumber() === roomNumber)
+                return true;
+        }
+        return false;
     };
     return TroubleshootingData;
 }());

@@ -1,14 +1,14 @@
-import { Room } from './Room';
+import { Room, SimpleRoom } from './Room';
 
 class TroubleshootingData {
+
     private title: string;
     private description: string;
     private solution: string;
     private types: string[];
     private tags: string[];
-    private whitelistedRoomIDs: string[];
-    private blacklistedRoomIDs: string[];
-
+    private whitelistedRooms: SimpleRoom[];
+    private blacklistedRooms: SimpleRoom[];
 
     constructor(title: string, description: string, solution: string) {
         this.title = title;
@@ -16,8 +16,8 @@ class TroubleshootingData {
         this.solution = solution;
         this.types = [];
         this.tags = [];
-        this.whitelistedRoomIDs = [];
-        this.blacklistedRoomIDs = [];
+        this.whitelistedRooms = [];
+        this.blacklistedRooms = [];
     }
 
     public setTypes(types: string[]) {
@@ -29,40 +29,54 @@ class TroubleshootingData {
     }
 
     public addWhitelistedRoom(room: Room) {
-        this.whitelistedRoomIDs.push(room.getID());
+        this.whitelistedRooms.push(room.getSimplified());
     }
 
     public addBlacklistedRoom(room: Room) {
-        this.blacklistedRoomIDs.push(room.getID());
+        this.blacklistedRooms.push(room.getSimplified());
     }
 
-    public getTitle() {
+    public getTitle(): string {
         return this.title;
     }
 
 
-    public getDescription() {
+    public getDescription(): string {
         return this.description;
     }
 
-    public getSolution() {
+    public getSolution(): string {
         return this.solution;
     }
 
-    public getTypes() {
+    public getTypes(): string[] {
         return this.types;
     }
 
-    public getTags() {
+    public getTags(): string[] {
         return this.tags;
     }
 
-    public getWhitelistedRoomIDs() {
-        return this.whitelistedRoomIDs;
+    public getWhitelistedRooms(): SimpleRoom[] {
+        return this.whitelistedRooms;
     }
 
-    public getBlacklistedRoomIDs() {
-        return this.blacklistedRoomIDs;
+    public isRoomWhitelisted(buildingName: string, roomNumber: string) {
+        for (const room of this.whitelistedRooms) {
+            if (room.getBuildingName() === buildingName && room.getRoomNumber() === roomNumber) return true;
+        }
+        return false;
+    }
+
+    public getBlacklistedRooms(): SimpleRoom[] {
+        return this.blacklistedRooms;
+    }
+
+    public isRoomBlacklisted(buildingName: string, roomNumber: string) {
+        for (const room of this.blacklistedRooms) {
+            if (room.getBuildingName() === buildingName && room.getRoomNumber() === roomNumber) return true;
+        }
+        return false;
     }
 }
 

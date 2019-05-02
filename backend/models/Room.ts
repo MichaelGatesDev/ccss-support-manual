@@ -4,7 +4,7 @@ import { app } from '../App';
 /**
  * A room within a building
  */
-class Room {
+export class Room {
 
     /**
      * The actual Building object which this room is contained within
@@ -100,12 +100,12 @@ class Room {
         this.type = type;
     }
 
-    public getBuilding(): Building | undefined {
-        return app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
+    public getSimplified(): SimpleRoom {
+        return new SimpleRoom(this.buildingName, this.number);
     }
 
-    public getID(): string {
-        return this.getBuilding()!.getInternalName() + "-" + this.number;
+    public getBuilding(): Building | undefined {
+        return app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
     }
 
     public getDisplayName(): string {
@@ -308,7 +308,7 @@ class Projector { }
 /**
  * 
  */
-class Audio {
+export class Audio {
 
     private systemDependent: boolean;
 
@@ -335,7 +335,7 @@ class Screen {
 /**
  * A Computer
  */
-class Computer {
+export class Computer {
 
     /**
      *  The physical structure of a computer
@@ -480,16 +480,23 @@ class Phone {
     public hasSpeaker() { return this.containsSpeaker; }
 }
 
-export {
-    Room,
-    // FurnitureItem,
-    // FurnitureSetup,
-    Projector,
-    Audio,
-    Screen,
-    Computer,
-    DocumentCamera,
-    DVDPlayer,
-    Printer,
-    Phone,
+/**
+ * Represents a very simplified room structure
+ */
+export class SimpleRoom {
+    private buildingName: string;
+    private roomNumber: string;
+
+    constructor(buildingName: string, roomNumber: string) {
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
+    }
+
+    public getBuildingName() {
+        return this.buildingName;
+    }
+
+    public getRoomNumber() {
+        return this.roomNumber;
+    }
 }

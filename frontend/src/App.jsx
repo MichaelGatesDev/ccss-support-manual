@@ -23,7 +23,8 @@ class App extends Component {
           {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
           {/* <Route path="/buildings/:building" component={Buildings} /> */}
           {/* <Route path="/buildings/:building/rooms" component={Rooms} /> */}
-          <Route path="/rooms/:roomID" component={Room} />
+          {/* <Route path="/rooms/:roomID" component={Room} /> */}
+          <Route path="/buildings/:buildingName/rooms/:roomNumber" component={Room} />
           <footer>
             <Footer />
           </footer>

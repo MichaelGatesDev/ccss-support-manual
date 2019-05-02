@@ -7,7 +7,7 @@ const router: Router = Router();
 import buildingsRoute from './buildings';
 router.use('/buildings/', buildingsRoute);
 
-import roomsRoute from './buildings';
+import roomsRoute from './rooms';
 router.use('/rooms/', roomsRoute);
 
 import imagesRoute from './images';
@@ -22,6 +22,7 @@ router.get('/', function (req: Request, res: Response, next: NextFunction) {
 });
 
 
+/*
 router.get('/getbuilding', function (req: Request, res: Response, next: NextFunction) {
 
   if (!req.query.roomID) {
@@ -31,5 +32,6 @@ router.get('/getbuilding', function (req: Request, res: Response, next: NextFunc
 
   res.json(app.getDataManager().getRoomManager().getRoomByID(req.query.roomID));
 });
+*/
 
 export = router;

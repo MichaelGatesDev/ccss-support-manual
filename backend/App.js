@@ -144,23 +144,7 @@ var app = new App();
 exports.app = app;
 app.initialize();
 exports.default = app.expressApp;
-/*    // load primary(troubleshooting) spreadsheet
-    console.log("Loading data from primary spreadsheet...");
-    return dataHelper.loadPrimarySpreadsheet(appConfig.primarySpreadsheet);
-  })
-  // after we load data from the primary spreadsheet
-  .then(function () {
-    console.log("Finished loading data from primary spreadsheet");
-
-    // load secondary(troubleshooting) spreadsheet
-    console.log("Loading data from secondary spreadsheet...");
-    return dataHelper.loadSecondarySpreadsheet(appConfig.secondarySpreadsheet);
-  })
-  // after we load data from the secondary (troubleshooting) spreadsheet
-  .then(function () {
-    console.log("Finished loading datafrom secondary spreadsheet");
-
-    // load images
+/*
     console.log("Loading images...");
     return dataHelper.loadImages(appConfig.images_directory);
   })

@@ -15,11 +15,11 @@ var Room = /** @class */ (function () {
         this.number = number;
         this.type = type;
     }
+    Room.prototype.getSimplified = function () {
+        return new SimpleRoom(this.buildingName, this.number);
+    };
     Room.prototype.getBuilding = function () {
         return App_1.app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
-    };
-    Room.prototype.getID = function () {
-        return this.getBuilding().getInternalName() + "-" + this.number;
     };
     Room.prototype.getDisplayName = function () {
         return this.getBuilding().getOfficialName() + " " + this.number.toLocaleUpperCase();
@@ -172,7 +172,6 @@ var Projector = /** @class */ (function () {
     }
     return Projector;
 }());
-exports.Projector = Projector;
 /**
  *
  */
@@ -197,7 +196,6 @@ var Screen = /** @class */ (function () {
     }
     return Screen;
 }());
-exports.Screen = Screen;
 /**
  * A Computer
  */
@@ -229,7 +227,6 @@ var DocumentCamera = /** @class */ (function () {
     }
     return DocumentCamera;
 }());
-exports.DocumentCamera = DocumentCamera;
 /**
  * A DVD Player
  */
@@ -246,7 +243,6 @@ var DVDPlayer = /** @class */ (function () {
     DVDPlayer.prototype.getType = function () { return this.type; };
     return DVDPlayer;
 }());
-exports.DVDPlayer = DVDPlayer;
 /**
  * A printer
  */
@@ -269,7 +265,6 @@ var Printer = /** @class */ (function () {
     Printer.prototype.getCatridgeType = function () { return this.cartridgeType; };
     return Printer;
 }());
-exports.Printer = Printer;
 /**
  * A Phone (like cellphone but older)
  */
@@ -298,4 +293,20 @@ var Phone = /** @class */ (function () {
     Phone.prototype.hasSpeaker = function () { return this.containsSpeaker; };
     return Phone;
 }());
-exports.Phone = Phone;
+/**
+ * Represents a very simplified room structure
+ */
+var SimpleRoom = /** @class */ (function () {
+    function SimpleRoom(buildingName, roomNumber) {
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
+    }
+    SimpleRoom.prototype.getBuildingName = function () {
+        return this.buildingName;
+    };
+    SimpleRoom.prototype.getRoomNumber = function () {
+        return this.roomNumber;
+    };
+    return SimpleRoom;
+}());
+exports.SimpleRoom = SimpleRoom;

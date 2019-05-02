@@ -5,36 +5,48 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 var ImageManager = /** @class */ (function () {
     function ImageManager() {
-        this.images = [];
+        this.buildingImages = [];
         this.roomImages = [];
     }
-    /**
-     * Adds a image to the array
-     * @param image Image to add
-     */
-    ImageManager.prototype.addImage = function (image) {
-        this.images.push(image);
+    ImageManager.prototype.addBuildingImages = function (images) {
+        this.buildingImages.push(images);
     };
-    /**
-     * Removes a image from the array
-     * @param image Image to remove
-     */
-    ImageManager.prototype.removeImage = function (image) {
-        var index = this.images.indexOf(image, 0);
-        if (index > -1) {
-            this.images.splice(index, 1);
+    ImageManager.prototype.addRoomImages = function (images) {
+        this.roomImages.push(images);
+    };
+    ImageManager.prototype.getImagesForBuilding = function (buildingName) {
+        for (var _i = 0, _a = this.buildingImages; _i < _a.length; _i++) {
+            var images = _a[_i];
+            if (images.getBuildingID() === buildingName)
+                return images;
         }
     };
-    /**
-     * Gets all images
-     */
-    ImageManager.prototype.getImages = function () {
-        return this.images;
+    ImageManager.prototype.getImagesForRoom = function (buildingName, roomNumber) {
+        for (var _i = 0, _a = this.roomImages; _i < _a.length; _i++) {
+            var images = _a[_i];
+            if (images.getBuildingName() === buildingName && images.getRoomNumber() === roomNumber)
+                return images;
+        }
     };
-    ImageManager.prototype.setRoomImages = function (roomID, images) {
+    ImageManager.prototype.getTotalSize = function () {
+        var size = 0;
+        for (var _i = 0, _a = this.roomImages; _i < _a.length; _i++) {
+            var images = _a[_i];
+            size += images.size();
+        }
+        return size;
     };
-    ImageManager.prototype.getImagesForRoom = function (room) {
-        return null;
+    ImageManager.prototype.getAllImages = function () {
+        return {
+            buildingImages: this.buildingImages,
+            roomImages: this.roomImages
+        };
+    };
+    ImageManager.prototype.getBuildingImages = function () {
+        return this.buildingImages;
+    };
+    ImageManager.prototype.getRoomImages = function () {
+        return this.roomImages;
     };
     return ImageManager;
 }());
@@ -49,15 +61,51 @@ var Image = /** @class */ (function () {
     return Image;
 }());
 exports.Image = Image;
+var BuildingImages = /** @class */ (function () {
+    function BuildingImages(buildingName) {
+        this.buildingName = buildingName;
+        this.rootImages = [];
+        this.panoramicImages = [];
+    }
+    BuildingImages.prototype.getBuildingID = function () {
+        return this.buildingName;
+    };
+    BuildingImages.prototype.addMainImage = function (image) {
+        this.rootImages.push(image);
+    };
+    BuildingImages.prototype.getMainImages = function () {
+        return this.rootImages;
+    };
+    BuildingImages.prototype.addPanoramicImage = function (image) {
+        this.panoramicImages.push(image);
+    };
+    BuildingImages.prototype.getPanoramicImages = function () {
+        return this.panoramicImages;
+    };
+    BuildingImages.prototype.getAllImages = function () {
+        return this.rootImages
+            .concat(this.panoramicImages);
+    };
+    BuildingImages.prototype.size = function () {
+        return (this.rootImages.length +
+            this.panoramicImages.length);
+    };
+    return BuildingImages;
+}());
+exports.BuildingImages = BuildingImages;
 var RoomImages = /** @class */ (function () {
-    function RoomImages(roomID) {
-        this.roomID = roomID;
+    function RoomImages(buildingName, roomNumber) {
+        this.buildingName = buildingName;
+        this.roomNumber = roomNumber;
         this.rootImages = [];
         this.panoramicImages = [];
         this.equipmentImages = [];
     }
-    RoomImages.prototype.getRoomID = function () {
-        return this.roomID;
+    RoomImages.prototype.getBuildingName = function () {
+        return this.buildingName;
+    };
+    RoomImages.prototype.getRoomNumber = function () {
+        return this.roomNumber;
     };
     RoomImages.prototype.addMainImage = function (image) {
         this.rootImages.push(image);

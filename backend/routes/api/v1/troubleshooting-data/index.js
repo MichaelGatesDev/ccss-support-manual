@@ -5,17 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var express_1 = require("express");
 var App_1 = require("../../../../App");
 var router = express_1.Router();
-var all_1 = __importDefault(require("./all"));
-router.use('/', all_1.default);
-router.param('roomID', function (req, res, next, id) {
-    var troubleshootingData = App_1.app.getDataManager().getTroubleshootingDataManager().getTroubleshootingDataForRoom(id);
-    if (troubleshootingData) {
-        req.troubleshootingData = troubleshootingData;
-        next();
-        return;
-    }
-    next(new Error('Failed to find room: ' + id));
+router.get("/", function (req, res) {
+    var tdm = App_1.app.getDataManager().getTroubleshootingDataManager();
+    res.json(tdm.getTroubleshootingData());
 });
-var single = require('./single');
-router.use('/:roomID', single);
+var buildings_1 = __importDefault(require("./buildings"));
+router.use('/buildings', buildings_1.default);
 module.exports = router;

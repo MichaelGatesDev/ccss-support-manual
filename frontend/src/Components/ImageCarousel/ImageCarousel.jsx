@@ -15,7 +15,7 @@ class ImageCarousel extends Component {
 
     render() {
 
-        var indicators = this.props.images.map((image, index) => {
+        var indicators = this.props.images.map((_image, index) => {
             return (
                 <li data-target={"#" + this.props.id} data-slide-to={index} className={index === 0 ? 'active' : ''} key={index}></li>
             );

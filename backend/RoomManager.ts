@@ -1,7 +1,6 @@
 import { BuildingManager } from "./BuildingManager";
 
 import { Room } from "./models/Room";
-import { Building } from "./models/Building";
 
 /**
  * A utility class for managing rooms
@@ -34,7 +33,7 @@ class RoomManager {
      * @param buildingName The name of the building
      * @param roomNumber The room number
      */
-    public getRoomByBuildingNameAndNumber(buildingName: string, roomNumber: string): Room | undefined {
+    public getRoom(buildingName: string, roomNumber: string): Room | undefined {
         for (const room of this.getRooms()) {
             if (
                 room.getBuilding()!.hasName(buildingName) &&
@@ -42,18 +41,6 @@ class RoomManager {
             )
                 return room;
         }
-    }
-
-    /**
-     * Gets a room by its ID
-     * @param roomID The ID of the room to get
-     */
-    public getRoomByID(roomID: string) {
-        for (const room of this.getRooms()) {
-            if (room.getID() === roomID)
-                return room;
-        }
-        return null;
     }
 }
 
