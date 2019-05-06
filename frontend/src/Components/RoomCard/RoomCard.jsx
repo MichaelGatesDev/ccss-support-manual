@@ -23,14 +23,14 @@ class RoomCard extends Component {
 
         var coverImage = "img/300x200.png";
         if (this.props.images) {
-            if (this.props.images.mainImages && this.props.images.mainImages.length > 0) {
-                coverImage = this.props.images.mainImages[0];
+            if (this.props.images.rootImages && this.props.images.rootImages.length > 0) {
+                coverImage = this.props.images.rootImages[0].url;
             }
         }
 
         return (
             <div className="RoomCard-Component">
-                <Link to={"rooms/" + this.props.room.id} target="_blank">
+                <Link to={"buildings/" + this.props.room.buildingName + "/rooms/" + this.props.room.number} target="_blank">
                     <div className="card">
                         <img className="card-img-top" src={coverImage} alt={"Image of " + this.getTitle()} />
                         <div className="card-body">

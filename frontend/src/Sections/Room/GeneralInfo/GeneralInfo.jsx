@@ -67,7 +67,7 @@ class GeneralInfo extends Component {
                             </div>
                             <div className="row">
                                 <div className="col text-center">
-                                    <p className="capitalized">{parseInt(this.props.room.extension) === -1 ? 'N/A' : this.props.room.extension}</p>
+                                    <p className="capitalized">{this.props.room.phone ? this.props.room.phone.extension : 'N/A'}</p>
                                 </div>
                             </div>
                         </div>

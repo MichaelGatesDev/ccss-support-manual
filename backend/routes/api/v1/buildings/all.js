@@ -1,13 +1,8 @@
-const express = require('express');
-const router = express.Router({
-    mergeParams: true
+"use strict";
+var express_1 = require("express");
+var App_1 = require("../../../../App");
+var router = express_1.Router();
+router.get('/', function (req, res, next) {
+    res.json(App_1.app.getDataManager().getBuildingManager().getBuildings());
 });
-
-var dataHelper = require('../../../../data-helper');
-
-
-router.get('/', (req, res, next) => {
-    res.json(dataHelper.getAllBuildings());
-});
-
 module.exports = router;

@@ -1,23 +1,14 @@
-var express = require('express');
-var router = express.Router();
-
-var dataHelper = require('../../../../data-helper');
-
-const all = require('./all');
-router.use('/', all);
-
-router.param('roomID', function (req, res, next, id) {
-    var troubleshootingData = dataHelper.getTroubleshootingDataForRoom(id);
-    if (troubleshootingData) {
-        req.troubleshootingData = troubleshootingData;
-        next();
-        return;
-    }
-    console.log(err);
-    next(new Error('Failed to find room: ' + id));
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var express_1 = require("express");
+var App_1 = require("../../../../App");
+var router = express_1.Router();
+router.get("/", function (req, res) {
+    var tdm = App_1.app.getDataManager().getTroubleshootingDataManager();
+    res.json(tdm.getTroubleshootingData());
 });
-
-const single = require('./single');
-router.use('/:roomID', single);
-
+var buildings_1 = __importDefault(require("./buildings"));
+router.use('/buildings', buildings_1.default);
 module.exports = router;

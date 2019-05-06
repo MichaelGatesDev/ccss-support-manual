@@ -12,39 +12,45 @@ class RoomCardsGrid extends Component {
         };
 
         this.getParentBuilding = this.getParentBuilding.bind(this);
-        this.getImages = this.getImages.bind(this);
+        this.getImagesForRoom = this.getImagesForRoom.bind(this);
     }
 
     componentDidMount() {
     }
 
+
+
     getParentBuilding(roomObj) {
         for (const building of this.props.buildings) {
             for (const room of building.rooms) {
-                if (room.id === roomObj.id) return building;
+                if (room.buildingName === roomObj.buildingName && room.number === roomObj.number) return building;
             }
         }
         return null;
     }
 
-    getImages(room) {
-        for (const item of this.props.images) {
-            if (item.roomID === room.id) {
+    getImagesForRoom(buildingName, roomNumber) {
+        let roomImages = this.props.images.roomImages;
+        for (const item of roomImages) {
+            if (
+                item.buildingName === buildingName &&
+                item.roomNumber === roomNumber
+            ) {
                 return item;
             }
         }
-        return [];
     }
 
     render() {
 
-        const items = this.props.rooms.map((room) => {
+        const items = this.props.rooms.map((room, index) => {
+            let parentBuilding = this.getParentBuilding(room);
             return (
-                <li key={room.id}>
+                <li key={index}>
                     <RoomCard
                         room={room}
-                        building={this.getParentBuilding(room)}
-                        images={this.getImages(room)}
+                        building={parentBuilding}
+                        images={this.getImagesForRoom(parentBuilding.internalName, room.number)}
                     />
                 </li>
             );

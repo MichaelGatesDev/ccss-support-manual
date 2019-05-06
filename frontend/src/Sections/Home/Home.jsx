@@ -33,13 +33,13 @@ class Home extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    buildings: [...this.state.buildings, ...data],
+                    buildings: data,
                 }, function () {
                     this.fetchAllImages();
                 });
             }).catch((error) => {
-                console.log("Failed to fetch buildings");
-                console.log(error);
+                console.error("Failed to fetch buildings");
+                console.error(error);
             });
     }
 
@@ -53,8 +53,8 @@ class Home extends Component {
                     loading: false,
                 });
             }).catch((error) => {
-                console.log(error);
-                console.log("Failed to fetch room images");
+                console.error("Failed to fetch room images");
+                console.error(error);
             });
     }
 
@@ -70,7 +70,7 @@ class Home extends Component {
     getParentBuilding(roomObj) {
         for (const building of this.state.buildings) {
             for (const room of building.rooms) {
-                if (room.id === roomObj.id) return building;
+                if (room.buildingName === roomObj.buildingName && room.number === roomObj.number) return building;
             }
         }
         return null;
