@@ -9,6 +9,7 @@ test('creates a building', () => {
         buildingOfficialName,
         buildingNicknames
     );
+    expect(building);
 });
 
 test('sets internal name', () => {
