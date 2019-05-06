@@ -1,13 +1,16 @@
+# ========================================================== #
+
 # No backend js files because we use typescript
-backend/*.js
+backend/**/*.js
 # No backend public data
 backend/public/
-
+# Allow typescript config
 !backend/tsconfig.json
 
 # Final application directory after build
 app/
 
+# ========================================================== #
 
 # Created by https://www.gitignore.io/api/node,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,visualstudiocode
