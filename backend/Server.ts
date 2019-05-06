@@ -1,10 +1,6 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
-import expressApp from './App';
+import expressApp, { app } from './App';
 
 var debug = require('debug')('backend:server');
 var http = require('http');
@@ -91,3 +87,5 @@ function onListening() {
 
   console.log(`Server running on ${bind}`);
 }
+
+app.initialize();

@@ -6,8 +6,6 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
 import { DataManager } from './DataManager';
-// import config = require('./config');
-// import gdriveDownloader = require('./gdrive-downloader');
 
 import indexRoute from "./routes/index";
 
@@ -116,27 +114,7 @@ class App {
 }
 
 const app = new App();
-app.initialize();
-
 export default app.expressApp;
 export { app };
-
-
-/*    
-    console.log("Loading images...");
-    return dataHelper.loadImages(appConfig.images_directory);
-  })
-  // load all images
-  .then(function () {
-    console.log("Loaded application images");
-  })
-  // catch any errors
-  .catch(function (err) {
-    console.log(err);
-    process.exit();
-    return;
-  });
-*/
-
 
 // ------------------------------------------------------ \\

@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 "use strict";
-/**
- * Module dependencies.
- */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var App_1 = __importDefault(require("./App"));
+var App_1 = __importStar(require("./App"));
 var debug = require('debug')('backend:server');
 var http = require('http');
 /**
@@ -75,3 +76,4 @@ function onListening() {
     debug('Listening on ' + bind);
     console.log("Server running on " + bind);
 }
+App_1.app.initialize();
