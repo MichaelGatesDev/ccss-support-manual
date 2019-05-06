@@ -25,4 +25,4 @@ router.get("/:roomNumber", function (req: any, res) {
     res.json(app.getDataManager().getImageManager().getImagesForRoom(req.building.internalName, req.room.number));
 });
 
-export = router;
+export default router;

@@ -10,4 +10,4 @@ router.get('/', function (req, res, next) {
   res.send("This is the primary API route");
 });
 
-export = router;
+export default router;

@@ -9,4 +9,4 @@ router.get('/', (req: any, res: Response, next: NextFunction) => {
 import roomsRoute from './rooms';
 router.use('/rooms', roomsRoute);
 
-export = router;
+export default router;

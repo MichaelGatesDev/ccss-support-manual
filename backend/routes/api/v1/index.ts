@@ -33,4 +33,4 @@ router.get('/getbuilding', function (req: Request, res: Response, next: NextFunc
 });
 */
 
-export = router;
+export default router;

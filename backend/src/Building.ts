@@ -3,7 +3,7 @@ import { Room } from './Room';
 /**
  * Represents a building which contains rooms 
  */
-class Building {
+export class Building {
 
     /**
      * Official Name of the building. (e.g. "Myers Fine Arts Building")
@@ -71,8 +71,12 @@ class Building {
      * 
      * @param room Room to add
      */
-    public addRoom(room: Room) {
-        this.rooms.push(room);
+    public addRoom(room: Room): boolean {
+        if (!this.rooms.includes(room)) {
+            this.rooms.push(room);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -118,9 +122,3 @@ class Building {
         return false;
     }
 }
-
-export {
-    Building
-}
-
-export * from './Building';

@@ -7,4 +7,4 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.json(app.getDataManager().getBuildingManager().getBuildings());
 });
 
-export = router;
+export default router;
