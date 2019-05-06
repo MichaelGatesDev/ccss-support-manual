@@ -1,11 +1,11 @@
 {
+  "bin": "Server.js",
   "name": "backend",
   "version": "1.3.0",
   "private": true,
-  "bin": "./bin/www",
   "scripts": {
     "start": "tsc && node ./Server",
-    "build": "pkg . -t windows,linux,osx -o application",
+    "build": "tsc && pkg . -t linux,osx,windows -o application",
     "tsc": "tsc"
   },
   "dependencies": {

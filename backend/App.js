@@ -44,8 +44,6 @@ var path_1 = __importDefault(require("path"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var morgan_1 = __importDefault(require("morgan"));
 var DataManager_1 = require("./DataManager");
-// import config = require('./config');
-// import gdriveDownloader = require('./gdrive-downloader');
 var index_1 = __importDefault(require("./routes/index"));
 var App = /** @class */ (function () {
     function App() {
@@ -142,21 +140,5 @@ var App = /** @class */ (function () {
 }());
 var app = new App();
 exports.app = app;
-app.initialize();
 exports.default = app.expressApp;
-/*
-    console.log("Loading images...");
-    return dataHelper.loadImages(appConfig.images_directory);
-  })
-  // load all images
-  .then(function () {
-    console.log("Loaded application images");
-  })
-  // catch any errors
-  .catch(function (err) {
-    console.log(err);
-    process.exit();
-    return;
-  });
-*/
 // ------------------------------------------------------ \\
