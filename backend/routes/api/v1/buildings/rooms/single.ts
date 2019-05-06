@@ -6,4 +6,4 @@ router.get('/', function (req: any, res: Response, next: NextFunction) {
     res.json(req.room);
 });
 
-export = router;
+export default router;

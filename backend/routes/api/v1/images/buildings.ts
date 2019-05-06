@@ -27,4 +27,4 @@ router.get("/:buildingName", function (req: any, res) {
 import roomsRoute from './rooms';
 router.use('/:buildingName/rooms', roomsRoute);
 
-export = router;
+export default router;

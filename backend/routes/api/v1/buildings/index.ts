@@ -19,4 +19,4 @@ router.use('/', all);
 import single from './single';
 router.use('/:buildingName', single);
 
-export = router;
+export default router;

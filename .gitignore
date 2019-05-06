@@ -6,6 +6,8 @@ backend/**/*.js
 backend/public/
 # Allow typescript config
 !backend/tsconfig.json
+# Allow babel config
+!backend/babel.config.js
 
 # Final application directory after build
 app/

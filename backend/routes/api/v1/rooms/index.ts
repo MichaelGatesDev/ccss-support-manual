@@ -7,4 +7,4 @@ router.get('/', function (req: Request, res: Response, next: NextFunction) {
     res.json(app.getDataManager().getRoomManager().getRooms())
 });
 
-export = router;
+export default router;

@@ -10,4 +10,4 @@ router.use('/api', apiRoute);
 //   res.send("This is the index page");
 // });
 
-export = router;
+export default router;

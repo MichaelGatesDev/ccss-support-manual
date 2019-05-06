@@ -11,4 +11,4 @@ router.get("/", function (req, res) {
 import buildingsRoute from './buildings';
 router.use('/buildings', buildingsRoute);
 
-export = router;
+export default router;

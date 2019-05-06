@@ -27,4 +27,4 @@ router.get("/:roomNumber", function (req: any, res) {
     res.json(tdm.getTroubleshootingDataForRoom(req.building.internalName, req.room.number));
 });
 
-export = router;
+export default router;

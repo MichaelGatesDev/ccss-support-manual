@@ -3,9 +3,6 @@ import { Building } from 'src/Building';
 
 const router: Router = Router();
 
-const all = require('./all');
-router.use('/', all);
-
 router.param('roomNumber', function (req: any, res: Response, next: NextFunction, number: string) {
     let building: Building = req.building;
     let room = building.getRoom(number);
@@ -17,10 +14,10 @@ router.param('roomNumber', function (req: any, res: Response, next: NextFunction
     next(new Error('Failed to find room: ' + number));
 });
 
+import all from './all';
+router.use('/', all);
 
-const single = require('./single');
+import single from './single';
 router.use('/:roomNumber', single);
 
-// export const index: Router = router;
-
-export = router;
+export default router;
