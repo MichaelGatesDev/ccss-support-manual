@@ -84,11 +84,13 @@ export class Building {
      * 
      * @param room Room to remove
      */
-    public removeRoom(room: Room) {
+    public removeRoom(room: Room): boolean {
+        if (!this.rooms.includes(room)) return false;
         const index = this.rooms.indexOf(room, 0);
         if (index > -1) {
             this.rooms.splice(index, 1);
         }
+        return true;
     }
 
     /**

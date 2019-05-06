@@ -104,6 +104,10 @@ export class Room {
         return new SimpleRoom(this.buildingName, this.number);
     }
 
+    public getBuildingName(): string {
+        return this.buildingName;
+    }
+
     public getBuilding(): Building | undefined {
         return app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
     }
