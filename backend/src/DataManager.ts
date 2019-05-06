@@ -4,11 +4,11 @@ import fs = require('fs');
 import { ConfigManager, GoogleSpreadsheetConfig } from './ConfigManager';
 import { BuildingManager } from './BuildingManager';
 import { RoomManager } from './RoomManager';
-import { Building } from './models/Building';
-import { Room, Computer, Audio } from './models/Room';
+import { Building } from '../models/Building';
+import { Room, Computer, Audio } from '../models/Room';
 import { StringUtils } from './StringUtils';
 import { ImageManager, Image, RoomImages } from './ImageManager';
-import { TroubleshootingData } from './models/TroubleshootingData';
+import { TroubleshootingData } from '../models/TroubleshootingData';
 import { TroubleshootingDataManager } from './TroubleshootingDataManager';
 import { GoogleDriveDownloader } from './Downloader';
 

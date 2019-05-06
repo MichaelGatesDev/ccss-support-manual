@@ -7,7 +7,7 @@ import logger from 'morgan';
 
 import { DataManager } from './DataManager';
 
-import indexRoute from "./routes/index";
+import indexRoute from "../routes/index";
 
 class App {
 

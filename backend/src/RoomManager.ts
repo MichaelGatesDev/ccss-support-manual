@@ -1,6 +1,6 @@
 import { BuildingManager } from "./BuildingManager";
 
-import { Room } from "./models/Room";
+import { Room } from "../models/Room";
 
 /**
  * A utility class for managing rooms
