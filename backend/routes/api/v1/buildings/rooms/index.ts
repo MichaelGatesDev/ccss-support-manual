@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { Building } from 'models/Building';
+import { Building } from 'src/Building';
 
 const router: Router = Router();
 

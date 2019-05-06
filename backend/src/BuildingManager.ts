@@ -1,4 +1,4 @@
-import { Building } from "../models/Building";
+import { Building } from "./Building";
 
 /**
  * A utility class for managing buildings

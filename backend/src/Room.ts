@@ -1,5 +1,5 @@
 import { Building } from './Building';
-import { app } from '../src/App';
+import { app } from './App';
 
 /**
  * A room within a building

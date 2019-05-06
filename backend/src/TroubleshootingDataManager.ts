@@ -1,4 +1,4 @@
-import { TroubleshootingData } from "models/TroubleshootingData";
+import { TroubleshootingData } from "src/TroubleshootingData";
 import { RoomManager } from "src/RoomManager";
 
 export class TroubleshootingDataManager {
