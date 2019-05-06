@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import expressApp, { app } from './App';
+import expressApp, { app } from './src/App';
 
 var debug = require('debug')('backend:server');
 var http = require('http');
