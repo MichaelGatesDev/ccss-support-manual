@@ -66,7 +66,7 @@ class App {
 
   public setupViews(): void {
     // view engine setup
-    this.expressApp.set('views', path.join(__dirname, 'views'));
+    this.expressApp.set('views', path.join(__dirname, '../views'));
     this.expressApp.set('view engine', 'ejs');
   }
 
