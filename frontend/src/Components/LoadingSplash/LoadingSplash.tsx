@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './LoadingSplash.scss';
 
-class LoadingSplash extends Component {
+interface Props { }
+interface State { }
 
-    constructor(props) {
+class LoadingSplash extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {

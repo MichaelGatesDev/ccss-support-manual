@@ -1,11 +1,23 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './RoomCardsGrid.scss';
 
-import RoomCard from "../../Components/RoomCard/RoomCard";
+import RoomCard from "../RoomCard/RoomCard";
 
-class RoomCardsGrid extends Component {
+interface Props {
+    //TODO make explicit
+    buildings: any[];
+    rooms: any[];
+    images: any;
+}
 
-    constructor(props) {
+interface State {
+}
+
+class RoomCardsGrid extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -20,7 +32,7 @@ class RoomCardsGrid extends Component {
 
 
 
-    getParentBuilding(roomObj) {
+    getParentBuilding(roomObj: any) {
         for (const building of this.props.buildings) {
             for (const room of building.rooms) {
                 if (room.buildingName === roomObj.buildingName && room.number === roomObj.number) return building;
@@ -29,7 +41,7 @@ class RoomCardsGrid extends Component {
         return null;
     }
 
-    getImagesForRoom(buildingName, roomNumber) {
+    getImagesForRoom(buildingName: string, roomNumber: string) {
         let roomImages = this.props.images.roomImages;
         for (const item of roomImages) {
             if (

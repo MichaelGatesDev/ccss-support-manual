@@ -1,11 +1,21 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import { Link } from 'react-router-dom'
 
 import './RoomCard.scss';
 
-class RoomCard extends Component {
+interface Props {
+    building: any; // TODO make this explicit
+    room: any; // TODO make this explicit
+    images: any; // TODO make this explicit
+}
 
-    constructor(props) {
+interface State { }
+
+class RoomCard extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {

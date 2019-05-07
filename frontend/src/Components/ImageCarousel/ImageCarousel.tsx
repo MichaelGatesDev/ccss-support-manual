@@ -1,9 +1,21 @@
-import React, { Component, Fragment } from 'react';
-import './ImageCarousel.css';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
 
-class ImageCarousel extends Component {
+import './ImageCarousel.scss';
 
-    constructor(props) {
+interface Props {
+    id: string;
+    images: string[];
+    height: string; // 100px
+}
+
+interface State {
+
+}
+
+class ImageCarousel extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {

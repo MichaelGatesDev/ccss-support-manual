@@ -1,9 +1,19 @@
-import React, { Component, Fragment } from 'react';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
+
 import './GeneralInfo.scss';
 
-class GeneralInfo extends Component {
+interface Props {
+    title: string;
+    room: any
+}
 
-    constructor(props) {
+interface State {
+}
+
+class GeneralInfo extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {

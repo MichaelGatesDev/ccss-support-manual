@@ -1,9 +1,19 @@
-import React, { Component } from 'react';
-import './FileSelectButton.css';
+import * as React from 'react';
+import { Component } from 'react';
 
-class FileSelectButton extends Component {
+import './FileSelectButton.scss';
 
-    constructor(props) {
+interface Props {
+    title: string;
+    name: string;
+}
+
+interface State {
+}
+
+class FileSelectButton extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -18,7 +28,7 @@ class FileSelectButton extends Component {
             <div className="FileSelectButton-Component">
                 <input
                     type="file"
-                    text={this.props.title}
+                    title={this.props.title}
                     accept=".xlsx"
                     name={this.props.name}
                 />

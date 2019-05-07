@@ -1,9 +1,19 @@
-import React, { Component } from 'react';
-import './Button.css';
+import * as React from 'react';
+import { Component } from 'react';
 
-class Button extends Component {
+import './Button.scss';
 
-    constructor(props) {
+interface Props {
+    preventDefault: boolean;
+    title: string;
+}
+
+interface State {
+}
+
+class Button extends Component<Props, State> {
+
+    constructor(props: any) {
         super(props);
 
         this.state = {
@@ -15,7 +25,7 @@ class Button extends Component {
     componentDidMount() {
     }
 
-    onClick(e) {
+    onClick(e: React.MouseEvent<HTMLInputElement>) {
         if (this.props.preventDefault) {
             e.preventDefault();
         }

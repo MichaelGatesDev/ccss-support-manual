@@ -1,4 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
+
 import './Room.scss';
 
 import { Transition, animated } from 'react-spring/renderprops'
@@ -14,9 +16,25 @@ import GeneralInfo from './GeneralInfo/GeneralInfo';
 
 var _ = require('underscore');
 
-class Room extends Component {
+interface Props {
+    match: any;
+}
 
-    constructor(props) {
+interface State {
+    loading: boolean;
+    activeTroubleshootingTypeFilters: string[];
+    activeTroubleshootingTagFilters: string[];
+    activeSearchQuery: string;
+
+    images?: any;
+    room?: any;
+    building?: any;
+    troubleshootingData?: any;
+}
+
+class Room extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -37,13 +55,14 @@ class Room extends Component {
     }
 
     fetchRoom() {
+        let self = this;
         fetch('/api/v1/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
                 this.setState({
                     room: data
                 }, function () {
-                    this.fetchBuilding();
+                    self.fetchBuilding();
                 });
             }).catch((error) => {
                 console.log(error);
@@ -52,13 +71,14 @@ class Room extends Component {
     }
 
     fetchBuilding() {
+        let self = this;
         fetch('/api/v1/buildings/' + this.props.match.params.buildingName)
             .then(response => response.json())
             .then(data => {
                 this.setState({
                     building: data
                 }, function () {
-                    this.fetchImages();
+                    self.fetchImages();
                 });
             }).catch((error) => {
                 console.log(error);
@@ -67,13 +87,14 @@ class Room extends Component {
     }
 
     fetchImages() {
+        let self = this;
         fetch('/api/v1/images/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
                 this.setState({
                     images: data
                 }, function () {
-                    this.fetchTroubleshootingData()
+                    self.fetchTroubleshootingData()
                 });
             }).catch((error) => {
                 console.log(error);
@@ -85,7 +106,7 @@ class Room extends Component {
         fetch('/api/v1/troubleshooting-data/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
-                var sortedTypes = _.sortBy(data, function (item) { return item.types; });
+                var sortedTypes = _.sortBy(data, function (item: any) { return item.types; });
                 this.setState({
                     loading: false,
                     troubleshootingData: sortedTypes
@@ -101,46 +122,46 @@ class Room extends Component {
     }
 
     getAllTroubleshootingDataTypes() {
-        let results = [];
+        let results: any[] = [];
         for (const td of this.state.troubleshootingData) {
             for (const type of td.types) {
                 if (!results.includes(type.toLowerCase()))
                     results.push(type.toLowerCase());
             }
         }
-        return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
+        return _.sortBy(results, function (obj: any) { return obj; }); // sort alphabetically descending (A-Z)
     }
 
     getAllTroubleshootingDataTags() {
-        let results = [];
+        let results: any[] = [];
         for (const td of this.state.troubleshootingData) {
             for (const tag of td.tags) {
                 if (!results.includes(tag.toLowerCase()))
                     results.push(tag.toLowerCase());
             }
         }
-        return _.sortBy(results, function (obj) { return obj; }); // sort alphabetically descending (A-Z)
+        return _.sortBy(results, function (obj: any) { return obj; }); // sort alphabetically descending (A-Z)
     }
 
-    onTypeFilterChange(activeTypeFilters) {
+    onTypeFilterChange(activeTypeFilters: string[]) {
         this.setState({
             activeTroubleshootingTypeFilters: activeTypeFilters
         });
     }
 
-    onTagFilterChange(activeTagFilters) {
+    onTagFilterChange(activeTagFilters: string[]) {
         this.setState({
             activeTroubleshootingTagFilters: activeTagFilters
         });
     }
 
-    onFilterSearch(query) {
+    onFilterSearch(query: string) {
         this.setState({
             activeSearchQuery: query
         });
     }
 
-    imagesAsArray(imagesObject) {
+    imagesAsArray(imagesObject: any) {
         let result = [];
         for (const item of imagesObject) {
             result.push(item.url);

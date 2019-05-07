@@ -1,9 +1,23 @@
-import React, { Component } from 'react';
-import './Checkbox.css';
+import * as React from 'react';
+import { Component } from 'react';
 
-class Checkbox extends Component {
+import './Checkbox.scss';
 
-    constructor(props) {
+interface Props {
+    id: string;
+    text: string;
+    name: string;
+
+    onChange: any;
+}
+
+interface State {
+    checked: boolean;
+}
+
+class Checkbox extends Component<Props, State> {
+
+    constructor(props: any) {
         super(props);
 
         this.state = {
@@ -16,11 +30,12 @@ class Checkbox extends Component {
     componentDidMount() {
     }
 
-    onChange(e) {
+    onChange(e: React.ChangeEvent<HTMLInputElement>) {
+        let self = this;
         this.setState({
             checked: e.target.checked
         }, function () {
-            this.props.onChange(this.props.name, this.state.checked);
+            self.props.onChange(self.props.name, self.state.checked);
         });
     }
 

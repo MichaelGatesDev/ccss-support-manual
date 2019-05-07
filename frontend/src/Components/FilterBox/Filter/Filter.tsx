@@ -1,9 +1,20 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './Filter.scss';
 
-class Filter extends Component {
+interface Props {
+    name: string;
+    selected: boolean;
+    onChange: any;
+}
 
-    constructor(props) {
+interface State {
+}
+
+class Filter extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.onSelect = this.onSelect.bind(this);
@@ -12,7 +23,7 @@ class Filter extends Component {
     componentDidMount() {
     }
 
-    onSelect(e) {
+    onSelect() {
         this.props.onChange(this.props.name, !this.props.selected);
     }
 

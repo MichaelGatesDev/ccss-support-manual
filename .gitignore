@@ -1,7 +1,10 @@
 # ========================================================== #
 
-# No backend js files because we use typescript
-backend/**/*.js
+# No js files because we use typescript
+**/*.js
+# No react JSX files because we use typescript
+**/*.jsx
+
 # No backend public data
 backend/public/
 # Allow typescript config

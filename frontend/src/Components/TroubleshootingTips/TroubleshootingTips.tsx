@@ -1,13 +1,26 @@
-import React, { Component } from 'react';
-import './TroubleshootingTips.css';
+import * as React from 'react';
+import { Component } from 'react';
+
+import './TroubleshootingTips.scss';
 
 import TroubleshootingTip from './TroubleshootingTip/TroubleshootingTip';
 
 // let _ = require('underscore');
 
-class TroubleshootingTips extends Component {
+interface Props {
+    troubleshootingData: any;
+    tagFilters: string[];
+    typeFilters: string[];
+    search: string;
+}
 
-    constructor(props) {
+interface State {
+
+}
+
+class TroubleshootingTips extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
     }
 
@@ -16,11 +29,13 @@ class TroubleshootingTips extends Component {
 
     render() {
 
+        let self = this;
+
         let data = this.props.troubleshootingData;
 
-        data = data.filter(function (item) {
+        data = data.filter(function (item: any) {
             if (item.types.length === 0) return true;
-            for (const typeFilter of this.props.typeFilters) {
+            for (const typeFilter of self.props.typeFilters) {
                 if (item.types.includes(typeFilter))
                     return true;
             }
@@ -29,8 +44,8 @@ class TroubleshootingTips extends Component {
 
 
         if (this.props.tagFilters.length > 0) {
-            data = data.filter(function (item) {
-                for (const tagFilter of this.props.tagFilters)
+            data = data.filter(function (item: any) {
+                for (const tagFilter of self.props.tagFilters)
                     if (item.tags.includes(tagFilter))
                         return true;
                 return false;
@@ -40,12 +55,12 @@ class TroubleshootingTips extends Component {
 
         let queries = this.props.search.split(" ");
         for (const q of queries) {
-            data = data.filter(function (item) {
+            data = data.filter(function (item: any) {
                 return item.title.includes(q) || item.description.includes(q) || item.types.includes(q) || item.tags.includes(q);
             }, this);
         }
 
-        let tips = data.map(function (value, index) {
+        let tips = data.map(function (value: any, index: number) {
             return (
                 <TroubleshootingTip
                     data={value}
