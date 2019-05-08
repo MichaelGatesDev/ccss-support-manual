@@ -18,7 +18,7 @@ function perform(){
     # Go into frontend dir
     cd frontend
     # Run ReactJS build
-    npm run build
+    yarn run build
     # Move the build folder into the backend to be built into it
     mv -v build/ ../backend/build/
     # Navigte to the project root
@@ -33,7 +33,7 @@ function perform(){
     # Go into backend dir
     cd backend
     # Run build (pkg)
-    npm run build
+    yarn run build
     # Move the build folder up to the project root
     mv application* ../app
     # Remove empty directory
