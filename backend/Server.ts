@@ -2,8 +2,8 @@
 
 import expressApp, { app } from './src/App';
 
-var debug = require('debug')('backend:server');
-var http = require('http');
+import debug from 'debug';
+import http from 'http';
 
 /**
  * Get port from environment and store in Express.
@@ -80,6 +80,12 @@ function onError(error: { syscall: string; code: any; }) {
 
 function onListening() {
   var addr = server.address();
+
+  if (addr === null) {
+    console.error("Server not running because no address found!");
+    return;
+  }
+
   var bind = typeof addr === 'string' ?
     'pipe ' + addr :
     'port ' + addr.port;

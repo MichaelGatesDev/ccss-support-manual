@@ -14,7 +14,7 @@ import LoadingSplash from '../../Components/LoadingSplash/LoadingSplash';
 
 import GeneralInfo from './GeneralInfo/GeneralInfo';
 
-var _ = require('underscore');
+import _ from 'underscore';
 
 interface Props {
     match: any;

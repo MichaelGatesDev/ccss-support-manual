@@ -1,4 +1,4 @@
-import fs = require('fs');
+import fs from 'fs';
 
 interface Serializable<T> {
     deserialize(input: Object): T;

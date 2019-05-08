@@ -9,7 +9,7 @@ import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
-var _ = require('underscore');
+import _ from 'underscore';
 
 
 interface Props {

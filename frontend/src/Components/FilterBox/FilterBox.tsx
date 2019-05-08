@@ -5,7 +5,7 @@ import './FilterBox.scss';
 
 import Filter from './Filter/Filter';
 
-var _ = require('underscore');
+import _ from 'underscore';
 
 interface Props {
     onChange: any;

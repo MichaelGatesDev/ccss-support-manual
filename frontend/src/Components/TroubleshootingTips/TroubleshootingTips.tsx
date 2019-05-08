@@ -5,8 +5,6 @@ import './TroubleshootingTips.scss';
 
 import TroubleshootingTip from './TroubleshootingTip/TroubleshootingTip';
 
-// let _ = require('underscore');
-
 interface Props {
     troubleshootingData: any;
     tagFilters: string[];
