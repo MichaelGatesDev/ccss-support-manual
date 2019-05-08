@@ -30,8 +30,7 @@ class FormInput extends Component<Props, State> {
     }
 
     componentDidMount() {
-
-        if (!this.textInput) return;
+        if (!this || !this.textInput) return;
 
         if (this.props.selectedByDefault) {
             this.textInput.focus();
@@ -46,7 +45,7 @@ class FormInput extends Component<Props, State> {
     }
 
     onBlur() {
-        if (!this.textInput) return;
+        if (!this || !this.textInput) return;
 
         if (this.props.alwaysSelected) {
             this.textInput.focus();
@@ -59,7 +58,6 @@ class FormInput extends Component<Props, State> {
     }
 
     render() {
-
         return (
             <div className="FormInput-Component">
                 <input

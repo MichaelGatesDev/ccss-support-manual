@@ -51,14 +51,14 @@ class App {
     this.setupMiddleware();
 
     console.debug("Setting up static directories");
-    this.expressApp.use(express.static(path.join(__dirname, 'public')));
-    this.expressApp.use(express.static(path.join(__dirname, 'build')));
+    this.expressApp.use(express.static(path.join(__dirname, '../public')));
+    this.expressApp.use(express.static(path.join(__dirname, '../build')));
 
     console.debug("Setting up routes");
     this.expressApp.use('/', indexRoute);
 
     console.debug("Setting up static files to serve");
-    this.expressApp.use('*', (req, res) => res.sendFile(path.join(__dirname, 'build', 'index.html')));
+    this.expressApp.use('*', (req, res) => res.sendFile(path.join(__dirname, '../build', 'index.html')));
 
     console.debug("Setting up error handling");
     this.setupErrorHandling();
