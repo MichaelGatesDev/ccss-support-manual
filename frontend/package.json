@@ -16,10 +16,11 @@
     "less": "^3.9.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "yarn run tsc && react-scripts start",
+    "build": "yarn run tsc && react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "tsc": "tsc"
   },
   "browserslist": [
     ">0.2%",

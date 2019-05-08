@@ -3,8 +3,6 @@ import './TroubleshootingTips.css';
 
 import TroubleshootingTip from './TroubleshootingTip/TroubleshootingTip';
 
-// let _ = require('underscore');
-
 class TroubleshootingTips extends Component {
 
     constructor(props) {

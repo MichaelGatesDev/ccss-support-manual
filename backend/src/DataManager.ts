@@ -1,5 +1,5 @@
-import Excel = require('exceljs');
-import fs = require('fs');
+import Excel from 'exceljs';
+import fs from 'fs';
 
 import { ConfigManager, GoogleSpreadsheetConfig } from './ConfigManager';
 import { BuildingManager } from './BuildingManager';

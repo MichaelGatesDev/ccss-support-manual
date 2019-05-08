@@ -12,7 +12,7 @@ import LoadingSplash from '../../Components/LoadingSplash/LoadingSplash';
 
 import GeneralInfo from './GeneralInfo/GeneralInfo';
 
-var _ = require('underscore');
+import _ from 'underscore';
 
 class Room extends Component {
 
