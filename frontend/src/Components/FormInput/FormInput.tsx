@@ -1,17 +1,36 @@
-import React, { Component } from 'react';
-import './FormInput.css';
+import * as React from 'react';
+import { Component } from 'react';
 
-class FormInput extends Component {
+import './FormInput.scss';
 
-    constructor(props) {
+interface Props {
+    selectedByDefault?: boolean;
+    alwaysSelected?: boolean;
+    onChange: any;
+    placeholder: string;
+    type: string;
+    value: string;
+}
+
+interface State {
+
+}
+
+class FormInput extends Component<Props, State> {
+
+    textInput: HTMLInputElement | undefined | null;
+
+    constructor(props: Props) {
         super(props);
+
+        this.state = {
+        };
 
         this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
-        this.setState({
-        });
+        if (!this || !this.textInput) return;
 
         if (this.props.selectedByDefault) {
             this.textInput.focus();
@@ -26,18 +45,19 @@ class FormInput extends Component {
     }
 
     onBlur() {
+        if (!this || !this.textInput) return;
+
         if (this.props.alwaysSelected) {
             this.textInput.focus();
         }
     }
 
-    onChange(e) {
+    onChange(e: React.ChangeEvent<HTMLInputElement>) {
         let value = e.target.value;
         this.props.onChange(value);
     }
 
     render() {
-
         return (
             <div className="FormInput-Component">
                 <input

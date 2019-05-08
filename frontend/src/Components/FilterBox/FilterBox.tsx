@@ -1,13 +1,27 @@
-import React, { Component, Fragment } from 'react';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
+
 import './FilterBox.scss';
 
 import Filter from './Filter/Filter';
 
 import _ from 'underscore';
 
-class FilterBox extends Component {
+interface Props {
+    onChange: any;
+    enabledByDefault: boolean;
+    keys: string[];
+    label: string;
+    buttonText: string;
+}
 
-    constructor(props) {
+interface State {
+    activeFilters: string[];
+}
+
+class FilterBox extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -23,32 +37,35 @@ class FilterBox extends Component {
     }
 
     resetFilters() {
+        let self = this;
         this.setState({
-            activeFilters: this.props.enabledByDefault ? this.props.keys : []
+            activeFilters: self.props.enabledByDefault ? self.props.keys : []
         }, function () {
-            this.props.onChange(this.state.activeFilters);
+            self.props.onChange(self.state.activeFilters);
         });
     }
 
-    onFilterChange(name, becomeActive) {
+    onFilterChange(name: string, becomeActive: boolean) {
+        let self = this;
         this.setState({
-            activeFilters: becomeActive ? [...this.state.activeFilters, name] : this.state.activeFilters.filter(item => item !== name)
+            activeFilters: becomeActive ? [...self.state.activeFilters, name] : self.state.activeFilters.filter(item => item !== name)
         }, function () {
-            this.props.onChange(this.state.activeFilters);
+            self.props.onChange(self.state.activeFilters);
         });
     }
 
     render() {
+        let self = this;
 
-        var sortedKeys = _.sortBy(this.props.keys, function (obj) { return obj; });
+        var sortedKeys = _.sortBy(this.props.keys, function (obj: any) { return obj; });
 
-        var filters = sortedKeys.map(function (value, index) {
-            var selected = this.state.activeFilters.includes(value);
+        var filters = sortedKeys.map(function (value: string, index: number) {
+            var selected = self.state.activeFilters.includes(value);
             return (
                 <Filter
                     name={value}
                     key={index}
-                    onChange={this.onFilterChange}
+                    onChange={self.onFilterChange}
                     selected={selected}
                 />
             );

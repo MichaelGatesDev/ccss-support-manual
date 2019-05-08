@@ -1,11 +1,21 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './TroubleshootingTip.scss';
 
-class TroubleshootingTip extends Component {
+interface Props {
+    data: any;
+}
 
-    // constructor(props) {
-    //     super(props);
-    // }
+interface State {
+
+}
+
+class TroubleshootingTip extends Component<Props, State> {
+
+    constructor(props: Props) {
+        super(props);
+    }
 
     // componentDidMount() {
     // }

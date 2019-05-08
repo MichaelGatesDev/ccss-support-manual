@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
 import { Link } from 'react-router-dom'
 
 import './LinkButton.scss';
 
-class LinkButton extends Component {
+interface Props {
+    href: string;
+    title: string;
+}
 
-    constructor(props) {
+interface State {
+}
+
+class LinkButton extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
     }
 

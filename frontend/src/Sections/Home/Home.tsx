@@ -1,4 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import * as React from 'react';
+import { Component, Fragment } from 'react';
+
 import './Home.scss';
 
 import { Transition, animated } from 'react-spring/renderprops'
@@ -9,9 +11,21 @@ import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
 import _ from 'underscore';
 
-class Home extends Component {
 
-    constructor(props) {
+interface Props {
+
+}
+
+interface State {
+    loading: boolean;
+    buildings: any[];
+    images: any[];
+    filterSearch: string;
+}
+
+class Home extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -29,13 +43,14 @@ class Home extends Component {
     }
 
     fetchBuildings() {
+        let self = this;
         fetch('/api/v1/buildings')
             .then(response => response.json())
             .then(data => {
-                this.setState({
+                self.setState({
                     buildings: data,
                 }, function () {
-                    this.fetchAllImages();
+                    self.fetchAllImages();
                 });
             }).catch((error) => {
                 console.error("Failed to fetch buildings");
@@ -44,11 +59,12 @@ class Home extends Component {
     }
 
     fetchAllImages() {
+        let self = this;
         fetch('/api/v1/images/')
             .then(response => response.json())
             .then(data => {
                 if (data == null) return;
-                this.setState({
+                self.setState({
                     images: data,
                     loading: false,
                 });
@@ -59,7 +75,7 @@ class Home extends Component {
     }
 
     getAllRooms() {
-        let result = [];
+        let result: any[] = [];
         for (const building of this.state.buildings) {
             result = result.concat(building.rooms);
         }
@@ -67,7 +83,7 @@ class Home extends Component {
     }
 
 
-    getParentBuilding(roomObj) {
+    getParentBuilding(roomObj: any) {
         for (const building of this.state.buildings) {
             for (const room of building.rooms) {
                 if (room.buildingName === roomObj.buildingName && room.number === roomObj.number) return building;
@@ -77,7 +93,7 @@ class Home extends Component {
     }
 
 
-    onSearch(value) {
+    onSearch(value: string) {
         this.setState({
             filterSearch: value
         });
@@ -86,18 +102,20 @@ class Home extends Component {
 
     render() {
 
+        let self = this;
+
         var query = this.state.filterSearch;
         var queries = query.split(" ");
 
-        var rooms = _(this.getAllRooms()).chain().sortBy(function (room) {
+        var rooms = _(this.getAllRooms()).chain().sortBy(function (room: any) {
             return room.number;
-        }, this).sortBy(function (room) {
-            return this.getParentBuilding(room).internalName;
+        }, this).sortBy(function (room: any) {
+            return self.getParentBuilding(room).internalName;
         }, this).value();
 
         for (const q of queries) {
-            rooms = rooms.filter(function (room) {
-                var pb = this.getParentBuilding(room);
+            rooms = rooms.filter(function (room: any) {
+                var pb = self.getParentBuilding(room);
                 if (!pb) return false;
 
                 var isNick = false;

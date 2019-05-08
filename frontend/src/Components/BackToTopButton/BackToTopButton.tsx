@@ -1,14 +1,26 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './BackToTopButton.scss';
 
 import { Transition, animated } from 'react-spring/renderprops'
 
-class BackToTopButton extends Component {
+interface Props {
+    minScrollAmt: number;
+    preventDefault?: boolean;
+}
 
-    constructor(props) {
+interface State {
+    visible: boolean;
+}
+
+class BackToTopButton extends Component<Props, State> {
+
+    constructor(props: any) {
         super(props);
 
         this.state = {
+            visible: false
         };
 
         this.onClick = this.onClick.bind(this);
@@ -22,12 +34,12 @@ class BackToTopButton extends Component {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    handleScroll = (e) => {
+    handleScroll = () => {
         var currentScrollAmt = window.scrollY;
         this.setState({ visible: currentScrollAmt > this.props.minScrollAmt });
     };
 
-    onClick(e) {
+    onClick(e: React.MouseEvent) {
         if (this.props.preventDefault) {
             e.preventDefault();
         }

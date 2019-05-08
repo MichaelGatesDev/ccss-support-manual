@@ -1,13 +1,25 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './NavBar.scss';
 
 import FormInput from "../FormInput/FormInput";
 
-// https://react-bootstrap.github.io/getting-started/support/
-class NavBar extends Component {
+interface Props {
+    title: string;
+    searchable?: boolean;
+    fixed?: boolean;
+    onSearch?: any;
+}
+
+interface State {
+    searchQuery: string;
+}
+
+class NavBar extends Component<Props, State> {
 
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -21,7 +33,7 @@ class NavBar extends Component {
 
     }
 
-    onSearch(value) {
+    onSearch(value: string) {
         this.setState({
             searchQuery: value
         });

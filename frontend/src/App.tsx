@@ -1,16 +1,21 @@
-import React, { Component } from "react";
+import * as React from 'react';
+import { Component } from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
 
 import './App.css';
 
 import Home from './Sections/Home/Home';
-import Settings from './Sections/Settings/Settings';
 import Room from './Sections/Room/Room';
 
 import Footer from "./Components/Footer/Footer";
 import BackToTopButton from "./Components/BackToTopButton/BackToTopButton";
 
 class App extends Component {
+
+  constructor(props: any) {
+    super(props);
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -19,7 +24,6 @@ class App extends Component {
         />
         <div className="App">
           <Route exact path="/" component={Home} />
-          <Route exact path="/settings" component={Settings} />
           {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
           {/* <Route path="/buildings/:building" component={Buildings} /> */}
           {/* <Route path="/buildings/:building/rooms" component={Rooms} /> */}

@@ -1,11 +1,23 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Component } from 'react';
+
 import './SearchBox.scss';
 
-import FormInput from "../../Components/FormInput/FormInput";
+import FormInput from "../FormInput/FormInput";
 
-class SearchBox extends Component {
+interface Props {
+    onChange: any;
+    label: string;
+    value: string;
+    buttonText: string;
+}
 
-    constructor(props) {
+interface State {
+}
+
+class SearchBox extends Component<Props, State> {
+
+    constructor(props: Props) {
         super(props);
 
         this.resetFilters = this.resetFilters.bind(this);
