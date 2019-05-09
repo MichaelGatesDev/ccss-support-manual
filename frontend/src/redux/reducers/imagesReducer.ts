@@ -1,7 +1,10 @@
 import { FETCH_IMAGES } from '../actions/types';
 
 const initialState = {
-    images: [],
+    images: {
+        buildingImages: [],
+        roomImages: [],
+    },
     loading: true,
 };
 

@@ -20,7 +20,7 @@ interface Props {
     buildingsLoading: boolean;
 
     fetchImages: any;
-    images: any[];
+    images: object;
     imagesLoading: boolean;
 }
 
@@ -36,7 +36,7 @@ class Home extends Component<Props, State> {
         buildingsLoading: PropTypes.bool.isRequired,
 
         fetchImages: PropTypes.func.isRequired,
-        images: PropTypes.array.isRequired,
+        images: PropTypes.object.isRequired,
         imagesLoading: PropTypes.bool.isRequired
     };
 
@@ -58,7 +58,6 @@ class Home extends Component<Props, State> {
 
     getAllRooms() {
         let result: any[] = [];
-        if (!this.props.buildings) return result;
         for (const building of this.props.buildings) {
             result = result.concat(building.rooms);
         }
@@ -123,7 +122,7 @@ class Home extends Component<Props, State> {
 
                 <Transition
                     native
-                    items={this.props.buildingsLoading}
+                    items={this.isLoading()}
                     // from={{ opacity: 0 }}
                     enter={{ opacity: 1 }}
                     leave={{ opacity: 0 }}
@@ -137,7 +136,7 @@ class Home extends Component<Props, State> {
                     )}
                 </Transition>
 
-                {!this.props.buildingsLoading &&
+                {!this.isLoading() &&
                     <Fragment>
                         <NavBar
                             title="CCSS Support Manual"
@@ -166,7 +165,7 @@ const mapStateToProps = (state: any) => ({
     buildingsLoading: state.buildings.loading,
 
     images: state.images.images,
-    imagesLoading: state.images.imagesLoading
+    imagesLoading: state.images.loading
 });
 
 export default connect(mapStateToProps, { fetchBuildings, fetchImages })(Home);
