@@ -1,64 +1,60 @@
 import * as React from 'react';
 import { Component, Fragment } from 'react';
+import * as PropTypes from 'prop-types';
 import { Transition, animated } from 'react-spring/renderprops'
 import { connect } from 'react-redux';
 import { fetchBuildings } from '../../redux/actions/buildingActions';
+import { fetchImages } from '../../redux/actions/imageActions';
+import _ from 'underscore';
 
 import './Home.scss';
-
 
 import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
-import _ from 'underscore';
-
 
 interface Props {
-    fetchBuildings: any
+    fetchBuildings: any;
+    buildings: any[];
+    buildingsLoading: boolean;
 
-    buildings: any[],
-    buildingsLoading: boolean
+    fetchImages: any;
+    images: any[];
+    imagesLoading: boolean;
 }
 
 interface State {
-    images: any[];
     filterSearch: string;
 }
 
 class Home extends Component<Props, State> {
 
+    static propTypes = {
+        fetchBuildings: PropTypes.func.isRequired,
+        buildings: PropTypes.array.isRequired,
+        buildingsLoading: PropTypes.bool.isRequired,
+
+        fetchImages: PropTypes.func.isRequired,
+        images: PropTypes.array.isRequired,
+        imagesLoading: PropTypes.bool.isRequired
+    };
+
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            images: [],
             filterSearch: ''
         };
 
         this.onSearch = this.onSearch.bind(this);
     }
 
+
     componentDidMount() {
         this.props.fetchBuildings();
+        this.props.fetchImages();
     }
-
-
-    fetchAllImages() {
-        let self = this;
-        fetch('/api/v1/images/')
-            .then(response => response.json())
-            .then(data => {
-                if (data == null) return;
-                self.setState({
-                    images: data,
-                });
-            }).catch((error) => {
-                console.error("Failed to fetch room images");
-                console.error(error);
-            });
-    }
-
 
     getAllRooms() {
         let result: any[] = [];
@@ -84,6 +80,11 @@ class Home extends Component<Props, State> {
         this.setState({
             filterSearch: value
         });
+    }
+
+    isLoading() {
+        return this.props.buildingsLoading ||
+            this.props.imagesLoading;
     }
 
 
@@ -149,7 +150,7 @@ class Home extends Component<Props, State> {
                                 <RoomCardsGrid
                                     rooms={rooms}
                                     buildings={this.props.buildings}
-                                    images={this.state.images}
+                                    images={this.props.images}
                                 />
                             </div>
                         </section>
@@ -163,6 +164,9 @@ class Home extends Component<Props, State> {
 const mapStateToProps = (state: any) => ({
     buildings: state.buildings.buildings,
     buildingsLoading: state.buildings.loading,
+
+    images: state.images.images,
+    imagesLoading: state.images.imagesLoading
 });
 
-export default connect(mapStateToProps, { fetchBuildings })(Home);
+export default connect(mapStateToProps, { fetchBuildings, fetchImages })(Home);
