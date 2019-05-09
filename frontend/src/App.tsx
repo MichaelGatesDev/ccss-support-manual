@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { BrowserRouter, Route } from "react-router-dom";
+import { Provider } from 'react-redux'
 
 import './App.css';
 
@@ -10,6 +11,11 @@ import Room from './Sections/Room/Room';
 import Footer from "./Components/Footer/Footer";
 import BackToTopButton from "./Components/BackToTopButton/BackToTopButton";
 
+import { store } from './redux/store';
+
+// https://github.com/piotrwitek/react-redux-typescript-guide/tree/master/playground/src/store
+// https://codesandbox.io/s/9on71rvnyo
+// https://react-redux.js.org/introduction/basic-tutorial
 class App extends Component {
 
   constructor(props: any) {
@@ -18,22 +24,24 @@ class App extends Component {
 
   render() {
     return (
-      <BrowserRouter>
-        <BackToTopButton
-          minScrollAmt={50}
-        />
-        <div className="App">
-          <Route exact path="/" component={Home} />
-          {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
-          {/* <Route path="/buildings/:building" component={Buildings} /> */}
-          {/* <Route path="/buildings/:building/rooms" component={Rooms} /> */}
-          {/* <Route path="/rooms/:roomID" component={Room} /> */}
-          <Route path="/buildings/:buildingName/rooms/:roomNumber" component={Room} />
-          <footer>
-            <Footer />
-          </footer>
-        </div>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <BackToTopButton
+            minScrollAmt={50}
+          />
+          <div className="App">
+            <Route exact path="/" component={Home} />
+            {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
+            {/* <Route path="/buildings/:building" component={Buildings} /> */}
+            {/* <Route path="/buildings/:building/rooms" component={Rooms} /> */}
+            {/* <Route path="/rooms/:roomID" component={Room} /> */}
+            <Route path="/buildings/:buildingName/rooms/:roomNumber" component={Room} />
+            <footer>
+              <Footer />
+            </footer>
+          </div>
+        </BrowserRouter>
+      </Provider>
     );
   }
 }

@@ -42,7 +42,10 @@ class RoomCardsGrid extends Component<Props, State> {
     }
 
     getImagesForRoom(buildingName: string, roomNumber: string) {
+        let images = this.props.images;
+        if (!images) return undefined;
         let roomImages = this.props.images.roomImages;
+        if (!roomImages) return undefined;
         for (const item of roomImages) {
             if (
                 item.buildingName === buildingName &&
