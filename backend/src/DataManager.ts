@@ -149,7 +149,7 @@ class DataManager {
 
             let building = new Building(
                 officialName,
-                nicknames.split(","),
+                nicknames.toLocaleLowerCase().split(","),
             );
 
             self.buildingManager.addBuilding(building);
