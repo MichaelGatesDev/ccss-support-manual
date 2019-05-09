@@ -97,14 +97,13 @@ class Home extends Component<Props, State> {
         var rooms = _(this.getAllRooms()).chain().sortBy(function (room: any) {
             return room.number;
         }, this).sortBy(function (room: any) {
-            return self.getParentBuilding(room).internalName;
+            return room.buildingName;
         }, this).value();
 
         for (const q of queries) {
             rooms = rooms.filter(function (room: any) {
                 var pb = self.getParentBuilding(room);
                 if (!pb) return false;
-
                 var isNick = false;
                 for (const nick of pb.nicknames) {
                     if (nick.includes(q)) {
@@ -112,7 +111,6 @@ class Home extends Component<Props, State> {
                         break;
                     }
                 }
-
                 return (room.number.includes(q) || room.name.includes(q) || pb.internalName.includes(q) || pb.officialName.includes(q) || isNick);
             }, this);
         }
