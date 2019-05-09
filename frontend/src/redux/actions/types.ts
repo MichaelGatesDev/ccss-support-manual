@@ -1,0 +1,2 @@
+export const FETCH_BUILDINGS = 'FETCH_BUILDINGS';
+export const FETCH_BUILDING = 'FETCH_BUILDING';

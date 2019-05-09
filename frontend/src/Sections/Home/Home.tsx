@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Component, Fragment } from 'react';
+import { Transition, animated } from 'react-spring/renderprops'
+import { connect } from 'react-redux';
+import { fetchBuildings } from '../../redux/actions/buildingActions';
 
 import './Home.scss';
 
-import { Transition, animated } from 'react-spring/renderprops'
 
 import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
@@ -13,12 +15,13 @@ import _ from 'underscore';
 
 
 interface Props {
+    fetchBuildings: any
 
+    buildings: any[],
+    buildingsLoading: boolean
 }
 
 interface State {
-    loading: boolean;
-    buildings: any[];
     images: any[];
     filterSearch: string;
 }
@@ -29,8 +32,6 @@ class Home extends Component<Props, State> {
         super(props);
 
         this.state = {
-            loading: true,
-            buildings: [],
             images: [],
             filterSearch: ''
         };
@@ -39,24 +40,9 @@ class Home extends Component<Props, State> {
     }
 
     componentDidMount() {
-        this.fetchBuildings();
+        this.props.fetchBuildings();
     }
 
-    fetchBuildings() {
-        let self = this;
-        fetch('/api/v1/buildings')
-            .then(response => response.json())
-            .then(data => {
-                self.setState({
-                    buildings: data,
-                }, function () {
-                    self.fetchAllImages();
-                });
-            }).catch((error) => {
-                console.error("Failed to fetch buildings");
-                console.error(error);
-            });
-    }
 
     fetchAllImages() {
         let self = this;
@@ -66,7 +52,6 @@ class Home extends Component<Props, State> {
                 if (data == null) return;
                 self.setState({
                     images: data,
-                    loading: false,
                 });
             }).catch((error) => {
                 console.error("Failed to fetch room images");
@@ -74,9 +59,11 @@ class Home extends Component<Props, State> {
             });
     }
 
+
     getAllRooms() {
         let result: any[] = [];
-        for (const building of this.state.buildings) {
+        if (!this.props.buildings) return result;
+        for (const building of this.props.buildings) {
             result = result.concat(building.rooms);
         }
         return result;
@@ -84,7 +71,7 @@ class Home extends Component<Props, State> {
 
 
     getParentBuilding(roomObj: any) {
-        for (const building of this.state.buildings) {
+        for (const building of this.props.buildings) {
             for (const room of building.rooms) {
                 if (room.buildingName === roomObj.buildingName && room.number === roomObj.number) return building;
             }
@@ -135,7 +122,7 @@ class Home extends Component<Props, State> {
 
                 <Transition
                     native
-                    items={this.state.loading}
+                    items={this.props.buildingsLoading}
                     // from={{ opacity: 0 }}
                     enter={{ opacity: 1 }}
                     leave={{ opacity: 0 }}
@@ -149,7 +136,7 @@ class Home extends Component<Props, State> {
                     )}
                 </Transition>
 
-                {!this.state.loading &&
+                {!this.props.buildingsLoading &&
                     <Fragment>
                         <NavBar
                             title="CCSS Support Manual"
@@ -161,7 +148,7 @@ class Home extends Component<Props, State> {
                             <div className="Home-Component">
                                 <RoomCardsGrid
                                     rooms={rooms}
-                                    buildings={this.state.buildings}
+                                    buildings={this.props.buildings}
                                     images={this.state.images}
                                 />
                             </div>
@@ -173,4 +160,9 @@ class Home extends Component<Props, State> {
     }
 }
 
-export default Home;
+const mapStateToProps = (state: any) => ({
+    buildings: state.buildings.buildings,
+    buildingsLoading: state.buildings.loading,
+});
+
+export default connect(mapStateToProps, { fetchBuildings })(Home);
