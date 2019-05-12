@@ -8,22 +8,22 @@ export class Building {
     /**
      * Official Name of the building. (e.g. "Myers Fine Arts Building")
      */
-    private officialName: string;
+    public officialName: string;
 
     /**
      * Nicknames/abbreviations that a building may have.
      */
-    private nicknames: string[];
+    public nicknames: string[];
 
     /**
      * Internal Name which used used by the program to identify the building.
      */
-    private internalName: string;
+    public internalName: string;
 
     /**
      * An array of Room objects representing the rooms in the building
      */
-    private rooms: Room[];
+    public rooms: Room[];
 
     /**
      * 

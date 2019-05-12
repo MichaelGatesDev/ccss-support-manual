@@ -9,85 +9,85 @@ export class Room {
     /**
      * The actual Building object which this room is contained within
      */
-    private buildingName: string;
+    public buildingName: string;
 
     /**
      * The last time that the room was checked or information was updated.
      */
-    private lastChecked !: string;
+    public lastChecked !: string;
 
     /**
      * The room number or unique identifier (e.g. 103F)
      */
-    private number: string;
+    public number: string;
 
     /**
      * The room name. May also be a nickname or brief descriptive name.
      */
-    private name !: string;
+    public name !: string;
 
     /**
      * The type of room
      */
-    private type: string;
+    public type: string;
 
     /**
      * The type of lock which must be unlocked to enter the room
      */
-    private lockType !: string;
+    public lockType !: string;
 
     /**
      * The capacity or 'max number of people allowed' in the room or -1 if N/A
      */
-    private capacity !: number;
+    public capacity !: number;
 
     // /**
     //  * The furniture within the room (tables, chairs, etc.)
     //  */
-    // private furniture !: FurnitureSetup;
+    // public furniture !: FurnitureSetup;
 
     /**
      * The phone in the room
      */
-    private phone !: Phone;
+    public phone !: Phone;
 
     /**
      * The projector
      */
-    private projector!: Projector;
+    public projector!: Projector;
 
     /**
      * The audio
      */
-    private audio !: Audio;
+    public audio !: Audio;
 
     /**
      * The screen
      */
-    private screen !: Screen;
+    public screen !: Screen;
 
     //TODO add generic video output
-    // private television: Television;
+    // public television: Television;
 
     /**
      * The teaching station computer
      */
-    private teachingStationComputer !: Computer;
+    public teachingStationComputer !: Computer;
 
     /**
      * The document camera
      */
-    private documentCamera !: DocumentCamera;
+    public documentCamera !: DocumentCamera;
 
     /**
      * The DVD Player
      */
-    private dvdPlayer !: DVDPlayer;
+    public dvdPlayer !: DVDPlayer;
 
     /**
      * The Printer
      */
-    private printer !: Printer;
+    public printer !: Printer;
 
     /**
      * @param building The Building object which is the parent of the room
@@ -108,7 +108,7 @@ export class Room {
         return this.buildingName;
     }
 
-    public getBuilding(): Building | undefined {
+    public getBuilding(): Building | null {
         return app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
     }
 

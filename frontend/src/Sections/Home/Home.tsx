@@ -3,8 +3,6 @@ import { Component, Fragment } from 'react';
 import * as PropTypes from 'prop-types';
 import { Transition, animated } from 'react-spring/renderprops'
 import { connect } from 'react-redux';
-import { fetchBuildings } from '../../redux/actions/buildingActions';
-import { fetchImages } from '../../redux/actions/imageActions';
 import _ from 'underscore';
 
 import './Home.scss';
@@ -13,15 +11,20 @@ import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
+import { Building } from "backend/src/Building";
+import { Room } from 'backend/src/Room';
+import { AppState } from '../../redux/store';
+import { fetchBuildings } from '../../redux/buildings/actions';
+import { fetchImages } from '../../redux/images/actions';
+import { BuildingsState } from '../../redux/buildings/types';
+import { ImagesState } from '../../redux/images/types';
 
 interface Props {
-    fetchBuildings: any;
-    buildings: any[];
-    buildingsLoading: boolean;
+    buildingsState: BuildingsState;
+    imagesState: ImagesState;
 
-    fetchImages: any;
-    images: object;
-    imagesLoading: boolean;
+    fetchBuildings: Function;
+    fetchImages: Function;
 }
 
 interface State {
@@ -29,16 +32,6 @@ interface State {
 }
 
 class Home extends Component<Props, State> {
-
-    static propTypes = {
-        fetchBuildings: PropTypes.func.isRequired,
-        buildings: PropTypes.array.isRequired,
-        buildingsLoading: PropTypes.bool.isRequired,
-
-        fetchImages: PropTypes.func.isRequired,
-        images: PropTypes.object.isRequired,
-        imagesLoading: PropTypes.bool.isRequired
-    };
 
     constructor(props: Props) {
         super(props);
@@ -56,20 +49,18 @@ class Home extends Component<Props, State> {
         this.props.fetchImages();
     }
 
-    getAllRooms() {
-        let result: any[] = [];
-        for (const building of this.props.buildings) {
+    getAllRooms(): Room[] {
+        let result: Room[] = [];
+        for (const building of this.props.buildingsState.buildings) {
             result = result.concat(building.rooms);
         }
         return result;
     }
 
 
-    getParentBuilding(roomObj: any) {
-        for (const building of this.props.buildings) {
-            for (const room of building.rooms) {
-                if (room.buildingName === roomObj.buildingName && room.number === roomObj.number) return building;
-            }
+    getParentBuilding(room: Room): Building | null {
+        for (const building of this.props.buildingsState.buildings) {
+            if (room.buildingName === building.internalName) return building;
         }
         return null;
     }
@@ -81,9 +72,8 @@ class Home extends Component<Props, State> {
         });
     }
 
-    isLoading() {
-        return this.props.buildingsLoading ||
-            this.props.imagesLoading;
+    isLoading(): boolean {
+        return this.props.buildingsState.buildingsLoading || this.props.imagesState.imagesLoading;
     }
 
 
@@ -91,28 +81,23 @@ class Home extends Component<Props, State> {
 
         let self = this;
 
-        var query = this.state.filterSearch;
-        var queries = query.split(" ");
+        let rooms: Room[] = [];
+        if (!this.isLoading()) {
+            let query = this.state.filterSearch;
+            let queries = query.split(" ");
+            rooms = _(this.getAllRooms()).chain().sortBy(function (room: Room) {
+                return room.number;
+            }, this).sortBy(function (room: Room) {
+                return room.buildingName;
+            }, this).value();
 
-        var rooms = _(this.getAllRooms()).chain().sortBy(function (room: any) {
-            return room.number;
-        }, this).sortBy(function (room: any) {
-            return room.buildingName;
-        }, this).value();
-
-        for (const q of queries) {
-            rooms = rooms.filter(function (room: any) {
-                var pb = self.getParentBuilding(room);
-                if (!pb) return false;
-                var isNick = false;
-                for (const nick of pb.nicknames) {
-                    if (nick.includes(q)) {
-                        isNick = true;
-                        break;
-                    }
-                }
-                return (room.number.includes(q) || room.name.includes(q) || pb.internalName.includes(q) || pb.officialName.includes(q) || isNick);
-            }, this);
+            for (const q of queries) {
+                rooms = rooms.filter(function (room: Room) {
+                    let pb = self.getParentBuilding(room);
+                    if (!pb) return false;
+                    return (room.number.includes(q) || pb.hasName(q));
+                }, this);
+            }
         }
 
         return (
@@ -146,8 +131,8 @@ class Home extends Component<Props, State> {
                             <div className="Home-Component">
                                 <RoomCardsGrid
                                     rooms={rooms}
-                                    buildings={this.props.buildings}
-                                    images={this.props.images}
+                                    buildings={this.props.buildingsState.buildings}
+                                    images={this.props.imagesState.images}
                                 />
                             </div>
                         </section>
@@ -158,12 +143,12 @@ class Home extends Component<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => ({
-    buildings: state.buildings.buildings,
-    buildingsLoading: state.buildings.loading,
-
-    images: state.images.images,
-    imagesLoading: state.images.loading
+const mapStateToProps = (state: AppState) => ({
+    buildingsState: state.buildings,
+    imagesState: state.images,
 });
 
-export default connect(mapStateToProps, { fetchBuildings, fetchImages })(Home);
+export default connect(
+    mapStateToProps,
+    { fetchBuildings, fetchImages }
+)(Home);

@@ -3,7 +3,7 @@ import { Building } from "./Building";
 /**
  * A utility class for managing buildings
  */
-class BuildingManager {
+export class BuildingManager {
     /**
      * An array of all buildings
      */
@@ -36,10 +36,11 @@ class BuildingManager {
      * Gets a building by the specified name
      * @param name The name of the building
      */
-    public getBuildingByName(name: string): Building | undefined {
+    public getBuildingByName(name: string): Building | null {
         for (const building of this.buildings) {
             if (building.hasName(name)) return building;
         }
+        return null;
     }
 
     /**
@@ -48,8 +49,4 @@ class BuildingManager {
     public getBuildings() {
         return this.buildings;
     }
-}
-
-export {
-    BuildingManager
 }

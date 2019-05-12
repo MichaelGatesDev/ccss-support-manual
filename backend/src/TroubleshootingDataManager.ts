@@ -1,5 +1,5 @@
-import { TroubleshootingData } from "src/TroubleshootingData";
-import { RoomManager } from "src/RoomManager";
+import { TroubleshootingData } from "./TroubleshootingData";
+import { RoomManager } from "./RoomManager";
 
 export class TroubleshootingDataManager {
 

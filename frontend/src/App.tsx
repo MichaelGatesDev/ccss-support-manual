@@ -13,9 +13,6 @@ import BackToTopButton from "./Components/BackToTopButton/BackToTopButton";
 
 import { store } from './redux/store';
 
-// https://github.com/piotrwitek/react-redux-typescript-guide/tree/master/playground/src/store
-// https://codesandbox.io/s/9on71rvnyo
-// https://react-redux.js.org/introduction/basic-tutorial
 class App extends Component {
 
   constructor(props: any) {

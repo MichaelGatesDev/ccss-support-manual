@@ -1,4 +1,0 @@
-export const FETCH_BUILDINGS = 'FETCH_BUILDINGS';
-export const FETCH_BUILDING = 'FETCH_BUILDING';
-
-export const FETCH_IMAGES = 'FETCH_IMAGES';

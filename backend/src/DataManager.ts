@@ -119,11 +119,11 @@ class DataManager {
         });
     }
 
-    private generateColumns(sheet: Excel.Worksheet, headerRowIndex: number) {
+    private generateColumns(sheet: Excel.Worksheet, headerRowIndex: number): void {
         let row = sheet.getRow(headerRowIndex);
-        if (row === null || !row.values || !row.values.length) return [];
+        if (row === null || !row.values || !row.values.length) return;
 
-        let headers = [];
+        let headers: string[] = [];
         for (let i: number = 1; i < row.values.length; i++) {
             let cell = row.getCell(i);
             headers.push(cell.text);
@@ -182,7 +182,7 @@ class DataManager {
                 return;
             }
 
-            let building: Building | undefined = self.buildingManager.getBuildingByName(buildingName);
+            let building: Building | null = self.buildingManager.getBuildingByName(buildingName);
             if (!building) {
                 console.debug(`No such building exists: ${buildingName}`);
                 return;
@@ -297,7 +297,7 @@ class DataManager {
                 var buildingName = parts[0];
                 var roomNumber = parts[1];
 
-                let room: Room | undefined = this.roomManager.getRoom(buildingName, roomNumber);
+                let room: Room | null = this.roomManager.getRoom(buildingName, roomNumber);
                 if (!room) continue;
 
                 results.push(room);
