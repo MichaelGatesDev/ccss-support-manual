@@ -1,59 +1,91 @@
-﻿
-echo "=== CLEANUP ==="
+﻿$StartLocation = (Get-Location).Path
+$FinalBuildPath = "$StartLocation\build"
+$BackendPath = "$StartLocation\backend"
+$BackendBuildPath = "$BackendPath\build"
+$FrontendPath = "$StartLocation\frontend"
+$FrontendBuildPath = "$FrontendPath\build"
 
-
-$path = ".\build\"
-# If build directory already exists
-if((test-path $path))
+function Cleanup()
 {
-    echo "Removing old app directory"
-    Remove-Item -Path $path -Recurse -Force
-    echo "Finished removing old app directory"
+    echo "=== CLEANUP STARTED ==="
+
+    # If build directory already exists
+    if((test-path $FinalBuildPath))
+    {
+        echo "Removing old build directory"
+        Remove-Item -Path $FinalBuildPath -Recurse -Force
+        echo "Finished removing old app directory"
+    }
+
+    echo "=== CLEANUP COMPLETE ==="
+    echo ""
 }
 
-# Build directory does not exist yet, create it
-New-Item -ItemType Directory -Force -Path $path
-echo "Created build directory"
+
+function Setup()
+{
+    # Build directory does not exist yet, create it
+    New-Item -ItemType Directory -Force -Path $FinalBuildPath
+    echo "Created build directory"
+}
 
 
-echo "=== BUILDING FRONTEND ==="
+function BuildBackend()
+{
+    echo "=== BUILDING BACKEND ==="
 
-# Go into frontend dir
-cd ".\frontend\"
-# Run ReactJS build
-yarn run build
-# Move the build folder into the backend to be built into it
-Move-Item -Path ".\build" -Destination "..\backend\build"
-# Navigate to the project root
-cd ..
-echo "=== FRONTEND COMPLETE ==="
+    # Go into backend dir
+    cd $BackendPath
 
+    # Run build (pkg)
+    yarn run build
 
-echo ""
+    # Move the build folder up to the build dir
+    $ApplicationFiles = Get-ChildItem | Where-Object -Property Name -Match 'application-*'
+    foreach ($File in $ApplicationFiles)
+    {
+        Move-Item -Path $File.PSPath -Destination "$FinalBuildPath\$File"
+        echo "Moved $File to $FinalBuildPath"
+    }
+    # Remove empty directory
+    Remove-Item -Path $BackendBuildPath -Force -Recurse
+    Copy-Item -Recurse -Path "$BackendPath\public" -Destination "$FinalBuildPath"
+    # Return to project root
+    cd $StartLocation
+
+    echo "=== BACKEND COMPLETE ==="
+    echo ""
+}
     
 
-echo "=== BUILDING BACKEND ==="
-# Go into backend dir
-cd backend
-# Run build (pkg)
-yarn run build
-# Move the build folder up to the build dir
-$ApplicationFiles = Get-ChildItem | Where-Object -Property Name -Match 'application-*'
-foreach ($File in $ApplicationFiles)
+function BuildFrontend()
 {
-    Move-Item -Path $File.PSPath -Destination "..\build\$File"
-    echo "Moved $File"
+    echo "=== FRONTEND BUILD STARTED ==="
+
+    # Go into frontend dir
+    cd $FrontendPath
+
+    # Run ReactJS build
+    yarn run build
+
+    # Move the build folder into the backend to be built into it
+    Move-Item -Path $FrontendBuildPath -Destination $BackendBuildPath
+
+    # Navigate to the project root
+    cd $StartLocation
+
+    echo "=== FRONTEND BUILD COMPLETE ==="
+    echo ""
 }
-# Remove empty directory
-Remove-Item -Path ".\build" -Force -Recurse
-Copy-Item -Recurse -Path ".\public" -Destination "..\build\"
-# Return to project root
-cd ..
-echo "=== BACKEND COMPLETE ==="
 
 
-echo ""
+function Build()
+{
+    Cleanup
+    Setup
+    BuildFrontend
+    BuildBackend
+    echo "Finished building application!"
+}
 
-echo "Finished building application!"
-
-
+Build

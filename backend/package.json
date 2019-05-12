@@ -1,5 +1,5 @@
 {
-  "bin": "Server.js",
+  "bin": "build/dist/Server.js",
   "name": "backend",
   "version": "0.0.0",
   "private": true,
