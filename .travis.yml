@@ -8,6 +8,6 @@ before_install:
   - yarn test
   - cd ../frontend
   - yarn
-  - yarn test
+  # - yarn test
 on:
   branch: master
