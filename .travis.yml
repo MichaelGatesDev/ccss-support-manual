@@ -5,7 +5,5 @@ cache: yarn
 before_install:
   - cd ./backend
   - yarn
-  - cd ../frontend
-  - yarn
 on:
   branch: master
