@@ -1,12 +1,11 @@
 {
   "bin": "Server.js",
   "name": "backend",
-  "version": "1.3.0",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "yarn run tsc && node ./Server",
-    "build": "yarn run tsc && pkg . -t linux,osx,windows -o application",
-    "tsc": "tsc",
+    "start": "tsc && node ./build/dist/Server",
+    "build": "tsc && pkg . -t linux,osx,windows -o application",
     "test": "jest"
   },
   "dependencies": {
@@ -23,8 +22,10 @@
     "morgan": "^1.9.1",
     "path": "^0.12.7",
     "request": "^2.88.0",
+    "tslib": "^1.9.3",
     "typescript": "^3.4.5",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "cross-env": "5.2.0"
   },
   "pkg": {
     "assets": [

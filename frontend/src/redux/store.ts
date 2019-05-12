@@ -1,16 +1,20 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 
-import rootReducer from './reducers';
+import { buildingsReducer } from "./buildings/reducers";
+import { imagesReducer } from "./images/reducers";
 
+const rootReducer = combineReducers({
+    buildings: buildingsReducer,
+    images: imagesReducer
+});
 
-const initialState: any = {};
+export type AppState = ReturnType<typeof rootReducer>;
 
 const middleware = [thunk];
 
 export const store = createStore(
     rootReducer,
-    initialState,
     applyMiddleware(...middleware)
 );
 

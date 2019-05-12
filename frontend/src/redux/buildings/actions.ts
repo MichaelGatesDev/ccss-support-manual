@@ -1,5 +1,7 @@
 import { Dispatch } from 'redux';
 import { FETCH_BUILDINGS, FETCH_BUILDING } from './types';
+import { Building } from 'backend/src/Building';
+
 
 export function fetchBuildings() {
     return function (dispatch: Dispatch) {
@@ -8,14 +10,13 @@ export function fetchBuildings() {
             .then(buildings => {
                 dispatch({
                     type: FETCH_BUILDINGS,
-                    payload: buildings
+                    payload: buildings as Building[]
                 })
             }).catch((error) => {
                 console.error("Failed to fetch buildings");
             });
     }
 };
-
 
 export function fetchBuilding(buildingName: string) {
     return function (dispatch: Dispatch) {
@@ -24,7 +25,7 @@ export function fetchBuilding(buildingName: string) {
             .then(building => {
                 dispatch({
                     type: FETCH_BUILDING,
-                    payload: building
+                    payload: building as Building | null
                 })
             }).catch((error) => {
                 console.error("Failed to fetch buildings");

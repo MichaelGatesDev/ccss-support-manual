@@ -5,11 +5,14 @@ import './RoomCardsGrid.scss';
 
 import RoomCard from "../RoomCard/RoomCard";
 
+import { Building } from 'backend/src/Building';
+import { ImageCollection, RoomImages } from 'backend/src/ImageManager';
+import { Room } from 'backend/src/Room';
+
 interface Props {
-    //TODO make explicit
-    buildings: any[];
-    rooms: any[];
-    images: any;
+    rooms: Room[];
+    buildings: Building[];
+    images: ImageCollection | null;
 }
 
 interface State {
@@ -41,11 +44,10 @@ class RoomCardsGrid extends Component<Props, State> {
         return null;
     }
 
-    getImagesForRoom(buildingName: string, roomNumber: string) {
-        let images = this.props.images;
-        if (!images) return undefined;
+    getImagesForRoom(buildingName: string, roomNumber: string): RoomImages | null {
+        if (!this.props.images) return null;
         let roomImages = this.props.images.roomImages;
-        if (!roomImages) return undefined;
+        if (!roomImages) return null;
         for (const item of roomImages) {
             if (
                 item.buildingName === buildingName &&
@@ -54,12 +56,14 @@ class RoomCardsGrid extends Component<Props, State> {
                 return item;
             }
         }
+        return null;
     }
 
     render() {
 
         const items = this.props.rooms.map((room, index) => {
             let parentBuilding = this.getParentBuilding(room);
+            if (!parentBuilding) return null;
             return (
                 <li key={index}>
                     <RoomCard

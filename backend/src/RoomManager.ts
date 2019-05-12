@@ -5,7 +5,7 @@ import { Room } from "./Room";
 /**
  * A utility class for managing rooms
  */
-class RoomManager {
+export class RoomManager {
 
     /**
      * A reference to the BuildingManager (used for all things related to building)
@@ -33,7 +33,7 @@ class RoomManager {
      * @param buildingName The name of the building
      * @param roomNumber The room number
      */
-    public getRoom(buildingName: string, roomNumber: string): Room | undefined {
+    public getRoom(buildingName: string, roomNumber: string): Room | null {
         for (const room of this.getRooms()) {
             if (
                 room.getBuilding()!.hasName(buildingName) &&
@@ -41,9 +41,6 @@ class RoomManager {
             )
                 return room;
         }
+        return null;
     }
-}
-
-export {
-    RoomManager
 }

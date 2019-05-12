@@ -1,10 +1,12 @@
+import { Building } from './Building';
+
 /**
  * A utility class for managing images
  */
 export class ImageManager {
 
-    private buildingImages: BuildingImages[];
-    private roomImages: RoomImages[];
+    public buildingImages: BuildingImages[];
+    public roomImages: RoomImages[];
 
     constructor() {
         this.buildingImages = [];
@@ -19,16 +21,18 @@ export class ImageManager {
         this.roomImages.push(images);
     }
 
-    public getImagesForBuilding(buildingName: string): BuildingImages | undefined {
+    public getImagesForBuilding(buildingName: string): BuildingImages | null {
         for (const images of this.buildingImages) {
             if (images.getBuildingID() === buildingName) return images;
         }
+        return null;
     }
 
-    public getImagesForRoom(buildingName: string, roomNumber: string): RoomImages | undefined {
+    public getImagesForRoom(buildingName: string, roomNumber: string): RoomImages | null {
         for (const images of this.roomImages) {
             if (images.getBuildingName() === buildingName && images.getRoomNumber() === roomNumber) return images;
         }
+        return null;
     }
 
     public getTotalSize() {
@@ -41,11 +45,8 @@ export class ImageManager {
         return size;
     }
 
-    public getAllImages() {
-        return {
-            buildingImages: this.buildingImages,
-            roomImages: this.roomImages
-        };
+    public getAllImages(): ImageCollection {
+        return new ImageCollection(this.buildingImages, this.roomImages);
     }
 
     public getBuildingImages() {
@@ -57,10 +58,27 @@ export class ImageManager {
     }
 }
 
+export class ImageCollection {
+    public buildingImages: BuildingImages[];
+    public roomImages: RoomImages[];
+
+    constructor(buildingImages: BuildingImages[], roomImages: RoomImages[]) {
+        this.buildingImages = buildingImages;
+        this.roomImages = roomImages;
+    }
+
+    public getBuildingImages() {
+        return this.buildingImages;
+    }
+
+    public getRoomImages() {
+        return this.roomImages;
+    }
+}
 
 export class Image {
 
-    private url: string;
+    public url: string;
 
     constructor(url: string) {
         this.url = url;
@@ -74,9 +92,9 @@ export class Image {
 
 
 export class BuildingImages {
-    private buildingName: string;
-    private rootImages: Image[];
-    private panoramicImages: Image[];
+    public buildingName: string;
+    public rootImages: Image[];
+    public panoramicImages: Image[];
 
     constructor(buildingName: string) {
         this.buildingName = buildingName;
@@ -118,11 +136,11 @@ export class BuildingImages {
 }
 
 export class RoomImages {
-    private buildingName: string;
-    private roomNumber: string;
-    private rootImages: Image[];
-    private panoramicImages: Image[];
-    private equipmentImages: Image[];
+    public buildingName: string;
+    public roomNumber: string;
+    public rootImages: Image[];
+    public panoramicImages: Image[];
+    public equipmentImages: Image[];
 
     constructor(buildingName: string, roomNumber: string) {
         this.buildingName = buildingName;

@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "lib": [
+          "es6"
+        ],
+        "esModuleInterop": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "./build/dist"
+    },
+    "references": [
+        {
+            "path": "./backend/"
+        },
+        {
+            "path": "./frontend"
+        }
+    ]
+}
