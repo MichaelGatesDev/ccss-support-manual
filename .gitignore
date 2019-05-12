@@ -1,11 +1,21 @@
-*config.json
-*.xlsx
+# ========================================================== #
 
-# Final application directory after build
-app
+# No js files because we use typescript
+**/*.js
+# No react JSX files because we use typescript
+**/*.jsx
 
 # No backend public data
 backend/public/
+# Allow typescript config
+!backend/tsconfig.json
+# Allow babel config
+!backend/babel.config.js
+
+# Final application directory after build
+build
+
+# ========================================================== #
 
 # Created by https://www.gitignore.io/api/node,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,visualstudiocode

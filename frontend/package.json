@@ -1,23 +1,39 @@
 {
   "name": "frontend",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "node-sass": "^4.11.0",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "react-router-dom": "^4.4.0",
-    "react-scripts": "2.1.8",
-    "underscore": "^1.9.1"
+    "node-sass": "^4.12.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "3.0.0",
+    "react-spring": "^8.0.20",
+    "react-transition-group": "^4.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^3.4.5",
+    "underscore": "^1.9.1",
+    "cross-env": "5.2.0",
+    "backend": "0.0.0"
   },
   "devDependencies": {
+    "@types/react": "^16.8.16",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.8",
+    "@types/react-router-dom": "^4.3.3",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
+    "@types/underscore": "^1.8.14",
     "less": "^3.9.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "tsc && react-scripts start",
+    "build": "tsc && react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "tsc": "tsc"
   },
   "browserslist": [
     ">0.2%",

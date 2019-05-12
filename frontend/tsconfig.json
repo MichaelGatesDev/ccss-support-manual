@@ -1,0 +1,29 @@
+{
+  "extends": "../tsproject.json",
+  "compilerOptions": {
+    "outDir": "./build/dist",
+    "rootDir": ".",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "jsx": "preserve",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "build",
+    "test/**/*.test.ts",
+    "test/**/*.test.tsx"
+  ]
+}

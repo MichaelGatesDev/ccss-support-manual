@@ -8,6 +8,10 @@ The application is designed to work for SUNY Plattsburgh, but can easily be modi
 
 ## Screenshots 
 
+### Home Page
+
+![](https://i.imgur.com/vIbb8Vr.png)
+
 ### Room Example
 
-![](https://i.imgur.com/ioXoyWc.jpg)
+![](https://i.imgur.com/cBtv1mz.png)
