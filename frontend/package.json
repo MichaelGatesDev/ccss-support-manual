@@ -31,7 +31,7 @@
   "scripts": {
     "start": "tsc && react-scripts start",
     "build": "tsc && react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --passWithNoTests",
     "eject": "react-scripts eject",
     "tsc": "tsc"
   },
