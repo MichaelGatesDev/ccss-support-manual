@@ -6,7 +6,7 @@ before_install:
   - cd ./backend
   - yarn
   - yarn test
-  - cd ./frontend
+  - cd ../frontend
   - yarn
   - yarn test
 on:
