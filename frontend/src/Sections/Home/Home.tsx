@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { Component, Fragment } from 'react';
-import * as PropTypes from 'prop-types';
-import { Transition, animated } from 'react-spring/renderprops'
 import { connect } from 'react-redux';
 import _ from 'underscore';
 
@@ -103,21 +101,9 @@ class Home extends Component<Props, State> {
         return (
             <Fragment>
 
-                <Transition
-                    native
-                    items={this.isLoading()}
-                    // from={{ opacity: 0 }}
-                    enter={{ opacity: 1 }}
-                    leave={{ opacity: 0 }}
-                >
-                    {(item => item && (styles =>
-                        (
-                            <animated.div style={styles}>
-                                <LoadingSplash />
-                            </animated.div>
-                        ))
-                    )}
-                </Transition>
+                {this.isLoading() &&
+                    <LoadingSplash />
+                }
 
                 {!this.isLoading() &&
                     <Fragment>
