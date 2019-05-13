@@ -14,8 +14,8 @@ interface State {
 }
 
 const BackToTopButtonDiv = posed.div({
+    exit: { opacity: 0 },
     enter: { opacity: 1 },
-    exit: { opacity: 0 }
 });
 
 class BackToTopButton extends Component<Props, State> {
