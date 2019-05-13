@@ -3,8 +3,6 @@ import { Component, Fragment } from 'react';
 
 import './Room.scss';
 
-import { Transition, animated } from 'react-spring/renderprops'
-
 import NavBar from "../../Components/NavBar/NavBar";
 import ImageCarousel from "../../Components/ImageCarousel/ImageCarousel";
 import FilterBox from "../../Components/FilterBox/FilterBox";
@@ -174,24 +172,9 @@ class Room extends Component<Props, State> {
         return (
 
             <Fragment>
-
-                <Transition
-                    native
-                    items={this.state.loading}
-                    // from={{ opacity: 0 }}
-                    enter={{ opacity: 1 }}
-                    leave={{ opacity: 0 }}
-                >
-                    {(item => item && (styles =>
-                        (
-                            <animated.div style={styles}>
-                                <LoadingSplash />
-                            </animated.div>
-                        ))
-                    )}
-                </Transition>
-
-
+                {this.state.loading &&
+                    <LoadingSplash />
+                }
                 {!this.state.loading &&
                     <Fragment>
                         <NavBar

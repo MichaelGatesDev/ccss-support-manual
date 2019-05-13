@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { Component } from 'react';
+import posed, { PoseGroup } from 'react-pose';
 
 import './BackToTopButton.scss';
-
-import { Transition, animated } from 'react-spring/renderprops'
 
 interface Props {
     minScrollAmt: number;
@@ -13,6 +12,11 @@ interface Props {
 interface State {
     visible: boolean;
 }
+
+const BackToTopButtonDiv = posed.div({
+    exit: { opacity: 0 },
+    enter: { opacity: 1 },
+});
 
 class BackToTopButton extends Component<Props, State> {
 
@@ -48,31 +52,21 @@ class BackToTopButton extends Component<Props, State> {
 
     render() {
         return (
-            <Transition
-                native
-                items={this.state.visible}
-                from={{ opacity: 0 }}
-                enter={{ opacity: 1 }}
-                leave={{ opacity: 0 }}
-            >
-                {(item => item && (styles =>
-                    (
-                        <animated.div style={styles}>
-                            <div className="BackToTopButton-Component">
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    onClick={this.onClick}
-                                    data-toggle="tooltip"
-                                    title="Back to Top"
-                                >
-                                    <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up"></i></label>
-                                </button>
-                            </div>
-                        </animated.div>
-                    ))
-                )}
-            </Transition>
+            <PoseGroup>
+                {this.state.visible && [
+                    <BackToTopButtonDiv className="BackToTopButton-Component" key="BackToTopButton">
+                        <button
+                            type="submit"
+                            className="btn btn-primary"
+                            onClick={this.onClick}
+                            data-toggle="tooltip"
+                            title="Back to Top"
+                        >
+                            <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up"></i></label>
+                        </button>
+                    </BackToTopButtonDiv>
+                ]}
+            </PoseGroup>
         );
     }
 }
