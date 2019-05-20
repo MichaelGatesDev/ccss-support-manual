@@ -1,6 +1,3 @@
-import { Building } from './Building';
-import { app } from './App';
-
 /**
  * A room within a building
  */
@@ -106,14 +103,6 @@ export class Room {
 
     public getBuildingName(): string {
         return this.buildingName;
-    }
-
-    public getBuilding(): Building | null {
-        return app.getDataManager().getBuildingManager().getBuildingByName(this.buildingName);
-    }
-
-    public getDisplayName(): string {
-        return this.getBuilding()!.getOfficialName() + " " + this.number.toLocaleUpperCase();
     }
 
     public setLastChecked(timestamp: string) {

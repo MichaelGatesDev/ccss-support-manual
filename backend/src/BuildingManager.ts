@@ -1,4 +1,5 @@
 import { Building } from "./Building";
+import { Room } from './Room';
 
 /**
  * A utility class for managing buildings
