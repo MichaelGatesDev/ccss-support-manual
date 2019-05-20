@@ -1,7 +1,7 @@
 {
   "extends": "../tsproject.json",
   "compilerOptions": {
-    "outDir": "./build/dist",
+    "outDir": "./dist",
     "rootDir": ".",
     "lib": [
       "dom"

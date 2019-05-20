@@ -14,7 +14,7 @@
         "importHelpers": true,
         "moduleResolution": "node",
         "sourceMap": true,
-        "outDir": "./build/dist"
+        "outDir": "./dist"
     },
     "references": [
         {

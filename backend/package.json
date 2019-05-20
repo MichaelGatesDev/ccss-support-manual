@@ -4,9 +4,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "tsc && node ./build/dist/Server",
-    "build": "tsc && pkg . -t linux,osx,windows -o application",
-    "test": "jest"
+    "start": "yarn serve",
+    "serve": "node dist/server.js",
+    "build": "yarn run build-ts && yarn run build-app",
+    "build-ts": "tsc",
+    "build-app": "pkg . -t linux,osx,windows -o application",
+    "test": "jest --forceExit --coverage --verbose"
   },
   "dependencies": {
     "@types/jest": "^24.0.12",
