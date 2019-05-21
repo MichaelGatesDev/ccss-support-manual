@@ -182,7 +182,7 @@ class DataManager {
                 return;
             }
 
-            let building: Building | null = self.buildingManager.getBuildingByName(buildingName);
+            let building = self.buildingManager.getBuildingByName(buildingName);
             if (!building) {
                 console.debug(`No such building exists: ${buildingName}`);
                 return;
@@ -205,11 +205,6 @@ class DataManager {
                 number,
                 type,
             );
-
-            if (!room.getBuilding()) {
-                console.debug("Room building is not valid!");
-                return;
-            }
 
             room.setLastChecked(row.getCell(config.roomsTimestampHeader.toLocaleLowerCase()).text);
             room.setName(row.getCell(config.roomsNameHeader.toLocaleLowerCase()).text);
@@ -246,7 +241,7 @@ class DataManager {
 
             // room.setPrinter();
 
-            room.getBuilding()!.addRoom(room);
+            building.addRoom(room);
         });
         console.debug(`Loaded ${this.roomManager.getRooms().length} rooms!`);
     }
