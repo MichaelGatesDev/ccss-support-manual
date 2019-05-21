@@ -37,6 +37,16 @@ class DataManager {
         const self = this;
         return new Promise(async (resolve, reject) => {
 
+            // create public dir if it does not exist
+            await fs.promises.mkdir('public')
+                .then(function () {
+                    console.log("Created 'public' directory");
+                })
+                .catch(function (err: Error) {
+                    console.error("There was an error creating the 'public' directory");
+                    return reject(err);
+                });
+                
             // configs
             await self.configManager.initialize();
 
