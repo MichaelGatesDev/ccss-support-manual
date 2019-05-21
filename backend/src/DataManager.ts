@@ -37,16 +37,21 @@ class DataManager {
         const self = this;
         return new Promise(async (resolve, reject) => {
 
-            // create public dir if it does not exist
-            await fs.promises.mkdir('public')
-                .then(function () {
-                    console.log("Created 'public' directory");
-                })
+            let rootDir = './public';
+
+            // create root dir if it does not exist
+            await fs.promises.access(rootDir, fs.constants.R_OK)
                 .catch(function (err: Error) {
-                    console.error("There was an error creating the 'public' directory");
-                    return reject(err);
+                    fs.promises.mkdir(rootDir, { recursive: true })
+                        .then(function () {
+                            console.log("Created directory: " + rootDir);
+                        })
+                        .catch(function (err: Error) {
+                            console.error("There was an error creating the directory: " + rootDir);
+                            return reject(err);
+                        });
                 });
-                
+
             // configs
             await self.configManager.initialize();
 
@@ -79,14 +84,12 @@ class DataManager {
             }
 
             // load data
-
             await self.loadPrimarySpreadsheet().then(function () {
                 console.log("Loaded primary spreadsheet");
             }).catch(function (err) {
                 console.error("There was an error loading the primary spreadsheet");
                 return reject(err);
             });
-
             await self.loadSecondarySpreadsheet().then(function () {
                 console.log("Loaded secondary spreadsheet");
             }).catch(function (err) {
@@ -389,17 +392,57 @@ class DataManager {
     private async loadImages() {
         const self = this;
         const config = this.configManager.getImagesConfig();
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
 
-            var rootDir = config.imagesDirectory + "buildings/";
+            var rootDir = config.imagesDirectory;
+            let buildingsDir = rootDir + "buildings/";
 
-            fs.promises.access(rootDir, fs.constants.R_OK).then(async function () {
+            // create root dir if it does not exist
+            await fs.promises.access(rootDir, fs.constants.R_OK)
+                .catch(function (err: Error) {
+                    fs.promises.mkdir(rootDir, { recursive: true })
+                        .then(function () {
+                            console.log("Created directory: " + rootDir);
+                        })
+                        .catch(function (err: Error) {
+                            console.error("There was an error creating the directory: " + rootDir);
+                            return reject(err);
+                        });
+                });
+
+            // create buildings dir if it does not exist
+            await fs.promises.access(buildingsDir, fs.constants.R_OK)
+                .catch(function (err: Error) {
+                    fs.promises.mkdir(buildingsDir, { recursive: true })
+                        .then(function () {
+                            console.log("Created directory: " + buildingsDir);
+                        })
+                        .catch(function (err: Error) {
+                            console.error("There was an error creating the directory: " + buildingsDir);
+                            return reject(err);
+                        });
+                });
+
+
+            fs.promises.access(buildingsDir, fs.constants.R_OK).then(async function () {
 
                 // console.log("ACCESSING ROOT DIR");
 
                 for (const building of self.buildingManager.getBuildings()) {
 
-                    var buildingDir = rootDir + building.getInternalName() + "/";
+                    var buildingDir = buildingsDir + building.getInternalName() + "/";
+
+                    await fs.promises.access(buildingDir, fs.constants.R_OK)
+                        .catch(function (err: Error) {
+                            fs.promises.mkdir(buildingDir, { recursive: true })
+                                .then(function () {
+                                    console.log("Created directory: " + buildingDir);
+                                })
+                                .catch(function (err: Error) {
+                                    console.error("There was an error creating the directory: " + buildingDir);
+                                    return reject(err);
+                                });
+                        });
 
                     await fs.promises.access(buildingDir, fs.constants.R_OK).then(async function () {
 

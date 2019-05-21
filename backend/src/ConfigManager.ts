@@ -175,7 +175,7 @@ export class ConfigManager {
 
 abstract class ConfigBase implements Serializable<ConfigBase> {
 
-    private configPath: string;
+    public configPath: string;
 
     constructor(configPath: string) {
         this.configPath = configPath;
@@ -203,8 +203,8 @@ abstract class ConfigBase implements Serializable<ConfigBase> {
 
 
 export class AppConfig extends ConfigBase {
-    public checkForProgramUpdates?: boolean = true;
-    public checkForDataUpdates?: boolean = true;
+    public checkForProgramUpdates: boolean = true;
+    public checkForDataUpdates: boolean = true;
 
     public deserialize(input: any): AppConfig {
         this.checkForProgramUpdates = input.checkForProgramUpdates;
@@ -214,10 +214,10 @@ export class AppConfig extends ConfigBase {
 }
 
 export class ImagesConfig extends ConfigBase {
-    public checkForImageUpdates?: boolean = true;
-    public imagesDirectory?: string = 'public/images/';
+    public checkForImageUpdates: boolean = true;
+    public imagesDirectory: string = './public/images/';
 
-    public deserialize(input: any): AppConfig {
+    public deserialize(input: any): ImagesConfig {
         this.checkForImageUpdates = input.checkForImageUpdates;
         this.imagesDirectory = input.imagesDirectory;
         return this;
