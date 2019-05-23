@@ -7,5 +7,8 @@ before_install:
   - yarn
   - cd ../frontend
   - yarn
+  - cd ..
 on:
   branch: master
+script:
+  - cd ./backend && yarn test && cd ../frontend && yarn test
