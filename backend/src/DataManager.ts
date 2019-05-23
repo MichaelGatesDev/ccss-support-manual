@@ -11,6 +11,7 @@ import { ImageManager, Image, RoomImages } from './ImageManager';
 import { TroubleshootingData } from './TroubleshootingData';
 import { TroubleshootingDataManager } from './TroubleshootingDataManager';
 import { GoogleDriveDownloader } from './Downloader';
+import { FileUtils } from './FileUtils';
 
 
 class DataManager {
@@ -36,6 +37,16 @@ class DataManager {
     public async initialize() {
         const self = this;
         return new Promise(async (resolve, reject) => {
+
+            let rootDir = './public';
+            // create root dir if it does not exist
+            await FileUtils.checkExists(rootDir)
+                .then(async (exists: boolean) => {
+                    if (!exists) {
+                        await FileUtils.createDirectory(rootDir);
+                        console.log("Created directory: " + rootDir);
+                    }
+                });
 
             // configs
             await self.configManager.initialize();
@@ -69,14 +80,12 @@ class DataManager {
             }
 
             // load data
-
             await self.loadPrimarySpreadsheet().then(function () {
                 console.log("Loaded primary spreadsheet");
             }).catch(function (err) {
                 console.error("There was an error loading the primary spreadsheet");
                 return reject(err);
             });
-
             await self.loadSecondarySpreadsheet().then(function () {
                 console.log("Loaded secondary spreadsheet");
             }).catch(function (err) {
@@ -247,7 +256,7 @@ class DataManager {
     }
 
     private async loadPrimarySpreadsheet() {
-        var self = this;
+        let self = this;
         let config = this.configManager.getPrimarySpreadsheetConfig();
 
         return new Promise((resolve, reject) => {
@@ -256,7 +265,7 @@ class DataManager {
                 return reject("File could not be found: " + config.getSheetPath());
             }
 
-            var workbook = new Excel.Workbook();
+            let workbook = new Excel.Workbook();
             workbook.xlsx.readFile(config.getSheetPath()).then(function () {
 
                 self.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
@@ -287,10 +296,10 @@ class DataManager {
         let results: Room[] = [];
         if (!StringUtils.isBlank(raw)) {
             for (const piece of raw.split(",")) {
-                var parts = piece.split("|");
+                let parts = piece.split("|");
 
-                var buildingName = parts[0];
-                var roomNumber = parts[1];
+                let buildingName = parts[0];
+                let roomNumber = parts[1];
 
                 let room: Room | null = this.roomManager.getRoom(buildingName, roomNumber);
                 if (!room) continue;
@@ -356,7 +365,7 @@ class DataManager {
     }
 
     private async loadSecondarySpreadsheet() {
-        var self = this;
+        let self = this;
         let config = this.configManager.getSecondarySpreadsheetConfig();
         return new Promise((resolve, reject) => {
 
@@ -364,7 +373,7 @@ class DataManager {
                 return reject("File could not be found: " + config.getSheetPath());
             }
 
-            var workbook = new Excel.Workbook();
+            let workbook = new Excel.Workbook();
             workbook.xlsx.readFile(config.getSheetPath()).then(function () {
 
                 self.loadTroubleshootingData(workbook.getWorksheet(config.troubleshootingSheetName));
@@ -379,104 +388,137 @@ class DataManager {
     private async loadImages() {
         const self = this;
         const config = this.configManager.getImagesConfig();
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
 
-            var rootDir = config.imagesDirectory + "buildings/";
+            let rootDir = config.imagesDirectory;
+            // create root dir if it does not exist
+            await FileUtils.checkExists(rootDir)
+                .then(async (exists: boolean) => {
+                    if (!exists) {
+                        await FileUtils.createDirectory(rootDir);
+                        console.log("Created directory: " + rootDir);
+                    }
+                });
 
-            fs.promises.access(rootDir, fs.constants.R_OK).then(async function () {
+            let buildingsDir = rootDir + "buildings/";
+            // create buildings dir if it does not exist
+            await FileUtils.checkExists(buildingsDir)
+                .then(async (exists: boolean) => {
+                    if (!exists) {
+                        await FileUtils.createDirectory(buildingsDir);
+                        console.log("Created directory: " + buildingsDir);
+                    }
+                });
 
-                // console.log("ACCESSING ROOT DIR");
+            for (const building of self.buildingManager.getBuildings()) {
 
-                for (const building of self.buildingManager.getBuildings()) {
+                let buildingDir = buildingsDir + building.getInternalName() + "/";
+                // create building dir if not exists
+                await FileUtils.checkExists(buildingDir)
+                    .then(async (exists: boolean) => {
+                        if (!exists) {
+                            await FileUtils.createDirectory(buildingDir);
+                            console.log("Created directory: " + buildingDir);
+                        }
+                    });
 
-                    var buildingDir = rootDir + building.getInternalName() + "/";
+                let roomsDir = buildingDir + 'rooms/';
+                // create building dir if not exists
+                await FileUtils.checkExists(roomsDir)
+                    .then(async (exists: boolean) => {
+                        if (!exists) {
+                            await FileUtils.createDirectory(roomsDir);
+                            console.log("Created directory: " + roomsDir);
+                        }
+                    });
 
-                    await fs.promises.access(buildingDir, fs.constants.R_OK).then(async function () {
+                for (const room of building.getRooms()) {
 
-                        // console.log("ACCESSING BUILDING DIR " + buildingDir);
+                    let roomImages = new RoomImages(building.getInternalName(), room.getNumber());
 
-                        for (const room of building.getRooms()) {
+                    let roomDir = roomsDir + room.getNumber().toLocaleLowerCase() + "/";
+                    // create room dir if not exists
+                    await FileUtils.checkExists(roomDir)
+                        .then(async (exists: boolean) => {
+                            if (!exists) {
+                                await FileUtils.createDirectory(roomDir);
+                                console.log("Created directory: " + roomDir);
+                            }
+                        });
 
-                            var roomDir = buildingDir + "rooms/" + room.getNumber().toLocaleLowerCase() + "/";
-
-                            await fs.promises.access(roomDir, fs.constants.R_OK).then(async function () {
-                                let roomImages = new RoomImages(building.getInternalName(), room.getNumber());
-
-                                // console.log("ACCESSING ROOM DIR " + roomDir);
-
-
-                                // root images
-                                await fs.promises.readdir(roomDir).then(async function (files) {
-                                    for (const file of files) {
-                                        await fs.promises.stat(roomDir + file).then(function (stat) {
-                                            if (!stat.isDirectory()) {
-                                                let url: string = roomDir.replace("public/", "") + file;
-                                                let image: Image = new Image(url);
-                                                roomImages.addMainImage(image);
-                                            }
-                                        });
-                                    }
-                                }).catch(function (err) {
-                                    console.log("Error reading root images at " + roomDir);
-                                });
-
-
-                                // panoramic images
-                                var panoramasDir = roomDir + "panoramas/";
-                                await fs.promises.access(panoramasDir, fs.constants.R_OK).then(async function () {
-                                    await fs.promises.readdir(panoramasDir).then(async function (files) {
-                                        for (const file of files) {
-                                            await fs.promises.stat(panoramasDir + file).then(function (stat) {
-                                                if (!stat.isDirectory()) {
-                                                    let url: string = panoramasDir.replace("public/", "") + file;
-                                                    let image: Image = new Image(url);
-                                                    roomImages.addPanoramicImage(image);
-                                                }
-                                            });
-                                        }
-                                    }).catch(function (err) {
-                                        console.log("Error reading panoramic images at " + panoramasDir);
-                                    });
-                                }).catch(function () {
-                                    console.log("Error accessing panoramic directory at " + panoramasDir);
-                                });
-
-
-                                // equipment images
-                                var equipmentDir = roomDir + "equipment/";
-                                await fs.promises.access(equipmentDir, fs.constants.R_OK).then(async function () {
-                                    await fs.promises.readdir(equipmentDir).then(async function (files) {
-                                        for (const file of files) {
-                                            await fs.promises.stat(equipmentDir + file).then(function (stat) {
-                                                if (!stat.isDirectory()) {
-                                                    let url: string = equipmentDir.replace("public/", "") + file;
-                                                    let image: Image = new Image(url);
-                                                    roomImages.addEquipmentImage(image);
-                                                }
-                                            });
-                                        }
-                                    }).catch(function (err) {
-                                        console.log("Error reading panoramic images at " + equipmentDir);
-                                    });
-                                }).catch(function () {
-                                    console.log("Error accessing equipment directory at " + equipmentDir);
-                                });
-
-                                self.imageManager.addRoomImages(roomImages);
-                                // console.debug(`Loaded ${roomImages.size()} images for ` + room.getDisplayName());
-
-                            }).catch(async function (err) {
-                                console.error("Unable to access room dir " + roomDir);
+                    // root images
+                    await fs.promises.readdir(roomDir).then(async function (files) {
+                        for (const file of files) {
+                            await fs.promises.stat(roomDir + file).then(function (stat) {
+                                if (!stat.isDirectory()) {
+                                    let url: string = roomDir.replace("public/", "") + file;
+                                    let image: Image = new Image(url);
+                                    roomImages.addMainImage(image);
+                                }
                             });
                         }
-                    }).catch(async function (err) {
+                    }).catch(function (err: Error) {
+                        console.log("Error reading root images at " + roomDir);
                         console.error(err);
                     });
+
+
+                    // panoramic images
+                    let panoramasDir = roomDir + "panoramas/";
+                    // create panoramas dir if not exists
+                    await FileUtils.checkExists(panoramasDir)
+                        .then(async (exists: boolean) => {
+                            if (!exists) {
+                                await FileUtils.createDirectory(panoramasDir);
+                                console.log("Created directory: " + panoramasDir);
+                            }
+                        });
+
+                    await fs.promises.readdir(panoramasDir).then(async function (files) {
+                        for (const file of files) {
+                            await fs.promises.stat(panoramasDir + file).then(function (stat) {
+                                if (!stat.isDirectory()) {
+                                    let url: string = panoramasDir.replace("public/", "") + file;
+                                    let image: Image = new Image(url);
+                                    roomImages.addPanoramicImage(image);
+                                }
+                            });
+                        }
+                    }).catch(function (err) {
+                        console.log("Error reading panoramic images at " + panoramasDir);
+                    });
+
+
+                    // equipment images
+                    let equipmentDir = roomDir + "equipment/";
+                    // create equipment dir if not exists
+                    await FileUtils.checkExists(equipmentDir)
+                        .then(async (exists: boolean) => {
+                            if (!exists) {
+                                await FileUtils.createDirectory(equipmentDir);
+                                console.log("Created directory: " + equipmentDir);
+                            }
+                        });
+
+                    await fs.promises.readdir(equipmentDir).then(async function (files) {
+                        for (const file of files) {
+                            await fs.promises.stat(equipmentDir + file).then(function (stat) {
+                                if (!stat.isDirectory()) {
+                                    let url: string = equipmentDir.replace("public/", "") + file;
+                                    let image: Image = new Image(url);
+                                    roomImages.addEquipmentImage(image);
+                                }
+                            });
+                        }
+                    }).catch(function (err) {
+                        console.log("Error reading panoramic images at " + equipmentDir);
+                    });
+
+                    self.imageManager.addRoomImages(roomImages);
+                    // console.debug(`Loaded ${roomImages.size()} images for ` + room.getDisplayName());
                 }
-                return resolve();
-            }).catch(async function (err) {
-                return reject(err);
-            });
+            }
+            return resolve();
         });
     }
 
