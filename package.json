@@ -1,7 +1,11 @@
 {
+    "name": "ccss-support-manual",
     "private": true,
+    "license": "MIT",
     "workspaces": [
-        "backend",
-        "frontend"
-    ]
+        "packages/*"
+    ],
+    "resolutions": {
+        "@types/react": "^16.8.17"
+    }
 }
