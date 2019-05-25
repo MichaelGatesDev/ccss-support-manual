@@ -1,4 +1,4 @@
-class StringUtils {
+export class StringUtils {
 
     public static RoomNumberPattern: RegExp = /[\d]{3}[A-Za-z]{0,1}/; //TODO make this configurable
 
@@ -32,8 +32,8 @@ class StringUtils {
         return text === "true" || text === "on" || text === "yes";
     }
 
-}
+    static internalize(str: string): string {
+        return str.toLowerCase().replace(/\s/g, "-");
+    }
 
-export {
-    StringUtils
 }

@@ -210,7 +210,7 @@ class DataManager {
             }
 
             let room = new Room(
-                building.getInternalName(),
+                building.internalName,
                 number,
                 type,
             );
@@ -412,7 +412,7 @@ class DataManager {
 
             for (const building of self.buildingManager.getBuildings()) {
 
-                let buildingDir = buildingsDir + building.getInternalName() + "/";
+                let buildingDir = buildingsDir + building.internalName + "/";
                 // create building dir if not exists
                 await FileUtils.checkExists(buildingDir)
                     .then(async (exists: boolean) => {
@@ -434,7 +434,7 @@ class DataManager {
 
                 for (const room of building.getRooms()) {
 
-                    let roomImages = new RoomImages(building.getInternalName(), room.getNumber());
+                    let roomImages = new RoomImages(building.internalName, room.getNumber());
 
                     let roomDir = roomsDir + room.getNumber().toLocaleLowerCase() + "/";
                     // create room dir if not exists

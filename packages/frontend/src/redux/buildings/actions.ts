@@ -2,18 +2,23 @@ import { Dispatch } from 'redux';
 import { FETCH_BUILDINGS, FETCH_BUILDING } from './types';
 import { Building } from 'backend/src/building';
 
+import { plainToClass } from "class-transformer";
 
 export function fetchBuildings() {
     return function (dispatch: Dispatch) {
         fetch('/api/v1/buildings')
             .then(response => response.json())
-            .then(buildings => {
+            .then((buildingsJson: Object[]) => {
+
+                plainToClass(Building, buildingsJson);
+
                 dispatch({
                     type: FETCH_BUILDINGS,
-                    payload: buildings as Building[]
-                })
+                    payload: buildingsJson
+                });
             }).catch((error) => {
                 console.error("Failed to fetch buildings");
+                console.error(error);
             });
     }
 };

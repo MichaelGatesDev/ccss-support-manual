@@ -16,6 +16,7 @@
     "backend": "0.0.0",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "class-transformer": "^0.2.3",
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
@@ -54,6 +55,7 @@
     "react-router-dom": "^5.0.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "semver": "6.0.0",
@@ -147,5 +149,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "resolutions": {
+    "@types/react": "^16.8.17"
   }
 }

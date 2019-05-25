@@ -1,4 +1,8 @@
 import { Room } from './room';
+import { StringUtils } from './string-utils';
+
+import { Type } from "class-transformer";
+
 
 /**
  * Represents a building which contains rooms 
@@ -8,22 +12,23 @@ export class Building {
     /**
      * Official Name of the building. (e.g. "Myers Fine Arts Building")
      */
-    public officialName: string;
+    officialName: string;
 
     /**
      * Nicknames/abbreviations that a building may have.
      */
-    public nicknames: string[];
+    nicknames: string[];
 
     /**
      * Internal Name which used used by the program to identify the building.
      */
-    public internalName: string;
+    internalName: string;
 
     /**
      * An array of Room objects representing the rooms in the building
      */
-    public rooms: Room[];
+    @Type(() => Room)
+    rooms: Room[];
 
     /**
      * 
@@ -38,31 +43,11 @@ export class Building {
         this.rooms = new Array<Room>();
     }
 
-    /**
-     * Creates the internal name from the official name
-     */
-    private createInternalName() {
-        return this.officialName.toLowerCase().replace(/\s/g, "-");
+    createInternalName(): string {
+        return StringUtils.internalize(this.officialName);
     }
 
-    /**
-     * Gets the official name of the building
-     */
-    public getOfficialName() {
-        return this.officialName;
-    }
-
-    /**
-     * Gets the nicknames/abbreviations of the building
-     */
-    public getNicknames() {
-        return this.nicknames;
-    }
-
-    /**
-     * Gets the internal name of the building
-     */
-    public getInternalName() {
+    getInternalName() {
         return this.internalName;
     }
 

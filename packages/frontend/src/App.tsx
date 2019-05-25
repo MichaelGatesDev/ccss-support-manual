@@ -13,6 +13,8 @@ import BackToTopButton from "./Components/BackToTopButton/BackToTopButton";
 
 import { store } from './redux/store';
 
+import "reflect-metadata";
+
 class App extends Component {
 
   constructor(props: any) {
