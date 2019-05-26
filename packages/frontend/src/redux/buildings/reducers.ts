@@ -14,11 +14,6 @@ export function buildingsReducer(state = initialState, action: BuildingsActionTy
                 buildings: action.payload,
                 buildingsLoading: false
             };
-        case FETCH_BUILDING:
-            return {
-                ...state,
-                building: action.payload
-            };
         default:
             return state;
     }

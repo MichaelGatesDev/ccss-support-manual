@@ -1,0 +1,11 @@
+{
+  "name": "@ccss-support-manual/common",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "exceljs": "^1.11.0"
+  }
+}

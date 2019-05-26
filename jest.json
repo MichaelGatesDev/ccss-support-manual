@@ -1,0 +1,21 @@
+{
+    "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js"
+    ],
+    "transform": {
+        "\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+        "**/*.test.*"
+    ],
+    "globals": {
+        "ts-jest": {
+            "tsConfig": "tsconfig.base.json"
+        }
+    },
+    "moduleNameMapper": {
+        "@stereobooster/(.*)$": "<rootDir>/packages/$1"
+    }
+}

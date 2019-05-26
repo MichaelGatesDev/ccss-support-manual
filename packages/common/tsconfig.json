@@ -1,20 +1,16 @@
 {
   "include": [
-    "src/**/*"
+    "src"
   ],
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     // to override config from tsconfig.base.json
-    "outDir": "build",
+    "outDir": "lib",
     "rootDir": "src",
     // for references
     "baseUrl": "src",
+    "composite": true,
+    "allowSyntheticDefaultImports": true
   },
-  // references required for monorepo to work
-  "references": [
-    {
-      "path": "../common",
-    }
-  ],
   "compileOnSave": true
 }

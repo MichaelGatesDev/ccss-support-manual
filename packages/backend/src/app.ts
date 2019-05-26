@@ -7,9 +7,9 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import { DataManager } from './data-manager';
+import { DataManager } from "@ccss-support-manual/common";
 
-import indexRoute from "../routes/index";
+import indexRoute from "./routes/index";
 
 class App {
 
@@ -67,7 +67,7 @@ class App {
   }
 
   public setupViews(): void {
-    // view engine setup
+    // view engine setup 
     this.expressApp.set('views', path.join(__dirname, '../views'));
     this.expressApp.set('view engine', 'ejs');
   }
@@ -82,7 +82,7 @@ class App {
 
   public setupErrorHandling(): void {
     //catch 404 and forward to error handler
-    this.expressApp.use((req: Request, res: Response, next: NextFunction) => {
+    this.expressApp.use((_req: Request, _res: Response, next: NextFunction) => {
       next(createError(404));
     });
 
@@ -90,7 +90,7 @@ class App {
     // will print stacktrace
     if (this.expressApp.get('env') === 'development') {
 
-      this.expressApp.use((err: any, req: Request, res: Response, next: NextFunction) => {
+      this.expressApp.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
         res.status(err['status'] || 500);
         res.render('error', {
           message: err.message,
@@ -101,7 +101,7 @@ class App {
 
     // production error handler
     // no stacktraces leaked to user
-    this.expressApp.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    this.expressApp.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
       res.status(err.status || 500);
       res.render('error', {
         message: err.message,

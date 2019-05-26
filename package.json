@@ -1,11 +1,14 @@
 {
-    "name": "ccss-support-manual",
     "private": true,
-    "license": "MIT",
     "workspaces": [
         "packages/*"
     ],
     "resolutions": {
         "@types/react": "^16.8.17"
+    },
+    "scripts": {
+        "build": "lerna run build --stream --scope=@ccss-support-manual/{common,backend,frontend}",
+        "pretest": "yarn build",
+        "test": "jest --config=jest.json"
     }
 }

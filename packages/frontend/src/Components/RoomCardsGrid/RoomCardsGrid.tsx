@@ -5,10 +5,6 @@ import './RoomCardsGrid.scss';
 
 import RoomCard from "../RoomCard/RoomCard";
 
-import { Building } from 'backend/src/building';
-import { ImageCollection, RoomImages } from 'backend/src/image-manager';
-import { Room } from 'backend/src/room';
-
 interface Props {
     rooms: Room[];
     buildings: Building[];
