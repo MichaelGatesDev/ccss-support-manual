@@ -1,7 +1,7 @@
 import { Room } from './room';
 import { StringUtils } from './string-utils';
 
-import { Type } from "class-transformer";
+// import { Type } from "class-transformer";
 
 
 /**
@@ -27,7 +27,7 @@ export class Building {
     /**
      * An array of Room objects representing the rooms in the building
      */
-    @Type(() => Room)
+    // @Type(() => Room)
     rooms: Room[];
 
     /**

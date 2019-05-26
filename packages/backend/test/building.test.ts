@@ -19,7 +19,7 @@ test('sets internal name', () => {
 
 test('checks nicknames', () => {
     // expect amount of nicknames
-    expect(building.getNicknames().length === buildingNicknames.length);
+    expect(building.nicknames.length === buildingNicknames.length);
 });
 
 test('checks all names', () => {

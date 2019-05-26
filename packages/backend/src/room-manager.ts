@@ -48,6 +48,6 @@ export class RoomManager {
     }
 
     public getRoomDisplayName(building: Building, room: Room): string {
-        return building.getOfficialName() + " " + room.getNumber().toLocaleUpperCase();
+        return building.officialName + " " + room.getNumber().toLocaleUpperCase();
     }
 }

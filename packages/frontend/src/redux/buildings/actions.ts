@@ -1,8 +1,7 @@
 import { Dispatch } from 'redux';
 import { FETCH_BUILDINGS, FETCH_BUILDING } from './types';
-import { Building } from 'backend/src/building';
 
-import { plainToClass } from "class-transformer";
+import { Building } from 'backend/src/building';
 
 export function fetchBuildings() {
     return function (dispatch: Dispatch) {
@@ -10,7 +9,7 @@ export function fetchBuildings() {
             .then(response => response.json())
             .then((buildingsJson: Object[]) => {
 
-                plainToClass(Building, buildingsJson);
+                // plainToClass(Building, buildingsJson);
 
                 dispatch({
                     type: FETCH_BUILDINGS,

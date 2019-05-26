@@ -77,7 +77,9 @@
     "@types/react-redux": "^7.0.8",
     "@types/react-router-dom": "^4.3.3",
     "@types/redux-thunk": "^2.1.0",
-    "@types/underscore": "^1.8.15"
+    "@types/underscore": "^1.8.15",
+    "ts-loader": "^6.0.1",
+    "typescript": "^3.4.5"
   },
   "scripts": {
     "start": "node scripts/start.js",
