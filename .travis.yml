@@ -8,4 +8,3 @@ on:
   branch: master
 script:
   - yarn test
-  - yarn test:frontend
