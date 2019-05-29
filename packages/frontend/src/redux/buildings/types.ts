@@ -1,4 +1,4 @@
-import { Building } from 'backend/src/building';
+import { Building } from "@ccss-support-manual/common";
 
 export interface BuildingsState {
     buildings: Building[];

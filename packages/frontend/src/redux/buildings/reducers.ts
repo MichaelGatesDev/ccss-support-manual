@@ -1,4 +1,4 @@
-import { BuildingsState, FETCH_BUILDINGS, FETCH_BUILDING, BuildingsActionTypes } from "./types";
+import { BuildingsState, FETCH_BUILDINGS, BuildingsActionTypes } from "./types";
 
 const initialState: BuildingsState = {
     buildings: [],

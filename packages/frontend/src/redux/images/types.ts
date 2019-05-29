@@ -1,4 +1,4 @@
-import { ImageCollection } from 'backend/src/image-manager';
+import { ImageCollection } from "@ccss-support-manual/common";
 
 export interface ImagesState {
     images: ImageCollection | null;

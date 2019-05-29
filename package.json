@@ -1,4 +1,5 @@
 {
+    "name": "ccss-support-manual-monorepo",
     "private": true,
     "workspaces": [
         "packages/*"
@@ -7,8 +8,12 @@
         "@types/react": "^16.8.17"
     },
     "scripts": {
-        "build": "lerna run build --stream --scope=@ccss-support-manual/{common,backend,frontend}",
+        "prestart": "yarn build",
+        "start:backend": "lerna run dev --stream --scope=@ccss-support-manual/backend",
+        "start:frontend": "lerna run start --stream --scope=@ccss-support-manual/frontend",
         "pretest": "yarn build",
-        "test": "jest --config=jest.json"
+        "test": "jest --config=jest.json",
+        "build": "tsc --build",
+        "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist}"
     }
 }

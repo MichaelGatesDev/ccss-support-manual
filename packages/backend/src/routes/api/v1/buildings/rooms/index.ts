@@ -1,5 +1,5 @@
 import { Router, Response, NextFunction } from 'express';
-import { Building } from '../../../../../src/building';
+import { Building } from '@ccss-support-manual/common';
 
 const router: Router = Router();
 

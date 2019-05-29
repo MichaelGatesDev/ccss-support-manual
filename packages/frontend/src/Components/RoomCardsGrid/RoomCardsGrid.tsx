@@ -5,6 +5,8 @@ import './RoomCardsGrid.scss';
 
 import RoomCard from "../RoomCard/RoomCard";
 
+import { Room, Building, ImageCollection, RoomImages } from "@ccss-support-manual/common";
+
 interface Props {
     rooms: Room[];
     buildings: Building[];

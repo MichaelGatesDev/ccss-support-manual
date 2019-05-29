@@ -6,11 +6,6 @@ export function fetchBuildings() {
         fetch('/api/v1/buildings')
             .then(response => response.json())
             .then((buildingsJson: Object[]) => {
-
-                // plainToClass(Building, buildingsJson);
-
-                // new Building("", []);
-
                 dispatch({
                     type: FETCH_BUILDINGS,
                     payload: buildingsJson

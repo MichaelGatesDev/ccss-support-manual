@@ -1,20 +1,7 @@
 {
-  "include": [
-    "src/**/*"
-  ],
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    // to override config from tsconfig.base.json
-    "outDir": "build",
-    "rootDir": "src",
-    // for references
-    "baseUrl": "src",
-  },
-  // references required for monorepo to work
-  "references": [
-    {
-      "path": "../common",
-    }
-  ],
-  "compileOnSave": true
+    "target": "esnext",
+    "module": "commonjs"
+  }
 }

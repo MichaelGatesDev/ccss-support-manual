@@ -9,8 +9,8 @@ import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
-import { Building } from "backend/src/building";
-import { Room } from 'backend/src/room';
+import { Building, Room } from "@ccss-support-manual/common";
+
 import { AppState } from '../../redux/store';
 import { fetchBuildings } from '../../redux/buildings/actions';
 import { fetchImages } from '../../redux/images/actions';

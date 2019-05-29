@@ -1,6 +1,5 @@
 import { Dispatch } from 'redux';
 import { FETCH_IMAGES } from './types';
-import { ImageCollection } from 'backend/src/image-manager';
 
 export function fetchImages() {
     return function (dispatch: Dispatch) {
@@ -9,9 +8,9 @@ export function fetchImages() {
             .then(images => {
                 dispatch({
                     type: FETCH_IMAGES,
-                    payload: images as ImageCollection | null
+                    payload: images
                 });
-            }).catch((error) => {
+            }).catch((_error) => {
                 console.error("Failed to fetch room images");
             });
     }

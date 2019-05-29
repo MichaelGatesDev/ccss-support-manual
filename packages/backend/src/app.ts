@@ -1,5 +1,3 @@
-import "reflect-metadata";
-
 import express, { Request, Response, NextFunction } from 'express';
 
 import createError from 'http-errors';
@@ -36,7 +34,7 @@ class App {
     await this.dataManager.initialize()
       .then(function () {
         console.log("Finished initializing data");
-      }).catch(function (err) {
+      }).catch(function (err: Error) {
         console.error("Failed to initialize data");
         console.error(err);
       });

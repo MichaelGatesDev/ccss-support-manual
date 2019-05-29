@@ -1,5 +1,5 @@
 import { Router, Response } from 'express';
-import { app } from '../../../../../src/app';
+import { app } from '../../../../../app';
 
 const router: Router = Router();
 

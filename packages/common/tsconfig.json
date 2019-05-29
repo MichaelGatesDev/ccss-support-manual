@@ -2,15 +2,14 @@
   "include": [
     "src"
   ],
-  "extends": "../../tsconfig.base.json",
+  "exclude": [
+    "node_modules",
+    "lib"
+  ],
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    // to override config from tsconfig.base.json
     "outDir": "lib",
     "rootDir": "src",
-    // for references
-    "baseUrl": "src",
-    "composite": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "compileOnSave": true
+    "module": "commonjs"
+  }
 }

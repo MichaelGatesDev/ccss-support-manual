@@ -1,6 +1,7 @@
 import { Router, Response, NextFunction } from 'express';
-import { app } from '../../../../src/app';
-import { Building } from '../../../../src/building';
+import { app } from '../../../../app';
+
+import { Building } from '@ccss-support-manual/common';
 
 const router: Router = Router();
 
