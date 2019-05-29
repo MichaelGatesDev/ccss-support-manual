@@ -13,7 +13,13 @@
         "start:frontend": "lerna run start --stream --scope=@ccss-support-manual/frontend",
         "pretest": "yarn build",
         "test": "jest --config=jest.json",
+        "test:frontend": "lerna run test --stream --scope=@ccss-support-manual/frontend",
         "build": "tsc --build",
-        "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist}"
+        "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist,build}"
+    },
+    "devDependencies": {
+        "jest": "^24.8.0",
+        "ts-jest": "^24.0.2",
+        "typescript": "^3.4.5"
     }
 }

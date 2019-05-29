@@ -1,5 +1,5 @@
-import { Building } from '../src/Building';
-import { Room, SimpleRoom } from '../src/Room';
+import { Building } from '../src/building';
+import { Room, SimpleRoom } from '../src/room';
 
 let building: Building = new Building(
     "My Cool Building",

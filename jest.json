@@ -1,21 +1,21 @@
 {
-    "moduleFileExtensions": [
-        "ts",
-        "tsx",
-        "js"
-    ],
-    "transform": {
-        "\\.tsx?$": "ts-jest"
-    },
-    "testMatch": [
-        "**/*.test.*"
-    ],
-    "globals": {
-        "ts-jest": {
-            "tsConfig": "tsconfig.base.json"
-        }
-    },
-    "moduleNameMapper": {
-        "@stereobooster/(.*)$": "<rootDir>/packages/$1"
+  "moduleFileExtensions": [
+    "ts",
+    "js"
+  ],
+  "transform": {
+    "\\.jsx?$": "babel-jest",
+    "\\.tsx?$": "ts-jest"
+  },
+  "testMatch": [
+    "**/*.test.*"
+  ],
+  "globals": {
+    "ts-jest": {
+      "tsConfig": "tsconfig.json"
     }
+  },
+  "moduleNameMapper": {
+    "@ccss-support-manual/(.*)$": "<rootDir>/packages/$1"
+  }
 }
