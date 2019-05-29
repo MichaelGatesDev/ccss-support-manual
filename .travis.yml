@@ -3,12 +3,8 @@ node_js:
   - "stable"
 cache: yarn
 before_install:
-  - cd ./backend
   - yarn
-  - cd ../frontend
-  - yarn
-  - cd ..
 on:
   branch: master
 script:
-  - cd ./backend && yarn test && cd ../frontend && yarn test
+  - yarn test

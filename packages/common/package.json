@@ -1,0 +1,17 @@
+{
+  "name": "@ccss-support-manual/common",
+  "version": "0.0.1",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "exceljs": "^1.11.0"
+  }
+}
