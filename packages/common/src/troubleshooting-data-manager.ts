@@ -47,35 +47,35 @@ export class TroubleshootingDataManager {
             }
 
             // audio
-            if (room.getAudio()) {
+            if (room.audio) {
                 if (td.getTypes().includes('audio')) {
                     results.push(td);
                     continue;
                 }
             }
             // projector
-            if (room.getProjector()) {
+            if (room.projector) {
                 if (td.getTypes().includes('projector')) {
                     results.push(td);
                     continue;
                 }
             }
             // computer
-            if (room.getTeachingStationComputer()) {
+            if (room.teachingStationComputer) {
                 if (td.getTypes().includes('computer')) {
                     results.push(td);
                     continue;
                 }
             }
             // dvd player
-            if (room.getDVDPlayer()) {
+            if (room.dvdPlayer) {
                 if (td.getTypes().includes('dvd')) {
                     results.push(td);
                     continue;
                 }
             }
             // printer
-            if (room.getPrinter()) {
+            if (room.printer) {
                 if (td.getTypes().includes('printer')) {
                     results.push(td);
                     continue;

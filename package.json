@@ -9,8 +9,8 @@
     },
     "scripts": {
         "prestart": "yarn build",
-        "start:backend": "lerna run dev --stream --scope=@ccss-support-manual/backend",
-        "start:frontend": "lerna run start --stream --scope=@ccss-support-manual/frontend",
+        "start:backend": "yarn prestart && lerna run dev --stream --scope=@ccss-support-manual/backend",
+        "start:frontend": "yarn prestart && lerna run start --stream --scope=@ccss-support-manual/frontend",
         "pretest": "yarn build",
         "test": "yarn test:backend && yarn test:frontend",
         "test:backend": "jest --config=jest.json",
