@@ -29,17 +29,16 @@ class TroubleshootingData {
     }
 
     public addWhitelistedRoom(room: Room) {
-        this.whitelistedRooms.push(room.getSimplified());
+        this.whitelistedRooms.push(new SimpleRoom(room.buildingName, room.number));
     }
 
     public addBlacklistedRoom(room: Room) {
-        this.blacklistedRooms.push(room.getSimplified());
+        this.blacklistedRooms.push(new SimpleRoom(room.buildingName, room.number));
     }
 
     public getTitle(): string {
         return this.title;
     }
-
 
     public getDescription(): string {
         return this.description;
@@ -63,7 +62,7 @@ class TroubleshootingData {
 
     public isRoomWhitelisted(buildingName: string, roomNumber: string) {
         for (const room of this.whitelistedRooms) {
-            if (room.getBuildingName() === buildingName && room.getRoomNumber() === roomNumber) return true;
+            if (room.buildingName === buildingName && room.roomNumber === roomNumber) return true;
         }
         return false;
     }
@@ -74,7 +73,7 @@ class TroubleshootingData {
 
     public isRoomBlacklisted(buildingName: string, roomNumber: string) {
         for (const room of this.blacklistedRooms) {
-            if (room.getBuildingName() === buildingName && room.getRoomNumber() === roomNumber) return true;
+            if (room.buildingName === buildingName && room.roomNumber === roomNumber) return true;
         }
         return false;
     }

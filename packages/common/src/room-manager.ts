@@ -2,6 +2,7 @@ import { BuildingManager } from "./building-manager";
 
 import { Room } from "./room";
 import { Building } from './building';
+import { BuildingUtils } from "./building-utils";
 
 /**
  * A utility class for managing rooms
@@ -23,7 +24,7 @@ export class RoomManager {
     public getRooms(): Room[] {
         let result: Room[] = [];
         for (const building of this.buildingManager.getBuildings()) {
-            result = result.concat(building.getRooms());
+            result = result.concat(building.rooms);
         }
         return result;
     }
@@ -36,11 +37,11 @@ export class RoomManager {
      */
     public getRoom(buildingName: string, roomNumber: string): Room | null {
         for (const room of this.getRooms()) {
-            let building = this.buildingManager.getBuildingByName(room.getBuildingName());
+            let building = this.buildingManager.getBuildingByName(room.buildingName);
             if (!building) continue;
             if (
-                building.hasName(buildingName) &&
-                room.getNumber() === roomNumber.toLowerCase().trim()
+                BuildingUtils.hasName(building, buildingName) &&
+                room.number === roomNumber.toLowerCase().trim()
             )
                 return room;
         }
@@ -48,6 +49,6 @@ export class RoomManager {
     }
 
     public getRoomDisplayName(building: Building, room: Room): string {
-        return building.officialName + " " + room.getNumber().toLocaleUpperCase();
+        return building.officialName + " " + room.number.toLocaleUpperCase();
     }
 }

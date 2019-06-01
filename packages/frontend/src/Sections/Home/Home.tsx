@@ -9,13 +9,13 @@ import NavBar from "../../Components/NavBar/NavBar";
 import RoomCardsGrid from "../../Components/RoomCardsGrid/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash/LoadingSplash";
 
-import { Building, Room } from "@ccss-support-manual/common";
-
 import { AppState } from '../../redux/store';
 import { fetchBuildings } from '../../redux/buildings/actions';
 import { fetchImages } from '../../redux/images/actions';
 import { BuildingsState } from '../../redux/buildings/types';
 import { ImagesState } from '../../redux/images/types';
+
+import { Building, Room, BuildingUtils } from "@ccss-support-manual/common";
 
 interface Props {
     buildingsState: BuildingsState;
@@ -93,7 +93,7 @@ class Home extends Component<Props, State> {
                 rooms = rooms.filter(function (room: Room) {
                     let pb = self.getParentBuilding(room);
                     if (!pb) return false;
-                    return (room.number.includes(q) || pb.hasName(q));
+                    return (room.number.includes(q) || BuildingUtils.hasName(pb, q));
                 }, this);
             }
         }

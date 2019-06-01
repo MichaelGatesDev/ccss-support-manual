@@ -5,16 +5,17 @@ import { ConfigManager, GoogleSpreadsheetConfig } from './config-manager';
 import { BuildingManager } from './building-manager';
 import { RoomManager } from './room-manager';
 import { Building } from './building';
-import { Room, Computer, Audio } from './room';
+import { Room, Computer, Audio, Phone, Projector, Screen, DocumentCamera, DVDPlayer, Printer } from './room';
 import { StringUtils } from './string-utils';
 import { ImageManager, Image, RoomImages } from './image-manager';
 import { TroubleshootingData } from './troubleshooting-data';
 import { TroubleshootingDataManager } from './troubleshooting-data-manager';
 import { GoogleDriveDownloader } from './downloader';
 import { FileUtils } from './file-utils';
+import { BuildingUtils } from './building-utils';
 
 
-class DataManager {
+export class DataManager {
 
     private configManager: ConfigManager;
     private buildingManager: BuildingManager;
@@ -156,10 +157,12 @@ class DataManager {
             let officialName = row.getCell(config.buildingsOfficialNameHeader.toLocaleLowerCase()).text;
             let nicknames = row.getCell(config.buildingsNicknamesHeader.toLocaleLowerCase()).text;
 
-            let building = new Building(
-                officialName,
-                nicknames.toLocaleLowerCase().split(","),
-            );
+            let building: Building = {
+                officialName: officialName,
+                nicknames: nicknames.toLocaleLowerCase().split(","),
+                internalName: StringUtils.internalize(officialName),
+                rooms: []
+            };
 
             self.buildingManager.addBuilding(building);
         });
@@ -208,49 +211,35 @@ class DataManager {
                 console.debug(`Room type is blank or invalid: ${type}`);
                 return;
             }
+            
+            let room: Room = {
+                buildingName: building.internalName,
+                lastChecked: row.getCell(config.roomsTimestampHeader.toLocaleLowerCase()).text,
+                number: number,
+                name: row.getCell(config.roomsNameHeader.toLocaleLowerCase()).text,
+                type: type,
+                lockType: row.getCell(config.roomsLockTypeHeader.toLocaleLowerCase()).text,
+                capacity: parseInt(row.getCell(config.roomsCapacityHeader.toLocaleLowerCase()).text),
+                phone: <Phone>{
+                    extension: row.getCell(config.roomsPhoneExtensionHeader.toLocaleLowerCase()).text,
+                    hasDisplay: row.getCell(config.roomsPhoneDisplayHeader.toLocaleLowerCase()).text.toLocaleLowerCase() === "true",
+                    hasSpeaker: row.getCell(config.roomsPhoneSpeakerHeader.toLocaleLowerCase()).text.toLocaleLowerCase() === "true"
+                },
+                projector: <Projector>{},
+                audio: <Audio>{
+                    systemDependent: StringUtils.parseBoolean(row.getCell(config.roomsAudioRequiresSystemHeader.toLocaleLowerCase()).text)
+                },
+                screen: <Screen>{},
+                teachingStationComputer: <Computer>{
+                    type: row.getCell(config.roomsTeachingStationComputerTypeHeader.toLocaleLowerCase()).text,
+                    operatingSystem: row.getCell(config.roomsTeachingStationComputerOSHeader.toLocaleLowerCase()).text
+                },
+                documentCamera: <DocumentCamera>{},
+                dvdPlayer: <DVDPlayer>{},
+                printer: <Printer>{}
+            };
 
-            let room = new Room(
-                building.internalName,
-                number,
-                type,
-            );
-
-            room.setLastChecked(row.getCell(config.roomsTimestampHeader.toLocaleLowerCase()).text);
-            room.setName(row.getCell(config.roomsNameHeader.toLocaleLowerCase()).text);
-            room.setLockType(row.getCell(config.roomsLockTypeHeader.toLocaleLowerCase()).text);
-            room.setCapacity(parseInt(row.getCell(config.roomsCapacityHeader.toLocaleLowerCase()).text));
-            room.setPhone(
-                row.getCell(config.roomsPhoneExtensionHeader.toLocaleLowerCase()).text,
-                row.getCell(config.roomsPhoneDisplayHeader.toLocaleLowerCase()).text,
-                row.getCell(config.roomsPhoneSpeakerHeader.toLocaleLowerCase()).text,
-            );
-
-            // room.setProjector(); 
-
-            room.setAudio(
-                new Audio(
-                    StringUtils.parseBoolean(row.getCell(config.roomsAudioRequiresSystemHeader.toLocaleLowerCase()).text)
-                )
-            );
-
-            // room.setScreen();
-
-            if (row.getCell(config.roomsTeachingStationComputerHeader.toLocaleLowerCase())) {
-                room.setTeachingStationComputer(
-                    new Computer(
-                        row.getCell(config.roomsTeachingStationComputerTypeHeader.toLocaleLowerCase()).text,
-                        row.getCell(config.roomsTeachingStationComputerOSHeader.toLocaleLowerCase()).text
-                    )
-                );
-            }
-
-            // room.setDocumentCamera();
-
-            // room.setDVDPlayer();
-
-            // room.setPrinter();
-
-            building.addRoom(room);
+            BuildingUtils.addRoom(building, room);
         });
         console.debug(`Loaded ${this.roomManager.getRooms().length} rooms!`);
     }
@@ -432,11 +421,11 @@ class DataManager {
                         }
                     });
 
-                for (const room of building.getRooms()) {
+                for (const room of building.rooms) {
 
-                    let roomImages = new RoomImages(building.internalName, room.getNumber());
+                    let roomImages = new RoomImages(building.internalName, room.number);
 
-                    let roomDir = roomsDir + room.getNumber().toLocaleLowerCase() + "/";
+                    let roomDir = roomsDir + room.number.toLocaleLowerCase() + "/";
                     // create room dir if not exists
                     await FileUtils.checkExists(roomDir)
                         .then(async (exists: boolean) => {
@@ -538,8 +527,4 @@ class DataManager {
     public getTroubleshootingDataManager() {
         return this.troubleshootingDataManager;
     }
-}
-
-export {
-    DataManager
 }
