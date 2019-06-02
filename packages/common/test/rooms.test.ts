@@ -1,52 +1,57 @@
 import { Building } from '../src/building';
+import { BuildingUtils } from '../src/building-utils';
 import { Room, SimpleRoom } from '../src/room';
+import { RoomUtils } from '../src/room-utils';
+import { StringUtils } from '../src/string-utils';
 
-let building: Building = new Building(
-    "My Cool Building",
-    ['my', 'cool', 'building', 'mcb']
-);
+let building: Building = <Building>{
+    officialName: "My Cool Building",
+    internalName: StringUtils.internalize("My Cool Building"),
+    nicknames: ['my', 'cool', 'building', 'mcb'],
+    rooms: []
+};
 
-let exampleRoom = new Room(
-    building.getInternalName(), // building name
-    "200", // number
-    "example" // type
-);
+let exampleRoom = {
+    buildingName: building.internalName,
+    number: "200",
+    type: "example"
+} as Room;
 
 test('creates a room', () => {
-    let createdRoom = new Room(
-        building.getInternalName(), // building name
-        "200", // number
-        "example" // type
-    );
+    let createdRoom = {
+        buildingName: building.internalName,
+        number: "200",
+        type: "example"
+    } as Room;
     expect(createdRoom);
 });
 
 test('adds room to building', () => {
     // should add room
-    expect(building.addRoom(exampleRoom));
+    expect(BuildingUtils.addRoom(building, exampleRoom));
 });
 
 test('does not add duplicate rooms', () => {
     // should not add duplicate room
-    expect(!building.addRoom(exampleRoom));
+    expect(BuildingUtils.addRoom(building, exampleRoom));
 });
 
 test('gets room via number', () => {
     // should have room with example room number
-    expect(building.getRoom(exampleRoom.getNumber()));
+    expect(RoomUtils.getRoomByNumber(building, exampleRoom.number));
 });
 
 test('gets simplified version of room', () => {
-    let simplified: SimpleRoom = exampleRoom.getSimplified();
+    let simplified: SimpleRoom = new SimpleRoom(exampleRoom.buildingName, exampleRoom.number);
     // should have same building name
-    expect(simplified.getBuildingName() === exampleRoom.getBuildingName());
+    expect(simplified.buildingName === exampleRoom.buildingName);
     // should have same number
-    expect(simplified.getRoomNumber() === exampleRoom.getNumber());
+    expect(simplified.roomNumber === exampleRoom.number);
 });
 
 test('removes from from building', () => {
     // should remove the example room
-    expect(building.removeRoom(exampleRoom));
+    expect(BuildingUtils.removeRoom(building, exampleRoom));
     // should not remove a room that it does not contain
-    expect(!building.removeRoom(exampleRoom));
+    expect(!BuildingUtils.removeRoom(building, exampleRoom));
 });
