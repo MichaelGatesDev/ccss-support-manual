@@ -1,5 +1,5 @@
-import { Building } from "./building";
-import { BuildingUtils } from "./building-utils";
+import { Building } from "../../common/src/building";
+import { BuildingUtils } from "../../common/src/building-utils";
 
 /**
  * A utility class for managing buildings

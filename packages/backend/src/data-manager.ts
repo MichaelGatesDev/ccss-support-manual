@@ -4,15 +4,15 @@ import fs from 'fs';
 import { ConfigManager, GoogleSpreadsheetConfig } from './config-manager';
 import { BuildingManager } from './building-manager';
 import { RoomManager } from './room-manager';
-import { Building } from './building';
-import { Room, Computer, Audio, Phone, Projector, Screen, DocumentCamera, DVDPlayer, Printer } from './room';
-import { StringUtils } from './string-utils';
+import { Building } from '../../common/src/building';
+import { Room, Computer, Audio, Phone, Projector, Screen, DocumentCamera, DVDPlayer, Printer } from '../../common/src/room';
+import { StringUtils } from '../../common/src/string-utils';
 import { ImageManager, Image, RoomImages } from './image-manager';
-import { TroubleshootingData } from './troubleshooting-data';
+import { TroubleshootingData } from '../../common/src/troubleshooting-data';
 import { TroubleshootingDataManager } from './troubleshooting-data-manager';
-import { GoogleDriveDownloader } from './downloader';
-import { FileUtils } from './file-utils';
-import { BuildingUtils } from './building-utils';
+import { GoogleDriveDownloader } from '../../common/src/downloader';
+import { FileUtils } from '../../common/src/file-utils';
+import { BuildingUtils } from '../../common/src/building-utils';
 
 
 export class DataManager {

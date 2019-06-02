@@ -141,37 +141,9 @@
         "version": "2d1a64f24118237935c3822e55be0fc9d808d228da7625ba27efa0bcc237e9b7",
         "signature": "773e88915b62d10e90176cd449782d0de2c709d3ed3893f83cb795c89669c536"
       },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts": {
-        "version": "c8b8de691d0624dee941f11f0110aa9261fc53e732582327f04edf83ebddd31b",
-        "signature": "20b27fecf19455175016008bf0d597b786e916435c9debc79b1180f93ed4c36e"
-      },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts": {
-        "version": "3ae6f9cedc8296f980b601421e80270bebdd8d740d6e2957b1204bb1fcecbd7b",
-        "signature": "dc98c1bed0d89c596f2b857461baf85a574acd709b48054f5cef6c1f7cfae554"
-      },
-      "d:/dev/web projects/ccss-support-manual/node_modules/exceljs/index.d.ts": {
-        "version": "a2fee0b7e6d3ca644baa3988e8463db81d4a1c0200b4fbd4c6b712ad9ba694c0",
-        "signature": "a2fee0b7e6d3ca644baa3988e8463db81d4a1c0200b4fbd4c6b712ad9ba694c0"
-      },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts": {
-        "version": "409b8955be812559bb2bc519805b2696a2d43c45690f90f3a3f9206bcf829b9c",
-        "signature": "d53660d30b320a94f7379fb23c5299185868e52b4523342130e05ab8630254c2"
-      },
       "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts": {
         "version": "a6166f626b4753fd404d51e1817c0c4d76ea9425718c4d13dd2eac89cabebfdf",
         "signature": "5cc842b1f5894d1b71eb6c43593b2a4951974b8be5f24b8fe90d2c54be5f27be"
-      },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts": {
-        "version": "a9c1aa8387c3e45faf88af3df9f95b724688c00232a9836e8064b1dc1bd4bab6",
-        "signature": "694bb24643fef995aa98290f92e54953f078ab04126cf7ffe19fa04cad637db8"
-      },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": {
-        "version": "1d95d2f7674a38f63b4ca600a4e7770c6842f30485c0bf976b2effb279b84ca6",
-        "signature": "e1fc7ffdc3877e24d58c6d78141344e37c351a816362fd62a68b3b8efcf47ac1"
-      },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts": {
-        "version": "ffa2a228860f517d03b090656f391873e79afba93b4b15d29c8bcfe6dc0b7afc",
-        "signature": "ac2432181706c38c151f0ec42a8e383fa1046510dbd23f09d1699c1ea0e44a70"
       },
       "d:/dev/web projects/ccss-support-manual/packages/common/src/downloader.ts": {
         "version": "110f71bfabd45e2d6bbaf99c327652520d9ca7513e51892b598c284259cc81fa",
@@ -181,17 +153,17 @@
         "version": "d9409cac3aaa20ecfa645f47afcb829f6d37a87abddc4f66595ba7a7f4cc3bdc",
         "signature": "4aca51ea616f69d1d6fe445d7e9b060bb0bc0f1e18e698839d144ecbdb396609"
       },
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/data-manager.ts": {
-        "version": "76ce0b4c5052676a4bfaa1b9eb9f3bb30714cb1356799291053297813ab7a028",
-        "signature": "f1050d122442b645ec66d839dc135ce075a3ec02567cfa944e33d8898735a0b7"
-      },
       "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts": {
         "version": "b413fdf8f19569c3ab6ff22649a3013b28483049e0f638ea1c23bce7d9497a55",
         "signature": "3f0c2c6eea3f6eae6d1ec1c8ac21cca7dbe03c871ae40a52c78c4293b1d74ac5"
       },
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": {
+        "version": "1d95d2f7674a38f63b4ca600a4e7770c6842f30485c0bf976b2effb279b84ca6",
+        "signature": "e1fc7ffdc3877e24d58c6d78141344e37c351a816362fd62a68b3b8efcf47ac1"
+      },
       "d:/dev/web projects/ccss-support-manual/packages/common/src/index.ts": {
-        "version": "dc83a631ba1a780c69417d32c3da6398a7c7aabbc68be908b2d5339b00b5a655",
-        "signature": "5c90c541262f452f48f89aa445cfc271b30b5b0b7be701788cccb0f9cb221c50"
+        "version": "2b1a9ea0f07c6901a388324dd8a9b49424f7d2e9033f0245901f2e336df5dae6",
+        "signature": "923a82849863d5efb96a7badb7da562c337419bd5225871eeff7ad30eb3362e9"
       },
       "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts": {
         "version": "9eac0dd4de5669db2b8321dffa400b997f7b21181118efc7a2c1743d93d4be57",
@@ -756,45 +728,7 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/exceljs/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -810,44 +744,25 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/data-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/exceljs/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/downloader.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/file-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts": [
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": [
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "d:/dev/web projects/ccss-support-manual/packages/common/src/index.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/downloader.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/file-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/data-manager.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1526,51 +1441,22 @@
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/exceljs/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts": [
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": [
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/data-manager.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts"
-      ],
       "d:/dev/web projects/ccss-support-manual/packages/common/src/index.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/downloader.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/file-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/data-manager.ts"
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
@@ -2147,18 +2033,12 @@
       "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/building-manager.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/config-manager.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/exceljs/index.d.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-manager.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/image-manager.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data-manager.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/downloader.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/file-utils.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/data-manager.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts",
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts",
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/index.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__generator/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__traverse/index.d.ts",
@@ -2254,8 +2134,7 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/vfile-message/types/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/vfile/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/vfile-message/index.d.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/yargs/index.d.ts",
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/index.ts"
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/yargs/index.d.ts"
     ]
   },
   "version": "3.4.5"

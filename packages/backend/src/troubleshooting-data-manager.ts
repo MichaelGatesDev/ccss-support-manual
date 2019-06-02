@@ -1,4 +1,4 @@
-import { TroubleshootingData } from "./troubleshooting-data";
+import { TroubleshootingData } from "../../common/src/troubleshooting-data";
 import { RoomManager } from "./room-manager";
 
 export class TroubleshootingDataManager {

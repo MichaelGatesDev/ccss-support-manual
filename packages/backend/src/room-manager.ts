@@ -1,8 +1,8 @@
 import { BuildingManager } from "./building-manager";
 
-import { Room } from "./room";
-import { Building } from './building';
-import { BuildingUtils } from "./building-utils";
+import { Room } from "../../common/src/room";
+import { Building } from '../../common/src/building';
+import { BuildingUtils } from "../../common/src/building-utils";
 
 /**
  * A utility class for managing rooms
