@@ -2,6 +2,16 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
-    "module": "commonjs"
-  }
+    "module": "commonjs",
+    "rootDir": "./src/",
+    "outDir": "build"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "references": [
+    {
+      "path": "../../packages/common"
+    }
+  ]
 }

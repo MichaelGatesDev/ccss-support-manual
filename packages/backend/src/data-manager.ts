@@ -4,16 +4,10 @@ import fs from 'fs';
 import { ConfigManager, GoogleSpreadsheetConfig } from './config-manager';
 import { BuildingManager } from './building-manager';
 import { RoomManager } from './room-manager';
-import { Building } from '../../common/src/building';
-import { Room, Computer, Audio, Phone, Projector, Screen, DocumentCamera, DVDPlayer, Printer } from '../../common/src/room';
-import { StringUtils } from '../../common/src/string-utils';
 import { ImageManager, Image, RoomImages } from './image-manager';
-import { TroubleshootingData } from '../../common/src/troubleshooting-data';
 import { TroubleshootingDataManager } from './troubleshooting-data-manager';
-import { GoogleDriveDownloader } from '../../common/src/downloader';
-import { FileUtils } from '../../common/src/file-utils';
-import { BuildingUtils } from '../../common/src/building-utils';
 
+import { FileUtils, StringUtils, GoogleDriveDownloader, Building, BuildingUtils, TroubleshootingData, Room, Phone, Projector, Computer, DocumentCamera, DVDPlayer, Printer, Audio } from "@ccss-support-manual/common";
 
 export class DataManager {
 
@@ -211,7 +205,7 @@ export class DataManager {
                 console.debug(`Room type is blank or invalid: ${type}`);
                 return;
             }
-            
+
             let room: Room = {
                 buildingName: building.internalName,
                 lastChecked: row.getCell(config.roomsTimestampHeader.toLocaleLowerCase()).text,

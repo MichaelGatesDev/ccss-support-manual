@@ -1,5 +1,4 @@
-import { Building } from "../../common/src/building";
-import { BuildingUtils } from "../../common/src/building-utils";
+import { Building, BuildingUtils } from "@ccss-support-manual/common";
 
 /**
  * A utility class for managing buildings

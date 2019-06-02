@@ -5,7 +5,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import { DataManager } from "@ccss-support-manual/common";
+import { DataManager } from './data-manager';
 
 import indexRoute from "./routes/index";
 

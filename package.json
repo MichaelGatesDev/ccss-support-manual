@@ -16,6 +16,8 @@
         "test:backend": "jest --config=jest.json",
         "test:frontend": "lerna run test --stream --scope=@ccss-support-manual/frontend",
         "build": "tsc --build",
+        "build:backend": "yarn build && lerna run build:app --scope=@ccss-support-manual/backend",
+        "build:app": "yarn build && ",
         "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist,build}"
     },
     "devDependencies": {

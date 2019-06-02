@@ -1,8 +1,6 @@
 import { BuildingManager } from "./building-manager";
 
-import { Room } from "../../common/src/room";
-import { Building } from '../../common/src/building';
-import { BuildingUtils } from "../../common/src/building-utils";
+import { Building, BuildingUtils, Room } from "@ccss-support-manual/common";
 
 /**
  * A utility class for managing rooms
