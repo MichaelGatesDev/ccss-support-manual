@@ -89,11 +89,12 @@ class Home extends Component<Props, State> {
                 return room.buildingName;
             }, this).value();
 
-            for (const q of queries) {
+            for (let q of queries) {
+                q = q.toLocaleLowerCase();
                 rooms = rooms.filter(function (room: Room) {
                     let pb = self.getParentBuilding(room);
                     if (!pb) return false;
-                    return (room.number.includes(q) || BuildingUtils.hasName(pb, q));
+                    return (room.number.toLocaleLowerCase().includes(q) || room.name.toLocaleLowerCase().includes(q) || BuildingUtils.hasName(pb, q));
                 }, this);
             }
         }
