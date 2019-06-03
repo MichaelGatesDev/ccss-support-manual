@@ -4,10 +4,10 @@ import fs from 'fs';
 import { ConfigManager, GoogleSpreadsheetConfig } from './config-manager';
 import { BuildingManager } from './building-manager';
 import { RoomManager } from './room-manager';
-import { ImageManager, Image, RoomImages } from './image-manager';
+import { ImageManager } from './image-manager';
 import { TroubleshootingDataManager } from './troubleshooting-data-manager';
 
-import { FileUtils, StringUtils, GoogleDriveDownloader, Building, BuildingUtils, TroubleshootingData, Room, Phone, Projector, Computer, DocumentCamera, DVDPlayer, Printer, Audio } from "@ccss-support-manual/common";
+import { FileUtils, StringUtils, GoogleDriveDownloader, Building, BuildingUtils, TroubleshootingData, Room, Phone, Projector, Computer, DocumentCamera, DVDPlayer, Printer, Audio, RoomImages, Image } from "@ccss-support-manual/common";
 
 export class DataManager {
 
