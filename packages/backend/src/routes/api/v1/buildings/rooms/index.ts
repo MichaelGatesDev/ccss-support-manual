@@ -1,11 +1,11 @@
 import { Router, Response, NextFunction } from 'express';
-import { Building } from '@ccss-support-manual/common';
+import { Building, RoomUtils } from '@ccss-support-manual/common';
 
 const router: Router = Router();
 
 router.param('roomNumber', function (req: any, _res: Response, next: NextFunction, number: string) {
     let building: Building = req.building;
-    let room = building.getRoom(number);
+    let room = RoomUtils.getRoomByNumber(building, number);
     if (room) {
         req.room = room;
         next();

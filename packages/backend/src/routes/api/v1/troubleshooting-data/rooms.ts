@@ -1,7 +1,7 @@
 import { Router, Response, NextFunction } from 'express';
 import { app } from '../../../../app';
 
-import { Building } from '@ccss-support-manual/common';
+import { Building, RoomUtils } from '@ccss-support-manual/common';
 
 const router: Router = Router();
 
@@ -11,15 +11,15 @@ router.get("/", function (_req, res) {
     console.warn("This route should not be used.");
 });
 
-router.param('roomNumber', function (req: any, _res: Response, next: NextFunction, id: string) {
+router.param('roomNumber', function (req: any, _res: Response, next: NextFunction, roomNumber: string) {
     let building: Building = req.building;
-    let room = building.getRoom(id);
+    let room = RoomUtils.getRoomByNumber(building, roomNumber);
     if (room) {
         req.room = room;
         next();
         return;
     }
-    next(new Error('Failed to find room: ' + id));
+    next(new Error('Failed to find room: ' + roomNumber));
     return;
 });
 

@@ -1,16 +1,18 @@
 {
   "name": "@ccss-support-manual/backend",
   "version": "0.0.1",
-  "main": "./build/src/server.js",
-  "bin": "./build/src/server.js",
+  "bin": "./build/server.js",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "build-app": "pkg . -t linux,osx,windows -o application",
+    "tsc": "tsc --build",
+    "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
-    "prod": "tsc && node ./build/src/server.js",
+    "prod": "yarn tsc && node ./build/src/server.js",
     "test": "jest --forceExit --coverage --verbose"
   },
+  "files": [
+    "build"
+  ],
   "dependencies": {
     "@ccss-support-manual/common": "*",
     "@types/jest": "^24.0.13",
@@ -31,9 +33,12 @@
     "underscore": "^1.9.1"
   },
   "pkg": {
+    "scripts": [
+      "./build/**/*.js"
+    ],
     "assets": [
-      "build/**/*",
-      "public/images/*"
+      "./views/**/*",
+      "./build/dist/**/*"
     ]
   },
   "devDependencies": {

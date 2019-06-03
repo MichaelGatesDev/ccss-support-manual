@@ -1,15 +1,15 @@
 {
   "include": [
-    "src"
+    "./src/"
   ],
   "exclude": [
-    "node_modules",
-    "lib"
+    "./node_modules/",
+    "./lib/"
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib",
-    "rootDir": "src",
+    "outDir": "./lib/",
+    "rootDir": "./src/",
     "module": "commonjs"
   }
 }

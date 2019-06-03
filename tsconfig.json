@@ -10,17 +10,15 @@
     "files": [],
     "compilerOptions": {
         "skipLibCheck": false,
-        "target": "esnext",
-        "module": "esnext",
+        "target": "es6",
+        "module": "commonjs",
         "lib": [
             "dom",
-            "esnext"
+            "es6"
         ],
         "jsx": "react",
         "declaration": true,
         "declarationMap": true,
-        "rootDir": ".",
-        "outDir": "build",
         "downlevelIteration": true,
         "strict": true,
         "removeComments": false,
@@ -43,7 +41,10 @@
     },
     "references": [
         {
-            "path": "packages/common"
+            "path": "packages/common",
+        },
+        {
+            "path": "packages/backend",
         }
     ]
 }

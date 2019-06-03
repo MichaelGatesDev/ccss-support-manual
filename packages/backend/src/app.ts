@@ -5,7 +5,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import { DataManager } from "@ccss-support-manual/common";
+import { DataManager } from './data-manager';
 
 import indexRoute from "./routes/index";
 
@@ -51,14 +51,14 @@ class App {
     this.setupMiddleware();
 
     console.debug("Setting up static directories");
-    this.expressApp.use('/images', express.static(path.join(__dirname, "../public/images")));
-    // this.expressApp.use(express.static(path.join(rootDir, '../../build')));
+    this.expressApp.use('/images', express.static("public/images"));
+    this.expressApp.use(express.static(path.join(__dirname, 'dist')));
 
     console.debug("Setting up routes");
     this.expressApp.use('/', indexRoute);
 
     console.debug("Setting up static files to serve");
-    this.expressApp.use('*', (_req, res) => res.sendFile(path.join(__dirname, '../build', 'index.html')));
+    this.expressApp.use('*', (_req, res) => res.sendFile(path.join(__dirname, 'dist', 'index.html')));
 
     console.debug("Setting up error handling");
     this.setupErrorHandling();
@@ -66,7 +66,7 @@ class App {
 
   public setupViews(): void {
     // view engine setup 
-    this.expressApp.set('views', path.join(__dirname, '../views'));
+    this.expressApp.set('views', path.join(__dirname, "../views"));
     this.expressApp.set('view engine', 'ejs');
   }
 

@@ -1,4 +1,5 @@
-import { TroubleshootingData } from "../../common/src/troubleshooting-data";
+import { TroubleshootingData } from "@ccss-support-manual/common";
+
 import { RoomManager } from "./room-manager";
 
 export class TroubleshootingDataManager {

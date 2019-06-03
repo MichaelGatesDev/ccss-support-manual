@@ -8,20 +8,28 @@
         "@types/react": "^16.8.17"
     },
     "scripts": {
-        "prestart": "yarn build",
+        "prestart": "yarn run tsc",
         "start:backend": "yarn prestart && lerna run dev --stream --scope=@ccss-support-manual/backend",
         "start:frontend": "yarn prestart && lerna run start --stream --scope=@ccss-support-manual/frontend",
-        "pretest": "yarn build",
+        "pretest": "yarn run tsc",
         "test": "yarn test:backend && yarn test:frontend",
         "test:backend": "jest --config=jest.json",
         "test:frontend": "lerna run test --stream --scope=@ccss-support-manual/frontend",
-        "build": "tsc --build",
-        "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist,build}"
+        "tsc": "tsc --build",
+        "build": "yarn run clean && yarn run tsc && ts-node scripts/build.ts",
+        "build:backend": "yarn run tsc && lerna run build:app --scope=@ccss-support-manual/backend",
+        "build:frontend": "yarn run tsc && lerna run build-prod --scope=@ccss-support-manual/frontend",
+        "clean": "ts-node scripts/clean.ts"
     },
     "devDependencies": {
+        "@types/rimraf": "^2.0.2",
         "jest": "^24.8.0",
         "lerna": "^3.14.1",
         "ts-jest": "^24.0.2",
+        "ts-node": "^8.2.0",
         "typescript": "^3.4.5"
+    },
+    "dependencies": {
+        "rimraf": "^2.6.3"
     }
 }
