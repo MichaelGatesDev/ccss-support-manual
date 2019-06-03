@@ -27,6 +27,8 @@ class FormInput extends Component<Props, State> {
         };
 
         this.onChange = this.onChange.bind(this);
+        this.onFocus = this.onFocus.bind(this);
+        this.onBlur = this.onBlur.bind(this);
     }
 
     componentDidMount() {
@@ -35,13 +37,9 @@ class FormInput extends Component<Props, State> {
         if (this.props.selectedByDefault) {
             this.textInput.focus();
         }
-
-        this.onFocus = this.onFocus.bind(this);
-        this.onBlur = this.onBlur.bind(this);
     }
 
     onFocus() {
-
     }
 
     onBlur() {
