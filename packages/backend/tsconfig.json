@@ -4,7 +4,7 @@
     "target": "esnext",
     "module": "commonjs",
     "rootDir": "./src/",
-    "outDir": "build"
+    "outDir": "./build/"
   },
   "include": [
     "src/**/*"

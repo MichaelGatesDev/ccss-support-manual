@@ -21,14 +21,6 @@
         "version": "2edd3ddf436ef8e12df876dcae4ecd6a8748577944c477bf4b20d5596e0c9843",
         "signature": "2edd3ddf436ef8e12df876dcae4ecd6a8748577944c477bf4b20d5596e0c9843"
       },
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.d.ts": {
-        "version": "6549045e428b5f483bc82d6e8f6d01a72decd0cb7387f650f365f2210fe10808",
-        "signature": "6549045e428b5f483bc82d6e8f6d01a72decd0cb7387f650f365f2210fe10808"
-      },
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.d.ts": {
-        "version": "1c05c805f62c1c06a60b7812cd8de2dff7a5bda2218ce5edda5d9d298b1c48e1",
-        "signature": "1c05c805f62c1c06a60b7812cd8de2dff7a5bda2218ce5edda5d9d298b1c48e1"
-      },
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.dom.d.ts": {
         "version": "6994c583b66862deca24d7bbf77297d95b9d3da8160dbd9beef6b847cf7c1376",
         "signature": "6994c583b66862deca24d7bbf77297d95b9d3da8160dbd9beef6b847cf7c1376"
@@ -108,18 +100,6 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.regexp.d.ts": {
         "version": "e7780d04cd4120ee554c665829db2bbdd6b947cbaa3c150b7d9ea74df3beb2e8",
         "signature": "e7780d04cd4120ee554c665829db2bbdd6b947cbaa3c150b7d9ea74df3beb2e8"
-      },
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.array.d.ts": {
-        "version": "fc7c02b980e7dda0ed14d57ee71705c09efc51ec6286a10b971a25a3bb29262b",
-        "signature": "fc7c02b980e7dda0ed14d57ee71705c09efc51ec6286a10b971a25a3bb29262b"
-      },
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.string.d.ts": {
-        "version": "669427ac10ef9f52b6a7a502a66670eaabba675e0a660eb971041bd73c9894e3",
-        "signature": "669427ac10ef9f52b6a7a502a66670eaabba675e0a660eb971041bd73c9894e3"
-      },
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.symbol.d.ts": {
-        "version": "7a842c21e0fe143eb3ad4d689a1470bab5ed9bc7fd7223fe8b56cbae27038d62",
-        "signature": "7a842c21e0fe143eb3ad4d689a1470bab5ed9bc7fd7223fe8b56cbae27038d62"
       },
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.intl.d.ts": {
         "version": "f6e0c89daaf72eac38dfb1d5ef0972183f7f26a68da15bfe5bcb7cfccf0c7db8",
@@ -204,6 +184,10 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/buffer.d.ts": {
         "version": "fe892fea1e75a442fffb4a604d7eeb451e858787a9f2f01c4e83bf12a3b5048d",
         "signature": "fe892fea1e75a442fffb4a604d7eeb451e858787a9f2f01c4e83bf12a3b5048d"
+      },
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/events/index.d.ts": {
+        "version": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935",
+        "signature": "400db42c3a46984118bff14260d60cec580057dc1ab4c2d7310beb643e4f5935"
       },
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts": {
         "version": "c5a3c14cb11afb48d405562e6843145caa67c60be9738f408cd7977ce30a0b00",
@@ -401,6 +385,14 @@
         "version": "5e36986c4fc3c242013026c0cffdf95f138c25edfd05e80c23d634e5dca4cfef",
         "signature": "5e36986c4fc3c242013026c0cffdf95f138c25edfd05e80c23d634e5dca4cfef"
       },
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/minimatch/index.d.ts": {
+        "version": "1d1e6bd176eee5970968423d7e215bfd66828b6db8d54d17afec05a831322633",
+        "signature": "1d1e6bd176eee5970968423d7e215bfd66828b6db8d54d17afec05a831322633"
+      },
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/glob/index.d.ts": {
+        "version": "d852d6282c8dc8156d26d6bda83ab4bde51fee05ba2fe0ecdc165ddda009d3ee",
+        "signature": "d852d6282c8dc8156d26d6bda83ab4bde51fee05ba2fe0ecdc165ddda009d3ee"
+      },
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts": {
         "version": "dc49082466ff7e61cfbaf146f106a59274dbb95f726ed1e22a54375f82992953",
         "signature": "dc49082466ff7e61cfbaf146f106a59274dbb95f726ed1e22a54375f82992953"
@@ -513,6 +505,10 @@
         "version": "39fda6063e101ac12bf637dc9090d4d05372a7d5f985c5f5261bb8867629566d",
         "signature": "39fda6063e101ac12bf637dc9090d4d05372a7d5f985c5f5261bb8867629566d"
       },
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/rimraf/index.d.ts": {
+        "version": "020902fda20b7d8937c30699f217e198054a0d0d5c1c309dab7d588adadfcade",
+        "signature": "020902fda20b7d8937c30699f217e198054a0d0d5c1c309dab7d588adadfcade"
+      },
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/stack-utils/index.d.ts": {
         "version": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49",
         "signature": "41422586881bcd739b4e62d9b91cd29909f8572aa3e3cdf316b7c50f14708d49"
@@ -552,17 +548,15 @@
     },
     "options": {
       "skipLibCheck": false,
-      "target": 7,
+      "target": 2,
       "module": 1,
       "lib": [
         "lib.dom.d.ts",
-        "lib.esnext.d.ts"
+        "lib.es2015.d.ts"
       ],
       "jsx": 2,
       "declaration": true,
       "declarationMap": true,
-      "rootDir": "D:/Dev/Web Projects/ccss-support-manual/packages/common/src",
-      "outDir": "D:/Dev/Web Projects/ccss-support-manual/packages/common/lib",
       "downlevelIteration": true,
       "strict": true,
       "removeComments": false,
@@ -582,6 +576,8 @@
         ]
       },
       "composite": true,
+      "outDir": "D:/Dev/Web Projects/ccss-support-manual/packages/common/lib/",
+      "rootDir": "D:/Dev/Web Projects/ccss-support-manual/packages/common/src/",
       "configFilePath": "D:/Dev/Web Projects/ccss-support-manual/packages/common/tsconfig.json"
     },
     "referencedMap": {
@@ -602,14 +598,6 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -690,18 +678,6 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.regexp.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.array.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.string.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.symbol.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -816,6 +792,10 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/events/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
@@ -1117,6 +1097,17 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/minimatch/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/glob/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/minimatch/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
@@ -1262,6 +1253,13 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/rimraf/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/glob/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/stack-utils/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
@@ -1323,14 +1321,6 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1414,18 +1404,6 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.array.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.string.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.symbol.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.intl.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
@@ -1433,20 +1411,6 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.bigint.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": [
-        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/packages/common/src/index.ts": [
         "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts",
@@ -1458,28 +1422,21 @@
         "d:/dev/web projects/ccss-support-manual/packages/common/src/string-utils.ts",
         "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts"
       ],
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/troubleshooting-data.ts": [
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/building-utils.ts": [
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts",
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts": [
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/packages/common/src/room-utils.ts": [
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
+        "d:/dev/web projects/ccss-support-manual/packages/common/src/building.ts"
+      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__generator/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__traverse/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@babel/parser/typings/babel-parser.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__template/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/parser/typings/babel-parser.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1492,212 +1449,32 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__template/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/parser/typings/babel-parser.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@babel/parser/typings/babel-parser.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__traverse/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/babel__generator/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@babel/types/lib/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/globals.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/assert.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/async_hooks.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/buffer.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/cluster.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/console.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/constants.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/crypto.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dgram.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/domain.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http2.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tls.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/https.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tls.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/inspector.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/module.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/os.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/path.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/perf_hooks.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/async_hooks.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/process.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/punycode.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/querystring.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/readline.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/repl.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/readline.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/vm.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/string_decoder.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/timers.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tls.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/crypto.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/trace_events.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tty.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/querystring.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/v8.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/vm.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/worker_threads.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/vm.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/zlib.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1744,34 +1521,36 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/zlib.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/globals.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/globals.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/base.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/globals.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/connect/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/vfile-message/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/body-parser/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/connect/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/vfile/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/vfile-message/types/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/range-parser/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/rimraf/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/glob/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/glob/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/minimatch/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1783,7 +1562,20 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/mime/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/body-parser/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/serve-static/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/express-serve-static-core/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/morgan/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/cookie-parser/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1793,51 +1585,345 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/body-parser/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/serve-static/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/express-serve-static-core/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/body-parser/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/connect/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/cookie-parser/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/connect/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/debug/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/async_hooks.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/perf_hooks.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/async_hooks.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/createbrowserhistory.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/buffer.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/events/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/cluster.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/console.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/constants.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/crypto.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tls.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/crypto.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/https.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tls.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http2.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tls.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dgram.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/dns.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/tty.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/http.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/net.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/domain.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/worker_threads.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/vm.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/zlib.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/v8.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/readline.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/repl.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/readline.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/vm.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/fs.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/stream.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/inspector.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/events.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/module.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/os.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/path.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/process.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/punycode.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/querystring.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/url.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/querystring.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/string_decoder.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/timers.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/trace_events.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/yargs/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/vfile-message/types/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/underscore/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/strip-json-comments/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/strip-bom/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/stack-utils/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router-dom/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/createhashhistory.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/creatememoryhistory.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/locationutils.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/pathutils.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-redux/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/redux/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/hoist-non-react-statics/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/redux/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-dom/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/q/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/jest/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/jest-diff/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/types.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/types.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/jest-diff/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-reports/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-report/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-coverage/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-report/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-coverage/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-coverage/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/invariant/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/http-errors/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/hoist-non-react-statics/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/csstype/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/prop-types/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/global.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/prop-types/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/csstype/index.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/global.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
@@ -1850,149 +1936,63 @@
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/global.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/csstype/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/prop-types/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/csstype/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/prop-types/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/global.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/hoist-non-react-statics/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/http-errors/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/invariant/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-coverage/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-report/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-coverage/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-reports/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-report/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/istanbul-lib-coverage/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/jest-diff/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/types.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/types.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/jest/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/jest-diff/build/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/jest-diff/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/morgan/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/q/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-dom/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/redux/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-redux/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/redux/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/hoist-non-react-statics/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
-      ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/pathutils.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router-dom/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/react/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/locationutils.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/stack-utils/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/creatememoryhistory.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/strip-bom/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/createhashhistory.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/strip-json-comments/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/createbrowserhistory.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/index.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/underscore/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/minimatch/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/vfile-message/types/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/debug/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/vfile/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/vfile-message/types/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/mime/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/vfile-message/index.d.ts": [
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/unist/index.d.ts",
-        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/range-parser/index.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ],
-      "d:/dev/web projects/ccss-support-manual/node_modules/@types/yargs/index.d.ts": [
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/globals.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/globals.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts": [
+        "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts"
+      ],
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/vm.d.ts": [
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/util.d.ts",
         "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/ts3.2/util.d.ts"
       ]
@@ -2003,8 +2003,6 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2016.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2017.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.d.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.d.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.dom.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2015.core.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2015.collection.d.ts",
@@ -2025,9 +2023,6 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.intl.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.promise.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2018.regexp.d.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.array.d.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.string.d.ts",
-      "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.es2019.symbol.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/typescript/lib/lib.esnext.bigint.d.ts",
       "d:/dev/web projects/ccss-support-manual/packages/common/src/room.ts",
@@ -2049,6 +2044,7 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/assert.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/async_hooks.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/buffer.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/events/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/child_process.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/cluster.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/node/console.d.ts",
@@ -2098,6 +2094,8 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/express/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/cookie-parser/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/debug/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/minimatch/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/glob/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/domutils.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/createbrowserhistory.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/history/createhashhistory.d.ts",
@@ -2126,6 +2124,7 @@
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-redux/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/react-router-dom/index.d.ts",
+      "d:/dev/web projects/ccss-support-manual/node_modules/@types/rimraf/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/stack-utils/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/strip-bom/index.d.ts",
       "d:/dev/web projects/ccss-support-manual/node_modules/@types/strip-json-comments/index.d.ts",

@@ -1,3 +1,4 @@
 public
 build
-lib
+dist
+application-*

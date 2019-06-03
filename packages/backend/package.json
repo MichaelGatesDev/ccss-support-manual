@@ -4,10 +4,10 @@
   "bin": "./build/server.js",
   "private": true,
   "scripts": {
-    "build": "tsc --build",
-    "build:app": "yarn run build && pkg package.json -t linux,osx,windows -o application",
+    "tsc": "tsc --build",
+    "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
-    "prod": "tsc && node ./build/src/server.js",
+    "prod": "yarn tsc && node ./build/src/server.js",
     "test": "jest --forceExit --coverage --verbose"
   },
   "files": [
@@ -37,7 +37,8 @@
       "./build/**/*.js"
     ],
     "assets": [
-      "views/**/*"
+      "./views/**/*",
+      "./build/dist/**/*"
     ]
   },
   "devDependencies": {
