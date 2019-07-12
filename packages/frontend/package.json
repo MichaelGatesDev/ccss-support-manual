@@ -5,6 +5,8 @@
   "dependencies": {
     "@babel/core": "7.4.3",
     "@ccss-support-manual/common": "*",
+    "@material-ui/core": "^4.0.0-rc.0",
+    "@material-ui/icons": "^4.2.1",
     "@svgr/webpack": "4.1.0",
     "@types/jest": "24.0.12",
     "@typescript-eslint/eslint-plugin": "1.6.0",
