@@ -55,6 +55,7 @@
     "react-pose": "^4.0.8",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
+    "react-scripts": "^3.0.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reflect-metadata": "^0.1.13",
@@ -83,10 +84,9 @@
     "typescript": "^3.4.5"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "node scripts/start.js",
-    "build-prod": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom"
   },
   "eslintConfig": {
     "extends": "react-app"
