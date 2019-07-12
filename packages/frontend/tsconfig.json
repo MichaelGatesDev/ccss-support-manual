@@ -1,3 +1,18 @@
 {
-  "extends": "../../tsconfig.json"
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "isolatedModules": true,
+    "declaration": false,
+    "declarationMap": false,
+    "composite": false
+  },
+  "include": [
+    "src",
+    "../common"
+  ]
 }
