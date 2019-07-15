@@ -5,7 +5,7 @@ import './FilterBox.scss';
 
 import Filter from './Filter/Filter';
 
-import _ from 'underscore';
+import _ from 'lodash';
 
 interface Props {
     onChange: any;
@@ -57,10 +57,10 @@ class FilterBox extends Component<Props, State> {
     render() {
         let self = this;
 
-        var sortedKeys = _.sortBy(this.props.keys, function (obj: any) { return obj; });
+        const sortedKeys = _.sortBy(this.props.keys);
 
-        var filters = sortedKeys.map(function (value: string, index: number) {
-            var selected = self.state.activeFilters.includes(value);
+        const filters = sortedKeys.map(function (value: string, index: number) {
+            const selected = self.state.activeFilters.includes(value);
             return (
                 <Filter
                     name={value}

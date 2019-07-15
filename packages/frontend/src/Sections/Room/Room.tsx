@@ -12,7 +12,7 @@ import LoadingSplash from '../../Components/LoadingSplash/LoadingSplash';
 
 import GeneralInfo from './GeneralInfo/GeneralInfo';
 
-import _ from 'underscore';
+import _ from 'lodash';
 
 interface Props {
     match: any;
@@ -104,7 +104,7 @@ class Room extends Component<Props, State> {
         fetch('/api/v1/troubleshooting-data/buildings/' + this.props.match.params.buildingName + "/rooms/" + this.props.match.params.roomNumber)
             .then(response => response.json())
             .then(data => {
-                var sortedTypes = _.sortBy(data, function (item: any) { return item.types; });
+                const sortedTypes = _.sortBy(data, function (item: any) { return item.types; });
                 this.setState({
                     loading: false,
                     troubleshootingData: sortedTypes
@@ -127,7 +127,7 @@ class Room extends Component<Props, State> {
                     results.push(type.toLowerCase());
             }
         }
-        return _.sortBy(results, function (obj: any) { return obj; }); // sort alphabetically descending (A-Z)
+        return _.sortBy(results); // sort alphabetically descending (A-Z)
     }
 
     getAllTroubleshootingDataTags() {
@@ -138,7 +138,7 @@ class Room extends Component<Props, State> {
                     results.push(tag.toLowerCase());
             }
         }
-        return _.sortBy(results, function (obj: any) { return obj; }); // sort alphabetically descending (A-Z)
+        return _.sortBy(results); // sort alphabetically descending (A-Z)
     }
 
     onTypeFilterChange(activeTypeFilters: string[]) {

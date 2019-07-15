@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import _ from 'underscore';
+import _ from 'lodash';
 
 import './Home.scss';
 
@@ -75,27 +75,32 @@ class Home extends Component<Props, State> {
     }
 
 
+    filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
+        let self = this;
+        return rooms.filter(function (room: Room) {
+            let pb = self.getParentBuilding(room);
+            if (!pb) return false;
+            return (
+                (filterNumber && room.number.toLocaleLowerCase().includes(name)) ||
+                (filterName && room.name.toLocaleLowerCase().includes(name)) ||
+                (filterBuildingName && BuildingUtils.hasName(pb, name))
+            );
+        }, this);
+    }
+
+
     render() {
 
-        let self = this;
-
-        let rooms: Room[] = [];
+        let rooms: Room[] = this.getAllRooms();
         if (!this.isLoading()) {
             let query = this.state.filterSearch;
             let queries = query.split(" ");
-            rooms = _(this.getAllRooms()).chain().sortBy(function (room: Room) {
-                return room.number;
-            }, this).sortBy(function (room: Room) {
-                return room.buildingName;
-            }, this).value();
 
-            for (let q of queries) {
-                q = q.toLocaleLowerCase();
-                rooms = rooms.filter(function (room: Room) {
-                    let pb = self.getParentBuilding(room);
-                    if (!pb) return false;
-                    return (room.number.toLocaleLowerCase().includes(q) || room.name.toLocaleLowerCase().includes(q) || BuildingUtils.hasName(pb, q));
-                }, this);
+            rooms = _.sortBy(rooms, ["buildingName", "number"]);
+
+            for (let query of queries) {
+                query = query.toLocaleLowerCase();
+                rooms = this.filterRoomsByName(rooms, query);
             }
         }
 
