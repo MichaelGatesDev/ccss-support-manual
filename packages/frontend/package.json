@@ -3,74 +3,19 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.5.4",
     "@ccss-support-manual/common": "*",
     "@material-ui/core": "^4.0.0-rc.0",
     "@material-ui/icons": "^4.2.1",
-    "@svgr/webpack": "4.3.1",
-    "@types/jest": "24.0.15",
-    "@typescript-eslint/eslint-plugin": "1.12.0",
-    "@typescript-eslint/parser": "1.12.0",
-    "babel-eslint": "10.0.2",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "8.0.6",
-    "babel-plugin-named-asset-import": "^0.3.2",
-    "babel-preset-react-app": "^9.0.0",
-    "camelcase": "^5.2.0",
-    "case-sensitive-paths-webpack-plugin": "2.2.0",
-    "class-transformer": "^0.2.3",
-    "css-loader": "3.0.0",
-    "dotenv": "8.0.0",
-    "dotenv-expand": "5.1.0",
-    "eslint": "^6.0.1",
-    "eslint-config-react-app": "^4.0.1",
-    "eslint-loader": "2.2.1",
-    "eslint-plugin-flowtype": "3.11.1",
-    "eslint-plugin-import": "2.18.0",
-    "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.14.2",
-    "eslint-plugin-react-hooks": "^1.5.0",
-    "file-loader": "4.0.0",
-    "fs-extra": "8.1.0",
-    "html-webpack-plugin": "4.0.0-beta.5",
-    "identity-obj-proxy": "3.0.0",
-    "is-wsl": "^2.1.0",
-    "jest": "24.8.0",
-    "jest-environment-jsdom-fourteen": "0.1.0",
-    "jest-resolve": "24.8.0",
-    "jest-watch-typeahead": "0.3.1",
     "lodash": "^4.17.14",
-    "mini-css-extract-plugin": "0.7.0",
     "node-sass": "^4.12.0",
-    "optimize-css-assets-webpack-plugin": "5.0.3",
-    "pnp-webpack-plugin": "1.5.0",
-    "postcss-flexbugs-fixes": "4.1.0",
-    "postcss-loader": "3.0.0",
-    "postcss-normalize": "8.0.1",
-    "postcss-preset-env": "6.7.0",
-    "postcss-safe-parser": "4.0.1",
     "react": "^16.8.6",
-    "react-app-polyfill": "^1.0.1",
-    "react-dev-utils": "^9.0.1",
     "react-dom": "^16.8.6",
     "react-pose": "^4.0.8",
     "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.0.1",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0",
-    "reflect-metadata": "^0.1.13",
-    "resolve": "1.11.1",
-    "sass-loader": "7.1.0",
-    "semver": "6.2.0",
-    "style-loader": "0.23.1",
-    "terser-webpack-plugin": "1.3.0",
-    "ts-pnp": "1.1.2",
-    "url-loader": "2.0.1",
-    "webpack": "4.35.3",
-    "webpack-dev-server": "3.7.2",
-    "webpack-manifest-plugin": "2.0.4",
-    "workbox-webpack-plugin": "4.3.1"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.136",
@@ -79,17 +24,12 @@
     "@types/react-dom": "16.8.4",
     "@types/react-redux": "^7.1.1",
     "@types/react-router-dom": "^4.3.4",
-    "babel-jest": "^24.8.0",
-    "ts-loader": "^6.0.4",
-    "typescript": "^3.5.3"
+    "ts-loader": "^6.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "test": "react-scripts test --env=jsdom --watchAll=false --forceExit"
   },
   "browserslist": {
     "production": [
@@ -103,58 +43,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jest-environment-jsdom-fourteen",
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
-    ]
-  },
-  "resolutions": {
-    "@types/react": "^16.8.17"
-  }
+  "proxy": "http://localhost:3001"
 }
