@@ -8,7 +8,7 @@
     "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
     "prod": "yarn tsc && node ./build/src/server.js",
-    "test": "jest --forceExit --coverage --verbose"
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles"
   },
   "files": [
     "build"
