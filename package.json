@@ -17,7 +17,7 @@
         "test:frontend": "yarn prestart && cd packages/frontend && yarn test",
         "tsc": "tsc --build",
         "build": "yarn clean && yarn tsc && ts-node scripts/build.ts",
-        "build:backend": "yarn tsc && cd packages/backend && yarn build",
+        "build:backend": "yarn tsc && cd packages/backend && yarn build:app",
         "build:frontend": "yarn tsc && cd packages/frontend && yarn build",
         "clean": "ts-node scripts/clean.ts"
     },
