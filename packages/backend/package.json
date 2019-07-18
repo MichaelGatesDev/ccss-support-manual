@@ -4,6 +4,7 @@
   "bin": "./build/server.js",
   "private": true,
   "scripts": {
+    "eslint": "npx eslint --ext .ts,.tsx \".\" ",
     "tsc": "tsc --build",
     "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
