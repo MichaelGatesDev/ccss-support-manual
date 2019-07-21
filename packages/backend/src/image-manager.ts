@@ -8,16 +8,16 @@ export class ImageManager {
     public buildingImages: BuildingImages[];
     public roomImages: RoomImages[];
 
-    constructor() {
+    public constructor() {
         this.buildingImages = [];
         this.roomImages = [];
     }
 
-    public addBuildingImages(images: BuildingImages) {
+    public addBuildingImages(images: BuildingImages): void {
         this.buildingImages.push(images);
     }
 
-    public addRoomImages(images: RoomImages) {
+    public addRoomImages(images: RoomImages): void {
         this.roomImages.push(images);
     }
 
@@ -35,7 +35,7 @@ export class ImageManager {
         return null;
     }
 
-    public getTotalSize() {
+    public getTotalSize(): number {
         let size = 0;
 
         for (const images of this.roomImages) {
@@ -47,13 +47,5 @@ export class ImageManager {
 
     public getAllImages(): ImageCollection {
         return new ImageCollection(this.buildingImages, this.roomImages);
-    }
-
-    public getBuildingImages() {
-        return this.buildingImages;
-    }
-
-    public getRoomImages() {
-        return this.roomImages;
     }
 }

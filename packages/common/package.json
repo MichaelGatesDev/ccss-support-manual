@@ -14,7 +14,7 @@
     "lib"
   ],
   "dependencies": {
-    "exceljs": "^1.11.0"
+    "exceljs": "^1.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",

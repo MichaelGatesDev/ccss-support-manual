@@ -12,7 +12,7 @@ export class RoomManager {
      */
     private buildingManager: BuildingManager;
 
-    constructor(buildingManager: BuildingManager) {
+    public constructor(buildingManager: BuildingManager) {
         this.buildingManager = buildingManager;
     }
 

@@ -3,5 +3,12 @@
         "packages/backend",
         "packages/common",
         "packages/frontend",
-    ]
+    ],
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "editor.tabSize": 4
 }

@@ -1,26 +1,18 @@
 module.exports = {
-    "env": {
-        "es6": true,
-        "node": true,
-        "jest": true
-    },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "rules": {
+    parser: '@typescript-eslint/parser',
+    plugins: ['@typescript-eslint'],
+    extends: ['plugin:@typescript-eslint/recommended'],
+    rules: {
         "indent": [
             "error",
-            4
+            4,
+            {
+                "SwitchCase": 1 // https://eslint.org/docs/rules/indent
+            }
         ],
         "linebreak-style": [
             "error",
-            "unix"
+            "windows"
         ],
         "quotes": [
             "error",

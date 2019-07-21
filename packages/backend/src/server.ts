@@ -1,97 +1,87 @@
 #!/usr/bin/env node
 
-import expressApp, { app } from './app';
+import expressApp, { app } from "./app";
 
-import debug from 'debug';
-import http from 'http';
+import debug from "debug";
+import http from "http";
 
-/**
- * Get port from environment and store in Express.
- */
+class ServerWrapper {
 
-var port = normalizePort(process.env.PORT || '3001');
-expressApp.set('port', port);
+    public port?: number;
 
-/**
- * Create HTTP server.
- */
+    public constructor() {
+    }
 
-var server = http.createServer(expressApp);
+    public init(): void {
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+        // Get port from environment and store in Express.
+        const port = this.normalizePort(process.env.PORT || "3001");
+        expressApp.set("port", port);
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+        // Create HTTP Server
+        const server = http.createServer(expressApp);
 
-/**
- * Normalize a port into a number, string, or false.
- */
+        // Listen on provided port, on all network interfaces.
+        server.listen(port);
+        server.on("error", this.onError);
+        server.on("listening", this.onListening);
+    }
 
-function normalizePort(val: string) {
-  var port = parseInt(val, 10);
+    /**
+     * Normalize a port into a number, string, or false.
+     */
+    public normalizePort(val: string): boolean | number | string {
+        return parseInt(val, 10);;
+    }
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    /**
+     * Event listener for HTTP server "error" event.
+     */
+    public onError(error: { syscall: string; code: string }): void {
+        if (error.syscall !== "listen") {
+            throw error;
+        }
 
-  return false;
+        const bind = "Port " + this.port;
+
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+            case "EACCES":
+                console.error(bind + " requires elevated privileges");
+                process.exit(1);
+                break;
+            case "EADDRINUSE":
+                console.error(bind + " is already in use");
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    }
+
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
+    public onListening(server: http.Server): void {
+        const addr = server.address();
+
+        if (addr === null) {
+            console.error("Server not running because no address found!");
+            return;
+        }
+
+        const bind = typeof addr === "string" ?
+            "pipe " + addr :
+            "port " + addr.port;
+        debug("Listening on " + bind);
+
+        console.log(`Server running on ${bind}`);
+    }
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
 
-function onError(error: { syscall: string; code: any; }) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  var bind = typeof port === 'string' ?
-    'Pipe ' + port :
-    'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-
-  if (addr === null) {
-    console.error("Server not running because no address found!");
-    return;
-  }
-
-  var bind = typeof addr === 'string' ?
-    'pipe ' + addr :
-    'port ' + addr.port;
-  debug('Listening on ' + bind);
-
-  console.log(`Server running on ${bind}`);
-}
+const myServer: ServerWrapper = new ServerWrapper();
+myServer.init();
 
 app.initialize();

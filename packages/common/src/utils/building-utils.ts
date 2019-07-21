@@ -1,5 +1,5 @@
-import { Building } from "./building";
-import { Room } from "./room";
+import { Building } from "../models/building";
+import { Room } from "../models/room";
 
 export class BuildingUtils {
 
@@ -8,7 +8,7 @@ export class BuildingUtils {
      * @param building The building
      * @param name The name to check
      */
-    static hasName(building: Building, name: string) {
+    public static hasName(building: Building, name: string): boolean {
         if (building.internalName.toLowerCase().includes(name.toLowerCase())) return true;
         if (building.officialName.toLowerCase().includes(name.toLowerCase())) return true;
         for (const nick of building.nicknames) { if (nick.toLowerCase().includes(name.toLowerCase())) return true; }
@@ -20,7 +20,7 @@ export class BuildingUtils {
      * 
      * @param room Room to add
      */
-    static addRoom(building: Building, room: Room): boolean {
+    public static addRoom(building: Building, room: Room): boolean {
         if (!building.rooms.includes(room)) {
             building.rooms.push(room);
             return true;
@@ -33,7 +33,7 @@ export class BuildingUtils {
      * 
      * @param room Room to remove
      */
-    static removeRoom(building: Building, room: Room): boolean {
+    public static removeRoom(building: Building, room: Room): boolean {
         if (!building.rooms.includes(room)) return false;
         const index = building.rooms.indexOf(room, 0);
         if (index > -1) {
