@@ -1,11 +1,10 @@
-import * as React from 'react';
-import { Component } from 'react';
+import { Component } from "react";
+import { Room, Building } from "@ccss-support-manual/models";
 
-import './RoomCardsGrid.scss';
+import "./RoomCardsGrid.scss";
 
 import RoomCard from "../RoomCard/RoomCard";
 
-import { Room, Building, ImageCollection, RoomImages } from "@ccss-support-manual/common";
 
 interface Props {
     rooms: Room[];
