@@ -1,14 +1,14 @@
 {
   "name": "@ccss-support-manual/backend",
   "version": "0.0.1",
-  "bin": "./build/server.js",
+  "bin": "./build/main.js",
   "private": true,
   "scripts": {
     "eslint": "npx eslint --ext .ts,.tsx \".\" ",
     "tsc": "tsc --build",
     "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts",
-    "prod": "yarn tsc && node ./build/src/server.js",
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/main.ts",
+    "prod": "yarn tsc && node ./build/src/main.js",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles"
   },
   "files": [

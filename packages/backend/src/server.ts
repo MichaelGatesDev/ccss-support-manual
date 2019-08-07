@@ -7,6 +7,7 @@ import http from "http";
 
 export class ServerWrapper {
 
+    private server?: http.Server;
     public port?: number;
 
     public constructor() {
@@ -21,12 +22,12 @@ export class ServerWrapper {
         expressApp.set("port", port);
 
         // Create HTTP Server
-        const server = http.createServer(expressApp);
+        this.server = http.createServer(expressApp);
 
         // Listen on provided port, on all network interfaces.
-        server.listen(port);
-        server.on("error", this.onError);
-        server.on("listening", this.onListening);
+        this.server.listen(port);
+        this.server.on("error", this.onError.bind(this));
+        this.server.on("listening", this.onListening.bind(this));
 
         console.log("Finished setting up HTTP server");
     }
@@ -67,8 +68,14 @@ export class ServerWrapper {
     /**
      * Event listener for HTTP server "listening" event.
      */
-    public onListening(server: http.Server): void {
-        const addr = server.address();
+    public onListening(): void {
+
+        if (this.server === undefined) {
+            console.error("Server is undefined!");
+            return;
+        }
+
+        const addr = this.server.address();
 
         if (addr === null) {
             console.error("Server not running because no address found!");
