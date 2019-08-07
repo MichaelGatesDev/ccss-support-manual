@@ -14,7 +14,7 @@ module.exports = {
   },
   parserOptions: {
     ecmaFeatures: {
-      jsx: true,
+      jsx: true
     },
     ecmaVersion: 2018,
     sourceType: 'module',
@@ -23,5 +23,12 @@ module.exports = {
     'react',
   ],
   rules: {
+    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "linebreak-style": ["error", "windows"],
+    "quotes": ["error", "double"],
+    "semi": [
+      "error",
+      "always"
+    ]
   },
 };
