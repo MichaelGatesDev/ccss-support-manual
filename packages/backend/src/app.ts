@@ -65,14 +65,14 @@ export class App {
             }
         }
 
-        // // Setup data
-        // try {
-        //     await this.spreadsheetManager.initialize();
-        //     console.log("Finished initializing data");
-        // } catch (error) {
-        //     console.error("Failed to initialize data");
-        //     console.error(error);
-        // }
+        // load spreadsheet data
+        try {
+            await this.spreadsheetManager.initialize();
+            console.log("Finished initializing data");
+        } catch (error) {
+            console.error("Failed to initialize data");
+            console.error(error);
+        }
 
 
         // load images
