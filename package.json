@@ -10,13 +10,11 @@
     "scripts": {
         "eslint": "yarn eslint:backend && yarn eslint:common && yarn eslint:frontend",
         "eslint:backend": "cd packages/backend && yarn eslint",
-        "eslint:common": "cd packages/common && yarn eslint",
         "eslint:frontend": "cd packages/frontend && yarn eslint",
         "prestart": "yarn tsc",
         "start:backend": "yarn prestart && cd packages/backend && yarn dev",
         "start:frontend": "yarn prestart && cd packages/frontend && yarn start",
         "test": "yarn test:common && yarn test:backend && yarn test:frontend",
-        "test:common": "yarn prestart && cd packages/common && yarn test",
         "test:backend": "yarn prestart && cd packages/backend && yarn test",
         "test:frontend": "yarn prestart && cd packages/frontend && yarn test",
         "tsc": "tsc --build",
@@ -26,8 +24,8 @@
         "clean": "ts-node scripts/clean.ts"
     },
     "dependencies": {
-        "@typescript-eslint/eslint-plugin": "1.12.0",
-        "@typescript-eslint/parser": "1.12.0",
+        "@typescript-eslint/eslint-plugin": "^1.12.0",
+        "@typescript-eslint/parser": "^1.12.0",
         "rimraf": "^2.6.3"
     },
     "devDependencies": {
