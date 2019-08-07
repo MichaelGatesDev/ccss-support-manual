@@ -10,10 +10,7 @@ module.exports = {
                 "SwitchCase": 1 // https://eslint.org/docs/rules/indent
             }
         ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
+        "linebreak-style": ["error", "windows"],
         "quotes": [
             "error",
             "double"
