@@ -1,16 +1,16 @@
-import { Router, Response, NextFunction } from 'express';
-import { app } from '../../../../app';
-
-import { Building, RoomUtils } from '@ccss-support-manual/common';
+import { Router, Response, NextFunction } from "express";
+import { app } from "../../../../app";
+import { Building } from "@ccss-support-manual/models";
+import { RoomUtils } from "@ccss-support-manual/utilities";
 
 const router: Router = Router();
 
 
-router.get("/", function (_req, res) {
-    res.json(app.getDataManager().getImageManager().getRoomImages());
+router.get("/", (_req, res): void => {
+    res.json(app.imageManager.roomImages);
 });
 
-router.param('roomNumber', function (req: any, _res: Response, next: NextFunction, roomNumber: string) {
+router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNumber: string): void => {
     let building: Building = req.building;
     let room = RoomUtils.getRoomByNumber(building, roomNumber);
     if (room) {
@@ -18,12 +18,12 @@ router.param('roomNumber', function (req: any, _res: Response, next: NextFunctio
         next();
         return;
     }
-    next(new Error('Failed to find room: ' + roomNumber));
+    next(new Error("Failed to find room: " + roomNumber));
     return;
 });
 
-router.get("/:roomNumber", function (req: any, res) {
-    res.json(app.getDataManager().getImageManager().getImagesForRoom(req.building.internalName, req.room.number));
+router.get("/:roomNumber", (req: any, res): void => {
+    res.json(app.imageManager.getImagesForRoom(req.building.internalName, req.room.number));
 });
 
 export default router;

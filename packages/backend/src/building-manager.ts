@@ -1,4 +1,5 @@
-import { Building, BuildingUtils } from "@ccss-support-manual/common";
+import { Building } from "@ccss-support-manual/models";
+import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 /**
  * A utility class for managing buildings
@@ -7,7 +8,7 @@ export class BuildingManager {
     /**
      * An array of all buildings
      */
-    private buildings: Building[];
+    public buildings: Building[];
 
     public constructor() {
         this.buildings = [];
@@ -41,12 +42,5 @@ export class BuildingManager {
             if (BuildingUtils.hasName(building, name)) return building;
         }
         return null;
-    }
-
-    /**
-     * Gets all buildings
-     */
-    public getBuildings(): Building[] {
-        return this.buildings;
     }
 }

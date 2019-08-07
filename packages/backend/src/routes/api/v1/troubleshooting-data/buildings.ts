@@ -1,33 +1,30 @@
-import { Router, Response, NextFunction } from 'express';
-import { app } from '../../../../app';
+import { Router, Response, NextFunction } from "express";
+import { app } from "../../../../app";
 
 const router: Router = Router();
 
 
-router.get("/", function (_req, res) {
-    const tdm = app.getDataManager().getTroubleshootingDataManager();
-    res.json(tdm.getTroubleshootingData());
-    console.warn("This route should not be used.");
+router.get("/", (_req, res): void => {
+    res.json(app.troubleshootingDataManager.troubleshootingData);
 });
 
-router.param('buildingName', function (req: any, _res: Response, next: NextFunction, id: string) {
-    let building = app.getDataManager().getBuildingManager().getBuildingByName(id);
+router.param("buildingName", (req: any, _res: Response, next: NextFunction, buildingName: string): void => {
+    let building = app.buildingManager.getBuildingByName(buildingName);
     if (building) {
         req.building = building;
         next();
         return;
     }
-    next(new Error('Failed to find building: ' + id));
+    next(new Error("Failed to find building: " + buildingName));
     return;
 });
 
-router.get("/:buildingName", function (_req: any, res) {
-    const tdm = app.getDataManager().getTroubleshootingDataManager();
-    res.json(tdm.getTroubleshootingData());
+router.get("/:buildingName", (_req: any, res): void => {
+    res.json({});
     console.warn("This route should not be used.");
 });
 
-import roomsRoute from './rooms';
-router.use('/:buildingName/rooms', roomsRoute);
+import roomsRoute from "./rooms";
+router.use("/:buildingName/rooms", roomsRoute);
 
 export default router;

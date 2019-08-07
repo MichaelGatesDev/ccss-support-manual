@@ -15,7 +15,8 @@
     "build"
   ],
   "dependencies": {
-    "@ccss-support-manual/common": "*",
+    "@ccss-support-manual/models": "file:../models",
+    "@ccss-support-manual/utilities": "file:../utilities",
     "@types/jest": "^24.0.13",
     "cookie-parser": "^1.4.4",
     "debug": "~4.1.1",

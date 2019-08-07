@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Typescript - compile all packages",
+            "type": "typescript",
+            "isBackground": true,
+            "tsconfig": "tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}

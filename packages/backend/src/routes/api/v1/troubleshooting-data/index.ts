@@ -1,14 +1,13 @@
-import { Router } from 'express';
-import { app } from '../../../../app';
+import { Router } from "express";
+import { app } from "../../../../app";
 
 const router: Router = Router();
 
-router.get("/", function (_req, res) {
-    const tdm = app.getDataManager().getTroubleshootingDataManager();
-    res.json(tdm.getTroubleshootingData());
+router.get("/", (_req, res): void => {
+    res.json(app.troubleshootingDataManager.troubleshootingData);
 });
 
-import buildingsRoute from './buildings';
-router.use('/buildings', buildingsRoute);
+import buildingsRoute from "./buildings";
+router.use("/buildings", buildingsRoute);
 
 export default router;

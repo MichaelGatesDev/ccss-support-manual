@@ -1,6 +1,6 @@
 import { BuildingManager } from "./building-manager";
-
-import { Building, BuildingUtils, Room } from "@ccss-support-manual/common";
+import { Room, Building } from "@ccss-support-manual/models";
+import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 /**
  * A utility class for managing rooms
@@ -21,7 +21,7 @@ export class RoomManager {
      */
     public getRooms(): Room[] {
         let result: Room[] = [];
-        for (const building of this.buildingManager.getBuildings()) {
+        for (const building of this.buildingManager.buildings) {
             result = result.concat(building.rooms);
         }
         return result;
@@ -33,7 +33,7 @@ export class RoomManager {
      * @param buildingName The name of the building
      * @param roomNumber The room number
      */
-    public getRoom(buildingName: string, roomNumber: string): Room | null {
+    public getRoom(buildingName: string, roomNumber: string): Room | undefined {
         for (const room of this.getRooms()) {
             let building = this.buildingManager.getBuildingByName(room.buildingName);
             if (!building) continue;
@@ -43,7 +43,7 @@ export class RoomManager {
             )
                 return room;
         }
-        return null;
+        return undefined;
     }
 
     public getRoomDisplayName(building: Building, room: Room): string {

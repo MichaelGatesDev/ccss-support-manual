@@ -1,8 +1,6 @@
 {
     "eslint.workingDirectories": [
-        "packages/backend",
-        "packages/common",
-        "packages/frontend",
+        "packages",
     ],
     "eslint.validate": [
         "javascript",
@@ -10,5 +8,8 @@
         "typescript",
         "typescriptreact"
     ],
-    "editor.tabSize": 4
+    "editor.tabSize": 4,
+    "files.exclude": {
+        "**/node_modules": true
+    }
 }

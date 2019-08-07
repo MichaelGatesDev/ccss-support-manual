@@ -3,15 +3,16 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "rootDir": "./src/",
-    "outDir": "./build/"
+    "rootDir": "src",
+    "outDir": "build"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ],
-  "references": [
-    {
-      "path": "../../packages/common"
-    }
+  "exclude": [
+    "node_modules",
+    "build",
+    "__tests__/**/*",
+    "__mocks__/**/*"
   ]
 }

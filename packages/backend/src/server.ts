@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import expressApp, { app } from "./app";
+import { expressApp } from "./app";
 
 import debug from "debug";
 import http from "http";
 
-class ServerWrapper {
+export class ServerWrapper {
 
     public port?: number;
 
@@ -14,8 +14,10 @@ class ServerWrapper {
 
     public init(): void {
 
+        console.log("Setting up HTTP server...");
+
         // Get port from environment and store in Express.
-        const port = this.normalizePort(process.env.PORT || "3001");
+        const port = process.env.PORT ? this.normalizePort(process.env.PORT) : 3001;
         expressApp.set("port", port);
 
         // Create HTTP Server
@@ -25,12 +27,14 @@ class ServerWrapper {
         server.listen(port);
         server.on("error", this.onError);
         server.on("listening", this.onListening);
+
+        console.log("Finished setting up HTTP server");
     }
 
     /**
      * Normalize a port into a number, string, or false.
      */
-    public normalizePort(val: string): boolean | number | string {
+    public normalizePort(val: string): number {
         return parseInt(val, 10);;
     }
 
@@ -79,9 +83,3 @@ class ServerWrapper {
         console.log(`Server running on ${bind}`);
     }
 }
-
-
-const myServer: ServerWrapper = new ServerWrapper();
-myServer.init();
-
-app.initialize();

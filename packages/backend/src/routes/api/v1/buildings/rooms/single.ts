@@ -1,8 +1,8 @@
-import { Router, Response } from 'express';
+import { Router, Response } from "express";
 
 const router: Router = Router();
 
-router.get('/', function (req: any, res: Response) {
+router.get("/", (req: any, res: Response): void => {
     res.json(req.room);
 });
 
