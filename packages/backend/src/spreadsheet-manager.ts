@@ -15,7 +15,7 @@ export class SpreadsheetManager {
             }
         }
 
-        // load data
+        // load data from classroom checks spreadsheet
         try {
             await this.loadClassroomChecksSpreadsheet();
             console.log("Loaded classroom checks spreadsheet");
@@ -25,6 +25,7 @@ export class SpreadsheetManager {
             return;
         }
 
+        // load data from troubleshoting spreadsheet
         try {
             await this.loadTroubleshootingDataSpreadsheet();
             console.log("Loaded troubleshooting data spreadsheet");
