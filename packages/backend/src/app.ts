@@ -12,7 +12,7 @@ import { RoomManager } from "./room-manager";
 import { ImageManager } from "./image-manager";
 import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
 import { SpreadsheetManager } from "./spreadsheet-manager";
-import { FileUtils } from "@ccss-support-manual/utilities";
+import { FileUtils, Logger, LogLevel } from "@ccss-support-manual/utilities";
 
 export const expressApp: express.Application = express();
 
@@ -48,12 +48,13 @@ export class App {
     public async initialize(): Promise<void> {
 
         // Setup express stuff
-        console.debug("Setting up express server...");
+        Logger.log(LogLevel.Debug, "Setting up express server...");
+        Logger.log(LogLevel.Debug, "Setting up express server...");
         this.setupExpress();
-        console.debug("Finished setting up express server.");
+        Logger.log(LogLevel.Debug, "Finished setting up express server.");
 
         // create directories 
-        this.setupDirectories();
+        await this.setupDirectories();
 
         // 
         await this.configManager.initialize();
@@ -68,10 +69,10 @@ export class App {
         // load spreadsheet data
         try {
             await this.spreadsheetManager.initialize();
-            console.log("Finished initializing data");
+            Logger.log(LogLevel.Info, "Finished initializing data");
         } catch (error) {
-            console.error("Failed to initialize data");
-            console.error(error);
+            Logger.log(LogLevel.Error, "Failed to initialize data");
+            Logger.log(LogLevel.Error, error);
         }
 
 
@@ -80,34 +81,34 @@ export class App {
     }
 
     public setupExpress(): void {
-        console.debug("Setting up views");
+        Logger.log(LogLevel.Debug, "Setting up views");
         // view engine setup 
         expressApp.set("views", path.join(__dirname, "../views"));
         expressApp.set("view engine", "ejs");
 
-        console.debug("Using dev logger");
+        Logger.log(LogLevel.Debug, "Using dev logger");
         expressApp.use(logger("dev"));
 
-        console.debug("Setting up middleware");
+        Logger.log(LogLevel.Debug, "Setting up middleware");
         expressApp.use(express.json());
         expressApp.use(express.urlencoded({
             extended: false
         }));
         expressApp.use(cookieParser());
 
-        console.debug("Setting up static directories");
+        Logger.log(LogLevel.Debug, "Setting up static directories");
         expressApp.use("/images", express.static("public/images"));
         expressApp.use(express.static(path.join(__dirname, "dist")));
 
-        console.debug("Setting up routes");
+        Logger.log(LogLevel.Debug, "Setting up routes");
         expressApp.use("/", indexRoute);
 
-        console.debug("Setting up static files to serve");
+        Logger.log(LogLevel.Debug, "Setting up static files to serve");
         expressApp.use("*", (res: express.Response): void => {
             res.sendFile(path.join(__dirname, "dist", "index.html"));
         });
 
-        console.debug("Setting up error handling");
+        Logger.log(LogLevel.Debug, "Setting up error handling");
         //catch 404 and forward to error handler
         expressApp.use((next: express.NextFunction): void => {
             next(createError(404));
@@ -140,17 +141,17 @@ export class App {
     public async setupDirectories(): Promise<void> {
         if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
             if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
-                console.log(`Created data directory: ${this.PUBLIC_DIR}`);
+                Logger.log(LogLevel.Info, `Created public directory: ${this.PUBLIC_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.SETTINGS_DIR)) {
             if (await FileUtils.createDirectory(this.SETTINGS_DIR)) {
-                console.log(`Created settings directory: ${this.SETTINGS_DIR}`);
+                Logger.log(LogLevel.Info, `Created settings directory: ${this.SETTINGS_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.IMAGES_DIR)) {
             if (await FileUtils.createDirectory(this.IMAGES_DIR)) {
-                console.log(`Created images directory: ${this.IMAGES_DIR}`);
+                Logger.log(LogLevel.Info, `Created images directory: ${this.IMAGES_DIR}`);
             }
         }
     }

@@ -5,18 +5,7 @@
             "packages/*/src"
         ]
     },
-    "references": [
-        {
-            "path": "packages/backend"
-        },
-        {
-            "path": "packages/frontend"
-        },
-        {
-            "path": "packages/models"
-        },
-        {
-            "path": "packages/utilities"
-        }
+    "exclude": [
+        "scripts"
     ]
 }

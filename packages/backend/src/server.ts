@@ -4,6 +4,7 @@ import { expressApp } from "./app";
 
 import debug from "debug";
 import http from "http";
+import { Logger, LogLevel } from "@ccss-support-manual/utilities";
 
 export class ServerWrapper {
 
@@ -15,7 +16,7 @@ export class ServerWrapper {
 
     public init(): void {
 
-        console.log("Setting up HTTP server...");
+        Logger.log(LogLevel.Debug, "Setting up HTTP server...");
 
         // Get port from environment and store in Express.
         const port = process.env.PORT ? this.normalizePort(process.env.PORT) : 3001;
@@ -29,7 +30,7 @@ export class ServerWrapper {
         this.server.on("error", this.onError.bind(this));
         this.server.on("listening", this.onListening.bind(this));
 
-        console.log("Finished setting up HTTP server");
+        Logger.log(LogLevel.Debug, "Finished setting up HTTP server");
     }
 
     /**
@@ -53,11 +54,11 @@ export class ServerWrapper {
         // handle specific listen errors with friendly messages
         switch (error.code) {
             case "EACCES":
-                console.error(bind + " requires elevated privileges");
+                Logger.log(LogLevel.Error, bind + " requires elevated privileges");
                 process.exit(1);
                 break;
             case "EADDRINUSE":
-                console.error(bind + " is already in use");
+                Logger.log(LogLevel.Error, bind + " is already in use");
                 process.exit(1);
                 break;
             default:
@@ -71,14 +72,14 @@ export class ServerWrapper {
     public onListening(): void {
 
         if (this.server === undefined) {
-            console.error("Server is undefined!");
+            Logger.log(LogLevel.Error, "Server is undefined!");
             return;
         }
 
         const addr = this.server.address();
 
         if (addr === null) {
-            console.error("Server not running because no address found!");
+            Logger.log(LogLevel.Error, "Server not running because no address found!");
             return;
         }
 
@@ -87,6 +88,6 @@ export class ServerWrapper {
             "port " + addr.port;
         debug("Listening on " + bind);
 
-        console.log(`Server running on ${bind}`);
+        Logger.log(LogLevel.Debug, `Server running on ${bind}`);
     }
 }

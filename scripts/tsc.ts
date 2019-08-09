@@ -21,7 +21,7 @@ for (const item of packages) {
     try {
         execSync(`cd ${packagesDir}/` + item + " && tsc --build");
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         console.error("There was an building typescript files");
     }
 }

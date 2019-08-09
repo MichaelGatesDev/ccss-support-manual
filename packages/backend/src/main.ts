@@ -7,4 +7,4 @@ const myServer: ServerWrapper = new ServerWrapper();
 myServer.init();
 
 // initialize the application
-app.initialize(); 
+app.initialize();

@@ -2,6 +2,7 @@ import fs from "fs";
 import https from "https";
 import { StringUtils } from "./string-utils";
 import { FileUtils } from "./file-utils";
+import { Logger, LogLevel } from "../logger";
 
 export class WebDownloader {
     private url: string;
@@ -25,18 +26,18 @@ export class WebDownloader {
                     if (err) {
                         fs.unlink(temporaryDestination, (err): void => {
                             if (err) {
-                                console.error(`Failed to delete temporary file ${temporaryDestination}`);
+                                Logger.log(LogLevel.Error, `Failed to delete temporary file ${temporaryDestination}`);
                                 return;
                             }
                             result = true;
                         });
-                        console.error(`Failed to rename downloaded file ${temporaryDestination} => ${self.destination}`);
+                        Logger.log(LogLevel.Error, `Failed to rename downloaded file ${temporaryDestination} => ${self.destination}`);
                     }
                 });
             });
         });
         request.on("error", (err): void => {
-            console.error(err);
+            Logger.log(LogLevel.Error, (err).toString());
         });
         return result;
     }
@@ -49,17 +50,14 @@ export class GoogleDriveDownloader {
 
     public static async downloadSpreadsheet(docID: string, format: string, destination: string): Promise<boolean> {
         if (StringUtils.isBlank(docID)) {
-            console.error("The docID of the spreadsheet must be specified");
+            Logger.log(LogLevel.Error, "The docID of the spreadsheet must be specified");
             return false;
         }
         if (StringUtils.isBlank(format)) { format = "xlsx"; };
         if (StringUtils.isBlank(destination)) {
-            console.error("The destination oft he spreadsheet must be specified");
+            Logger.log(LogLevel.Error, "The destination oft he spreadsheet must be specified");
             return false;
         }
-
-        console.log("Checking if the file already exists...");
-
 
         if (await FileUtils.checkExists(destination)) return false;
 
@@ -78,8 +76,8 @@ export class GoogleDriveDownloader {
             console.log("Download complete!");
             return true;
         } catch (error) {
-            console.error("An error occurred while downloading");
-            console.error(error);
+            Logger.log(LogLevel.Error, "An error occurred while downloading");
+            Logger.log(LogLevel.Error, error);
             return false;
         }
     }

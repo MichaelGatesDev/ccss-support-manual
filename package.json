@@ -8,20 +8,15 @@
         "@types/react": "^16.8.17"
     },
     "scripts": {
-        "eslint": "yarn eslint:backend && yarn eslint:common && yarn eslint:frontend",
-        "eslint:backend": "cd packages/backend && yarn eslint",
-        "eslint:frontend": "cd packages/frontend && yarn eslint",
-        "prestart": "yarn tsc",
-        "start:backend": "yarn prestart && cd packages/backend && yarn dev",
-        "start:frontend": "yarn prestart && cd packages/frontend && yarn start",
-        "test": "yarn test:common && yarn test:backend && yarn test:frontend",
-        "test:backend": "yarn prestart && cd packages/backend && yarn test",
-        "test:frontend": "yarn prestart && cd packages/frontend && yarn test",
-        "tsc": "tsc --build",
+        "start:backend": "cd packages/backend && yarn dev",
+        "start:frontend": "cd packages/frontend && yarn start",
+        "eslint": "ts-node scripts/eslint.ts",
+        "test": "ts-node scripts/test.ts",
+        "tsc": "ts-node scripts/tsc.ts",
+        "clean": "ts-node scripts/clean.ts",
         "build": "yarn clean && yarn tsc && ts-node scripts/build.ts",
         "build:backend": "yarn tsc && cd packages/backend && yarn build:app",
-        "build:frontend": "yarn tsc && cd packages/frontend && yarn build",
-        "clean": "ts-node scripts/clean.ts"
+        "build:frontend": "yarn tsc && cd packages/frontend && yarn build"
     },
     "dependencies": {
         "@typescript-eslint/eslint-plugin": "^1.12.0",

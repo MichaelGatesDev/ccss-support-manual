@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "lib",
-    "rootDir": "./src/",
+    "rootDir": "src",
     "module": "commonjs",
     "composite": true
   },
@@ -14,5 +14,10 @@
     "lib",
     "__tests__/**/*",
     "__mocks__/**/*"
+  ],
+  "references": [
+    {
+      "path": "../models"
+    }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@ccss-support-manual/models",
-  "version": "0.0.1",
+  "version": "0.0.0-dev",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "description": "",
@@ -14,8 +14,6 @@
     "lib"
   ],
   "dependencies": {
-    "@ccss-support-manual/models": "file:../models",
-    "@ccss-support-manual/utilities": "file:../utilities",
     "exceljs": "^1.13.0"
   },
   "devDependencies": {

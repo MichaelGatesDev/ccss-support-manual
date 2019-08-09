@@ -2,7 +2,7 @@ import Excel from "exceljs";
 import fs from "fs";
 import { GoogleSpreadsheetConfig } from "./configs/GoogleSpreadsheetConfig";
 import { app } from "./app";
-import { StringUtils, ExcelJSUtils, EnumUtils, BuildingUtils, RoomUtils } from "@ccss-support-manual/utilities";
+import { StringUtils, ExcelJSUtils, EnumUtils, BuildingUtils, RoomUtils, GoogleDriveDownloader, Logger, LogLevel } from "@ccss-support-manual/utilities";
 import { BuildingFactory, RoomType, LockType, RoomFactory, Classroom, RoomTypeUtils, ClassroomFactory, PhoneFactory, DeviceFactory, DeviceType, SmartClassroom, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, ComputerType, OperatingSystem, TeachingStationComputerFactory, ComputerFactory, AudioFactory, SpeakerType, SimpleRoom, TroubleshootingDataFactory } from "@ccss-support-manual/models";
 
 export class SpreadsheetManager {
@@ -18,62 +18,62 @@ export class SpreadsheetManager {
         // load data from classroom checks spreadsheet
         try {
             await this.loadClassroomChecksSpreadsheet();
-            console.log("Loaded classroom checks spreadsheet");
+            Logger.log(LogLevel.Info, "Loaded classroom checks spreadsheet");
         } catch (error) {
-            console.error("There was an error loading the classroom checks spreadsheet");
-            console.error(error);
+            Logger.log(LogLevel.Error, "There was an error loading the classroom checks spreadsheet");
+            Logger.log(LogLevel.Error, error);
             return;
         }
 
         // load data from troubleshoting spreadsheet
         try {
             await this.loadTroubleshootingDataSpreadsheet();
-            console.log("Loaded troubleshooting data spreadsheet");
+            Logger.log(LogLevel.Info, "Loaded troubleshooting data spreadsheet");
         } catch (error) {
-            console.error("There was an error loading the troubleshooting data spreadsheet");
-            console.error(error);
+            Logger.log(LogLevel.Error, "There was an error loading the troubleshooting data spreadsheet");
+            Logger.log(LogLevel.Error, error);
             return;
         }
     }
 
     public async checkForUpdates(): Promise<void> {
-        console.log("Checking for spreadsheet updates...");
+        Logger.log(LogLevel.Info, "Checking for spreadsheet updates...");
         await this.checkUpdateForConfig(app.configManager.classroomChecksSpreadsheetConfig);
         await this.checkUpdateForConfig(app.configManager.troubleshootingSpreadsheetConfig);
-        console.log("Finished checking for spreadsheet updates");
+        Logger.log(LogLevel.Info, "Finished checking for spreadsheet updates");
     }
 
     public async checkUpdateForConfig(config?: GoogleSpreadsheetConfig): Promise<void> {
         try {
             if (config === undefined) {
-                console.error("Config is undefind");
+                Logger.log(LogLevel.Error, "Config is undefind");
                 return;
             }
             await this.downloadSpreadsheet(config.docID, config.sheetPath);
-            console.log("Downloaded spreadsheet!");
+            Logger.log(LogLevel.Info, "Downloaded spreadsheet!");
         } catch (error) {
-            console.error("There was an error downloading the spreadsheet!");
-            console.error(error);
+            Logger.log(LogLevel.Error, "There was an error downloading the spreadsheet!");
+            Logger.log(LogLevel.Error, error);
         }
     }
 
-    private async downloadSpreadsheet(docID: string, _sheetPath: string): Promise<void> {
+    private async downloadSpreadsheet(docID: string, sheetPath: string): Promise<void> {
         if (StringUtils.isBlank(docID)) {
-            console.error("No docID specified");
+            Logger.log(LogLevel.Error, "No docID specified");
             return;
         }
-        // await GoogleDriveDownloader.downloadSpreadsheet(
-        //     docID,
-        //     "xlsx",
-        //     sheetPath
-        // );
+        await GoogleDriveDownloader.downloadSpreadsheet(
+            docID,
+            "xlsx",
+            sheetPath
+        );
     }
 
 
     private loadBuildings(sheet: Excel.Worksheet): void {
         const config = app.configManager.classroomChecksSpreadsheetConfig;
         if (config === undefined) {
-            console.error("Config is undefined");
+            Logger.log(LogLevel.Error, "Config is undefined");
             return;
         }
 
@@ -103,7 +103,7 @@ export class SpreadsheetManager {
 
         const config = app.configManager.classroomChecksSpreadsheetConfig;
         if (config === undefined) {
-            console.error("Config is undefined");
+            Logger.log(LogLevel.Error, "Config is undefined");
             return;
         }
 
@@ -279,7 +279,7 @@ export class SpreadsheetManager {
 
         let config = app.configManager.classroomChecksSpreadsheetConfig;
         if (config === undefined) {
-            console.error("Config is undefined");
+            Logger.log(LogLevel.Error, "Config is undefined");
             return;
         }
 
@@ -291,7 +291,7 @@ export class SpreadsheetManager {
             this.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
             this.loadRooms(workbook.getWorksheet(config.roomsSheetName));
         } catch (error) {
-            console.error(`File could not be found: ${config.sheetPath}`);
+            Logger.log(LogLevel.Error, `File could not be found: ${config.sheetPath}`);
             return;
         }
     }
@@ -319,7 +319,7 @@ export class SpreadsheetManager {
 
         const config = app.configManager.troubleshootingSpreadsheetConfig;
         if (config === undefined) {
-            console.error("Config is undefined");
+            Logger.log(LogLevel.Error, "Config is undefined");
             return;
         }
 
@@ -327,7 +327,7 @@ export class SpreadsheetManager {
         sheet.eachRow({ includeEmpty: false }, (row, rowNumber): void => {
 
             if (config === undefined) {
-                console.error("Config is undefined");
+                Logger.log(LogLevel.Error, "Config is undefined");
                 return;
             }
 
@@ -375,14 +375,14 @@ export class SpreadsheetManager {
 
             app.troubleshootingDataManager.addTroubleshootingData(dataFactory.build());
         });
-        console.log(`Loaded ${app.troubleshootingDataManager.troubleshootingData.length} troubleshooting data items!`);
+        Logger.log(LogLevel.Info, `Loaded ${app.troubleshootingDataManager.troubleshootingData.length} troubleshooting data items!`);
     }
 
     private async loadTroubleshootingDataSpreadsheet(): Promise<void> {
 
         let config = app.configManager.troubleshootingSpreadsheetConfig;
         if (config === undefined) {
-            console.error("Config is undefined");
+            Logger.log(LogLevel.Error, "Config is undefined");
             return;
         }
 
@@ -391,7 +391,7 @@ export class SpreadsheetManager {
             let workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
             this.loadTroubleshootingData(workbook.getWorksheet(config.troubleshootingSheetName));
         } catch (error) {
-            console.error(`File could not be found: ${config.sheetPath}`);
+            Logger.log(LogLevel.Error, `File could not be found: ${config.sheetPath}`);
         }
     }
 

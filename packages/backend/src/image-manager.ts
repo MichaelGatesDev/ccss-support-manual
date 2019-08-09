@@ -1,5 +1,5 @@
 import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
-import { FileUtils } from "@ccss-support-manual/utilities";
+import { FileUtils, Logger, LogLevel } from "@ccss-support-manual/utilities";
 import { app } from "./app";
 import fs from "fs";
 
@@ -24,7 +24,7 @@ export class ImageManager {
         // create buildings dir if it does not exist
         if (!await FileUtils.checkExists(app.BUILDING_IMAGES_DIR)) {
             await FileUtils.createDirectory(app.BUILDING_IMAGES_DIR);
-            console.log(`Created directory:  ${app.BUILDING_IMAGES_DIR}`);
+            Logger.log(LogLevel.Info, `Created directory:  ${app.BUILDING_IMAGES_DIR}`);
         }
 
         for (const building of app.buildingManager.buildings) {
@@ -33,7 +33,7 @@ export class ImageManager {
             // create building dir if not exists
             if (!await FileUtils.checkExists(buildingDir)) {
                 await FileUtils.createDirectory(buildingDir);
-                console.log(`Created directory:  ${buildingDir}`);
+                Logger.log(LogLevel.Info, `Created directory:  ${buildingDir}`);
             }
 
             // building images
@@ -52,7 +52,7 @@ export class ImageManager {
             // create rooms dir if not exists
             if (!await FileUtils.checkExists(roomsDir)) {
                 if (await FileUtils.createDirectory(roomsDir)) {
-                    console.log(`Created directory:  ${roomsDir}`);
+                    Logger.log(LogLevel.Info, `Created directory:  ${roomsDir}`);
                 }
             }
 
@@ -62,7 +62,7 @@ export class ImageManager {
                 // create room dir if it doesnt exist
                 if (!await FileUtils.checkExists(roomDir)) {
                     if (await FileUtils.createDirectory(roomDir)) {
-                        console.log(`Created directory:  ${roomDir}`);
+                        Logger.log(LogLevel.Info, `Created directory:  ${roomDir}`);
                     }
                 }
 
@@ -85,7 +85,7 @@ export class ImageManager {
                 // create panoramas dir if it doesnt exist
                 if (!await FileUtils.checkExists(panoramasDir)) {
                     if (await FileUtils.createDirectory(panoramasDir)) {
-                        console.log(`Created directory:  ${panoramasDir}`);
+                        Logger.log(LogLevel.Info, `Created directory:  ${panoramasDir}`);
                     }
                 }
                 const panoramaFiles = await fs.promises.readdir(panoramasDir, { withFileTypes: true });
@@ -106,7 +106,7 @@ export class ImageManager {
                 // create equipment dir if it doesnt exist
                 if (!await FileUtils.checkExists(equipmentDir)) {
                     if (await FileUtils.createDirectory(equipmentDir)) {
-                        console.log(`Created directory:  ${equipmentDir}`);
+                        Logger.log(LogLevel.Info, `Created directory:  ${equipmentDir}`);
                     }
                 }
 
