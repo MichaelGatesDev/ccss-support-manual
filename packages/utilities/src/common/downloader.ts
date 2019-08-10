@@ -26,12 +26,11 @@ export class WebDownloader {
                     if (err) {
                         fs.unlink(temporaryDestination, (err): void => {
                             if (err) {
-                                Logger.log(LogLevel.Error, `Failed to delete temporary file ${temporaryDestination}`);
-                                return;
+                                throw new Error(`Failed to delete temporary file ${temporaryDestination}`);
                             }
                             result = true;
                         });
-                        Logger.log(LogLevel.Error, `Failed to rename downloaded file ${temporaryDestination} => ${self.destination}`);
+                        throw new Error(`Failed to rename downloaded file ${temporaryDestination} => ${self.destination}`);
                     }
                 });
             });
@@ -50,13 +49,11 @@ export class GoogleDriveDownloader {
 
     public static async downloadSpreadsheet(docID: string, format: string, destination: string): Promise<boolean> {
         if (StringUtils.isBlank(docID)) {
-            Logger.log(LogLevel.Error, "The docID of the spreadsheet must be specified");
-            return false;
+            throw new Error("The docID of the spreadsheet must be specified");
         }
         if (StringUtils.isBlank(format)) { format = "xlsx"; };
         if (StringUtils.isBlank(destination)) {
-            Logger.log(LogLevel.Error, "The destination oft he spreadsheet must be specified");
-            return false;
+            throw new Error("The destination of the spreadsheet must be specified");
         }
 
         if (await FileUtils.checkExists(destination)) return false;
@@ -70,15 +67,11 @@ export class GoogleDriveDownloader {
             destination
         );
 
-        console.log("Beginning download...");
         try {
             await downloader.download();
-            console.log("Download complete!");
             return true;
         } catch (error) {
-            Logger.log(LogLevel.Error, "An error occurred while downloading");
-            Logger.log(LogLevel.Error, error);
-            return false;
+            throw error;
         }
     }
 
