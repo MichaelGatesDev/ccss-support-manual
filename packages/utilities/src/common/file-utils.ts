@@ -9,7 +9,7 @@ export class FileUtils {
             await fs.promises.mkdir(path, { recursive: recursive });
             return true;
         } catch (error) {
-            // console.error(`There was an error checking the creating the directory: ${path}`);
+            // console.error(`There was an error creating the directory: ${path}`);
             return false;
         }
     }
