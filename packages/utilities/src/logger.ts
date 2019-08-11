@@ -8,34 +8,67 @@ export enum LogLevel {
     Critical
 }
 
+const DEFAULT_COLOR: colors.Color = colors.reset;
+const DEBUG_COLOR: colors.Color = colors.cyan;
+const INFO_COLOR: colors.Color = colors.white;
+const WARNING_COLOR: colors.Color = colors.yellow;
+const ERROR_COLOR: colors.Color = colors.red;
+const CRITICAL_COLOR: colors.Color = colors.red.bold;
+
 export class Logger {
 
-    public static log(level: LogLevel, message: string): void {
-        let prefix = "[{level}]";
-        let color: colors.Color | undefined;
 
-        prefix = prefix.replace("{level}", LogLevel[level].toString());
+    private static doLog(color: colors.Color, level: LogLevel, message: string): void {
+        const today = new Date();
+        const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+        console.log(`${color(`[${time}][${LogLevel[level].toString().toUpperCase()}]`)}: ${message}`);
+    }
+
+    public static log(level: LogLevel, message: string): void {
         switch (level) {
             default:
-                color = colors.reset;
+                Logger.default(message);
                 break;
             case LogLevel.Debug:
-                color = colors.cyan;
+                Logger.debug(message);
                 break;
             case LogLevel.Info:
-                color = colors.white;
+                Logger.info(message);
                 break;
             case LogLevel.Warning:
-                color = colors.yellow;
+                Logger.warning(message);
                 break;
             case LogLevel.Error:
-                color = colors.red;
+                Logger.error(message);
                 break;
             case LogLevel.Critical:
-                color = colors.red.bold;
+                Logger.critical(message);
                 break;
         }
+    }
 
-        console.log(`${color(prefix)} ${message}`);
+    public static default(message: string): void {
+        this.doLog(DEFAULT_COLOR, LogLevel.Info, message);
+    }
+
+    public static debug(message: string): void {
+        this.doLog(DEBUG_COLOR, LogLevel.Debug, message);
+    }
+
+    public static info(message: string): void {
+        this.doLog(INFO_COLOR, LogLevel.Info, message);
+    }
+
+    public static warning(message: string): void {
+        this.doLog(WARNING_COLOR, LogLevel.Warning, message);
+    }
+
+    public static error(message: string): void {
+        this.doLog(ERROR_COLOR, LogLevel.Error, message);
+    }
+
+    public static critical(message: string): void {
+        this.doLog(CRITICAL_COLOR, LogLevel.Critical, message);
     }
 }
