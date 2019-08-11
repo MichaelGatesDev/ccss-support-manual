@@ -33,10 +33,10 @@ export class ConfigManager {
                 ]
             );
             if (result.wasCreated) {
-                Logger.log(LogLevel.Info, "Created app config!");
+                Logger.info("Created app config!");
             }
             this.appConfig = result.loaded as AppConfig;
-            Logger.log(LogLevel.Info, "Loaded app config");
+            Logger.info("Loaded app config");
         } catch (error) {
             throw error;
         }
@@ -53,10 +53,10 @@ export class ConfigManager {
                 ]
             );
             if (result.wasCreated) {
-                Logger.log(LogLevel.Info, "Created classroom checks spreadsheet config!");
+                Logger.info("Created classroom checks spreadsheet config!");
             }
             this.classroomChecksSpreadsheetConfig = result.loaded as ClassroomChecksSpreadsheetConfig;
-            Logger.log(LogLevel.Info, "Loaded classroom checks spreadsheet config");
+            Logger.info("Loaded classroom checks spreadsheet config");
         } catch (error) {
             throw error;
         }
@@ -73,10 +73,10 @@ export class ConfigManager {
                 ]
             );
             if (result.wasCreated) {
-                Logger.log(LogLevel.Info, "Created troubleshooting spreadsheet config!");
+                Logger.info("Created troubleshooting spreadsheet config!");
             }
             this.troubleshootingSpreadsheetConfig = result.loaded as TroubleshootingSpreadsheetConfig;
-            Logger.log(LogLevel.Info, "Loaded troubleshooting spreadsheet config");
+            Logger.info("Loaded troubleshooting spreadsheet config");
         } catch (error) {
             throw error;
         }
@@ -91,10 +91,10 @@ export class ConfigManager {
                 ]
             );
             if (result.wasCreated) {
-                Logger.log(LogLevel.Info, "Created images config!");
+                Logger.info("Created images config!");
             }
             this.imagesConfig = result.loaded as ImagesConfig;
-            Logger.log(LogLevel.Info, "Loaded images config");
+            Logger.info("Loaded images config");
         } catch (error) {
             throw error;
         }

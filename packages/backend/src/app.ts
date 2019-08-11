@@ -48,10 +48,10 @@ export class App {
     public async initialize(): Promise<void> {
 
         // Setup express stuff
-        Logger.log(LogLevel.Debug, "Setting up express server...");
-        Logger.log(LogLevel.Debug, "Setting up express server...");
+        Logger.debug("Setting up express server...");
+        Logger.debug("Setting up express server...");
         this.setupExpress();
-        Logger.log(LogLevel.Debug, "Finished setting up express server.");
+        Logger.debug("Finished setting up express server.");
 
         // create directories 
         await this.setupDirectories();
@@ -69,10 +69,10 @@ export class App {
         // load spreadsheet data
         try {
             await this.spreadsheetManager.initialize();
-            Logger.log(LogLevel.Info, "Finished initializing data");
+            Logger.info("Finished initializing data");
         } catch (error) {
-            Logger.log(LogLevel.Error, "Failed to initialize data");
-            Logger.log(LogLevel.Error, error);
+            Logger.error("Failed to initialize data");
+            Logger.error(error);
         }
 
 
@@ -81,34 +81,34 @@ export class App {
     }
 
     public setupExpress(): void {
-        Logger.log(LogLevel.Debug, "Setting up views");
+        Logger.debug("Setting up views");
         // view engine setup 
         expressApp.set("views", path.join(__dirname, "../views"));
         expressApp.set("view engine", "ejs");
 
-        Logger.log(LogLevel.Debug, "Using dev logger");
+        Logger.debug("Using dev logger");
         expressApp.use(logger("dev"));
 
-        Logger.log(LogLevel.Debug, "Setting up middleware");
+        Logger.debug("Setting up middleware");
         expressApp.use(express.json());
         expressApp.use(express.urlencoded({
             extended: false
         }));
         expressApp.use(cookieParser());
 
-        Logger.log(LogLevel.Debug, "Setting up static directories");
+        Logger.debug("Setting up static directories");
         expressApp.use("/images", express.static("public/images"));
         expressApp.use(express.static(path.join(__dirname, "dist")));
 
-        Logger.log(LogLevel.Debug, "Setting up routes");
+        Logger.debug("Setting up routes");
         expressApp.use("/", indexRoute);
 
-        Logger.log(LogLevel.Debug, "Setting up static files to serve");
+        Logger.debug("Setting up static files to serve");
         expressApp.use("*", (res: express.Response): void => {
             res.sendFile(path.join(__dirname, "dist", "index.html"));
         });
 
-        Logger.log(LogLevel.Debug, "Setting up error handling");
+        Logger.debug("Setting up error handling");
         //catch 404 and forward to error handler
         expressApp.use((next: express.NextFunction): void => {
             next(createError(404));
@@ -141,17 +141,17 @@ export class App {
     public async setupDirectories(): Promise<void> {
         if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
             if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
-                Logger.log(LogLevel.Info, `Created public directory: ${this.PUBLIC_DIR}`);
+                Logger.info(`Created public directory: ${this.PUBLIC_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.SETTINGS_DIR)) {
             if (await FileUtils.createDirectory(this.SETTINGS_DIR)) {
-                Logger.log(LogLevel.Info, `Created settings directory: ${this.SETTINGS_DIR}`);
+                Logger.info(`Created settings directory: ${this.SETTINGS_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.IMAGES_DIR)) {
             if (await FileUtils.createDirectory(this.IMAGES_DIR)) {
-                Logger.log(LogLevel.Info, `Created images directory: ${this.IMAGES_DIR}`);
+                Logger.info(`Created images directory: ${this.IMAGES_DIR}`);
             }
         }
     }

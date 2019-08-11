@@ -36,7 +36,7 @@ export class WebDownloader {
             });
         });
         request.on("error", (err): void => {
-            Logger.log(LogLevel.Error, (err).toString());
+            Logger.error((err).toString());
         });
         return result;
     }
