@@ -57,7 +57,13 @@ export class App {
         await this.setupDirectories();
 
         // 
-        await this.configManager.initialize();
+        try {
+            Logger.info("Initializing configuration manager...");
+            await this.configManager.initialize();
+            Logger.info("Finished initializing configuration manager");
+        } catch (error) {
+            Logger.error(error);
+        }
 
         // check for updates
         if (this.configManager.appConfig !== undefined) {
@@ -66,12 +72,13 @@ export class App {
             }
         }
 
-        // load spreadsheet data
+        // spreadsheets
         try {
+            Logger.info("Initializing spreadsheet manager...");
             await this.spreadsheetManager.initialize();
-            Logger.info("Finished initializing data");
+            Logger.info("Finished initializing spreadsheet manager");
         } catch (error) {
-            Logger.error("Failed to initialize data");
+            Logger.error("Failed to initialize spreadsheet manager");
             Logger.error(error);
         }
 
