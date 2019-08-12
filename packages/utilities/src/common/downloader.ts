@@ -2,7 +2,7 @@ import fs from "fs";
 import https from "https";
 import { StringUtils } from "./string-utils";
 import { FileUtils } from "./file-utils";
-import { Logger, LogLevel } from "../logger";
+import { Logger } from "../logger";
 
 export class WebDownloader {
     private url: string;

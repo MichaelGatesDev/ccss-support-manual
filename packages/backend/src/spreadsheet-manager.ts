@@ -1,8 +1,7 @@
 import Excel from "exceljs";
-import fs from "fs";
 import { GoogleSpreadsheetConfig } from "./configs/GoogleSpreadsheetConfig";
 import { app } from "./app";
-import { StringUtils, ExcelJSUtils, EnumUtils, BuildingUtils, RoomUtils, GoogleDriveDownloader, Logger } from "@ccss-support-manual/utilities";
+import { StringUtils, ExcelJSUtils, EnumUtils, BuildingUtils, RoomUtils, GoogleDriveDownloader, Logger, FileUtils } from "@ccss-support-manual/utilities";
 import { BuildingFactory, RoomType, LockType, RoomFactory, Classroom, RoomTypeUtils, ClassroomFactory, PhoneFactory, DeviceFactory, DeviceType, SmartClassroom, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, ComputerType, OperatingSystem, TeachingStationComputerFactory, ComputerFactory, AudioFactory, SpeakerType, SimpleRoom, TroubleshootingDataFactory } from "@ccss-support-manual/models";
 
 export class SpreadsheetManager {
@@ -17,8 +16,9 @@ export class SpreadsheetManager {
 
         // load data from classroom checks spreadsheet
         try {
+            Logger.info("Loading classroom checks spreadsheet...");
             await this.loadClassroomChecksSpreadsheet();
-            Logger.info("Loaded classroom checks spreadsheet");
+            Logger.info("Finished loading classroom checks spreadsheet");
         } catch (error) {
             Logger.error("There was an error loading the classroom checks spreadsheet");
             Logger.error(error);
@@ -38,23 +38,17 @@ export class SpreadsheetManager {
 
     public async checkForUpdates(): Promise<void> {
         Logger.info("Checking for spreadsheet updates...");
-        await this.checkUpdateForConfig(app.configManager.classroomChecksSpreadsheetConfig);
-        await this.checkUpdateForConfig(app.configManager.troubleshootingSpreadsheetConfig);
+        await this.checkUpdateForSpreadsheet(app.configManager.classroomChecksSpreadsheetConfig);
+        await this.checkUpdateForSpreadsheet(app.configManager.troubleshootingSpreadsheetConfig);
         Logger.info("Finished checking for spreadsheet updates");
     }
 
-    public async checkUpdateForConfig(config?: GoogleSpreadsheetConfig): Promise<void> {
-        try {
-            if (config === undefined) {
-                Logger.error("Config is undefind");
-                return;
-            }
-            await this.downloadSpreadsheet(config.docID, config.sheetPath);
-            Logger.info("Downloaded spreadsheet!");
-        } catch (error) {
-            Logger.error("There was an error downloading the spreadsheet!");
-            Logger.error(error);
+    public async checkUpdateForSpreadsheet(config?: GoogleSpreadsheetConfig): Promise<void> {
+        if (config === undefined) {
+            Logger.error("Config is undefined");
+            return;
         }
+        await this.downloadSpreadsheet(config.docID, config.sheetPath);
     }
 
     private async downloadSpreadsheet(docID: string, sheetPath: string): Promise<void> {
@@ -64,11 +58,13 @@ export class SpreadsheetManager {
         }
 
         try {
+            Logger.info(`Downloading spreadsheet ${docID}`);
             await GoogleDriveDownloader.downloadSpreadsheet(
                 docID,
                 "xlsx",
                 sheetPath
             );
+            Logger.info(`Finished download spreadsheet ${docID}`);
         } catch (error) {
             Logger.error(`Failed to download spreadsheet: ${docID}`);
             Logger.error(error);
@@ -101,7 +97,7 @@ export class SpreadsheetManager {
 
             app.buildingManager.addBuilding(building);
         });
-        console.debug(`Loaded ${app.buildingManager.buildings.length} buildings!`);
+        console.debug(`Loaded ${app.buildingManager.buildings.length} buildings`);
     }
 
 
@@ -277,7 +273,7 @@ export class SpreadsheetManager {
             }
 
         });
-        console.debug(`Loaded ${app.roomManager.getRooms().length} rooms!`);
+        console.debug(`Loaded ${app.roomManager.getRooms().length} rooms`);
     }
 
 
@@ -289,17 +285,15 @@ export class SpreadsheetManager {
             return;
         }
 
-        try {
-            await fs.promises.access(config.sheetPath);
-
-            let workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
-
-            this.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
-            this.loadRooms(workbook.getWorksheet(config.roomsSheetName));
-        } catch (error) {
+        if (!FileUtils.checkExists(config.sheetPath)) {
             Logger.error(`File could not be found: ${config.sheetPath}`);
             return;
         }
+
+        const workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
+
+        this.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
+        this.loadRooms(workbook.getWorksheet(config.roomsSheetName));
     }
 
 
@@ -381,7 +375,7 @@ export class SpreadsheetManager {
 
             app.troubleshootingDataManager.addTroubleshootingData(dataFactory.build());
         });
-        Logger.info(`Loaded ${app.troubleshootingDataManager.troubleshootingData.length} troubleshooting data items!`);
+        Logger.info(`Loaded ${app.troubleshootingDataManager.troubleshootingData.length} troubleshooting data items`);
     }
 
     private async loadTroubleshootingDataSpreadsheet(): Promise<void> {
@@ -392,13 +386,13 @@ export class SpreadsheetManager {
             return;
         }
 
-        try {
-            await fs.promises.access(config.sheetPath);
-            let workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
-            this.loadTroubleshootingData(workbook.getWorksheet(config.troubleshootingSheetName));
-        } catch (error) {
+        if (!FileUtils.checkExists(config.sheetPath)) {
             Logger.error(`File could not be found: ${config.sheetPath}`);
+            return;
         }
+
+        let workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
+        this.loadTroubleshootingData(workbook.getWorksheet(config.troubleshootingSheetName));
     }
 
 }
