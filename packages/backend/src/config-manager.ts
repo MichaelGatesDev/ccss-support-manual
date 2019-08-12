@@ -1,14 +1,9 @@
-import { ConfigBase, ConfigUtils, Logger, LogLevel } from "@ccss-support-manual/utilities";
+import { ConfigBase, ConfigUtils, Logger, LogLevel, ConfigIOResult } from "@ccss-support-manual/utilities";
 import { AppConfig } from "./configs/AppConfig";
 import { ImagesConfig } from "./configs/ImagesConfig";
 import { ClassroomChecksSpreadsheetConfig } from "./configs/ClassroomChecksSpreadsheetConfig";
 import { TroubleshootingSpreadsheetConfig } from "./configs/TroubleshootingSpreadsheetConfig";
 import { app } from "./app";
-
-interface ConfigIOResult {
-    wasCreated: boolean;
-    loaded: ConfigBase;
-}
 
 export class ConfigManager {
 
@@ -26,17 +21,17 @@ export class ConfigManager {
         // Create app config
         try {
             const result: ConfigIOResult = await ConfigUtils.createIfNotExistsAndLoad<AppConfig>(
-                "public/settings/application-config.json",
+                `${app.SETTINGS_DIR}/application-config.json`,
                 AppConfig,
                 [
-                    "public/settings/application-config.json"
+                    `${app.SETTINGS_DIR}/application-config.json`
                 ]
             );
             if (result.wasCreated) {
-                Logger.info("Created app config!");
+                Logger.info("Created application config!");
             }
             this.appConfig = result.loaded as AppConfig;
-            Logger.info("Loaded app config");
+            Logger.info("Loaded application config");
         } catch (error) {
             throw error;
         }
