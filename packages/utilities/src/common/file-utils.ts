@@ -9,7 +9,6 @@ export class FileUtils {
             await fs.promises.mkdir(path, { recursive: recursive });
             return true;
         } catch (error) {
-            // console.error(`There was an error creating the directory: ${path}`);
             return false;
         }
     }
@@ -19,7 +18,6 @@ export class FileUtils {
             await fs.promises.access(path, fs.constants.R_OK);
             return true;
         } catch (error) {
-            // console.error(`There was an error checking the existence of a file/directory: ${path}`);
             return false;
         }
     }
@@ -29,7 +27,6 @@ export class FileUtils {
             const stat = await fs.promises.stat(path);
             return stat.isDirectory();
         } catch (error) {
-            // console.error(`There was an error checking if path is to a directory: ${path}`);
             return false;
         }
     }
@@ -39,7 +36,6 @@ export class FileUtils {
             const stat = await fs.promises.stat(path);
             return stat.isFile();
         } catch (error) {
-            // console.error(`There was an error checking if path is to a file: ${path}`);
             return false;
         }
     }
