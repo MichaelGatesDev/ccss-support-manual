@@ -6,7 +6,7 @@ const router: Router = Router();
 
 router.use("/api", apiRoute);
 
-router.get("/", function (_req, res, _next) {
+router.get("/", (_req, res): void => {
     res.send("This is the index page");
 });
 

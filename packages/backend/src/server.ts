@@ -1,10 +1,10 @@
 #!/usr/bin/env node
+import { Logger } from '@michaelgatesdev/common';
 
 import { expressApp } from "./app";
 
 import debug from "debug";
 import http from "http";
-import { Logger, LogLevel } from "@ccss-support-manual/utilities";
 
 export class ServerWrapper {
 

@@ -1,4 +1,4 @@
-import { ConfigBase } from "@ccss-support-manual/utilities";
+import { ConfigBase } from "cardboard-config";
 
 export abstract class GoogleSpreadsheetConfig extends ConfigBase {
     public docID: string;

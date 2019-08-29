@@ -11,5 +11,4 @@ test("creates a room", (): void => {
 
     expect(RoomUtils.isRoom(room));
 
-
 });

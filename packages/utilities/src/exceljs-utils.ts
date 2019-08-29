@@ -1,5 +1,5 @@
 import Excel from "exceljs";
-import { StringUtils } from "./string-utils";
+import { StringUtils } from "@michaelgatesdev/common";
 
 export class ExcelJSUtils {
 

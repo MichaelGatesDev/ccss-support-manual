@@ -1,4 +1,4 @@
-import { ConfigBase } from "@ccss-support-manual/utilities";
+import { ConfigBase } from "cardboard-config";
 
 export class ImagesConfig extends ConfigBase {
     public checkForImageUpdates: boolean = true;

@@ -1,4 +1,6 @@
-import { ConfigBase, ConfigUtils, Logger, LogLevel, ConfigIOResult } from "@ccss-support-manual/utilities";
+import { ConfigIOResult, ConfigurationUtilities } from 'cardboard-config';
+import { Logger } from '@michaelgatesdev/common';
+
 import { AppConfig } from "./configs/AppConfig";
 import { ImagesConfig } from "./configs/ImagesConfig";
 import { ClassroomChecksSpreadsheetConfig } from "./configs/ClassroomChecksSpreadsheetConfig";
@@ -20,8 +22,7 @@ export class ConfigManager {
 
         // Create app config
         try {
-            const result: ConfigIOResult = await ConfigUtils.createIfNotExistsAndLoad<AppConfig>(
-                `${app.SETTINGS_DIR}/application-config.json`,
+            const result: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<AppConfig>(
                 AppConfig,
                 [
                     `${app.SETTINGS_DIR}/application-config.json`
@@ -38,8 +39,7 @@ export class ConfigManager {
 
         // Create classroom checks spreadsheet config
         try {
-            const result: ConfigIOResult = await ConfigUtils.createIfNotExistsAndLoad<ClassroomChecksSpreadsheetConfig>(
-                `${app.SETTINGS_DIR}/classroom-checks-spreadsheet-config.json`,
+            const result: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<ClassroomChecksSpreadsheetConfig>(
                 ClassroomChecksSpreadsheetConfig,
                 [
                     `${app.SETTINGS_DIR}/classroom-checks-spreadsheet-config.json`,
@@ -58,8 +58,7 @@ export class ConfigManager {
 
         // Create troubleshooting config
         try {
-            const result: ConfigIOResult = await ConfigUtils.createIfNotExistsAndLoad<TroubleshootingSpreadsheetConfig>(
-                `${app.SETTINGS_DIR}/troubleshooting-spreadsheet-config.json`,
+            const result: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<TroubleshootingSpreadsheetConfig>(
                 TroubleshootingSpreadsheetConfig,
                 [
                     `${app.SETTINGS_DIR}/troubleshooting-spreadsheet-config.json`,
@@ -78,8 +77,7 @@ export class ConfigManager {
 
         // Create images config
         try {
-            const result: ConfigIOResult = await ConfigUtils.createIfNotExistsAndLoad<ImagesConfig>(
-                `${app.SETTINGS_DIR}/images-config.json`,
+            const result: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<ImagesConfig>(
                 ImagesConfig,
                 [
                     `${app.SETTINGS_DIR}/images-config.json`

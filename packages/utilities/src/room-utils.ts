@@ -9,6 +9,13 @@ import {
 } from "@ccss-support-manual/models";
 
 export class RoomUtils {
+
+    public static RoomNumberPattern: RegExp = /[\d]{3}[A-Za-z]{0,1}/; //TODO make this configurable
+
+    public static isValidRoomNumber(number: string): boolean {
+        return RoomUtils.RoomNumberPattern.test(number);
+    }
+
     /**
      * Gets a room within the building with the specified number
      * @param number The room number

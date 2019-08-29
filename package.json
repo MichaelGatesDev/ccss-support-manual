@@ -1,5 +1,5 @@
 {
-    "name": "ccss-support-manual-monorepo",
+    "name": "ccss-support-manual",
     "private": true,
     "workspaces": [
         "packages/*"

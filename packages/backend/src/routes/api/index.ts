@@ -6,7 +6,7 @@ const router: Router = Router();
 
 router.use("/v1", v1route);
 
-router.get("/", function (_req, res, _next) {
+router.get("/", (_req, res): void => {
     res.send("This is the primary API route");
 });
 

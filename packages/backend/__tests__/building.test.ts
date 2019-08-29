@@ -1,10 +1,11 @@
 import { Building, BuildingFactory } from "@ccss-support-manual/models";
-import { StringUtils, BuildingUtils } from "@ccss-support-manual/utilities";
+import { BuildingUtils } from "@ccss-support-manual/utilities";
 
+import { StringUtils } from "@michaelgatesdev/common";
 
 let building: Building;
-let buildingOfficialName = "My Cool Building";
-let buildingNicknames: string[] = ["my", "cool", "building", "mcb"];
+const buildingOfficialName = "My Cool Building";
+const buildingNicknames: string[] = ["my", "cool", "building", "mcb"];
 
 test("creates a building", (): void => {
 

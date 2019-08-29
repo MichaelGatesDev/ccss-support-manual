@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, Request, Response } from "express";
 
 const router: Router = Router();
 
@@ -16,7 +16,7 @@ import troubleshootingRoute from "./troubleshooting-data";
 router.use("/troubleshooting-data/", troubleshootingRoute);
 
 
-router.get("/", function (_req: Request, res: Response, _next: NextFunction) {
+router.get("/", (_req: Request, res: Response): void => {
     res.send("This is the primary API v1 route");
 });
 

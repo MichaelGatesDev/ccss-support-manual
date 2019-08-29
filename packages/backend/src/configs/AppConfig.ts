@@ -1,4 +1,4 @@
-import { ConfigBase } from "@ccss-support-manual/utilities";
+import { ConfigBase } from "cardboard-config";
 
 export class AppConfig extends ConfigBase {
     public checkForProgramUpdates: boolean = true;

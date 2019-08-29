@@ -1,9 +1,10 @@
-import { Room, SimpleRoom, RoomFactory, Building, BuildingFactory } from "@ccss-support-manual/models";
-import { RoomUtils, StringUtils, BuildingUtils } from "@ccss-support-manual/utilities";
+import { Building, BuildingFactory, Room, RoomFactory, SimpleRoom } from "@ccss-support-manual/models";
+import { BuildingUtils, RoomUtils } from "@ccss-support-manual/utilities";
+import { StringUtils } from "@michaelgatesdev/common";
 
-let buildingOfficialName = "My Cool Building";
-let buildingNicknames: string[] = ["my", "cool", "building", "mcb"];
-let building: Building = new BuildingFactory()
+const buildingOfficialName = "My Cool Building";
+const buildingNicknames: string[] = ["my", "cool", "building", "mcb"];
+const building: Building = new BuildingFactory()
     .withOfficialName(buildingOfficialName)
     .withInternalName(StringUtils.internalize(buildingOfficialName))
     .withNicknames(buildingNicknames)
@@ -36,7 +37,7 @@ test("gets room via number", (): void => {
 });
 
 test("gets simplified version of room", (): void => {
-    let simplified: SimpleRoom = new RoomFactory()
+    const simplified: SimpleRoom = new RoomFactory()
         .withBuildingName(exampleRoom.buildingName)
         .withNumber(exampleRoom.number)
         .buildSimple();

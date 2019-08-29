@@ -9,13 +9,15 @@
     "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/main.ts",
     "prod": "yarn tsc && node ./build/src/main.js",
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles"
+    "test": "jest --coverage --verbose --detectOpenHandles"
   },
   "files": [
     "build"
   ],
   "dependencies": {
+    "@michaelgatesdev/common": "^1.0.10",
     "@types/jest": "^24.0.13",
+    "cardboard-config": "^1.0.0",
     "cookie-parser": "^1.4.4",
     "debug": "~4.1.1",
     "ejs": "~2.6.1",
@@ -30,6 +32,7 @@
     "request": "^2.88.0",
     "ts-node-dev": "^1.0.0-pre.39",
     "tslib": "^1.9.3",
+    "typescript": "^3.5.3",
     "underscore": "^1.9.1"
   },
   "pkg": {

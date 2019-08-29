@@ -1,8 +1,10 @@
+import { Logger, StringUtils, GoogleDriveDownloader, EnumUtils, FileUtils } from '@michaelgatesdev/common';
 import Excel from "exceljs";
+
 import { GoogleSpreadsheetConfig } from "./configs/GoogleSpreadsheetConfig";
 import { app } from "./app";
-import { StringUtils, ExcelJSUtils, EnumUtils, BuildingUtils, RoomUtils, GoogleDriveDownloader, Logger, FileUtils } from "@ccss-support-manual/utilities";
 import { BuildingFactory, RoomType, LockType, RoomFactory, Classroom, RoomTypeUtils, ClassroomFactory, PhoneFactory, DeviceFactory, DeviceType, SmartClassroom, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, ComputerType, OperatingSystem, TeachingStationComputerFactory, ComputerFactory, AudioFactory, SpeakerType, SimpleRoom, TroubleshootingDataFactory } from "@ccss-support-manual/models";
+import { BuildingUtils, RoomUtils, ExcelJSUtils } from '@ccss-support-manual/utilities';
 
 export class SpreadsheetManager {
 
@@ -127,7 +129,7 @@ export class SpreadsheetManager {
             }
 
             const number = row.getCell(config.roomsNumberHeader.toLocaleLowerCase()).text.toLowerCase();
-            if (StringUtils.isBlank(number) || !StringUtils.isValidRoomNumber(number)) {
+            if (StringUtils.isBlank(number) || !RoomUtils.isValidRoomNumber(number)) {
                 console.debug(`Room number is blank or invalid: ${number}`);
                 return;
             }
