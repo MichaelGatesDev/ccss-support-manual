@@ -287,13 +287,12 @@ export class SpreadsheetManager {
             return;
         }
 
-        if (await !FileUtils.checkExists(config.sheetPath)) {
+        if (!await FileUtils.checkExists(config.sheetPath)) {
             Logger.error(`File could not be found: ${config.sheetPath}`);
             return;
         }
 
         const workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
-
         this.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
         this.loadRooms(workbook.getWorksheet(config.roomsSheetName));
     }
@@ -388,7 +387,7 @@ export class SpreadsheetManager {
             return;
         }
 
-        if (await !FileUtils.checkExists(config.sheetPath)) {
+        if (!await FileUtils.checkExists(config.sheetPath)) {
             Logger.error(`File could not be found: ${config.sheetPath}`);
             return;
         }
