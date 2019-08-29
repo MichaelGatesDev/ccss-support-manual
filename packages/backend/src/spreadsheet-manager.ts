@@ -287,7 +287,7 @@ export class SpreadsheetManager {
             return;
         }
 
-        if (!FileUtils.checkExists(config.sheetPath)) {
+        if (await !FileUtils.checkExists(config.sheetPath)) {
             Logger.error(`File could not be found: ${config.sheetPath}`);
             return;
         }
@@ -388,7 +388,7 @@ export class SpreadsheetManager {
             return;
         }
 
-        if (!FileUtils.checkExists(config.sheetPath)) {
+        if (await !FileUtils.checkExists(config.sheetPath)) {
             Logger.error(`File could not be found: ${config.sheetPath}`);
             return;
         }
