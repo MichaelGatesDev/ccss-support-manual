@@ -5,12 +5,79 @@ import {
     RoomFactory,
     Classroom,
     SmartClassroom,
-    ComputerClassroom
+    ComputerClassroom,
+    LockType,
+    RoomType,
+    ClassroomFactory,
+    PhoneFactory,
+    DeviceFactory,
+    DeviceType,
+    SmartClassroomFactory,
+    AudioFactory,
+    SpeakerType,
+    VideoFactory,
+    DVDPlayerFactory,
+    VideoOutputType,
+    TeachingStationFactory,
+    TeachingStationType,
+    TeachingStationComputerFactory,
+    ComputerFactory,
+    OperatingSystem
 } from "@ccss-support-manual/models";
+import { BuildingUtils } from "./building-utils";
 
 export class RoomUtils {
 
     public static RoomNumberPattern: RegExp = /[\d]{3}[A-Za-z]{0,1}/; //TODO make this configurable
+
+    public static exampleRoom = new RoomFactory()
+        .withBuildingName(BuildingUtils.exampleBuilding.officialName)
+        .withLockType(LockType.Key)
+        .withCapacity(100)
+        .withName("Example Room")
+        .withNumber("123A")
+        .withType(RoomType.Room)
+        .build();
+
+    public static exampleClassroom = new ClassroomFactory(RoomUtils.exampleRoom)
+        .withLastChecked("never")
+        .withPhone(new PhoneFactory(new DeviceFactory().ofType(DeviceType.Phone).build()).hasDisplay(true).hasSpeaker(true).build())
+        .build();
+
+    public static exampleSmartClassroom = new SmartClassroomFactory(RoomUtils.exampleClassroom)
+        .withAudio(new AudioFactory().isSystemDependent(true).withSpeakerType(SpeakerType.Mounted).build())
+        .withVideo(
+            new VideoFactory()
+                .withDVDPlayer(
+                    new DVDPlayerFactory(
+                        new DeviceFactory()
+                            .ofType(DeviceType.DVDPlayer)
+                            .build()
+                    ).build()
+                )
+                .withOutputType(VideoOutputType.Projector)
+                .build()
+        )
+        .withTeachingStation(
+            new TeachingStationFactory()
+                .ofType(TeachingStationType.Digital)
+                .withComputer(
+                    new TeachingStationComputerFactory(
+                        new ComputerFactory(
+                            new DeviceFactory()
+                                .ofType(DeviceType.Computer)
+                                .build()
+                        )
+                            .withOperatingSystem(OperatingSystem.Windows10)
+                            .build()
+                    )
+                        .hasWebcam(true)
+                        .build()
+                )
+                .build()
+        )
+        .build();
+
 
     public static isValidRoomNumber(number: string): boolean {
         return RoomUtils.RoomNumberPattern.test(number);

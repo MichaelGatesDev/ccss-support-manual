@@ -23,6 +23,14 @@ export class BuildingManager {
     }
 
     /**
+     * Adds multiple buildings to the array
+     * @param buildings Buildings to add
+     */
+    public addBuildings(buildings: Building[]): void {
+        this.buildings.push(...buildings);
+    }
+
+    /**
      * Removes a building from the array
      * @param building Building to remove
      */

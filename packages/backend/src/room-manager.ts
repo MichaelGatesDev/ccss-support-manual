@@ -49,4 +49,13 @@ export class RoomManager {
     public getRoomDisplayName(building: Building, room: Room): string {
         return building.officialName + " " + room.number.toLocaleUpperCase();
     }
+
+
+    public addRooms(rooms: Room[]): void {
+        for (const room of rooms) {
+            const building = this.buildingManager.getBuildingByName(room.buildingName);
+            if (building === null) continue;
+            building.rooms.push(room);
+        }
+    }
 }

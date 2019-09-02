@@ -1,6 +1,14 @@
-import { Building, Room } from "@ccss-support-manual/models";
+import { Building, Room, BuildingFactory } from "@ccss-support-manual/models";
+import { StringUtils } from "@michaelgatesdev/common";
 
 export class BuildingUtils {
+
+    private static exampleBuildingName = "Example Building";
+    public static exampleBuilding = new BuildingFactory()
+        .withOfficialName(BuildingUtils.exampleBuildingName)
+        .withInternalName(StringUtils.internalize(BuildingUtils.exampleBuildingName))
+        .withNicknames([...BuildingUtils.exampleBuildingName.split(" "), "nicknames"])
+        .build();
 
     /**
      * Checks if a building's name(s) contain the specified string

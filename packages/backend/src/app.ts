@@ -14,6 +14,7 @@ import { RoomManager } from "./room-manager";
 import { ImageManager } from "./image-manager";
 import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
 import { SpreadsheetManager } from "./spreadsheet-manager";
+import { DataManager } from './data-manager';
 
 export const expressApp: express.Application = express();
 
@@ -25,6 +26,7 @@ export class App {
 
     public ROOT_DIR: string = path.resolve("./");
     public PUBLIC_DIR: string = path.join(this.ROOT_DIR, "/public");
+    public DATA_DIR: string = path.join(this.PUBLIC_DIR, "/data");
     public SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "/settings");
     public IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "/images");
     public BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "/buildings");
@@ -35,6 +37,7 @@ export class App {
     public buildingManager: BuildingManager;
     public roomManager: RoomManager;
     public troubleshootingDataManager: TroubleshootingDataManager;
+    public dataManager: DataManager;
 
 
     public constructor() {
@@ -44,6 +47,7 @@ export class App {
         this.buildingManager = new BuildingManager();
         this.roomManager = new RoomManager(this.buildingManager);
         this.troubleshootingDataManager = new TroubleshootingDataManager(this.roomManager);
+        this.dataManager = new DataManager();
     }
 
     public async initialize(): Promise<void> {
@@ -54,10 +58,12 @@ export class App {
         this.setupExpress();
         Logger.debug("Finished setting up express server.");
 
+
         // create directories 
         await this.setupDirectories();
 
-        // 
+
+        // create and load configuration files
         try {
             Logger.info("Initializing configuration manager...");
             await this.configManager.initialize();
@@ -67,21 +73,13 @@ export class App {
         }
 
         // check for updates
-        if (this.configManager.appConfig !== undefined) {
-            if (this.configManager.appConfig.checkForDataUpdates) {
-                // await this.checkForUpdates();
-            }
-        }
+        // if (this.configManager.appConfig !== undefined) {
+        //     if (this.configManager.appConfig.checkForDataUpdates) {
+        //         // await this.checkForUpdates();
+        //     }
+        // }
 
-        // spreadsheets
-        try {
-            Logger.info("Initializing spreadsheet manager...");
-            await this.spreadsheetManager.initialize();
-            Logger.info("Finished initializing spreadsheet manager");
-        } catch (error) {
-            Logger.error("Failed to initialize spreadsheet manager");
-            Logger.error(error);
-        }
+        await this.dataManager.initialize();
 
 
         // load images
@@ -150,6 +148,11 @@ export class App {
         if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
             if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
                 Logger.info(`Created public directory: ${this.PUBLIC_DIR}`);
+            }
+        }
+        if (!await FileUtils.checkExists(this.DATA_DIR)) {
+            if (await FileUtils.createDirectory(this.DATA_DIR)) {
+                Logger.info(`Created data directory: ${this.DATA_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.SETTINGS_DIR)) {
