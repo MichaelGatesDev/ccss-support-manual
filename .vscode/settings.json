@@ -10,6 +10,6 @@
     ],
     "editor.tabSize": 4,
     "files.exclude": {
-        "packages/*/{lib,build,coverage,tsconfig.tsbuildinfo}": true,
+        "packages/*/{coverage,tsconfig.tsbuildinfo}": true,
     }
 }
