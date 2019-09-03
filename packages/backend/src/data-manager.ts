@@ -2,7 +2,7 @@ import { FileUtils, Logger } from '@michaelgatesdev/common';
 
 import { app } from './app';
 import { BuildingUtils, RoomUtils } from '@ccss-support-manual/utilities';
-import { Building, Room } from '@ccss-support-manual/models';
+import { Building, Room, BuildingFactory } from '@ccss-support-manual/models';
 
 
 export class DataManager {

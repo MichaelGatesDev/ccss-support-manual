@@ -81,6 +81,8 @@ export class App {
 
         await this.dataManager.initialize();
 
+        await this.spreadsheetManager.initialize();
+
 
         // load images
         await this.imageManager.initialize();

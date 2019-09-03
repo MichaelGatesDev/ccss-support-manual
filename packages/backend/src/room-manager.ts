@@ -54,7 +54,8 @@ export class RoomManager {
     public addRooms(rooms: Room[]): void {
         for (const room of rooms) {
             const building = this.buildingManager.getBuildingByName(room.buildingName);
-            if (building === null) continue;
+            if (building === undefined) continue;
+            if (building.rooms === undefined) building.rooms = [];
             building.rooms.push(room);
         }
     }

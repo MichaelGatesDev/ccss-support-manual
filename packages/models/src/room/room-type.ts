@@ -14,13 +14,17 @@ export enum RoomType {
     SeminarRoom
 }
 
+const ComputerClassroomTypes = [
+    RoomType.ComputerClassroom,
+];
+
 const SmartClassroomTypes = [
     RoomType.SmartClassroom,
     RoomType.ComputerClassroom,
     RoomType.ConferenceRoom,
     RoomType.LectureHall,
     RoomType.MeetingRoom,
-    RoomType.SeminarRoom
+    RoomType.SeminarRoom,
 ];
 
 const ClassroomTypes = [
@@ -36,6 +40,10 @@ const RoomTypes = [
 
 
 export class RoomTypeUtils {
+
+    public static isComputerClassroom(toCheck: RoomType): boolean {
+        return toCheck in ComputerClassroomTypes;
+    }
 
     public static isSmartClassroom(toCheck: RoomType): boolean {
         return toCheck in SmartClassroomTypes;

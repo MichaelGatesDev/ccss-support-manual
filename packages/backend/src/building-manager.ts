@@ -45,10 +45,10 @@ export class BuildingManager {
      * Gets a building by the specified name
      * @param name The name of the building
      */
-    public getBuildingByName(name: string): Building | null {
+    public getBuildingByName(name: string): Building | undefined {
         for (const building of this.buildings) {
             if (BuildingUtils.hasName(building, name)) return building;
         }
-        return null;
+        return undefined;
     }
 }
