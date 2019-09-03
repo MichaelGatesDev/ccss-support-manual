@@ -17,22 +17,22 @@ export class SpreadsheetManager {
     private static ClassroomChecksSpreadsheetVersionPattern = /((Summer|Winter)\s20[0-9]{2})/gi;
 
     public async initialize(): Promise<void> {
-        const path = "public/tmp/Classroom Checks - Summer 2019.xlsx";
-        if (!await FileUtils.checkExists(path)) {
-            Logger.debug(`No file: ${path}`);
-        }
-        try {
-            Logger.info(`Importing spreadsheet data from ${path}`);
-            const result = await SpreadsheetManager.importSpreadsheet(
-                path,
-                SpreadsheetType.ClassroomChecks,
-                SpreadsheetImportMode.ClearAndWrite
-            ) as ClassroomChecksSpreadsheetImportResult;
-            Logger.info(`Succesfully imported ${result.buildings.length} buildings and ${result.rooms.length} rooms from "${path}"`);
-        } catch (error) {
-            Logger.error(`There was an error importing spreadsheet data from ${path}`);
-            Logger.error(error);
-        }
+        // const path = "public/tmp/Classroom Checks - Summer 2019.xlsx";
+        // if (!await FileUtils.checkExists(path)) {
+        //     Logger.debug(`No file: ${path}`);
+        // }
+        // try {
+        //     Logger.info(`Importing spreadsheet data from ${path}`);
+        //     const result = await SpreadsheetManager.importSpreadsheet(
+        //         path,
+        //         SpreadsheetType.ClassroomChecks,
+        //         SpreadsheetImportMode.ClearAndWrite
+        //     ) as ClassroomChecksSpreadsheetImportResult;
+        //     Logger.info(`Succesfully imported ${result.buildings.length} buildings and ${result.rooms.length} rooms from "${path}"`);
+        // } catch (error) {
+        //     Logger.error(`There was an error importing spreadsheet data from ${path}`);
+        //     Logger.error(error);
+        // }
     }
 
     public static async convertSpreadsheetToJson(path: string): Promise<Map<string, any>> {
