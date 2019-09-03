@@ -6,8 +6,6 @@
         "strict": true,
         "skipLibCheck": true,
         "noEmitOnError": false,
-        "noUnusedParameters": true,
-        "noUnusedLocals": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "importHelpers": true,
