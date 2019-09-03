@@ -3,6 +3,15 @@ import XLSX from "xlsx";
 import { Building, Room, BuildingFactory, RoomFactory, RoomType, LockType, ClassroomFactory, PhoneFactory, DeviceFactory, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, TeachingStationComputerFactory, ComputerFactory, OperatingSystem, ComputerType, RoomTypeUtils, AudioFactory, SpeakerType, VideoFactory, VideoOutputType, DVDPlayerType, DVDPlayerFactory, ComputerClassroomFactory, PrinterFactory, DeviceType } from '@ccss-support-manual/models';
 
 
+export interface ClassroomChecksSpreadsheetImportResult {
+    buildings: Building[];
+    rooms: Room[];
+}
+
+export interface TroubleshootingSpreadsheetImportResult {
+}
+
+
 export class SpreadsheetManager {
 
     private static ClassroomChecksSpreadsheetVersionPattern = /((Summer|Winter)\s20[0-9]{2})/gi;
@@ -18,10 +27,8 @@ export class SpreadsheetManager {
                 path,
                 SpreadsheetType.ClassroomChecks,
                 SpreadsheetImportMode.ClearAndWrite
-            );
-            if (result) {
-                Logger.info(`Succesfully imported spreadsheet data from ${path}`);
-            }
+            ) as ClassroomChecksSpreadsheetImportResult;
+            Logger.info(`Succesfully imported ${result.buildings.length} buildings and ${result.rooms.length} rooms from "${path}"`);
         } catch (error) {
             Logger.error(`There was an error importing spreadsheet data from ${path}`);
             Logger.error(error);
@@ -45,8 +52,8 @@ export class SpreadsheetManager {
     }
 
 
-    public static async importSpreadsheet(path: string, ssType: SpreadsheetType, mode: SpreadsheetImportMode): Promise<boolean> {
-        if (!await FileUtils.checkExists(path)) return false;
+    public static async importSpreadsheet(path: string, ssType: SpreadsheetType, mode: SpreadsheetImportMode): Promise<ClassroomChecksSpreadsheetImportResult | TroubleshootingSpreadsheetImportResult> {
+        if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
         switch (ssType) {
             case SpreadsheetType.ClassroomChecks:
                 const matches = path.match(this.ClassroomChecksSpreadsheetVersionPattern);
@@ -60,7 +67,7 @@ export class SpreadsheetManager {
         return false;
     }
 
-    private static async importClassroomChecks(path: string, mode: SpreadsheetImportMode, version: ClassroomChecksSpreadsheetVersion): Promise<boolean> {
+    private static async importClassroomChecks(path: string, mode: SpreadsheetImportMode, version: ClassroomChecksSpreadsheetVersion): Promise<ClassroomChecksSpreadsheetImportResult> {
         Logger.debug(`Importing classroom checks spreadsheet as mode ${SpreadsheetImportMode[mode]} with version ${ClassroomChecksSpreadsheetVersion[version]} from ${path}`)
 
         let ss: ClassroomChecksSpreadsheetBase | undefined;
@@ -117,7 +124,6 @@ export class SpreadsheetManager {
                 // finally add the building to the results
                 importedBuildings.push(factory.build());
             }
-            Logger.info(`Imported ${importedBuildings.length} buildings`);
         }
         else {
             Logger.debug("No buildings sheet defined");
@@ -361,13 +367,18 @@ export class SpreadsheetManager {
                     importedRooms.push(createdRoom);
                 }
             }
-            Logger.info(`Imported ${importedRooms.length} rooms`);
-            return true;
         }
-        return false;
+        else {
+            Logger.info("No rooms sheet defined");
+        }
+
+        return {
+            buildings: importedBuildings,
+            rooms: importedRooms
+        };
     }
 
-    public static async importTroubleshooting(path: string, mode: SpreadsheetImportMode): Promise<boolean> {
+    public static async importTroubleshooting(path: string, mode: SpreadsheetImportMode): Promise<TroubleshootingSpreadsheetImportResult> {
         throw new Error("Method not implemented.");
     }
 }
