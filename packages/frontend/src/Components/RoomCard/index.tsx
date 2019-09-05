@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Building, Room } from "@ccss-support-manual/models";
 
 import "./style.scss";
 
 interface Props {
-  building: any; // TODO make this explicit
-  room: any; // TODO make this explicit
+  building: Building;
+  room: Room;
   images: any; // TODO make this explicit
 }
 
@@ -31,6 +32,7 @@ class RoomCard extends Component<Props, State> {
       <div className="RoomCard-Component">
         <Link to={`buildings/${room.buildingName}/rooms/${room.number}`} target="_blank">
           <div className="card">
+            <p className="card-meta"> </p>
             <img className="card-img-top" src={coverImage} alt={`${this.getTitle()}`} />
             <div className="card-body">
               <p className="card-title">{this.getTitle()}</p>

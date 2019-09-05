@@ -29,23 +29,29 @@
 
   .card {
     width: 350px;
-  }
 
-  .card-body {
-    text-align: center;
-
-    .card-title {
-      font-size: 1.15em;
+    .card-meta {
+      position: absolute;
+      width: 100%;
+      background-color: #FFFF00;
     }
 
-    .card-title,
-    .card-subtitle {
-      text-transform: capitalize;
-      font-weight: bold;
-    }
-
-    .card-subtitle {
-      margin-bottom: 0.25em;
+    .card-body {
+      text-align: center;
+  
+      .card-title {
+        font-size: 1.15em;
+      }
+  
+      .card-title,
+      .card-subtitle {
+        text-transform: capitalize;
+        font-weight: bold;
+      }
+  
+      .card-subtitle {
+        margin-bottom: 0.25em;
+      }
     }
   }
 }
