@@ -87,7 +87,7 @@ class NavBar extends Component<Props, State> {
                 <a className="nav-link" href="https://banner.plattsburgh.edu/pls/prod/psu_genweb.master_sched_search" target="_blank" rel="noopener noreferrer">Master Schedule</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="https://booking.plattsburgh.edu/Web/schedule.php" target="_blank" rel="noopener noreferrer">Room Schedule</a>
+                <a className="nav-link" href="https://booking.plattsburgh.edu/" target="_blank" rel="noopener noreferrer">Room Schedule</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="https://suny.service-now.com/navpage.do" target="_blank" rel="noopener noreferrer">ServiceNow</a>
