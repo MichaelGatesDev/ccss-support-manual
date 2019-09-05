@@ -39,12 +39,35 @@ export class RoomUtils {
         .withType(RoomType.Room)
         .build();
 
-    public static exampleClassroom = new ClassroomFactory(RoomUtils.exampleRoom)
+    public static exampleClassroom = new ClassroomFactory(
+        new RoomFactory()
+            .withBuildingName(BuildingUtils.exampleBuilding.officialName)
+            .withLockType(LockType.Swipe)
+            .withCapacity(40)
+            .withName("Example Classroom")
+            .withNumber("123B")
+            .withType(RoomType.Classroom)
+            .build()
+    )
         .withLastChecked("never")
-        .withPhone(new PhoneFactory(new DeviceFactory().ofType(DeviceType.Phone).build()).hasDisplay(true).hasSpeaker(true).build())
+        .withPhone(new PhoneFactory(new DeviceFactory().ofType(DeviceType.Phone).build()).hasDisplay(true).hasSpeaker(true).withExtension("1234").build())
         .build();
 
-    public static exampleSmartClassroom = new SmartClassroomFactory(RoomUtils.exampleClassroom)
+    public static exampleSmartClassroom = new SmartClassroomFactory(
+        new ClassroomFactory(
+            new RoomFactory()
+                .withBuildingName(BuildingUtils.exampleBuilding.officialName)
+                .withLockType(LockType.Electronic)
+                .withCapacity(10)
+                .withName("Example Smart Classroom")
+                .withNumber("215F")
+                .withType(RoomType.SmartClassroom)
+                .build()
+        )
+            .withLastChecked("never")
+            .withPhone(new PhoneFactory(new DeviceFactory().ofType(DeviceType.Phone).build()).hasDisplay(true).hasSpeaker(true).withExtension("9999").build())
+            .build()
+    )
         .withAudio(new AudioFactory().isSystemDependent(true).withSpeakerType(SpeakerType.Mounted).build())
         .withVideo(
             new VideoFactory()

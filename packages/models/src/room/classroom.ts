@@ -1,6 +1,7 @@
 import { Room } from "./room";
 import { Phone, PhoneFactory } from "../equipment/phone";
 import { DeviceFactory, DeviceType } from "../equipment/device";
+import { RoomType } from "./room-type";
 
 /**
  * 
@@ -22,6 +23,7 @@ export class ClassroomFactory {
     private _lastChecked: string = "";
 
     public constructor(room: Room) {
+        room.roomType = RoomType.Classroom;
         this._room = room;
     }
 

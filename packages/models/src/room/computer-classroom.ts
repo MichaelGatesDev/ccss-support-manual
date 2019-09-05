@@ -1,5 +1,6 @@
 import { Printer } from "../equipment/printer";
 import { SmartClassroom } from "./smart-classroom";
+import { RoomType } from "./room-type";
 
 export interface ComputerClassroom extends SmartClassroom {
     // labComputers: LabComputer[];
@@ -16,6 +17,7 @@ export class ComputerClassroomFactory {
     private _printer?: Printer;
 
     public constructor(room: SmartClassroom) {
+        room.roomType = RoomType.SmartClassroom;
         this._room = room;
     }
 
