@@ -51,12 +51,12 @@ class Home extends Component<Props, State> {
     });
   }
 
-  getParentBuilding(room: Room): Building | null {
+  getParentBuilding(room: Room): Building | undefined {
     const { buildingsState } = this.props;
     for (const building of buildingsState.buildings) {
-      if (room.buildingName === building.internalName) return building;
+      if (BuildingUtils.hasName(building, room.buildingName)) return building;
     }
-    return null;
+    return undefined;
   }
 
   getAllRooms(): Room[] {
@@ -68,17 +68,15 @@ class Home extends Component<Props, State> {
     return result;
   }
 
-  isLoading(): boolean {
+  private isLoading(): boolean {
     const { buildingsState, imagesState } = this.props;
     return buildingsState.buildingsLoading || imagesState.imagesLoading;
   }
 
-
   filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
-    const self = this;
     return rooms.filter((room: Room) => {
-      const pb = self.getParentBuilding(room);
-      if (!pb) return false;
+      const pb: Building | undefined = this.getParentBuilding(room);
+      if (pb === undefined) return false;
       return (
         (filterNumber && room.number.toLocaleLowerCase().includes(name)) ||
         (filterName && room.name.toLocaleLowerCase().includes(name)) ||
@@ -89,16 +87,21 @@ class Home extends Component<Props, State> {
 
 
   render() {
+    // Display splash when loading
+    if (this.isLoading()) {
+      return <LoadingSplash />;
+    }
+
+
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
 
-    let rooms: Room[] = this.getAllRooms();
-    if (!this.isLoading()) {
-      const query = filterSearch;
-      const queries = query.split(" ");
+    const query = filterSearch;
+    const queries = query.split(" ");
 
-      rooms = _.sortBy(rooms, ["buildingName", "number"]);
+    let rooms = _.sortBy(this.getAllRooms(), ["buildingName", "number"]);
 
+    if (queries.length > 0) {
       for (let query of queries) {
         query = query.toLocaleLowerCase();
         rooms = this.filterRoomsByName(rooms, query);
@@ -107,32 +110,23 @@ class Home extends Component<Props, State> {
 
     return (
       <Fragment>
-
-        {this.isLoading() &&
-          <LoadingSplash />
-        }
-
-        {!this.isLoading() &&
-          (
-            <Fragment>
-              <NavBar
-                title="CCSS Support Manual"
-                searchable
-                onSearch={this.onSearch}
-                fixed
-              />
-              <section className="container-fluid" id="home-section">
-                <div className="Home-Component">
-                  <RoomCardsGrid
-                    rooms={rooms}
-                    buildings={buildingsState.buildings}
-                    images={imagesState}
-                  />
-                </div>
-              </section>
-            </Fragment>
-          )
-        }
+        {/* Top navigation */}
+        <NavBar
+          title="CCSS Support Manual"
+          searchable
+          onSearch={this.onSearch}
+          fixed
+        />
+        {/* Main content */}
+        <section className="container-fluid" id="home-section">
+          <div className="Home-Component">
+            <RoomCardsGrid
+              rooms={rooms}
+              buildings={buildingsState.buildings}
+              images={imagesState}
+            />
+          </div>
+        </section>
       </Fragment>
     );
   }
