@@ -1,9 +1,9 @@
-import { Router, Response } from "express";
+import { Router, Response, Request } from "express";
 import { app } from "../../../../app";
 
 const router: Router = Router();
 
-router.get("/", (res: Response): void => {
+router.get("/", (_req: Request, res: Response): void => {
     res.json(app.buildingManager.buildings);
 });
 

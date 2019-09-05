@@ -1,4 +1,4 @@
-import express, { Response } from "express";
+import express, { Response, Request } from "express";
 
 import createError from "http-errors";
 import path from "path";
@@ -112,7 +112,7 @@ export class App {
         expressApp.use("/", indexRoute);
 
         Logger.debug("Setting up static files to serve");
-        expressApp.use("*", (res: express.Response): void => {
+        expressApp.use("*", (_req: Request, res: express.Response): void => {
             res.sendFile(path.join(__dirname, "dist", "index.html"));
         });
 

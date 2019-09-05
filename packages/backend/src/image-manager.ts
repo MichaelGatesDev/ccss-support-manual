@@ -43,7 +43,10 @@ export class ImageManager {
                 if (file.isDirectory()) continue;
                 const newPath = `${buildingDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                 const image = new BuildingImageFactory(
-                    new ImageFactory().ofType(ImageType.Building).withPath(newPath).build()
+                    new ImageFactory()
+                        .ofType(ImageType.Building)
+                        .withPath(newPath)
+                        .build()
                 ).withBuildingName(building.internalName).build();
                 this.buildingImages.push(image);
             }
@@ -74,7 +77,10 @@ export class ImageManager {
                     const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                     const image = new RoomImageFactory(
                         new BuildingImageFactory(
-                            new ImageFactory().ofType(ImageType.Room).withPath(newPath).build()
+                            new ImageFactory()
+                                .ofType(ImageType.Room)
+                                .withPath(newPath)
+                                .build()
                         ).withBuildingName(building.internalName).build()
                     ).build();
                     this.roomImages.push(image);
@@ -95,7 +101,10 @@ export class ImageManager {
                     const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                     const image = new RoomImageFactory(
                         new BuildingImageFactory(
-                            new ImageFactory().ofType(ImageType.RoomPanorama).withPath(newPath).build()
+                            new ImageFactory()
+                                .ofType(ImageType.RoomPanorama)
+                                .withPath(newPath)
+                                .build()
                         ).withBuildingName(building.internalName).build()
                     ).build();
                     this.roomImages.push(image);
@@ -117,7 +126,10 @@ export class ImageManager {
                     const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                     const image = new RoomImageFactory(
                         new BuildingImageFactory(
-                            new ImageFactory().ofType(ImageType.RoomEquipment).withPath(newPath).build()
+                            new ImageFactory()
+                                .ofType(ImageType.RoomEquipment)
+                                .withPath(newPath)
+                                .build()
                         ).withBuildingName(building.internalName).build()
                     ).build();
                     this.roomImages.push(image);
