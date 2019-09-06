@@ -1,6 +1,6 @@
 import { Logger, FileUtils, EnumUtils, StringUtils } from '@michaelgatesdev/common';
 import XLSX from "xlsx";
-import { Building, Room, BuildingFactory, RoomFactory, RoomType, LockType, ClassroomFactory, PhoneFactory, DeviceFactory, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, TeachingStationComputerFactory, ComputerFactory, OperatingSystem, ComputerType, RoomTypeUtils, AudioFactory, SpeakerType, VideoFactory, VideoOutputType, DVDPlayerType, DVDPlayerFactory, ComputerClassroomFactory, PrinterFactory, DeviceType } from '@ccss-support-manual/models';
+import { Building, Room, BuildingFactory, RoomFactory, RoomType, LockType, ClassroomFactory, PhoneFactory, DeviceFactory, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, TeachingStationComputerFactory, ComputerFactory, OperatingSystem, ComputerType, RoomTypeUtils, AudioFactory, SpeakerType, VideoFactory, VideoOutputType, DVDPlayerType, DVDPlayerFactory, ComputerClassroomFactory, PrinterFactory, DeviceType, SpreadsheetType, SpreadsheetImportMode, ClassroomChecksSpreadsheetVersion } from '@ccss-support-manual/models';
 
 
 export interface ClassroomChecksSpreadsheetImportResult {
@@ -381,35 +381,6 @@ export class SpreadsheetManager {
     public static async importTroubleshooting(path: string, mode: SpreadsheetImportMode): Promise<TroubleshootingSpreadsheetImportResult> {
         throw new Error("Method not implemented.");
     }
-}
-
-export enum SpreadsheetType {
-    ClassroomChecks,
-    Troubleshooting
-}
-
-export enum ClassroomChecksSpreadsheetVersion {
-    Summer2017,
-    Winter2017,
-    Summer2018,
-    Winter2018,
-    Summer2019,
-    Winter2019,
-}
-
-export enum SpreadsheetImportMode {
-    /**
-     * Overwrites any matching data and appends any extra
-     */
-    OverwriteAndAppend,
-    /**
-     * Clears any existing data and writes data
-     */
-    ClearAndWrite,
-    /**
-     * Only adds non-matching data
-     */
-    Append,
 }
 
 
