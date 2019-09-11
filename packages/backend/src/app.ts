@@ -24,12 +24,13 @@ export class App {
     //              Configure express backend
     // ------------------------------------------------------ \\
 
-    public ROOT_DIR: string = path.resolve("./");
-    public PUBLIC_DIR: string = path.join(this.ROOT_DIR, "/public");
-    public DATA_DIR: string = path.join(this.PUBLIC_DIR, "/data");
-    public SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "/settings");
-    public IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "/images");
-    public BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "/buildings");
+    public ROOT_DIR: string = "./";
+    public PUBLIC_DIR: string = `${this.ROOT_DIR}/public`;
+    public UPLOADS_DIR: string = `${this.PUBLIC_DIR}/uploads`;
+    public DATA_DIR: string = `${this.PUBLIC_DIR}/data`;
+    public SETTINGS_DIR: string = `${this.PUBLIC_DIR}/settings`;
+    public IMAGES_DIR: string = `${this.PUBLIC_DIR}/images`;
+    public BUILDING_IMAGES_DIR: string = `${this.IMAGES_DIR}/buildings`;
 
     public spreadsheetManager: SpreadsheetManager;
     public configManager: ConfigManager;
@@ -125,7 +126,6 @@ export class App {
         // development error handler
         // will print stacktrace
         if (expressApp.get("env") === "development") {
-
             expressApp.use((err: any, res: express.Response): void => {
                 res.status(err["status"] || 500);
                 res.render("error", {

@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import { Room, Building, RoomImage } from "@ccss-support-manual/models";
-
 import "./style.scss";
+
+import React, { Component } from "react";
+import shortid from "shortid";
+import { Room, Building, RoomImage } from "@ccss-support-manual/models";
 
 import RoomCard from "../RoomCard";
 import { ImagesState } from "../../redux/images/types";
@@ -64,7 +65,7 @@ export default class RoomCardsGrid extends Component<Props, State> {
       const parentBuilding = this.getParentBuilding(room);
       if (!parentBuilding) return null;
       return (
-        <li key={`card-${room.buildingName}${room.number}`}>
+        <li key={shortid.generate()}>
           <RoomCard
             room={room}
             building={parentBuilding}

@@ -1,7 +1,7 @@
 import { Logger, FileUtils, EnumUtils, StringUtils } from '@michaelgatesdev/common';
 import XLSX from "xlsx";
 import { Building, Room, BuildingFactory, RoomFactory, RoomType, LockType, ClassroomFactory, PhoneFactory, DeviceFactory, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, TeachingStationComputerFactory, ComputerFactory, OperatingSystem, ComputerType, RoomTypeUtils, AudioFactory, SpeakerType, VideoFactory, VideoOutputType, DVDPlayerType, DVDPlayerFactory, ComputerClassroomFactory, PrinterFactory, DeviceType, SpreadsheetType, SpreadsheetImportMode, ClassroomChecksSpreadsheetVersion } from '@ccss-support-manual/models';
-
+import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
 
 export interface ClassroomChecksSpreadsheetImportResult {
     buildings: Building[];
@@ -54,22 +54,18 @@ export class SpreadsheetManager {
 
     public static async importSpreadsheet(path: string, ssType: SpreadsheetType, mode: SpreadsheetImportMode): Promise<ClassroomChecksSpreadsheetImportResult | TroubleshootingSpreadsheetImportResult> {
         if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
+        Logger.debug(`Importing ${SpreadsheetType[ssType]} as mode ${SpreadsheetImportMode[mode]} from ${path}`)
         switch (ssType) {
             case SpreadsheetType.ClassroomChecks:
-                const matches = path.match(this.ClassroomChecksSpreadsheetVersionPattern);
-                if (matches === null || matches.length !== 1) throw new Error("No version match found for spreadsheet");
-                const version = EnumUtils.parse(ClassroomChecksSpreadsheetVersion, matches[0]);
+                const version = SpreadsheetUtils.matchClassroomChecksVersion(path);
                 if (version === undefined) throw new Error(`No classroom checks spreadsheet version match found in ${path}`);
-                return this.importClassroomChecks(path, mode, version);
+                return this.importClassroomChecks(path, version);
             case SpreadsheetType.Troubleshooting:
-                return this.importTroubleshooting(path, mode);
+                return this.importTroubleshooting(path);
         }
-        return false;
     }
 
-    private static async importClassroomChecks(path: string, mode: SpreadsheetImportMode, version: ClassroomChecksSpreadsheetVersion): Promise<ClassroomChecksSpreadsheetImportResult> {
-        Logger.debug(`Importing classroom checks spreadsheet as mode ${SpreadsheetImportMode[mode]} with version ${ClassroomChecksSpreadsheetVersion[version]} from ${path}`)
-
+    private static async importClassroomChecks(path: string, version: ClassroomChecksSpreadsheetVersion): Promise<ClassroomChecksSpreadsheetImportResult> {
         let ss: ClassroomChecksSpreadsheetBase | undefined;
         switch (version) {
             case ClassroomChecksSpreadsheetVersion.Summer2017:
@@ -378,7 +374,7 @@ export class SpreadsheetManager {
         };
     }
 
-    public static async importTroubleshooting(path: string, mode: SpreadsheetImportMode): Promise<TroubleshootingSpreadsheetImportResult> {
+    public static async importTroubleshooting(path: string): Promise<TroubleshootingSpreadsheetImportResult> {
         throw new Error("Method not implemented.");
     }
 }

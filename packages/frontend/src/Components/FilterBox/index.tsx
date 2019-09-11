@@ -1,7 +1,8 @@
+import "./style.scss";
+
 import React, { Component, Fragment } from "react";
 import _ from "lodash";
-
-import "./style.scss";
+import shortid from "shortid";
 
 import Filter from "./Filter";
 
@@ -65,7 +66,7 @@ class FilterBox extends Component<Props, State> {
       return (
         <Filter
           name={value}
-          key={`filter-${value}`}
+          key={shortid.generate()}
           onChange={this.onFilterChange}
           selected={selected}
         />

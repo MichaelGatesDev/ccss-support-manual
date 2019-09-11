@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import { TroubleshootingData } from "@ccss-support-manual/models";
-
 import "./style.scss";
+
+import React, { Component } from "react";
+import shortid from "shortid";
+
+import { TroubleshootingData } from "@ccss-support-manual/models";
 
 import TroubleshootingTip from "./TroubleshootingTip";
 
@@ -53,7 +55,7 @@ export default class TroubleshootingTips extends Component<Props, State> {
     const tips = data.map((value: TroubleshootingData) => (
       <TroubleshootingTip
         data={value}
-        key={`tip-${value.title.length}`}
+        key={shortid.generate()}
       />
     ), this);
 

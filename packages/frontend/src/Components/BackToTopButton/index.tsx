@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import posed, { PoseGroup } from "react-pose";
+import shortid from "shortid";
 
 import "./style.scss";
 
@@ -55,7 +56,7 @@ export default class BackToTopButton extends Component<Props, State> {
     return (
       <PoseGroup>
         {visible && [
-          <BackToTopButtonDiv className="BackToTopButton-Component" key="BackToTopButton">
+          <BackToTopButtonDiv className="BackToTopButton-Component" key={shortid.generate()}>
             <button
               type="submit"
               className="btn btn-primary"

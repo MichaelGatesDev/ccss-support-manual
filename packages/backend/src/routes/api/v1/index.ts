@@ -1,23 +1,21 @@
 import { Router, Request, Response } from "express";
 
-const router: Router = Router();
-
-
 import buildingsRoute from "./buildings";
-router.use("/buildings/", buildingsRoute);
-
 import roomsRoute from "./rooms";
-router.use("/rooms/", roomsRoute);
-
 import imagesRoute from "./images";
-router.use("/images/", imagesRoute);
-
 import troubleshootingRoute from "./troubleshooting-data";
+import uploadRoute from "./upload";
+
+const router: Router = Router();
+router.use("/buildings/", buildingsRoute);
+router.use("/rooms/", roomsRoute);
+router.use("/images/", imagesRoute);
 router.use("/troubleshooting-data/", troubleshootingRoute);
+router.use("/upload/", uploadRoute);
 
 
 router.get("/", (_req: Request, res: Response): void => {
-    res.send("This is the primary API v1 route");
+  res.send("This is the primary API v1 route");
 });
 
 

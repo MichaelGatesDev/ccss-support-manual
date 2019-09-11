@@ -1,6 +1,8 @@
-import React, { Fragment, PureComponent } from "react";
-
 import "./style.scss";
+
+import React, { Fragment, PureComponent } from "react";
+import shortid from "shortid";
+
 
 interface Props {
   id: string;
@@ -16,11 +18,11 @@ export default class ImageCarousel extends PureComponent<Props, State> {
     const { images, id, height } = this.props;
 
     const indicators = images.map((image, index) => (
-      <li data-target={`#${id}`} data-slide-to={index} className={index === 0 ? "active" : ""} key={image} />
+      <li data-target={`#${id}`} data-slide-to={index} className={index === 0 ? "active" : ""} key={shortid.generate()} />
     ), this);
 
     const items = images.map((image, index) => (
-      <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={image}>
+      <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={shortid.generate()}>
         <img
           className="d-block"
           src={`/${image}`}
