@@ -43,13 +43,16 @@ export class ImageManager {
                 if (file.isDirectory()) continue;
                 const newPath = `${buildingDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                 const image = new BuildingImageFactory(
-                    new ImageFactory().ofType(ImageType.Building).withPath(newPath).build()
+                    new ImageFactory()
+                        .ofType(ImageType.Building)
+                        .withPath(newPath)
+                        .build()
                 ).withBuildingName(building.internalName).build();
                 this.buildingImages.push(image);
             }
 
 
-            const roomsDir = `${buildingDir}/rooms/`;
+            const roomsDir = `${buildingDir}/rooms`;
             // create rooms dir if not exists
             if (!await FileUtils.checkExists(roomsDir)) {
                 if (await FileUtils.createDirectory(roomsDir)) {
@@ -59,7 +62,7 @@ export class ImageManager {
 
             for (const room of building.rooms) {
 
-                const roomDir = `${roomsDir}/${room.number.toLocaleLowerCase()}`;
+                const roomDir = `${roomsDir}/${`${room.number}`.toLocaleLowerCase()}`;
                 // create room dir if it doesnt exist
                 if (!await FileUtils.checkExists(roomDir)) {
                     if (await FileUtils.createDirectory(roomDir)) {
@@ -74,7 +77,10 @@ export class ImageManager {
                     const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                     const image = new RoomImageFactory(
                         new BuildingImageFactory(
-                            new ImageFactory().ofType(ImageType.Room).withPath(newPath).build()
+                            new ImageFactory()
+                                .ofType(ImageType.Room)
+                                .withPath(newPath)
+                                .build()
                         ).withBuildingName(building.internalName).build()
                     ).build();
                     this.roomImages.push(image);
@@ -82,7 +88,7 @@ export class ImageManager {
 
 
                 // panoramic images
-                const panoramasDir = roomDir + "panoramas/";
+                const panoramasDir = roomDir + "/panoramas";
                 // create panoramas dir if it doesnt exist
                 if (!await FileUtils.checkExists(panoramasDir)) {
                     if (await FileUtils.createDirectory(panoramasDir)) {
@@ -95,7 +101,10 @@ export class ImageManager {
                     const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                     const image = new RoomImageFactory(
                         new BuildingImageFactory(
-                            new ImageFactory().ofType(ImageType.RoomPanorama).withPath(newPath).build()
+                            new ImageFactory()
+                                .ofType(ImageType.RoomPanorama)
+                                .withPath(newPath)
+                                .build()
                         ).withBuildingName(building.internalName).build()
                     ).build();
                     this.roomImages.push(image);
@@ -103,7 +112,7 @@ export class ImageManager {
 
 
                 // equipment images
-                let equipmentDir = roomDir + "equipment/";
+                let equipmentDir = roomDir + "/equipment";
                 // create equipment dir if it doesnt exist
                 if (!await FileUtils.checkExists(equipmentDir)) {
                     if (await FileUtils.createDirectory(equipmentDir)) {
@@ -117,7 +126,10 @@ export class ImageManager {
                     const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
                     const image = new RoomImageFactory(
                         new BuildingImageFactory(
-                            new ImageFactory().ofType(ImageType.RoomEquipment).withPath(newPath).build()
+                            new ImageFactory()
+                                .ofType(ImageType.RoomEquipment)
+                                .withPath(newPath)
+                                .build()
                         ).withBuildingName(building.internalName).build()
                     ).build();
                     this.roomImages.push(image);

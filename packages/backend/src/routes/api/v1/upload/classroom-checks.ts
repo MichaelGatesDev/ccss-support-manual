@@ -1,0 +1,56 @@
+import { Router } from "express";
+import multer from "multer";
+import { SpreadsheetManager, ClassroomChecksSpreadsheetImportResult } from "../../../../spreadsheet-manager";
+import { SpreadsheetType, SpreadsheetImportMode, ClassroomChecksSpreadsheetVersion } from "@ccss-support-manual/models";
+import { app } from "../../../../app";
+import { Logger } from "@michaelgatesdev/common";
+import { RoomUtils } from "@ccss-support-manual/utilities";
+
+const router: Router = Router();
+
+const storage = multer.diskStorage({
+    filename(_req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+const upload = multer({ storage });
+
+
+router.post('/', upload.single('file'), async (req, res) => {
+    const mode: number = req.body.importMode;
+    // const version: number = req.body.fileVersion;
+    const result = await SpreadsheetManager.importSpreadsheet(`${req.file.destination}/${req.file.originalname}`, SpreadsheetType.ClassroomChecks, mode) as ClassroomChecksSpreadsheetImportResult;
+
+    switch (+mode) {
+        default:
+            break;
+        case SpreadsheetImportMode.Append:
+            Logger.debug("Append data");
+            Logger.error("NOT SUPPORTED!");
+            // app.buildingManager.addBuildings(result.buildings);
+            // // add new buildings and rooms
+            // const differentRooms = RoomUtils.getDifference(app.roomManager.getRooms(), result.rooms);
+            // console.log(`Rooms before filter: ${result.rooms.length} | After filter: ${differentRooms.length}`);
+            // app.roomManager.addRooms(differentRooms);
+            break;
+        case SpreadsheetImportMode.ClearAndWrite:
+            Logger.debug("Clear and Write data");
+            // clear all buildings and rooms
+            app.buildingManager.clear();
+            // add new buildings and rooms
+            app.buildingManager.addBuildings(result.buildings);
+            app.roomManager.addRooms(result.rooms);
+            break;
+        case SpreadsheetImportMode.OverwriteAndAppend:
+            Logger.debug("Overwrite and Append data");
+            Logger.error("NOT SUPPORTED!");
+            // // add new buildings and rooms
+            // app.buildingManager.addBuildings(result.buildings);
+            // app.roomManager.addRooms(result.rooms);
+            break;
+    }
+
+    res.status(200).json({});
+});
+
+export default router;

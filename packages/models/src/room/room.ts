@@ -16,7 +16,7 @@ export interface Room {
      * The first number of the identifier indicates the floor (e.g. 0 = basement, 1 = 1st floor, 2 = 2nd floor, etc.)
      * The next two digits indicate the 
      */
-    number: string;
+    number: string | number;
 
     /**
      * The name of the room. Typically found on the sign with the room number.
@@ -45,7 +45,7 @@ export interface Room {
  */
 export interface SimpleRoom {
     buildingName: string;
-    roomNumber: string;
+    roomNumber: string | number;
 }
 
 
@@ -53,7 +53,7 @@ export interface SimpleRoom {
 export class RoomFactory {
 
     private _buildingName: string = "";
-    private _number: string = "";
+    private _number: string | number = "";
     private _name: string = "";
     private _type: RoomType = RoomType.Other;
     private _lockType: LockType = LockType.Other;

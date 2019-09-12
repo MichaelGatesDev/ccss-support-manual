@@ -1,5 +1,6 @@
 import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
+import _ from "lodash";
 
 /**
  * A utility class for managing buildings
@@ -23,6 +24,14 @@ export class BuildingManager {
     }
 
     /**
+     * Adds multiple buildings to the array
+     * @param buildings Buildings to add
+     */
+    public addBuildings(buildings: Building[]): void {
+        this.buildings.push(...buildings);
+    }
+
+    /**
      * Removes a building from the array
      * @param building Building to remove
      */
@@ -34,13 +43,20 @@ export class BuildingManager {
     }
 
     /**
+     * Clears all buildings
+     */
+    public clear(): void {
+        this.buildings = [];
+    }
+
+    /**
      * Gets a building by the specified name
      * @param name The name of the building
      */
-    public getBuildingByName(name: string): Building | null {
+    public getBuildingByName(name: string): Building | undefined {
         for (const building of this.buildings) {
             if (BuildingUtils.hasName(building, name)) return building;
         }
-        return null;
+        return undefined;
     }
 }

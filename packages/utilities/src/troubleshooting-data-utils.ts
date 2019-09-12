@@ -3,11 +3,11 @@ import { TroubleshootingData, Room, RoomFactory } from "@ccss-support-manual/mod
 export class TroubleshootingDataUtils {
 
     public static addWhitelistedRoom(data: TroubleshootingData, room: Room): void {
-        data.whitelistedRooms.push(new RoomFactory().withBuildingName(room.buildingName).withNumber(room.number).buildSimple());
+        data.whitelistedRooms.push(new RoomFactory().withBuildingName(room.buildingName).withNumber(`${room.number}`).buildSimple());
     }
 
     public static addBlacklistedRoom(data: TroubleshootingData, room: Room): void {
-        data.blacklistedRooms.push(new RoomFactory().withBuildingName(room.buildingName).withNumber(room.number).buildSimple());
+        data.blacklistedRooms.push(new RoomFactory().withBuildingName(room.buildingName).withNumber(`${room.number}`).buildSimple());
     }
 
     public static isRoomWhitelisted(data: TroubleshootingData, buildingName: string, roomNumber: string): boolean {

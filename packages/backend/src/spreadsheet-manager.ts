@@ -1,399 +1,551 @@
-import { Logger, StringUtils, GoogleDriveDownloader, EnumUtils, FileUtils } from '@michaelgatesdev/common';
-import Excel from "exceljs";
+import { Logger, FileUtils, EnumUtils, StringUtils } from '@michaelgatesdev/common';
+import XLSX from "xlsx";
+import { Building, Room, BuildingFactory, RoomFactory, RoomType, LockType, ClassroomFactory, PhoneFactory, DeviceFactory, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, TeachingStationComputerFactory, ComputerFactory, OperatingSystem, ComputerType, RoomTypeUtils, AudioFactory, SpeakerType, VideoFactory, VideoOutputType, DVDPlayerType, DVDPlayerFactory, ComputerClassroomFactory, PrinterFactory, DeviceType, SpreadsheetType, SpreadsheetImportMode, ClassroomChecksSpreadsheetVersion } from '@ccss-support-manual/models';
+import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
 
-import { GoogleSpreadsheetConfig } from "./configs/GoogleSpreadsheetConfig";
-import { app } from "./app";
-import { BuildingFactory, RoomType, LockType, RoomFactory, Classroom, RoomTypeUtils, ClassroomFactory, PhoneFactory, DeviceFactory, DeviceType, SmartClassroom, SmartClassroomFactory, TeachingStationFactory, TeachingStationType, ComputerType, OperatingSystem, TeachingStationComputerFactory, ComputerFactory, AudioFactory, SpeakerType, SimpleRoom, TroubleshootingDataFactory } from "@ccss-support-manual/models";
-import { BuildingUtils, RoomUtils, ExcelJSUtils } from '@ccss-support-manual/utilities';
+export interface ClassroomChecksSpreadsheetImportResult {
+    buildings: Building[];
+    rooms: Room[];
+}
+
+export interface TroubleshootingSpreadsheetImportResult {
+}
+
 
 export class SpreadsheetManager {
 
+    private static ClassroomChecksSpreadsheetVersionPattern = /((Summer|Winter)\s20[0-9]{2})/gi;
+
     public async initialize(): Promise<void> {
-
-        if (app.configManager.appConfig !== undefined) {
-            if (app.configManager.appConfig.checkForDataUpdates) {
-                await this.checkForUpdates();
-            }
-        }
-
-        // load data from classroom checks spreadsheet
-        try {
-            Logger.info("Loading classroom checks spreadsheet...");
-            await this.loadClassroomChecksSpreadsheet();
-            Logger.info("Finished loading classroom checks spreadsheet");
-        } catch (error) {
-            Logger.error("There was an error loading the classroom checks spreadsheet");
-            Logger.error(error);
-            return;
-        }
-
-        // load data from troubleshoting spreadsheet
-        try {
-            await this.loadTroubleshootingDataSpreadsheet();
-            Logger.info("Loaded troubleshooting data spreadsheet");
-        } catch (error) {
-            Logger.error("There was an error loading the troubleshooting data spreadsheet");
-            Logger.error(error);
-            return;
-        }
+        // const path = "public/tmp/Classroom Checks - Summer 2019.xlsx";
+        // if (!await FileUtils.checkExists(path)) {
+        //     Logger.debug(`No file: ${path}`);
+        // }
+        // try {
+        //     Logger.info(`Importing spreadsheet data from ${path}`);
+        //     const result = await SpreadsheetManager.importSpreadsheet(
+        //         path,
+        //         SpreadsheetType.ClassroomChecks,
+        //         SpreadsheetImportMode.ClearAndWrite
+        //     ) as ClassroomChecksSpreadsheetImportResult;
+        //     Logger.info(`Succesfully imported ${result.buildings.length} buildings and ${result.rooms.length} rooms from "${path}"`);
+        // } catch (error) {
+        //     Logger.error(`There was an error importing spreadsheet data from ${path}`);
+        //     Logger.error(error);
+        // }
     }
 
-    public async checkForUpdates(): Promise<void> {
-        Logger.info("Checking for spreadsheet updates...");
-        await this.checkUpdateForSpreadsheet(app.configManager.classroomChecksSpreadsheetConfig);
-        await this.checkUpdateForSpreadsheet(app.configManager.troubleshootingSpreadsheetConfig);
-        Logger.info("Finished checking for spreadsheet updates");
-    }
+    public static async convertSpreadsheetToJson(path: string): Promise<Map<string, any>> {
+        if (!await FileUtils.checkExists(path)) throw new Error();
 
-    public async checkUpdateForSpreadsheet(config?: GoogleSpreadsheetConfig): Promise<void> {
-        if (config === undefined) {
-            Logger.error("Config is undefined");
-            return;
-        }
-        await this.downloadSpreadsheet(config.docID, config.sheetPath);
-    }
+        let result: Map<string, any> = new Map<string, any>();
 
-    private async downloadSpreadsheet(docID: string, sheetPath: string): Promise<void> {
-        if (StringUtils.isBlank(docID)) {
-            Logger.error("No docID specified");
-            return;
-        }
+        const workbook = XLSX.readFile(path);
+        const sheets = workbook.SheetNames;
 
-        try {
-            Logger.info(`Downloading spreadsheet ${docID}`);
-            await GoogleDriveDownloader.downloadSpreadsheet(
-                docID,
-                "xlsx",
-                sheetPath
-            );
-            Logger.info(`Finished download spreadsheet ${docID}`);
-        } catch (error) {
-            Logger.error(`Failed to download spreadsheet: ${docID}`);
-            Logger.error(error);
-        }
-    }
-
-
-    private loadBuildings(sheet: Excel.Worksheet): void {
-        const config = app.configManager.classroomChecksSpreadsheetConfig;
-        if (config === undefined) {
-            Logger.error("Config is undefined");
-            return;
-        }
-
-        ExcelJSUtils.generateColumnHeaders(sheet, config.buildingsSheetHeaderRow);
-
-        sheet.eachRow({ includeEmpty: false }, (row, rowNumber): void => {
-            if (rowNumber == config.buildingsSheetHeaderRow) return; // skip headers row
-            if (row.getCell(1) === undefined || row.getCell(1).text === "") return; // skip if row is empty. exceljs doesn"t work well for some reason.
-
-            const officialName = row.getCell(config.buildingsOfficialNameHeader.toLocaleLowerCase()).text.toLowerCase();
-            const nicknames = row.getCell(config.buildingsNicknamesHeader.toLocaleLowerCase()).text.toLowerCase();
-
-            const building = new BuildingFactory()
-                .withOfficialName(officialName)
-                .withNicknames(nicknames.split(","))
-                .withInternalName(StringUtils.internalize(officialName))
-                .withRooms([])
-                .build();
-
-            app.buildingManager.addBuilding(building);
+        sheets.forEach(async (sheet: string): Promise<void> => {
+            const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+            result.set(sheet, json);
         });
-        console.debug(`Loaded ${app.buildingManager.buildings.length} buildings`);
+
+        return result;
     }
 
 
-    private loadRooms(sheet: Excel.Worksheet): void {
+    public static async importSpreadsheet(path: string, ssType: SpreadsheetType, mode: SpreadsheetImportMode): Promise<ClassroomChecksSpreadsheetImportResult | TroubleshootingSpreadsheetImportResult> {
+        if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
+        Logger.debug(`Importing ${SpreadsheetType[ssType]} as mode ${SpreadsheetImportMode[mode]} from ${path}`)
+        switch (ssType) {
+            case SpreadsheetType.ClassroomChecks:
+                const version = SpreadsheetUtils.matchClassroomChecksVersion(path);
+                if (version === undefined) throw new Error(`No classroom checks spreadsheet version match found in ${path}`);
+                return this.importClassroomChecks(path, version);
+            case SpreadsheetType.Troubleshooting:
+                return this.importTroubleshooting(path);
+        }
+    }
 
-        const config = app.configManager.classroomChecksSpreadsheetConfig;
-        if (config === undefined) {
-            Logger.error("Config is undefined");
-            return;
+    private static async importClassroomChecks(path: string, version: ClassroomChecksSpreadsheetVersion): Promise<ClassroomChecksSpreadsheetImportResult> {
+        let ss: ClassroomChecksSpreadsheetBase | undefined;
+        switch (version) {
+            case ClassroomChecksSpreadsheetVersion.Summer2017:
+                ss = new ClassroomChecksSpreadsheet_Summer2017();
+                break;
+            case ClassroomChecksSpreadsheetVersion.Winter2017:
+                ss = new ClassroomChecksSpreadsheet_Winter2017();
+                break;
+            case ClassroomChecksSpreadsheetVersion.Summer2018:
+                ss = new ClassroomChecksSpreadsheet_Summer2018();
+                break;
+            case ClassroomChecksSpreadsheetVersion.Winter2018:
+                ss = new ClassroomChecksSpreadsheet_Winter2018();
+                break;
+            case ClassroomChecksSpreadsheetVersion.Summer2019:
+                ss = new ClassroomChecksSpreadsheet_Summer2019();
+                break;
+            case ClassroomChecksSpreadsheetVersion.Winter2019:
+                ss = new ClassroomChecksSpreadsheet_Winter2019();
+                break;
+        }
+        if (ss === undefined) throw new Error("Spreadsheet undefined");
+
+        const jsonObjects = await this.convertSpreadsheetToJson(path);
+
+        // buildings
+        const importedBuildings: Building[] = [];
+        if (ss.buildingsSheetName !== undefined) {
+            let buildingsSheet = jsonObjects.get(ss.buildingsSheetName);
+            for (const building of buildingsSheet) {
+
+                let factory = new BuildingFactory();
+
+                // official name
+                if (ss.buildingsOfficialNameHeader !== undefined) {
+                    if (ss.buildingsOfficialNameHeader in building) {
+                        let officialName: string = building[ss.buildingsOfficialNameHeader];
+                        if (StringUtils.isBlank(officialName)) continue; // invalid entry
+                        factory = factory.withOfficialName(officialName);
+                        factory = factory.withInternalName(StringUtils.internalize(officialName));
+                    }
+                }
+                // nicknames
+                if (ss.buildingsNicknamesHeader !== undefined) {
+                    if (ss.buildingsNicknamesHeader in building) {
+                        let rawNicknames: string = building[ss.buildingsNicknamesHeader];
+                        let nicknames = rawNicknames.split(",");
+                        factory = factory.withNicknames(nicknames);
+                    }
+                }
+
+                // finally add the building to the results
+                importedBuildings.push(factory.build());
+            }
+        }
+        else {
+            Logger.debug("No buildings sheet defined");
         }
 
-        ExcelJSUtils.generateColumnHeaders(sheet, config.roomsSheetHeaderRow);
-        sheet.eachRow({ includeEmpty: false }, (row, rowNumber): void => {
-            if (rowNumber == config.roomsSheetHeaderRow) return; // skip headers row
-            if (row.getCell(1) === undefined || row.getCell(1).text === "") return; // skip if row is empty. exceljs doesn"t work well for some reason.
+        // rooms 
+        const importedRooms: Room[] = [];
+        if (ss.roomsSheetName !== undefined) {
+            let roomsSheet = jsonObjects.get(ss.roomsSheetName);
+            for (const room of roomsSheet) {
 
-            const buildingName = row.getCell(config.roomsBuildingHeader.toLocaleLowerCase()).text.toLowerCase();
-            if (!buildingName) {
-                console.debug(`No such building exists: ${buildingName}`);
-                return;
-            }
-
-            const building = app.buildingManager.getBuildingByName(buildingName);
-            if (!building) {
-                console.debug(`No such building exists: ${buildingName}`);
-                return;
-            }
-
-            const number = row.getCell(config.roomsNumberHeader.toLocaleLowerCase()).text.toLowerCase();
-            if (StringUtils.isBlank(number) || !RoomUtils.isValidRoomNumber(number)) {
-                console.debug(`Room number is blank or invalid: ${number}`);
-                return;
-            }
-
-            const name = row.getCell(config.roomsNameHeader.toLocaleLowerCase()).text.toLowerCase();
-
-            const roomType: RoomType = RoomType[row.getCell(config.roomsTypeHeader.toLocaleLowerCase()).text as keyof typeof RoomType];
-            if (roomType === undefined) {
-                console.debug(`Room type is invalid: ${roomType}`);
-                return;
-            }
-
-            const lockType: LockType = LockType[row.getCell(config.roomsLockTypeHeader.toLocaleLowerCase()).text as keyof typeof LockType];
-            if (lockType === undefined) {
-                console.debug(`Lock type is invalid: ${lockType}`);
-                return;
-            }
-
-            const capacity: number = parseInt(row.getCell(config.roomsCapacityHeader.toLocaleLowerCase()).text);
-
-
-            const room = new RoomFactory()
-                .withBuildingName(building.internalName)
-                .withNumber(number)
-                .withName(name)
-                .withType(roomType)
-                .withLockType(lockType)
-                .withCapacity(capacity)
-                .build();
-
-            let classroom: Classroom | undefined;
-            if (RoomTypeUtils.isClassroom(roomType)) {
-                let roomFactory = new ClassroomFactory(room);
-
-                // timestamp / last checked
-                const lastChecked = row.getCell(config.roomsTimestampHeader.toLocaleLowerCase()).text.toLowerCase();
-                roomFactory = roomFactory.withLastChecked(lastChecked);
-
-                // phone
-                const roomsPhoneStatus: string = row.getCell(config.roomsPhoneStatusHeader.toLocaleLowerCase()).text.toLowerCase();
-                const roomsPhoneExtension: string = row.getCell(config.roomsPhoneExtensionHeader.toLocaleLowerCase()).text.toLowerCase();
-                const roomsPhoneDisplayStatus: string = row.getCell(config.roomsPhoneDisplayStatusHeader.toLocaleLowerCase()).text.toLowerCase();
-                const roomsPhoneSpeakerStatus: string = row.getCell(config.roomsPhoneSpeakerStatusHeader.toLocaleLowerCase()).text.toLowerCase();
-                if (roomsPhoneStatus !== "n/a") {
-                    roomFactory = roomFactory.withPhone(
-                        new PhoneFactory(
-                            new DeviceFactory().ofType(DeviceType.Phone).build()
-                        )
-                            .withExtension(roomsPhoneExtension)
-                            .hasDisplay(roomsPhoneDisplayStatus !== "n/a")
-                            .hasSpeaker(roomsPhoneSpeakerStatus !== "n/a")
-                            .build()
-                    );
+                // =========== ROOM ==========
+                let roomFactory = new RoomFactory();
+                // building name
+                if (ss.roomsBuildingNameHeader !== undefined && ss.roomsBuildingNameHeader in room) {
+                    let roomBuildingName: string = room[ss.roomsBuildingNameHeader];
+                    roomFactory = roomFactory.withBuildingName(roomBuildingName);
                 }
-                classroom = roomFactory.build();
-            }
-
-
-            let smartClassroom: SmartClassroom | undefined;
-            if (RoomTypeUtils.isSmartClassroom(roomType)) {
-                if (classroom === undefined) return;
-                let roomFactory = new SmartClassroomFactory(classroom);
-
-
-                // teaching station
-                let teachingStationFactory = new TeachingStationFactory();
-
-                const rawTeachingStationType = row.getCell(config.roomsTeachingStationTypeHeader.toLocaleLowerCase()).text.toLowerCase();
-                const tsType = EnumUtils.parse(TeachingStationType, rawTeachingStationType);
-                if (tsType === undefined) {
-                    console.debug(`Teaching Station Type is invalid: ${rawTeachingStationType}`);
-                    return;
+                // room number
+                if (ss.roomsNumberHeader !== undefined && ss.roomsNumberHeader in room) {
+                    let roomNumber: string = room[ss.roomsNumberHeader];
+                    if (StringUtils.isBlank(roomNumber)) continue; // invalid entry
+                    roomFactory = roomFactory.withNumber(roomNumber);
                 }
+                // room name
+                if (ss.roomsNameHeader !== undefined && ss.roomsNameHeader in room) {
+                    let roomName: string = room[ss.roomsNameHeader];
+                    roomFactory = roomFactory.withName(roomName);
+                }
+                // room type
+                let roomType: RoomType | undefined;
+                if (ss.roomsRoomTypeHeader !== undefined && ss.roomsRoomTypeHeader in room) {
+                    let roomTypeRaw: string = room[ss.roomsRoomTypeHeader];
+                    roomType = EnumUtils.parse(RoomType, roomTypeRaw);
+                    if (roomType !== undefined) roomFactory = roomFactory.withType(roomType);
+                }
+                // lock type
+                if (ss.roomsLockTypeHeader !== undefined && ss.roomsLockTypeHeader in room) {
+                    let roomLockTypeRaw: string = room[ss.roomsLockTypeHeader];
+                    let roomLockType = EnumUtils.parse(LockType, roomLockTypeRaw);
+                    if (roomLockType !== undefined) roomFactory = roomFactory.withLockType(roomLockType);
+                }
+                // capacity
+                if (ss.roomsCapacityHeader !== undefined && ss.roomsCapacityHeader in room) {
+                    let roomCapacity: number = room[ss.roomsCapacityHeader];
+                    roomFactory = roomFactory.withCapacity(roomCapacity);
+                }
+                let createdRoom = roomFactory.build();
 
-                const tsComputerStatus = config.roomsTeachingStationComputerStatusHeader.toLocaleLowerCase();
-                if (tsComputerStatus !== "n/a") {
+                if (StringUtils.isBlank(createdRoom.buildingName)) continue; // invalid entry
+                if (StringUtils.isBlank(`${createdRoom.number}`)) continue; // invalid entry
 
-                    const rawTeachingStationComputerType = row.getCell(config.roomsTeachingStationComputerTypeHeader.toLocaleLowerCase()).text.toLowerCase();
-                    const teachingStationComputerType = EnumUtils.parse(ComputerType, rawTeachingStationComputerType);
-                    if (teachingStationComputerType === undefined) {
-                        console.debug(`Teaching Station Computer Type is invalid: ${rawTeachingStationComputerType}`);
-                        return;
+                // =========== CLASSROOM ==========
+                let classroomFactory = new ClassroomFactory(createdRoom);
+                // classroom - last checked
+                if (ss.roomsLastCheckedHeader !== undefined && ss.roomsLastCheckedHeader in room) {
+                    let roomLastChecked: string = room[ss.roomsLastCheckedHeader];
+                    classroomFactory = classroomFactory.withLastChecked(roomLastChecked);
+                }
+                // classroom - phone
+                if (ss.roomsPhoneExtensionHeader !== undefined && ss.roomsPhoneExtensionHeader in room) {
+                    let roomsPhoneExtension: string = room[ss.roomsPhoneExtensionHeader];
+                    // ---- DEVICE ---- \\
+                    let phoneDeviceFactory = new DeviceFactory();
+                    // type
+                    phoneDeviceFactory = phoneDeviceFactory.ofType(DeviceType.Phone);
+                    // make
+                    if (ss.roomsPhoneMakeHeader !== undefined && ss.roomsPhoneMakeHeader in room) {
+                        let make: string = room[ss.roomsPhoneMakeHeader];
+                        phoneDeviceFactory = phoneDeviceFactory.withMake(make);
+                    }
+                    // model
+                    if (ss.roomsPhoneModelHeader !== undefined && ss.roomsPhoneModelHeader in room) {
+                        let model: string = room[ss.roomsPhoneModelHeader];
+                        phoneDeviceFactory = phoneDeviceFactory.withModel(model);
+                    }
+                    // ---- PHONE ---- \\
+                    let phoneFactory = new PhoneFactory(phoneDeviceFactory.build());
+                    phoneFactory = phoneFactory.withExtension(roomsPhoneExtension);
+                    if (ss.roomsPhoneHasDisplayHeader !== undefined && ss.roomsPhoneHasDisplayHeader in room) {
+                        let roomPhoneHasDisplay: string = room[ss.roomsPhoneHasDisplayHeader];
+                        phoneFactory = phoneFactory.hasDisplay(StringUtils.parseBoolean(roomPhoneHasDisplay));
+                    }
+                    if (ss.roomsPhoneHasSpeakerHeader !== undefined && ss.roomsPhoneHasSpeakerHeader in room) {
+                        let roomPhoneHasSpeaker: string = room[ss.roomsPhoneHasSpeakerHeader];
+                        phoneFactory = phoneFactory.hasSpeaker(StringUtils.parseBoolean(roomPhoneHasSpeaker));
+                    }
+                    classroomFactory = classroomFactory.withPhone(phoneFactory.build());
+                }
+                let createdClassroom = classroomFactory.build();
+
+                // =========== SMART CLASSROOM ==========
+                let smartClassroomFactory = new SmartClassroomFactory(createdClassroom);
+                // smart classroom - teaching station
+                let tsFactory = new TeachingStationFactory();
+                if (ss.roomsTeachingStationTypeHeader !== undefined && ss.roomsTeachingStationTypeHeader in room) {
+                    let tsType = EnumUtils.parse(TeachingStationType, room[ss.roomsTeachingStationTypeHeader]);
+                    if (tsType !== undefined) tsFactory = tsFactory.ofType(tsType);
+                }
+                // smart classroom - teaching station computer
+                let computerDeviceFactory = new DeviceFactory();
+                if (ss.roomsTeachingStationComputerTypeHeader !== undefined && ss.roomsTeachingStationComputerTypeHeader in room) {
+                    // ---- DEVICE ---- \\
+                    // type
+                    computerDeviceFactory = computerDeviceFactory.ofType(DeviceType.Computer);
+                    // make
+                    if (ss.roomsTeachingStationComputerMakeHeader !== undefined && ss.roomsTeachingStationComputerMakeHeader in room) {
+                        let make: string = room[ss.roomsTeachingStationComputerMakeHeader];
+                        computerDeviceFactory = computerDeviceFactory.withMake(make);
+                    }
+                    // model
+                    if (ss.roomsTeachingStationComputerModelHeader !== undefined && ss.roomsTeachingStationComputerModelHeader in room) {
+                        let model: string = room[ss.roomsTeachingStationComputerModelHeader];
+                        computerDeviceFactory = computerDeviceFactory.withModel(model);
+                    }
+                    let createdComputerDevice = computerDeviceFactory.build();
+
+                    // ---- COMPUTER ---- \\
+                    let computerFactory = new ComputerFactory(createdComputerDevice);
+                    // type
+                    if (ss.roomsTeachingStationComputerTypeHeader !== undefined && ss.roomsTeachingStationComputerTypeHeader in room) {
+                        let rawType: string = room[ss.roomsTeachingStationComputerTypeHeader];
+                        let type = EnumUtils.parse(ComputerType, rawType);
+                        if (type !== undefined) computerFactory = computerFactory.ofType(type);
+                    }
+                    // OS
+                    if (ss.roomsTeachingStationComputerOperatingSystemHeader !== undefined && ss.roomsTeachingStationComputerOperatingSystemHeader in room) {
+                        let rawOS: string = room[ss.roomsTeachingStationComputerOperatingSystemHeader];
+                        let os = EnumUtils.parse(OperatingSystem, rawOS);
+                        if (os !== undefined) computerFactory = computerFactory.withOperatingSystem(os);
+                    }
+                    let createdComputer = computerFactory.build();
+
+                    // ---- TS COMPUTER ---- \\
+                    let tsComputerFactory = new TeachingStationComputerFactory(createdComputer);
+                    // hasWebcam
+                    if (ss.roomsTeachingStationComputerHasWebcamHeader !== undefined && ss.roomsTeachingStationComputerHasWebcamHeader in room) {
+                        let tsHasWebcam: string = room[ss.roomsTeachingStationComputerHasWebcamHeader];
+                        tsComputerFactory = tsComputerFactory.hasWebcam(StringUtils.parseBoolean(tsHasWebcam));
                     }
 
-                    const rawTeachingStationComputerOperatingSystem = row.getCell(config.roomsTeachingStationComputerOperatingSystemHeader.toLocaleLowerCase()).text.toLowerCase();
-                    const teachingStationComputerOperatingSystem = EnumUtils.parse(OperatingSystem, rawTeachingStationComputerOperatingSystem);
-                    if (teachingStationComputerOperatingSystem === undefined) {
-                        console.debug(`Teaching Station Computer Operating System is invalid: ${rawTeachingStationComputerOperatingSystem}`);
-                        return;
-                    }
-
-                    const rawTeachingStationComputerCameraStatus = row.getCell(config.roomsTeachingStationComputerCameraStatusHeader.toLocaleLowerCase()).text.toLowerCase();
-
-                    teachingStationFactory = teachingStationFactory.withComputer(
-                        new TeachingStationComputerFactory(
-                            new ComputerFactory(
-                                new DeviceFactory()
-                                    .ofType(DeviceType.Computer)
-                                    .build()
-                            )
-                                .ofType(teachingStationComputerType)
-                                .withOperatingSystem(teachingStationComputerOperatingSystem)
-                                .build()
-                        )
-                            .hasWebcam(rawTeachingStationComputerCameraStatus !== "n/a")
-                            .build()
-                    )
-                        .ofType(tsType);
+                    tsFactory = tsFactory.withComputer(tsComputerFactory.build());
                 }
-                roomFactory = roomFactory.withTeachingStation(teachingStationFactory.build());
+                smartClassroomFactory = smartClassroomFactory.withTeachingStation(tsFactory.build());
 
-
-                // audio
+                // smart classroom - audio
                 let audioFactory = new AudioFactory();
+                // audio system dependent
+                if (ss.roomsAudioSystemDependentHeader !== undefined && ss.roomsAudioSystemDependentHeader in room) {
+                    let dependent: boolean = room[ss.roomsAudioSystemDependentHeader];
+                    audioFactory = audioFactory.isSystemDependent(dependent);
+                }
+                // audio speaker type
+                if (ss.roomsAudioSpeakerTypeHeader !== undefined && ss.roomsAudioSpeakerTypeHeader in room) {
+                    let rawType: string = room[ss.roomsAudioSpeakerTypeHeader];
+                    let type = EnumUtils.parse(SpeakerType, rawType);
+                    if (type !== undefined) audioFactory = audioFactory.withSpeakerType(type);
+                }
+                smartClassroomFactory = smartClassroomFactory.withAudio(audioFactory.build());
 
-                const audioStatus = row.getCell(config.roomsAudioStatusHeader.toLocaleLowerCase()).text.toLowerCase();
-                if (audioStatus !== "n/a") {
-
-                    const isSystemDependent: boolean = StringUtils.parseBoolean(row.getCell(config.roomsAudioRequiresSystemHeader.toLocaleLowerCase()).text);
-                    audioFactory = audioFactory.isSystemDependent(isSystemDependent);
-
-                    const speakerType = SpeakerType[row.getCell(config.roomsAudioSpeakersTypeHeader.toLocaleLowerCase()).text as keyof typeof SpeakerType];
-                    if (speakerType !== undefined) {
-                        audioFactory = audioFactory.withSpeakerType(speakerType);
+                // smart classroom - video
+                let videoFactory = new VideoFactory();
+                // video output type
+                if (ss.roomsVideoOutputTypeHeader !== undefined && ss.roomsVideoOutputTypeHeader in room) {
+                    let rawType: string = room[ss.roomsVideoOutputTypeHeader];
+                    let type = EnumUtils.parse(VideoOutputType, rawType);
+                    if (type !== undefined) videoFactory = videoFactory.withOutputType(type);
+                }
+                // dvd player type
+                if (ss.roomsDVDPlayerTypeHeader !== undefined && ss.roomsDVDPlayerTypeHeader in room) {
+                    let rawType: string = room[ss.roomsDVDPlayerTypeHeader];
+                    let type = EnumUtils.parse(DVDPlayerType, rawType);
+                    if (type !== undefined) {
+                        // ---- DEVICE ---- \\
+                        let dvdDeviceFactory = new DeviceFactory();
+                        // type
+                        dvdDeviceFactory = dvdDeviceFactory.ofType(DeviceType.DVDPlayer);
+                        // make
+                        if (ss.roomsDVDPlayerMakeHeader !== undefined && ss.roomsDVDPlayerMakeHeader in room) {
+                            let make: string = room[ss.roomsDVDPlayerMakeHeader];
+                            dvdDeviceFactory = dvdDeviceFactory.withMake(make);
+                        }
+                        // model
+                        if (ss.roomsDVDPlayerModelHeader !== undefined && ss.roomsDVDPlayerModelHeader in room) {
+                            let model: string = room[ss.roomsDVDPlayerModelHeader];
+                            dvdDeviceFactory = dvdDeviceFactory.withModel(model);
+                        }
+                        // ---- DVD Player ---- \\
+                        let dvdFactory = new DVDPlayerFactory(dvdDeviceFactory.build());
+                        dvdFactory = dvdFactory.ofType(type);
+                        videoFactory = videoFactory.withDVDPlayer(dvdFactory.build());
                     }
                 }
+                let createdSmartClassroom = smartClassroomFactory.build();
 
-                roomFactory = roomFactory.withAudio(audioFactory.build());
+                // =========== COMPUTER CLASSROOM ==========
+                let computerClassroomFactory = new ComputerClassroomFactory(createdSmartClassroom);
+                // printer
+                if (ss.roomsPrinterCartridgeTypeHeader !== undefined && ss.roomsPrinterCartridgeTypeHeader in room) {
+                    // ---- DEVICE ---- \\
+                    let printerDeviceFactory = new DeviceFactory();
+                    // type
+                    printerDeviceFactory = printerDeviceFactory.ofType(DeviceType.Printer);
+                    // make
+                    if (ss.roomsPrinterMakeHeader !== undefined && ss.roomsPrinterMakeHeader in room) {
+                        let make: string = room[ss.roomsPrinterMakeHeader];
+                        printerDeviceFactory = printerDeviceFactory.withMake(make);
+                    }
+                    // model
+                    if (ss.roomsPrinterModelHeader !== undefined && ss.roomsPrinterModelHeader in room) {
+                        let model: string = room[ss.roomsPrinterModelHeader];
+                        printerDeviceFactory = printerDeviceFactory.withModel(model);
+                    }
+                    // ---- PRINTER ---- \\
+                    let printerFactory = new PrinterFactory(printerDeviceFactory.build());
+                    let cartridge: string = room[ss.roomsPrinterCartridgeTypeHeader];
+                    printerFactory = printerFactory.withCartridgeType(cartridge);
 
+                    // symquest #
+                    if (ss.roomsPrinterSymquestNumberHeader !== undefined && ss.roomsPrinterSymquestNumberHeader in room) {
+                        let number: string = room[ss.roomsPrinterSymquestNumberHeader];
+                        printerFactory = printerFactory.withSymquestNumber(number);
+                    }
 
-                // video
-                // let videoFactory = new VideoFactory();
-
-                smartClassroom = roomFactory.build();
-            }
-
-
-            // register room
-            if (smartClassroom !== undefined && smartClassroom) {
-                BuildingUtils.addRoom(building, room);
-            } else if (classroom !== undefined && classroom) {
-                BuildingUtils.addRoom(building, classroom);
-            }
-
-        });
-        console.debug(`Loaded ${app.roomManager.getRooms().length} rooms`);
-    }
-
-
-    private async loadClassroomChecksSpreadsheet(): Promise<void> {
-
-        let config = app.configManager.classroomChecksSpreadsheetConfig;
-        if (config === undefined) {
-            Logger.error("Config is undefined");
-            return;
-        }
-
-        if (!await FileUtils.checkExists(config.sheetPath)) {
-            Logger.error(`File could not be found: ${config.sheetPath}`);
-            return;
-        }
-
-        const workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
-        this.loadBuildings(workbook.getWorksheet(config.buildingsSheetName));
-        this.loadRooms(workbook.getWorksheet(config.roomsSheetName));
-    }
+                    computerClassroomFactory = computerClassroomFactory.withPrinter(printerFactory.build());
+                }
+                let createdComputerClassroom = computerClassroomFactory.build();
 
 
-    private parseRooms(raw: string): SimpleRoom[] {
-        let results: SimpleRoom[] = [];
-        if (!StringUtils.isBlank(raw)) {
-            for (const piece of raw.split(",")) {
-                let parts = piece.split("|");
-
-                let buildingName = parts[0];
-                let roomNumber = parts[1];
-
-                const room = app.roomManager.getRoom(buildingName, roomNumber);
-                if (room === undefined) continue;
-
-                results.push(RoomUtils.getSimplified(room));
-            }
-        }
-        return results;
-    }
-
-    private loadTroubleshootingData(sheet: Excel.Worksheet): void {
-
-        const config = app.configManager.troubleshootingSpreadsheetConfig;
-        if (config === undefined) {
-            Logger.error("Config is undefined");
-            return;
-        }
-
-        ExcelJSUtils.generateColumnHeaders(sheet, config.troubleshootingSheetHeaderRow);
-        sheet.eachRow({ includeEmpty: false }, (row, rowNumber): void => {
-
-            if (config === undefined) {
-                Logger.error("Config is undefined");
-                return;
-            }
-
-            if (rowNumber == config.troubleshootingSheetHeaderRow) return; // skip headers row
-            if (row.getCell(1) === undefined || row.getCell(1).text === "") return; // skip if row is empty. exceljs doesn"t work well for some reason.
-
-            const title: string = row.getCell(config.troubleshootingTitleHeader.toLocaleLowerCase()).text.trim();
-            const description: string = row.getCell(config.troubleshootingDescriptionHeader.toLocaleLowerCase()).text.trim();
-            const solution: string = row.getCell(config.troubleshootingSolutionHeader.toLocaleLowerCase()).text.trim();
-
-            const types: string[] = [];
-            const rawTypes = row.getCell(config.troubleshootingTypesHeader.toLocaleLowerCase()).text.trim().split(",");
-            for (const type of rawTypes) {
-                if (!StringUtils.isBlank(type)) {
-                    types.push(type.toLocaleLowerCase());
+                // finally add the room to the results
+                if (roomType !== undefined && RoomTypeUtils.isComputerClassroom(roomType)) {
+                    importedRooms.push(createdComputerClassroom);
+                }
+                else if (roomType !== undefined && RoomTypeUtils.isSmartClassroom(roomType)) {
+                    importedRooms.push(createdSmartClassroom);
+                }
+                else if (roomType !== undefined && RoomTypeUtils.isClassroom(roomType)) {
+                    importedRooms.push(createdClassroom);
+                }
+                else {
+                    importedRooms.push(createdRoom);
                 }
             }
-
-            const tags: string[] = [];
-            const rawTags = row.getCell(config.troubleshootingTagsHeader.toLocaleLowerCase()).text.trim().split(",");
-            for (const tag of rawTags) {
-                if (!StringUtils.isBlank(tag)) {
-                    tags.push(tag.toLocaleLowerCase());
-                }
-            }
-
-            const rawWhitelisted: string = row.getCell(config.troubleshootingWhitelistedRoomsHeader.toLocaleLowerCase()).text.toLowerCase();
-            const whitelisted: SimpleRoom[] = this.parseRooms(rawWhitelisted);
-
-
-            const rawBlacklisted: string = row.getCell(config.troubleshootingBlacklistedRoomsHeader.toLocaleLowerCase()).text.toLowerCase();
-            const blacklisted: SimpleRoom[] = this.parseRooms(rawBlacklisted);
-
-
-
-            let dataFactory = new TroubleshootingDataFactory()
-                .withTitle(title)
-                .withDescription(description)
-                .withSolution(solution)
-                .withTypes(types)
-                .withWhitelistedRooms(whitelisted)
-                .withBlacklistedRooms(blacklisted)
-                .withTags(tags);
-
-
-            app.troubleshootingDataManager.addTroubleshootingData(dataFactory.build());
-        });
-        Logger.info(`Loaded ${app.troubleshootingDataManager.troubleshootingData.length} troubleshooting data items`);
-    }
-
-    private async loadTroubleshootingDataSpreadsheet(): Promise<void> {
-
-        let config = app.configManager.troubleshootingSpreadsheetConfig;
-        if (config === undefined) {
-            Logger.error("Config is undefined");
-            return;
+        }
+        else {
+            Logger.info("No rooms sheet defined");
         }
 
-        if (!await FileUtils.checkExists(config.sheetPath)) {
-            Logger.error(`File could not be found: ${config.sheetPath}`);
-            return;
-        }
-
-        let workbook = await new Excel.Workbook().xlsx.readFile(config.sheetPath);
-        this.loadTroubleshootingData(workbook.getWorksheet(config.troubleshootingSheetName));
+        return {
+            buildings: importedBuildings,
+            rooms: importedRooms
+        };
     }
 
+    public static async importTroubleshooting(path: string): Promise<TroubleshootingSpreadsheetImportResult> {
+        throw new Error("Method not implemented.");
+    }
+}
+
+
+abstract class ClassroomChecksSpreadsheetBase {
+    // =================================== \\
+    //              BUILDINGS              \\
+    // =================================== \\
+    buildingsSheetName?: string;
+    buildingsOfficialNameHeader?: string;
+    buildingsNicknamesHeader?: string;
+
+    // =================================== \\
+    //              ROOMS                  \\
+    // =================================== \\
+    roomsSheetName?: string;
+
+    // room
+    roomsBuildingNameHeader?: string;
+    roomsNumberHeader?: string;
+    roomsNameHeader?: string;
+    roomsRoomTypeHeader?: string;
+    roomsLockTypeHeader?: string;
+    roomsCapacityHeader?: string;
+
+    // classroom
+    roomsLastCheckedHeader?: string;
+    // classroom - phone
+    roomsPhoneMakeHeader?: string;
+    roomsPhoneModelHeader?: string;
+    roomsPhoneExtensionHeader?: string;
+    roomsPhoneHasDisplayHeader?: string;
+    roomsPhoneHasSpeakerHeader?: string;
+
+    // smart classroom - teaching station
+    roomsTeachingStationTypeHeader?: string;
+    roomsTeachingStationComputerMakeHeader?: string;
+    roomsTeachingStationComputerModelHeader?: string;
+    roomsTeachingStationComputerTypeHeader?: string;
+    roomsTeachingStationComputerOperatingSystemHeader?: string;
+    roomsTeachingStationComputerHasWebcamHeader?: string;
+    // smart classroom - audio
+    roomsAudioSystemDependentHeader?: string;
+    roomsAudioSpeakerTypeHeader?: string;
+    roomsAudioSpeakerMakeHeader?: string;
+    roomsAudioSpeakerModelHeader?: string;
+    // smart classroom - video
+    roomsVideoOutputTypeHeader?: string;
+    roomsDVDPlayerTypeHeader?: string;
+    roomsDVDPlayerMakeHeader?: string;
+    roomsDVDPlayerModelHeader?: string;
+
+    // computer classroom
+    roomsPrinterMakeHeader?: string;
+    roomsPrinterModelHeader?: string;
+    roomsPrinterSymquestNumberHeader?: string;
+    roomsPrinterCartridgeTypeHeader?: string;
+}
+
+
+class ClassroomChecksSpreadsheet_Summer2017 extends ClassroomChecksSpreadsheetBase {
+    public constructor() {
+        super();
+        this.roomsSheetName = "Main";
+        this.roomsBuildingNameHeader = "Building";
+        this.roomsNumberHeader = "Room #";
+    }
+}
+
+class ClassroomChecksSpreadsheet_Winter2017 extends ClassroomChecksSpreadsheetBase {
+    public constructor() {
+        super();
+        this.roomsSheetName = "Main";
+        this.roomsBuildingNameHeader = "Building";
+        this.roomsNumberHeader = "Room #";
+        this.roomsCapacityHeader = "Capacity";
+        this.roomsLockTypeHeader = "Lock Type";
+        this.roomsPhoneExtensionHeader = "Phone Extension";
+    }
+}
+
+class ClassroomChecksSpreadsheet_Summer2018 extends ClassroomChecksSpreadsheetBase {
+    public constructor() {
+        super();
+        this.roomsSheetName = "Main";
+        this.roomsBuildingNameHeader = "Building";
+        this.roomsNumberHeader = "Room #";
+        this.roomsCapacityHeader = "Capacity";
+        this.roomsLockTypeHeader = "Lock Type";
+        this.roomsPhoneExtensionHeader = "Phone Extension";
+    }
+}
+
+class ClassroomChecksSpreadsheet_Winter2018 extends ClassroomChecksSpreadsheetBase {
+    public constructor() {
+        super();
+        this.buildingsSheetName = "Buildings";
+        this.buildingsOfficialNameHeader = "Official Name";
+        this.buildingsNicknamesHeader = "Other Names";
+
+
+        this.roomsSheetName = "Main";
+        this.roomsBuildingNameHeader = "Building";
+        this.roomsNumberHeader = "Room #";
+        this.roomsCapacityHeader = "Capacity";
+        this.roomsLockTypeHeader = "Lock Type";
+        this.roomsPhoneExtensionHeader = "Phone Extension";
+    }
+}
+
+class ClassroomChecksSpreadsheet_Summer2019 extends ClassroomChecksSpreadsheetBase {
+    public constructor() {
+        super();
+        this.buildingsSheetName = "Buildings";
+        this.buildingsOfficialNameHeader = "Official Name";
+        this.buildingsNicknamesHeader = "Nicknames";
+
+        this.roomsSheetName = "Rooms";
+        this.roomsBuildingNameHeader = "Building";
+        this.roomsNumberHeader = "Number";
+        this.roomsNameHeader = "Name";
+        this.roomsRoomTypeHeader = "Type";
+        this.roomsLockTypeHeader = "Lock Type";
+        this.roomsCapacityHeader = "Capacity";
+
+        this.roomsPhoneExtensionHeader = "Phone Extension";
+
+        this.roomsTeachingStationTypeHeader = "Teaching Station Type";
+        this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
+        this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
+
+        this.roomsVideoOutputTypeHeader = "Video Output Type";
+        this.roomsDVDPlayerTypeHeader = "DVD Player Type";
+
+        this.roomsAudioSystemDependentHeader = "Audio Requires System";
+        this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
+
+        this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
+        this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+    }
+}
+
+class ClassroomChecksSpreadsheet_Winter2019 extends ClassroomChecksSpreadsheetBase {
+    public constructor() {
+        super();
+        this.buildingsSheetName = "Buildings";
+        this.buildingsOfficialNameHeader = "Official Name";
+        this.buildingsNicknamesHeader = "Nicknames";
+
+        this.roomsSheetName = "Rooms";
+        this.roomsBuildingNameHeader = "Building";
+        this.roomsNumberHeader = "Number";
+        this.roomsNameHeader = "Name";
+        this.roomsRoomTypeHeader = "Type";
+        this.roomsLockTypeHeader = "Lock Type";
+        this.roomsCapacityHeader = "Capacity";
+
+        this.roomsPhoneExtensionHeader = "Phone Extension";
+
+        this.roomsTeachingStationTypeHeader = "Teaching Station Type";
+        this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
+        this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
+
+        this.roomsVideoOutputTypeHeader = "Video Output Type";
+        this.roomsDVDPlayerTypeHeader = "DVD Player Type";
+
+        this.roomsAudioSystemDependentHeader = "Audio Requires System";
+        this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
+
+        this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
+        this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+    }
 }

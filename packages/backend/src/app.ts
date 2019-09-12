@@ -1,4 +1,4 @@
-import express, { Response } from "express";
+import express, { Response, Request } from "express";
 
 import createError from "http-errors";
 import path from "path";
@@ -14,6 +14,7 @@ import { RoomManager } from "./room-manager";
 import { ImageManager } from "./image-manager";
 import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
 import { SpreadsheetManager } from "./spreadsheet-manager";
+import { DataManager } from './data-manager';
 
 export const expressApp: express.Application = express();
 
@@ -23,11 +24,13 @@ export class App {
     //              Configure express backend
     // ------------------------------------------------------ \\
 
-    public ROOT_DIR: string = path.resolve("./");
-    public PUBLIC_DIR: string = path.join(this.ROOT_DIR, "/public");
-    public SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "/settings");
-    public IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "/images");
-    public BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "/buildings");
+    public ROOT_DIR: string = "./";
+    public PUBLIC_DIR: string = `${this.ROOT_DIR}/public`;
+    public UPLOADS_DIR: string = `${this.PUBLIC_DIR}/uploads`;
+    public DATA_DIR: string = `${this.PUBLIC_DIR}/data`;
+    public SETTINGS_DIR: string = `${this.PUBLIC_DIR}/settings`;
+    public IMAGES_DIR: string = `${this.PUBLIC_DIR}/images`;
+    public BUILDING_IMAGES_DIR: string = `${this.IMAGES_DIR}/buildings`;
 
     public spreadsheetManager: SpreadsheetManager;
     public configManager: ConfigManager;
@@ -35,6 +38,7 @@ export class App {
     public buildingManager: BuildingManager;
     public roomManager: RoomManager;
     public troubleshootingDataManager: TroubleshootingDataManager;
+    public dataManager: DataManager;
 
 
     public constructor() {
@@ -44,6 +48,7 @@ export class App {
         this.buildingManager = new BuildingManager();
         this.roomManager = new RoomManager(this.buildingManager);
         this.troubleshootingDataManager = new TroubleshootingDataManager(this.roomManager);
+        this.dataManager = new DataManager();
     }
 
     public async initialize(): Promise<void> {
@@ -54,10 +59,12 @@ export class App {
         this.setupExpress();
         Logger.debug("Finished setting up express server.");
 
+
         // create directories 
         await this.setupDirectories();
 
-        // 
+
+        // create and load configuration files
         try {
             Logger.info("Initializing configuration manager...");
             await this.configManager.initialize();
@@ -67,21 +74,15 @@ export class App {
         }
 
         // check for updates
-        if (this.configManager.appConfig !== undefined) {
-            if (this.configManager.appConfig.checkForDataUpdates) {
-                // await this.checkForUpdates();
-            }
-        }
+        // if (this.configManager.appConfig !== undefined) {
+        //     if (this.configManager.appConfig.checkForDataUpdates) {
+        //         // await this.checkForUpdates();
+        //     }
+        // }
 
-        // spreadsheets
-        try {
-            Logger.info("Initializing spreadsheet manager...");
-            await this.spreadsheetManager.initialize();
-            Logger.info("Finished initializing spreadsheet manager");
-        } catch (error) {
-            Logger.error("Failed to initialize spreadsheet manager");
-            Logger.error(error);
-        }
+        await this.dataManager.initialize();
+
+        await this.spreadsheetManager.initialize();
 
 
         // load images
@@ -112,7 +113,7 @@ export class App {
         expressApp.use("/", indexRoute);
 
         Logger.debug("Setting up static files to serve");
-        expressApp.use("*", (res: express.Response): void => {
+        expressApp.use("*", (_req: Request, res: express.Response): void => {
             res.sendFile(path.join(__dirname, "dist", "index.html"));
         });
 
@@ -125,7 +126,6 @@ export class App {
         // development error handler
         // will print stacktrace
         if (expressApp.get("env") === "development") {
-
             expressApp.use((err: any, res: express.Response): void => {
                 res.status(err["status"] || 500);
                 res.render("error", {
@@ -150,6 +150,11 @@ export class App {
         if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
             if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
                 Logger.info(`Created public directory: ${this.PUBLIC_DIR}`);
+            }
+        }
+        if (!await FileUtils.checkExists(this.DATA_DIR)) {
+            if (await FileUtils.createDirectory(this.DATA_DIR)) {
+                Logger.info(`Created data directory: ${this.DATA_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.SETTINGS_DIR)) {

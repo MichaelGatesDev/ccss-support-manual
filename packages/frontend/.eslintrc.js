@@ -23,11 +23,22 @@ module.exports = {
     'react',
   ],
   rules: {
-    "indent": ["error", 4, { "SwitchCase": 1 }],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "quotes": ["error", "double"],
     "semi": [
       "error",
       "always"
-    ]
+    ],
+    "max-len": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/prefer-default-export": 0,
+    "no-restricted-syntax": 0,
+    "no-shadow": 0,
+    "operator-linebreak": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "padded-blocks": 0,
+    "no-alert": 0,
+    "no-console": 0,
   },
 };

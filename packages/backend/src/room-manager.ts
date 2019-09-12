@@ -1,6 +1,7 @@
 import { BuildingManager } from "./building-manager";
 import { Room, Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
+import _ from "lodash";
 
 /**
  * A utility class for managing rooms
@@ -28,6 +29,15 @@ export class RoomManager {
     }
 
     /**
+     * Clears all rooms from buildings
+     */
+    public clear(): void {
+        for (const building of this.buildingManager.buildings) {
+            building.rooms = [];
+        }
+    }
+
+    /**
      * Gets a room by the building name and room number
      * 
      * @param buildingName The name of the building
@@ -47,6 +57,27 @@ export class RoomManager {
     }
 
     public getRoomDisplayName(building: Building, room: Room): string {
-        return building.officialName + " " + room.number.toLocaleUpperCase();
+        return building.officialName + " " + `${room.number}`.toLocaleUpperCase();
+    }
+
+    public addRoom(room: Room) {
+        const pb = this.buildingManager.getBuildingByName(room.buildingName);
+        if (pb === undefined) return;
+        if (pb.rooms === undefined) pb.rooms = [];
+        pb.rooms.push(room);
+    }
+
+    public removeRoom(room: Room) {
+        const pb = this.buildingManager.getBuildingByName(room.buildingName);
+        if (pb === undefined) return;
+        if (pb.rooms === undefined) pb.rooms = [];
+        if (!_.includes(pb.rooms, room)) return;
+        pb.rooms = _.remove(pb.rooms, room);
+    }
+
+    public addRooms(rooms: Room[]): void {
+        for (const room of rooms) {
+            this.addRoom(room);
+        }
     }
 }
