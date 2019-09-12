@@ -25,6 +25,7 @@ import {
     OperatingSystem
 } from "@ccss-support-manual/models";
 import { BuildingUtils } from "./building-utils";
+import _ from "lodash";
 
 export class RoomUtils {
 
@@ -137,4 +138,15 @@ export class RoomUtils {
     public static isComputerClassroom(obj: any): obj is ComputerClassroom {
         return (obj as ComputerClassroom).printer !== undefined;
     }
+
+    /**
+     * @returns true if roomA and roomB share the same building name and room number
+     */
+    public static isSameAs(roomA: Room, roomB: Room): boolean {
+        return roomA.buildingName === roomB.buildingName && roomA.number === roomB.number;
+    }
+
+    // public static getDifference(roomsA: Room[], roomsB: Room[]): Room[] {
+    //     return _.differenceWith(roomsA, roomsB, (roomA, roomB): boolean => this.isSameAs(roomA, roomB));
+    // }
 }

@@ -69,7 +69,7 @@ export default class RoomCardsGrid extends Component<Props, State> {
           <RoomCard
             room={room}
             building={parentBuilding}
-            images={this.getImagesForRoom(parentBuilding.internalName, room.number)}
+            images={this.getImagesForRoom(parentBuilding.internalName, `${room.number}`)}
           />
         </li>
       );

@@ -170,7 +170,7 @@ export class SpreadsheetManager {
                 let createdRoom = roomFactory.build();
 
                 if (StringUtils.isBlank(createdRoom.buildingName)) continue; // invalid entry
-                if (StringUtils.isBlank(createdRoom.number)) continue; // invalid entry
+                if (StringUtils.isBlank(`${createdRoom.number}`)) continue; // invalid entry
 
                 // =========== CLASSROOM ==========
                 let classroomFactory = new ClassroomFactory(createdRoom);

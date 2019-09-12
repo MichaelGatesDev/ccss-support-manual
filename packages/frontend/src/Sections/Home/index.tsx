@@ -78,7 +78,7 @@ class Home extends Component<Props, State> {
       const pb: Building | undefined = this.getParentBuilding(room);
       if (pb === undefined) return false;
       return (
-        (filterNumber && room.number.toLocaleLowerCase().includes(name)) ||
+        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
         (filterName && room.name.toLocaleLowerCase().includes(name)) ||
         (filterBuildingName && BuildingUtils.hasName(pb, name))
       );

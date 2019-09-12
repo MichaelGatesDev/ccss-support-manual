@@ -1,5 +1,6 @@
 import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
+import _ from "lodash";
 
 /**
  * A utility class for managing buildings
@@ -39,6 +40,13 @@ export class BuildingManager {
         if (index > -1) {
             this.buildings.splice(index, 1);
         }
+    }
+
+    /**
+     * Clears all buildings
+     */
+    public clear(): void {
+        this.buildings = [];
     }
 
     /**

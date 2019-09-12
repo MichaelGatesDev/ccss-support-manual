@@ -62,7 +62,7 @@ export class ImageManager {
 
             for (const room of building.rooms) {
 
-                const roomDir = `${roomsDir}/${room.number.toLocaleLowerCase()}`;
+                const roomDir = `${roomsDir}/${`${room.number}`.toLocaleLowerCase()}`;
                 // create room dir if it doesnt exist
                 if (!await FileUtils.checkExists(roomDir)) {
                     if (await FileUtils.createDirectory(roomDir)) {

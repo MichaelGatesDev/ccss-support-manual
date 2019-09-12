@@ -1,3 +1,5 @@
+import "./style.scss";
+
 import React, { PureComponent, Fragment, ChangeEvent } from "react";
 import { EnumUtils } from "@michaelgatesdev/common";
 import {
@@ -9,7 +11,6 @@ import {
 import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
 
 import NavBar from "../../Components/NavBar";
-import Button from "../../Components/Button";
 import Select from "../../Components/Select";
 import FileSelect from "../../Components/FileSelect";
 
@@ -162,66 +163,107 @@ export default class Settings extends PureComponent<Props, State> {
         />
         {/* Main content */}
         <section className="container" id="settings-section">
-          <div className="SettingsSection-Component">
 
-            <p>
-              Uploading:&nbsp;
-              {uploading ? "true" : "false"}
-            </p>
 
-            <h2>Data</h2>
+          <div id="#data">
+            <div className="row">
+              <div className="col">
+                <h2>Data</h2>
+              </div>
+            </div>
 
             {/* Import Data from Spreadsheet */}
-            <h3>Import Data from Spreadsheet</h3>
-            <div className="row">
+            <div className="row segment">
               <div className="col">
-                <h4>Spreadsheet File</h4>
-                <FileSelect
-                  types={["xlsx"]}
-                  onSelect={this.onSpreadsheetToImportSelect}
-                />
-              </div>
-              <div className="col">
-                <h4>Spreadsheet Type</h4>
-                <Select
-                  readonly={file === undefined}
-                  values={EnumUtils.values(SpreadsheetType)}
-                  onChange={this.onImportTypeChange}
-                  current={SpreadsheetType[fileType]}
-                />
-              </div>
-              <div className="col">
-                <h4>Spreadsheet Version</h4>
-                <Select
-                  readonly={file === undefined}
-                  values={EnumUtils.values(fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion : TroubleshootingSpreadsheetVersion)}
-                  onChange={this.onImportVersionChange}
-                  current={fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion[fileVersion!] : TroubleshootingSpreadsheetVersion[fileVersion!]}
-                />
-              </div>
-              <div className="col">
-                <h4>Data Import Mode</h4>
-                <Select
-                  readonly={file === undefined}
-                  values={EnumUtils.values(SpreadsheetImportMode)}
-                  onChange={this.onImportModeChange}
-                  current={SpreadsheetImportMode[importMode]}
-                />
-              </div>
-            </div>
-            <br />
-            <div className="row">
-              <div className="col">
-                <Button
-                  disabled={uploading}
-                  preventDefault={false}
-                  title="Import"
-                  onClick={this.import}
-                />
+                <h3>Import Data from Spreadsheet</h3>
+
+                <div className="row">
+                  <div className="col">
+                    <h4>Spreadsheet File</h4>
+                    <FileSelect
+                      types={["xlsx"]}
+                      onSelect={this.onSpreadsheetToImportSelect}
+                    />
+                  </div>
+                  <div className="col">
+                    <h4>Spreadsheet Type</h4>
+                    <Select
+                      readonly={file === undefined}
+                      values={EnumUtils.values(SpreadsheetType)}
+                      onChange={this.onImportTypeChange}
+                      current={SpreadsheetType[fileType]}
+                    />
+                  </div>
+                  <div className="col">
+                    <h4>Spreadsheet Version</h4>
+                    <Select
+                      readonly={file === undefined}
+                      values={EnumUtils.values(fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion : TroubleshootingSpreadsheetVersion)}
+                      onChange={this.onImportVersionChange}
+                      current={fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion[fileVersion!] : TroubleshootingSpreadsheetVersion[fileVersion!]}
+                    />
+                  </div>
+                  <div className="col">
+                    <h4>Data Import Mode</h4>
+                    <Select
+                      readonly={file === undefined}
+                      values={EnumUtils.values(SpreadsheetImportMode)}
+                      onChange={this.onImportModeChange}
+                      current={SpreadsheetImportMode[importMode]}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <button
+                      type="button"
+                      disabled={uploading}
+                      onClick={this.import}
+                    >
+                      Import
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
+
+            {/* Export Data to Spreadsheet */}
+            <div className="row segment">
+              <div className="col">
+                <h3>Export Data to Spreadsheet</h3>
+              </div>
+            </div>
+
+
+            {/* Backup Data */}
+            <div className="row segment">
+              <div className="col">
+                <h3>Backup Data</h3>
+              </div>
+            </div>
+
+            {/* Restore Data */}
+            <div className="row segment">
+              <div className="col">
+                <h3>Restore Data</h3>
+              </div>
+            </div>
+
+
+            {/* Save Data */}
+            <div className="row segment">
+              <div className="col">
+                <h3>Save Data</h3>
+                <div className="row">
+                  <div className="col">
+                    <button type="button">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
         </section>
       </Fragment>
     );
