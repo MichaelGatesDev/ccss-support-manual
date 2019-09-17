@@ -5,7 +5,8 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 
-import { Logger, FileUtils } from "@michaelgatesdev/common";
+import { Logger } from "@michaelgatesdev/common";
+import { FileUtils } from "@michaelgatesdev/common-io";
 
 import indexRoute from "./routes/index";
 import { ConfigManager } from "./config-manager";
@@ -27,6 +28,7 @@ export class App {
     public ROOT_DIR: string = "./";
     public PUBLIC_DIR: string = `${this.ROOT_DIR}/public`;
     public UPLOADS_DIR: string = `${this.PUBLIC_DIR}/uploads`;
+    public BACKUPS_DIR: string = `${this.PUBLIC_DIR}/backups`;
     public DATA_DIR: string = `${this.PUBLIC_DIR}/data`;
     public SETTINGS_DIR: string = `${this.PUBLIC_DIR}/settings`;
     public IMAGES_DIR: string = `${this.PUBLIC_DIR}/images`;
@@ -150,6 +152,11 @@ export class App {
         if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
             if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
                 Logger.info(`Created public directory: ${this.PUBLIC_DIR}`);
+            }
+        }
+        if (!await FileUtils.checkExists(this.BACKUPS_DIR)) {
+            if (await FileUtils.createDirectory(this.BACKUPS_DIR)) {
+                Logger.info(`Created backups directory: ${this.BACKUPS_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.DATA_DIR)) {

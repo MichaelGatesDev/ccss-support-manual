@@ -1,7 +1,8 @@
-import { BuildingManager } from "./building-manager";
+import _ from "lodash";
+
 import { Room, Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
-import _ from "lodash";
+import { BuildingManager } from "./building-manager";
 
 /**
  * A utility class for managing rooms

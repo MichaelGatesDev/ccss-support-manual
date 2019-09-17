@@ -15,7 +15,8 @@
     "build"
   ],
   "dependencies": {
-    "@michaelgatesdev/common": "~1.0.15-fix",
+    "@michaelgatesdev/common": "^1.1.2",
+    "@michaelgatesdev/common-io": "^1.0.0",
     "@types/jest": "^24.0.13",
     "cardboard-config": "^1.0.0",
     "cookie-parser": "^1.4.4",

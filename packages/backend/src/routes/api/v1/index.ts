@@ -25,8 +25,8 @@ router.get("/save", (_req: Request, res: Response): void => {
   res.status(200).json({});
 });
 
-router.get("/backup", (_req: Request, res: Response): void => {
-  app.dataManager.backup();
+router.get("/backup", async (_req: Request, res: Response): Promise<void> => {
+  await app.dataManager.backup();
   res.status(200).json({});
 });
 

@@ -106,6 +106,17 @@ export default class Settings extends PureComponent<Props, State> {
   export = () => {
   };
 
+  backup = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    console.log(event);
+    fetch("/api/v1/backup")
+      .then(() => {
+        alert("Backup complete");
+      }).catch(error => {
+        console.error("Failed to backup ");
+        console.error(error);
+      });
+  };
+
   onImportTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { target } = event;
     if (target === null) return;
@@ -240,8 +251,14 @@ export default class Settings extends PureComponent<Props, State> {
             <div className="row segment">
               <div className="col">
                 <h3>Backup Data</h3>
+                <div className="row">
+                  <div className="col">
+                    <button type="button" onClick={this.backup}>Backup</button>
+                  </div>
+                </div>
               </div>
             </div>
+
 
             {/* Restore Data */}
             <div className="row segment">
@@ -262,6 +279,7 @@ export default class Settings extends PureComponent<Props, State> {
                 </div>
               </div>
             </div>
+
           </div>
 
         </section>

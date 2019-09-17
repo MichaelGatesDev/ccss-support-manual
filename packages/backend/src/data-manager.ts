@@ -1,4 +1,5 @@
-import { FileUtils, Logger } from '@michaelgatesdev/common';
+import { Logger, StringUtils } from '@michaelgatesdev/common';
+import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from './app';
 import { BuildingUtils, RoomUtils } from '@ccss-support-manual/utilities';
@@ -136,4 +137,22 @@ export class DataManager {
         return json;
     }
 
+    public async backup(): Promise<void> {
+        Logger.info("Performing backup...");
+        const now = new Date();
+
+        const month = StringUtils.pad(`${now.getMonth()}`, "0", 2);
+        const day = StringUtils.pad(`${now.getMonth()}`, "0", 2);
+        const hours = StringUtils.pad(`${now.getHours()}`, "0", 2);
+        const minutes = StringUtils.pad(`${now.getMinutes()}`, "0", 2);
+        const seconds = StringUtils.pad(`${now.getSeconds()}`, "0", 2);
+        const nowStr = `${now.getFullYear()}${month}${day}${hours}${minutes}${seconds}`;
+        Logger.info(`Backup directory: ${app.BACKUPS_DIR}/${nowStr}`);
+        const destDir = `${app.BACKUPS_DIR}/${nowStr}`;
+        if (await FileUtils.createDirectory(destDir)) Logger.info("Created directory");
+        if (await FileUtils.copy(app.DATA_DIR, `${destDir}/data`)) Logger.info("Copied data");
+        if (await FileUtils.copy(app.IMAGES_DIR, `${destDir}/images`)) Logger.info("Copied images");
+        if (await FileUtils.copy(app.SETTINGS_DIR, `${destDir}/settings`)) Logger.info("Copied settings");
+        Logger.info("Backup complete");
+    }
 }
