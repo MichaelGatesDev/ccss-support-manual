@@ -77,7 +77,7 @@ export class DataManager {
         return await FileUtils.writeJSON(
             this.buildingsFilePath,
             buildings,
-            (key, value): any => {
+            (key: any, value: any): any => {
                 if (key === "rooms") return undefined;
                 return value;
             }
@@ -154,5 +154,12 @@ export class DataManager {
         if (await FileUtils.copy(app.IMAGES_DIR, `${destDir}/images`)) Logger.info("Copied images");
         if (await FileUtils.copy(app.SETTINGS_DIR, `${destDir}/settings`)) Logger.info("Copied settings");
         Logger.info("Backup complete");
+    }
+
+    public async getRestoreOptions(): Promise<string[]> {
+        const backups = await FileUtils.list(app.BACKUPS_DIR);
+        return backups.map((backup): string => {
+            return backup.path.replace(`${app.BACKUPS_DIR}/`, "");
+        });
     }
 }

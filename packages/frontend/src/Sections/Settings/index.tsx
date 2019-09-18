@@ -26,6 +26,8 @@ interface State {
   fileType: SpreadsheetType;
   fileVersion?: ClassroomChecksSpreadsheetVersion | TroubleshootingSpreadsheetVersion;
   importMode: SpreadsheetImportMode;
+
+  restoreOptions?: string[];
 }
 
 export default class Settings extends PureComponent<Props, State> {
@@ -38,6 +40,10 @@ export default class Settings extends PureComponent<Props, State> {
       fileType: SpreadsheetType.ClassroomChecks,
       importMode: SpreadsheetImportMode.OverwriteAndAppend,
     };
+  }
+
+  componentDidMount() {
+    this.fetchRestoreOptions();
   }
 
   onSpreadsheetToImportSelect = (selected?: File | FileList): void => {
@@ -155,6 +161,21 @@ export default class Settings extends PureComponent<Props, State> {
     });
   };
 
+
+  fetchRestoreOptions() {
+    fetch("/api/v1/restore")
+      .then(response => response.json())
+      .then((options): void => {
+        this.setState({ restoreOptions: options }, () => {
+          console.debug("Upload complete");
+        });
+      }).catch(error => {
+        console.error("Failed to fetch restore options");
+        console.error(error);
+      });
+  }
+
+
   render() {
 
     const {
@@ -163,6 +184,8 @@ export default class Settings extends PureComponent<Props, State> {
       fileType,
       fileVersion,
       importMode,
+
+      restoreOptions,
     } = this.state;
 
     return (
@@ -263,7 +286,19 @@ export default class Settings extends PureComponent<Props, State> {
             {/* Restore Data */}
             <div className="row segment">
               <div className="col">
-                <h3>Restore Data</h3>
+                <div className="row">
+                  <div className="col">
+                    <h3>Restore Data</h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <Select
+                      size={5}
+                      values={restoreOptions}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
