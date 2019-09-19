@@ -7,7 +7,6 @@ import { Building, Room } from '@ccss-support-manual/models';
 
 
 export class DataManager {
-
     private buildingsFilePath?: string;
     private roomsFilePath?: string;
 
@@ -48,6 +47,15 @@ export class DataManager {
         const loadedRooms = await this.loadRoomsFile();
         app.roomManager.addRooms(loadedRooms);
         Logger.info(`Loaded ${loadedRooms.length} rooms`);
+    }
+
+    public async reinitialize(): Promise<void> {
+        app.roomManager.clear();
+        app.buildingManager.clear();
+        //TODO clear troubleshooting data
+        //TODO clear images
+        // app.imageManager.clear();
+        await this.initialize();
     }
 
     /**
@@ -162,4 +170,21 @@ export class DataManager {
             return backup.path.replace(`${app.BACKUPS_DIR}/`, "");
         });
     }
+
+    public async restore(restorePoint: string) {
+        const path = `${app.BACKUPS_DIR}/${restorePoint}`;
+        if (! await FileUtils.checkExists(path)) return;
+        Logger.info(`Restoring to ${restorePoint}`);
+
+        await FileUtils.delete(app.DATA_DIR);
+        await FileUtils.delete(app.IMAGES_DIR);
+        await FileUtils.delete(app.SETTINGS_DIR);
+
+        await FileUtils.copy(`${path}/data`, app.DATA_DIR);
+        await FileUtils.copy(`${path}/images`, app.IMAGES_DIR);
+        await FileUtils.copy(`${path}/settings`, app.SETTINGS_DIR);
+
+        await this.reinitialize();
+    }
+
 }

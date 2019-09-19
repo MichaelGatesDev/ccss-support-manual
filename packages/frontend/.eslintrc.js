@@ -40,5 +40,6 @@ module.exports = {
     "padded-blocks": 0,
     "no-alert": 0,
     "no-console": 0,
+    "react/sort-comp": 0
   },
 };
