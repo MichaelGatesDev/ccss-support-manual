@@ -33,6 +33,7 @@ import {
 } from '@ccss-support-manual/models';
 import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
 import { FileUtils } from "@michaelgatesdev/common-io";
+import { app } from "./app";
 
 export interface ClassroomChecksSpreadsheetImportResult {
     buildings: Building[];
@@ -398,6 +399,8 @@ export class SpreadsheetManager {
         else {
             Logger.info("No rooms sheet defined");
         }
+
+        app.imageManager.initialize(); // create new image directories if needed
 
         return {
             buildings: importedBuildings,
