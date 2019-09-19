@@ -5,7 +5,7 @@ const router: Router = Router();
 
 
 router.get("/", (_req, res): void => {
-    res.json(app.imageManager.buildingImages);
+    res.status(200).json(app.imageManager.buildingImages);
 });
 
 router.param("buildingName", (req: any, _res: Response, next: NextFunction, buildingName: string): void => {
@@ -21,7 +21,7 @@ router.param("buildingName", (req: any, _res: Response, next: NextFunction, buil
 
 
 router.get("/:buildingName", (req: any, res): void => {
-    res.json(app.imageManager.getImagesForBuilding(req.building.internalName));
+    res.status(200).json(app.imageManager.getImagesForBuilding(req.building.internalName));
 });
 
 import roomsRoute from "./rooms";

@@ -20,7 +20,7 @@ router.param("buildingName", (req: any, _res: Response, next: NextFunction, buil
 });
 
 router.get("/:buildingName", (_req: any, res): void => {
-    res.json({});
+    res.status(403).json({});
     console.warn("This route should not be used.");
 });
 

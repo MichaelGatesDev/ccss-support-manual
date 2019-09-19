@@ -20,7 +20,7 @@ router.use("/backup", backupRoute);
 router.use("/restore", restoreRoute);
 
 router.get("/", (_req: Request, res: Response): void => {
-  res.send("This is the primary API v1 route");
+  res.status(200).send("This is the primary API v1 route");
 });
 
 router.get("/save", (_req: Request, res: Response): void => {
