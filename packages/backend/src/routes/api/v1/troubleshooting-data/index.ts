@@ -4,7 +4,7 @@ import { app } from "../../../../app";
 const router: Router = Router();
 
 router.get("/", (_req, res): void => {
-    res.json(app.troubleshootingDataManager.troubleshootingData);
+    res.status(200).json(app.troubleshootingDataManager.troubleshootingData);
 });
 
 import buildingsRoute from "./buildings";

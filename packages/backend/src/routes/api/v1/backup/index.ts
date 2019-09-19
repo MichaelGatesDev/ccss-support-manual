@@ -9,7 +9,7 @@ router.get("/", async (_req: Request, res: Response): Promise<void> => {
 });
 
 router.post("/", (_req: Request, res: Response): void => {
-  res.send("This is the primary API v1 route");
+  res.status(200).send("This is the primary API v1 route");
 });
 
 export default router;

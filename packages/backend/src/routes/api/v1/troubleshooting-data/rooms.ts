@@ -7,7 +7,7 @@ import { RoomUtils } from "@ccss-support-manual/utilities";
 const router: Router = Router();
 
 router.get("/", (_req, res): void => {
-    res.json({});
+    res.status(403).json({});
     console.warn("This route should not be used.");
 });
 
@@ -24,7 +24,7 @@ router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNu
 });
 
 router.get("/:roomNumber", (req: any, res): void => {
-    res.json(app.troubleshootingDataManager.getTroubleshootingDataForRoom(req.building.internalName, req.room.number));
+    res.status(200).json(app.troubleshootingDataManager.getTroubleshootingDataForRoom(req.building.internalName, req.room.number));
 });
 
 export default router;

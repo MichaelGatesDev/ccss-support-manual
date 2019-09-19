@@ -7,7 +7,7 @@ const router: Router = Router();
 
 
 router.get("/", (_req, res): void => {
-    res.json(app.imageManager.roomImages);
+    res.status(200).json(app.imageManager.roomImages);
 });
 
 router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNumber: string): void => {
@@ -23,7 +23,7 @@ router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNu
 });
 
 router.get("/:roomNumber", (req: any, res): void => {
-    res.json(app.imageManager.getImagesForRoom(req.building.internalName, req.room.number));
+    res.status(200).json(app.imageManager.getImagesForRoom(req.building.internalName, req.room.number));
 });
 
 export default router;
