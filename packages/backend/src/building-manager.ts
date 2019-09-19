@@ -28,6 +28,9 @@ export class BuildingManager {
      * @param buildings Buildings to add
      */
     public addBuildings(buildings: Building[]): void {
+        for (const building of buildings) {
+            if (building.rooms === undefined) building.rooms = [];
+        }
         this.buildings.push(...buildings);
     }
 
