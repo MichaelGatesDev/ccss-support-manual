@@ -1,4 +1,4 @@
-import { ConfigIOResult, ConfigurationUtilities } from 'cardboard-config';
+import { ConfigIOResult, ConfigurationUtilities } from "cardboard-config";
 import { Logger } from '@michaelgatesdev/common';
 
 import { AppConfig } from "./configs/AppConfig";

@@ -1,4 +1,5 @@
-import { FileUtils, Logger } from '@michaelgatesdev/common';
+import { Logger } from '@michaelgatesdev/common';
+import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
 import { app } from "./app";

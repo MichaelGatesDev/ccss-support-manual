@@ -26,6 +26,9 @@ interface State {
   fileType: SpreadsheetType;
   fileVersion?: ClassroomChecksSpreadsheetVersion | TroubleshootingSpreadsheetVersion;
   importMode: SpreadsheetImportMode;
+
+  selectedRestorePoint?: string;
+  restoreOptions?: string[];
 }
 
 export default class Settings extends PureComponent<Props, State> {
@@ -38,6 +41,21 @@ export default class Settings extends PureComponent<Props, State> {
       fileType: SpreadsheetType.ClassroomChecks,
       importMode: SpreadsheetImportMode.OverwriteAndAppend,
     };
+  }
+
+  componentDidMount() {
+    this.fetchRestoreOptions();
+  }
+
+  fetchRestoreOptions() {
+    fetch("/api/v1/restore")
+      .then(response => response.json())
+      .then((options): void => {
+        this.setState({ restoreOptions: options });
+      }).catch(error => {
+        console.error("Failed to fetch restore options");
+        console.error(error);
+      });
   }
 
   onSpreadsheetToImportSelect = (selected?: File | FileList): void => {
@@ -106,6 +124,50 @@ export default class Settings extends PureComponent<Props, State> {
   export = () => {
   };
 
+  onRestoreChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { target } = event;
+    const { value } = target;
+    this.setState({
+      selectedRestorePoint: value,
+    });
+  };
+
+  backup = () => {
+    fetch("/api/v1/backup")
+      .then(() => {
+        alert("Backup complete");
+      }).catch(error => {
+        console.error("Failed to backup ");
+        console.error(error);
+      });
+  };
+
+  restore = () => {
+    const { selectedRestorePoint } = this.state;
+    if (selectedRestorePoint === undefined) {
+      alert("You must select a restore point!");
+      return;
+    }
+
+    console.debug(`Restoring ${selectedRestorePoint}`);
+
+    fetch("/api/v1/restore", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        restorePoint: selectedRestorePoint,
+      }),
+    })
+      .then(() => {
+        console.log("Restore complete");
+      }).catch(error => {
+        console.error("Failed to restore ");
+        console.error(error);
+      });
+  };
+
   onImportTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { target } = event;
     if (target === null) return;
@@ -152,6 +214,8 @@ export default class Settings extends PureComponent<Props, State> {
       fileType,
       fileVersion,
       importMode,
+
+      restoreOptions,
     } = this.state;
 
     return (
@@ -231,7 +295,16 @@ export default class Settings extends PureComponent<Props, State> {
             {/* Export Data to Spreadsheet */}
             <div className="row segment">
               <div className="col">
-                <h3>Export Data to Spreadsheet</h3>
+                <div className="row">
+                  <div className="col">
+                    <h3>Export Data to Spreadsheet</h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <p>This feature is not available yet</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -239,14 +312,42 @@ export default class Settings extends PureComponent<Props, State> {
             {/* Backup Data */}
             <div className="row segment">
               <div className="col">
-                <h3>Backup Data</h3>
+                <div className="row">
+                  <div className="col">
+                    <h3>Backup Data</h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <button type="button" onClick={this.backup}>Backup</button>
+                  </div>
+                </div>
               </div>
             </div>
+
 
             {/* Restore Data */}
             <div className="row segment">
               <div className="col">
-                <h3>Restore Data</h3>
+                <div className="row">
+                  <div className="col">
+                    <h3>Restore Data</h3>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <Select
+                      size={5}
+                      values={restoreOptions}
+                      onChange={this.onRestoreChange}
+                    />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <button type="button" onClick={this.restore}>Restore</button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -262,6 +363,7 @@ export default class Settings extends PureComponent<Props, State> {
                 </div>
               </div>
             </div>
+
           </div>
 
         </section>

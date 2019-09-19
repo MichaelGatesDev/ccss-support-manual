@@ -1,4 +1,5 @@
-import { FileUtils, Logger } from '@michaelgatesdev/common';
+import { Logger, StringUtils } from '@michaelgatesdev/common';
+import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from './app';
 import { BuildingUtils, RoomUtils } from '@ccss-support-manual/utilities';
@@ -6,7 +7,6 @@ import { Building, Room } from '@ccss-support-manual/models';
 
 
 export class DataManager {
-
     private buildingsFilePath?: string;
     private roomsFilePath?: string;
 
@@ -49,6 +49,15 @@ export class DataManager {
         Logger.info(`Loaded ${loadedRooms.length} rooms`);
     }
 
+    public async reinitialize(): Promise<void> {
+        app.roomManager.clear();
+        app.buildingManager.clear();
+        //TODO clear troubleshooting data
+        //TODO clear images
+        // app.imageManager.clear();
+        await this.initialize();
+    }
+
     /**
      * Saves all of the buildings currently stored in the BuildingManager
      * @returns true if successful otherwise false
@@ -76,7 +85,7 @@ export class DataManager {
         return await FileUtils.writeJSON(
             this.buildingsFilePath,
             buildings,
-            (key, value): any => {
+            (key: any, value: any): any => {
                 if (key === "rooms") return undefined;
                 return value;
             }
@@ -134,6 +143,48 @@ export class DataManager {
         const json = await FileUtils.readJSON<Room[]>(this.roomsFilePath);
         if (json === undefined) throw new Error("Rooms data is corrupted");
         return json;
+    }
+
+    public async backup(): Promise<void> {
+        Logger.info("Performing backup...");
+        const now = new Date();
+
+        const month = StringUtils.pad(`${now.getMonth()}`, "0", 2);
+        const day = StringUtils.pad(`${now.getMonth()}`, "0", 2);
+        const hours = StringUtils.pad(`${now.getHours()}`, "0", 2);
+        const minutes = StringUtils.pad(`${now.getMinutes()}`, "0", 2);
+        const seconds = StringUtils.pad(`${now.getSeconds()}`, "0", 2);
+        const nowStr = `${now.getFullYear()}${month}${day}${hours}${minutes}${seconds}`;
+        Logger.info(`Backup directory: ${app.BACKUPS_DIR}/${nowStr}`);
+        const destDir = `${app.BACKUPS_DIR}/${nowStr}`;
+        if (await FileUtils.createDirectory(destDir)) Logger.info("Created directory");
+        if (await FileUtils.copy(app.DATA_DIR, `${destDir}/data`)) Logger.info("Copied data");
+        if (await FileUtils.copy(app.IMAGES_DIR, `${destDir}/images`)) Logger.info("Copied images");
+        if (await FileUtils.copy(app.SETTINGS_DIR, `${destDir}/settings`)) Logger.info("Copied settings");
+        Logger.info("Backup complete");
+    }
+
+    public async getRestoreOptions(): Promise<string[]> {
+        const backups = await FileUtils.list(app.BACKUPS_DIR);
+        return backups.map((backup): string => {
+            return backup.path.replace(`${app.BACKUPS_DIR}/`, "");
+        });
+    }
+
+    public async restore(restorePoint: string) {
+        const path = `${app.BACKUPS_DIR}/${restorePoint}`;
+        if (! await FileUtils.checkExists(path)) return;
+        Logger.info(`Restoring to ${restorePoint}`);
+
+        await FileUtils.delete(app.DATA_DIR);
+        await FileUtils.delete(app.IMAGES_DIR);
+        await FileUtils.delete(app.SETTINGS_DIR);
+
+        await FileUtils.copy(`${path}/data`, app.DATA_DIR);
+        await FileUtils.copy(`${path}/images`, app.IMAGES_DIR);
+        await FileUtils.copy(`${path}/settings`, app.SETTINGS_DIR);
+
+        await this.reinitialize();
     }
 
 }
