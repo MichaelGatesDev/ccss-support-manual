@@ -135,7 +135,7 @@ export default class Settings extends PureComponent<Props, State> {
   backup = () => {
     fetch("/api/v1/backup")
       .then(() => {
-        alert("Backup complete");
+        console.log("Backup complete");
       }).catch(error => {
         console.error("Failed to backup ");
         console.error(error);
@@ -164,6 +164,16 @@ export default class Settings extends PureComponent<Props, State> {
         console.log("Restore complete");
       }).catch(error => {
         console.error("Failed to restore ");
+        console.error(error);
+      });
+  };
+
+  save = () => {
+    fetch("/api/v1/save")
+      .then(() => {
+        console.log("Save complete");
+      }).catch(error => {
+        console.error("Failed to save ");
         console.error(error);
       });
   };
@@ -358,7 +368,7 @@ export default class Settings extends PureComponent<Props, State> {
                 <h3>Save Data</h3>
                 <div className="row">
                   <div className="col">
-                    <button type="button">Save</button>
+                    <button type="button" onClick={this.save}>Save</button>
                   </div>
                 </div>
               </div>
