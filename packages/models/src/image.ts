@@ -7,7 +7,8 @@ export interface BuildingImage extends Image {
     buildingName: string;
 }
 
-export interface RoomImage extends BuildingImage {
+export interface RoomImage extends Image {
+    buildingName: string;
     roomNumber: string;
 }
 
@@ -67,14 +68,20 @@ export class BuildingImageFactory {
 
 export class RoomImageFactory {
 
-    private _image: BuildingImage;
+    private _image: Image;
+    private _buildingName: string = "";
     private _roomNumber: string = "";
 
-    public constructor(image: BuildingImage) {
+    public constructor(image: Image) {
         this._image = image;
     }
 
-    public withBuildingName(roomNumber: string): RoomImageFactory {
+    public withBuildingName(buildingName: string): RoomImageFactory {
+        this._buildingName = buildingName;
+        return this;
+    }
+
+    public withRoomNumber(roomNumber: string): RoomImageFactory {
         this._roomNumber = roomNumber;
         return this;
     }
@@ -82,6 +89,7 @@ export class RoomImageFactory {
     public build(): RoomImage {
         return {
             ...this._image,
+            buildingName: this._buildingName,
             roomNumber: this._roomNumber
         };
     }
