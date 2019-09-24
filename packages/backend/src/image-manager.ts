@@ -47,24 +47,20 @@ export class ImageManager {
 
         for (const building of app.buildingManager.buildings) {
 
+            // building images
             const buildingDir = `${app.BUILDING_IMAGES_DIR}/${building.internalName}`;
             // create building dir if not exists
             await this.createDirectoryIfNotExists(buildingDir);
+            const rootBuildingImages = await this.createBuildingImagesFromDirectory(buildingDir, building.internalName, ImageType.Building);
+            this.buildingImages.push(...rootBuildingImages);
 
-            // building images
-            const buildingFiles = await fs.promises.readdir(buildingDir, { withFileTypes: true });
-            for (const file of buildingFiles) {
-                if (file.isDirectory()) continue;
-                const newPath = `${buildingDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
-                const image = new BuildingImageFactory(
-                    new ImageFactory()
-                        .ofType(ImageType.Building)
-                        .withPath(newPath)
-                        .build()
-                ).withBuildingName(building.internalName).build();
-                this.buildingImages.push(image);
-            }
-
+            // UNCOMMENT IF YOU WANT BUILDING PANORAMA IMAGES
+            // // panorama images
+            // const panoramasDir = `${buildingDir}/panoramas`;
+            // // create titles dir if it doesnt exist
+            // await this.createDirectoryIfNotExists(panoramasDir);
+            // const panoramaBuildingImages = await this.createBuildingImagesFromDirectory(panoramasDir, building.internalName, ImageType.BuildingPanorama);
+            // this.buildingImages.push(...panoramaBuildingImages);
 
             const roomsDir = `${buildingDir}/rooms`;
             // create rooms dir if not exists
@@ -75,66 +71,69 @@ export class ImageManager {
                 const roomDir = `${roomsDir}/${`${room.number}`.toLocaleLowerCase()}`;
                 // create room dir if it doesnt exist
                 await this.createDirectoryIfNotExists(roomDir);
+                const rootImages = await this.createRoomImagesFromDirectory(roomDir, building.internalName, room.number.toString(), ImageType.Room);
+                this.roomImages.push(...rootImages);
 
-                // root images
-                const rootFiles = await fs.promises.readdir(roomDir, { withFileTypes: true });
-                for (const file of rootFiles) {
-                    if (file.isDirectory()) continue;
-                    const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
-                    const image = new RoomImageFactory(
-                        new ImageFactory()
-                            .ofType(ImageType.Room)
-                            .withPath(newPath)
-                            .build()
-                    )
-                        .withBuildingName(building.internalName)
-                        .withRoomNumber(`${room.number}`)
-                        .build();
-                    this.roomImages.push(image);
-                }
+                // title images
+                const titlesDir = `${roomDir}/titles`;
+                // create titles dir if it doesnt exist
+                await this.createDirectoryIfNotExists(titlesDir);
+                const titleImages = await this.createRoomImagesFromDirectory(titlesDir, building.internalName, room.number.toString(), ImageType.RoomTitle);
+                this.roomImages.push(...titleImages);
 
                 // panoramic images
-                const panoramasDir = roomDir + "/panoramas";
+                const panoramasDir = `${roomDir}/panoramas`;
                 // create panoramas dir if it doesnt exist
                 await this.createDirectoryIfNotExists(panoramasDir);
-
-                const panoramaFiles = await fs.promises.readdir(panoramasDir, { withFileTypes: true });
-                for (const file of panoramaFiles) {
-                    if (file.isDirectory) continue;
-                    const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
-                    const image = new RoomImageFactory(
-                        new BuildingImageFactory(
-                            new ImageFactory()
-                                .ofType(ImageType.RoomPanorama)
-                                .withPath(newPath)
-                                .build()
-                        ).withBuildingName(building.internalName).build()
-                    ).build();
-                    this.roomImages.push(image);
-                }
-
+                const panoramicImages = await this.createRoomImagesFromDirectory(titlesDir, building.internalName, room.number.toString(), ImageType.RoomPanorama);
+                this.roomImages.push(...panoramicImages);
 
                 // equipment images
-                const equipmentDir = roomDir + "/equipment";
+                const equipmentDir = `${roomDir}/equipment`;
                 // create equipment dir if it doesnt exist
                 await this.createDirectoryIfNotExists(equipmentDir);
-
-                const equipmentFiles = await fs.promises.readdir(equipmentDir, { withFileTypes: true });
-                for (const file of equipmentFiles) {
-                    if (file.isDirectory) continue;
-                    const newPath = `${roomDir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
-                    const image = new RoomImageFactory(
-                        new BuildingImageFactory(
-                            new ImageFactory()
-                                .ofType(ImageType.RoomEquipment)
-                                .withPath(newPath)
-                                .build()
-                        ).withBuildingName(building.internalName).build()
-                    ).build();
-                    this.roomImages.push(image);
-                }
+                const equipmentImages = await this.createRoomImagesFromDirectory(titlesDir, building.internalName, room.number.toString(), ImageType.RoomEquipment);
+                this.roomImages.push(...equipmentImages);
             }
         }
+    }
+
+    private async createBuildingImagesFromDirectory(dir: string, buildingName: string, type: ImageType): Promise<BuildingImage[]> {
+        const files = await fs.promises.readdir(dir, { withFileTypes: true });
+        const images: BuildingImage[] = files.map((file) => {
+            if (file.isDirectory()) return undefined;
+            const newPath = `${dir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
+            const image = new BuildingImageFactory(
+                new ImageFactory()
+                    .ofType(type)
+                    .withPath(newPath)
+                    .build()
+            )
+                .withBuildingName(buildingName)
+                .build();
+            return image;
+        }).filter((image: BuildingImage | undefined): image is BuildingImage => image !== undefined);
+        return images;
+    }
+
+
+    private async createRoomImagesFromDirectory(dir: string, buildingName: string, roomNumber: string, type: ImageType): Promise<RoomImage[]> {
+        const files = await fs.promises.readdir(dir, { withFileTypes: true });
+        const images: RoomImage[] = files.map((file) => {
+            if (file.isDirectory()) return undefined;
+            const newPath = `${dir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
+            const image = new RoomImageFactory(
+                new ImageFactory()
+                    .ofType(type)
+                    .withPath(newPath)
+                    .build()
+            )
+                .withBuildingName(buildingName)
+                .withRoomNumber(roomNumber)
+                .build();
+            return image;
+        }).filter((image): image is RoomImage => image !== undefined);
+        return images;
     }
 
 

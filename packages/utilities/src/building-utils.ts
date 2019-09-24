@@ -48,4 +48,15 @@ export class BuildingUtils {
         }
         return true;
     }
+
+
+    public static getParentBuilding(targetRoom: Room, allBuildings: Building[]): Building | undefined {
+        for (const building of allBuildings) {
+            for (const room of building.rooms) {
+                if (room.buildingName === targetRoom.buildingName && room.number === targetRoom.number) return building;
+            }
+        }
+        return undefined;
+    }
+
 }

@@ -96,6 +96,8 @@ class Home extends Component<Props, State> {
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
 
+    console.log(imagesState);
+
     const query = filterSearch;
     const queries = query.split(" ");
 

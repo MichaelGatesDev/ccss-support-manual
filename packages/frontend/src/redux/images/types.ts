@@ -3,13 +3,13 @@ import { BuildingImage, RoomImage } from "@ccss-support-manual/models";
 export interface ImagesState {
   imagesLoading: boolean;
 
-  buildingImages: BuildingImage[];
   roomImages: RoomImage[];
+  buildingImages: BuildingImage[];
 }
 
 export interface ImagesFetchedPayload {
-  buildingImages: BuildingImage[];
   roomImages: RoomImage[];
+  buildingImages: BuildingImage[];
 }
 
 // Describing the different ACTION NAMES available

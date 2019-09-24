@@ -18,6 +18,7 @@ export enum ImageType {
     Room,
     RoomPanorama,
     RoomEquipment,
+    RoomTitle,
     Other
 }
 
