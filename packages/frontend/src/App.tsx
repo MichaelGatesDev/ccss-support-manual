@@ -8,7 +8,10 @@ import { store } from "./redux/store";
 
 import Home from "./Sections/Home";
 import Settings from "./Sections/Settings";
+import Buildings from "./Sections/Buildings";
+
 import BackToTopButton from "./Components/BackToTopButton";
+
 
 export default function App() {
   return (
@@ -22,7 +25,7 @@ export default function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/settings" component={Settings} />
 
-          {/* <Route path="/buildings" component={Buildings} /> */}
+          <Route exact path="/buildings" component={Buildings} />
           {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
           {/* <Route path="/buildings/:buildingName" component={Building} /> */}
 

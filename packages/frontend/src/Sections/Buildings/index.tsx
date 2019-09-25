@@ -7,7 +7,6 @@ import { BuildingUtils } from "@ccss-support-manual/utilities";
 import "./style.scss";
 
 import NavBar from "../../Components/NavBar";
-import RoomCardsGrid from "../../Components/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash";
 
 import { AppState } from "../../redux/store";
@@ -15,6 +14,7 @@ import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
+import BuildingCardsGrid from "../../Components/BuildingCardsGrid";
 
 interface Props {
   buildingsState: BuildingsState;
@@ -28,7 +28,7 @@ interface State {
   filterSearch: string;
 }
 
-class Home extends Component<Props, State> {
+class Buildings extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -51,14 +51,6 @@ class Home extends Component<Props, State> {
     });
   }
 
-  getParentBuilding(room: Room): Building | undefined {
-    const { buildingsState } = this.props;
-    for (const building of buildingsState.buildings) {
-      if (BuildingUtils.hasName(building, room.buildingName)) return building;
-    }
-    return undefined;
-  }
-
   getAllRooms(): Room[] {
     const { buildingsState } = this.props;
     let result: Room[] = [];
@@ -73,18 +65,9 @@ class Home extends Component<Props, State> {
     return buildingsState.buildingsLoading || imagesState.imagesLoading;
   }
 
-  filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
-    return rooms.filter((room: Room) => {
-      const pb: Building | undefined = this.getParentBuilding(room);
-      if (pb === undefined) return false;
-      return (
-        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
-        (filterName && room.name.toLocaleLowerCase().includes(name)) ||
-        (filterBuildingName && BuildingUtils.hasName(pb, name))
-      );
-    }, this);
+  filterBuildingsByName(buildings: Building[], name: string): Building[] {
+    return buildings.filter((building: Building) => BuildingUtils.hasName(building, name), this);
   }
-
 
   render() {
     // Display splash when loading
@@ -92,19 +75,19 @@ class Home extends Component<Props, State> {
       return <LoadingSplash />;
     }
 
-
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
+    const { buildings } = buildingsState;
 
     const query = filterSearch;
     const queries = query.split(" ");
 
-    let rooms = _.sortBy(this.getAllRooms(), ["buildingName", "number"]);
+    let filteredBuildings = _.sortBy(buildings, ["internalName"]);
 
     if (queries.length > 0) {
       for (let query of queries) {
         query = query.toLocaleLowerCase();
-        rooms = this.filterRoomsByName(rooms, query);
+        filteredBuildings = this.filterBuildingsByName(filteredBuildings, query);
       }
     }
 
@@ -119,9 +102,8 @@ class Home extends Component<Props, State> {
         />
         {/* Main content */}
         <section className="container-fluid" id="home-section">
-          <RoomCardsGrid
-            rooms={rooms}
-            buildings={buildingsState.buildings}
+          <BuildingCardsGrid
+            buildings={filteredBuildings}
             images={imagesState}
           />
         </section>
@@ -138,4 +120,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
   mapStateToProps,
   { fetchBuildings, fetchImages },
-)(Home);
+)(Buildings);
