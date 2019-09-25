@@ -21,10 +21,13 @@ export default function App() {
         <div className="App">
           <Route exact path="/" component={Home} />
           <Route exact path="/settings" component={Settings} />
+
+          {/* <Route path="/buildings" component={Buildings} /> */}
           {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
-          {/* <Route path="/buildings/:building" component={Buildings} /> */}
-          {/* <Route path="/buildings/:building/rooms" component={Rooms} /> */}
-          {/* <Route path="/rooms/:roomID" component={Room} /> */}
+          {/* <Route path="/buildings/:buildingName" component={Building} /> */}
+
+          {/* <Route path="/buildings/:buildingName/rooms" component={Rooms} /> */}
+          {/* <Route exact path="/buildings/:buildingName/rooms/create" component={CreateRoom} /> */}
           {/* <Route path="/buildings/:buildingName/rooms/:roomNumber" component={Room} /> */}
         </div>
       </BrowserRouter>

@@ -38,9 +38,7 @@ export default class RoomCardsGrid extends Component<Props, State> {
   }
 
   render() {
-    const { rooms, buildings, images } = this.props;
-
-    console.log(images);
+    const { rooms, buildings } = this.props;
 
     const items = rooms.map(room => {
       const parentBuilding = BuildingUtils.getParentBuilding(room, buildings);
