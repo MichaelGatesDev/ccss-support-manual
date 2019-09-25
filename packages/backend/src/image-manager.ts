@@ -104,7 +104,8 @@ export class ImageManager {
         const imagesPromise = files.map(async (file) => {
             if (file.isDirectory()) return undefined;
 
-            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, 350, false);
+            const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
+            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, thumbnailWidth, false);
 
             const newPath = `${dir}/${file.name}.thumb.jpg`.replace(`${app.PUBLIC_DIR}/`, "");
             const image = new BuildingImageFactory(
@@ -126,7 +127,8 @@ export class ImageManager {
         const imagesPromise = files.map(async (file) => {
             if (file.isDirectory()) return undefined;
 
-            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, 350, false);
+            const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.roomImageThumbnailWidth : 350;
+            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, thumbnailWidth, false);
 
             const newPath = `${dir}/${file.name}.thumb.jpg`.replace(`${app.PUBLIC_DIR}/`, "");
             const image = new RoomImageFactory(
