@@ -55,7 +55,7 @@ export default class BackToTopButton extends Component<Props, State> {
     const { visible } = this.state;
     // if (!visible) return null;
     return (
-      <PoseGroup>
+      <PoseGroup flipMove={false}>
         {visible &&
           (
             <BackToTopButtonDiv className="BackToTopButton-Component" key="back-to-top-button">
