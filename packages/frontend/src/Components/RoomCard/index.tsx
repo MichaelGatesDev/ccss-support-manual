@@ -20,7 +20,7 @@ interface State { }
 class RoomCard extends Component<Props, State> {
   getTitle() {
     const { building, room } = this.props;
-    return `${building.officialName} ${room.number}`;
+    return `${building.officialName} ${room.number.toString().toUpperCase()}`;
   }
 
   render() {
