@@ -24,7 +24,7 @@ class RoomCard extends Component<Props, State> {
   }
 
   render() {
-    const { images, room } = this.props;
+    const { building, room, images } = this.props;
 
     let coverImage = "img/300x200.png";
     if (images.length > 0) {
@@ -36,10 +36,10 @@ class RoomCard extends Component<Props, State> {
 
     return (
       <div className="RoomCard-Component">
-        <Link to={`buildings/${room.buildingName}/rooms/${room.number}`} target="_blank">
+        <Link to={`/buildings/${building.internalName}/rooms/${room.number}`} target="_blank">
           <div className="card">
             <p className="card-meta"> </p>
-            <img className="card-img-top" src={escape(coverImage)} alt={this.getTitle()} />
+            <img className="card-img-top" src={`/${escape(coverImage)}`} alt={this.getTitle()} />
             <div className="card-body">
               <p className="card-title">{this.getTitle()}</p>
               <p className="card-subtitle">{room.name ? room.name : <br />}</p>

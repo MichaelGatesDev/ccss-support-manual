@@ -7,20 +7,25 @@ import { BuildingUtils } from "@ccss-support-manual/utilities";
 import "./style.scss";
 
 import NavBar from "../../Components/NavBar";
-import RoomCardsGrid from "../../Components/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash";
+import RoomCardsGrid from "../../Components/RoomCardsGrid";
 
 import { AppState } from "../../redux/store";
-import { fetchBuildings } from "../../redux/buildings/actions";
+import { fetchBuilding, fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 
 interface Props {
+  match?: any;
+
+  buildingName: string;
+
   buildingsState: BuildingsState;
   imagesState: ImagesState;
 
   fetchBuildings: Function;
+  fetchBuilding: Function;
   fetchImages: Function;
 }
 
@@ -28,7 +33,7 @@ interface State {
   filterSearch: string;
 }
 
-class Home extends Component<Props, State> {
+class BuildingSection extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -40,8 +45,14 @@ class Home extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { fetchBuildings, fetchImages } = this.props;
+    const {
+      buildingName,
+      fetchBuildings,
+      fetchBuilding,
+      fetchImages,
+    } = this.props;
     fetchBuildings();
+    fetchBuilding(buildingName);
     fetchImages();
   }
 
@@ -51,7 +62,12 @@ class Home extends Component<Props, State> {
     });
   }
 
-  getParentBuilding(room: Room): Building | undefined {
+  private isLoading(): boolean {
+    const { buildingsState, imagesState } = this.props;
+    return buildingsState.buildingsLoading || imagesState.imagesLoading;
+  }
+
+  private getParentBuilding(room: Room): Building | undefined {
     const { buildingsState } = this.props;
     for (const building of buildingsState.buildings) {
       if (BuildingUtils.hasName(building, room.buildingName)) return building;
@@ -59,21 +75,7 @@ class Home extends Component<Props, State> {
     return undefined;
   }
 
-  getAllRooms(): Room[] {
-    const { buildingsState } = this.props;
-    let result: Room[] = [];
-    for (const building of buildingsState.buildings) {
-      result = result.concat(building.rooms);
-    }
-    return result;
-  }
-
-  private isLoading(): boolean {
-    const { buildingsState, imagesState } = this.props;
-    return buildingsState.buildingsLoading || imagesState.imagesLoading;
-  }
-
-  filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
+  private filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
     return rooms.filter((room: Room) => {
       const pb: Building | undefined = this.getParentBuilding(room);
       if (pb === undefined) return false;
@@ -85,7 +87,6 @@ class Home extends Component<Props, State> {
     }, this);
   }
 
-
   render() {
     // Display splash when loading
     if (this.isLoading()) {
@@ -94,11 +95,17 @@ class Home extends Component<Props, State> {
 
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
+    const { building, buildings } = buildingsState;
+
+    if (building === undefined) {
+      return <p>Building not found</p>;
+    }
 
     const query = filterSearch;
     const queries = query.split(" ");
 
-    let rooms = _.sortBy(this.getAllRooms(), ["buildingName", "number"]);
+
+    let rooms = _.sortBy(building.rooms, ["number"]);
 
     if (queries.length > 0) {
       for (let query of queries) {
@@ -120,7 +127,7 @@ class Home extends Component<Props, State> {
         <section className="container-fluid" id="home-section">
           <RoomCardsGrid
             rooms={rooms}
-            buildings={buildingsState.buildings}
+            buildings={buildings}
             images={imagesState}
           />
         </section>
@@ -129,12 +136,14 @@ class Home extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: AppState, props: Props) => ({
   buildingsState: state.buildings,
   imagesState: state.images,
+
+  buildingName: props.match.params.buildingName,
 });
 
 export default connect(
   mapStateToProps,
-  { fetchBuildings, fetchImages },
-)(Home);
+  { fetchBuildings, fetchBuilding, fetchImages },
+)(BuildingSection);

@@ -28,7 +28,7 @@ interface State {
   filterSearch: string;
 }
 
-class Buildings extends Component<Props, State> {
+class BuildingsSection extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -120,4 +120,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
   mapStateToProps,
   { fetchBuildings, fetchImages },
-)(Buildings);
+)(BuildingsSection);
