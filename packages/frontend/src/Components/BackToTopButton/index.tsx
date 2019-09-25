@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import posed, { PoseGroup } from "react-pose";
-import shortid from "shortid";
+// import shortid from "shortid";
 
 import "./style.scss";
 
@@ -53,23 +53,26 @@ export default class BackToTopButton extends Component<Props, State> {
 
   render() {
     const { visible } = this.state;
+    // if (!visible) return null;
     return (
       <PoseGroup>
-        {visible && [
-          <BackToTopButtonDiv className="BackToTopButton-Component" key={shortid.generate()}>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={this.onClick}
-              data-toggle="tooltip"
-              title="Back to Top"
-            >
-              {/* eslint jsx-a11y/label-has-associated-control: 0 */}
-              {/* eslint jsx-a11y/label-has-for: 0 */}
-              <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up" /></label>
-            </button>
-          </BackToTopButtonDiv>,
-        ]}
+        {visible &&
+          (
+            <BackToTopButtonDiv className="BackToTopButton-Component" key="back-to-top-button">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={this.onClick}
+                data-toggle="tooltip"
+                title="Back to Top"
+              >
+                {/* eslint jsx-a11y/label-has-associated-control: 0 */}
+                {/* eslint jsx-a11y/label-has-for: 0 */}
+                <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up" /></label>
+              </button>
+            </BackToTopButtonDiv>
+          )
+        }
       </PoseGroup>
     );
   }
