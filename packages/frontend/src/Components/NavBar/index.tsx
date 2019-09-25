@@ -50,6 +50,15 @@ class NavBar extends Component<Props, State> {
           {/* Left */}
           <div className="navbar-collapse collapse order-0 dual-collapse2">
             <a className="navbar-brand" href="/">{title}</a>
+
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <a className="nav-link" href="/buildings" rel="noopener noreferrer">Buildings</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/settings" rel="noopener noreferrer">Settings</a>
+              </li>
+            </ul>
           </div>
 
           {/* Center */}
