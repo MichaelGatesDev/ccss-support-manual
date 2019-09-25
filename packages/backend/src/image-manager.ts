@@ -1,9 +1,10 @@
 import { Logger, ArrayUtils } from '@michaelgatesdev/common';
 import { FileUtils } from "@michaelgatesdev/common-io";
 
-import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
-import { app } from "./app";
 import fs from "fs";
+import sharp from "sharp";
+import { app } from "./app";
+import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 /**
@@ -100,9 +101,12 @@ export class ImageManager {
 
     private async createBuildingImagesFromDirectory(dir: string, buildingName: string, type: ImageType): Promise<BuildingImage[]> {
         const files = await fs.promises.readdir(dir, { withFileTypes: true });
-        const images: BuildingImage[] = files.map((file) => {
+        const imagesPromise = files.map(async (file) => {
             if (file.isDirectory()) return undefined;
-            const newPath = `${dir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
+
+            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, 350, false);
+
+            const newPath = `${dir}/${file.name}.thumb.jpg`.replace(`${app.PUBLIC_DIR}/`, "");
             const image = new BuildingImageFactory(
                 new ImageFactory()
                     .ofType(type)
@@ -112,16 +116,19 @@ export class ImageManager {
                 .withBuildingName(buildingName)
                 .build();
             return image;
-        }).filter((image: BuildingImage | undefined): image is BuildingImage => image !== undefined);
-        return images;
+        });
+        return (await Promise.all(imagesPromise)).filter((image: BuildingImage | undefined): image is BuildingImage => image !== undefined);
     }
 
 
     private async createRoomImagesFromDirectory(dir: string, buildingName: string, roomNumber: string, type: ImageType): Promise<RoomImage[]> {
         const files = await fs.promises.readdir(dir, { withFileTypes: true });
-        const images: RoomImage[] = files.map((file) => {
+        const imagesPromise = files.map(async (file) => {
             if (file.isDirectory()) return undefined;
-            const newPath = `${dir}/${file.name}`.replace(`${app.PUBLIC_DIR}/`, "");
+
+            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, 350, false);
+
+            const newPath = `${dir}/${file.name}.thumb.jpg`.replace(`${app.PUBLIC_DIR}/`, "");
             const image = new RoomImageFactory(
                 new ImageFactory()
                     .ofType(type)
@@ -132,8 +139,8 @@ export class ImageManager {
                 .withRoomNumber(roomNumber)
                 .build();
             return image;
-        }).filter((image): image is RoomImage => image !== undefined);
-        return images;
+        });
+        return (await Promise.all(imagesPromise)).filter((image: RoomImage | undefined): image is RoomImage => image !== undefined);
     }
 
 
@@ -146,6 +153,37 @@ export class ImageManager {
         return false;
     }
 
+    public async createThumbnail(path: string, dest: string, width: number, height?: number): Promise<void> {
+        try {
+            await sharp(path)
+                .resize(width, height)
+                .jpeg({ quality: 100 })
+                .toFile(dest);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    private async createThumbnailIfNotExists(path: string, width: number, forceCreate?: boolean): Promise<void> {
+        if (!this.isThumb(path) && (!await this.hasThumb(`${path}`) || forceCreate)) {
+            Logger.warning(`No thumbnail exists for ${path}`);
+            try {
+                await this.createThumbnail(`${path}`, `${path}.thumb.jpg`, width);
+                Logger.info(`Created thumbnail for ${path} (width: ${width})`);
+            } catch (error) {
+                Logger.error(`Error while generating thumbnail for ${path}`);
+                Logger.error(error);
+            }
+        }
+    }
+
+    private isThumb(name: string): boolean {
+        return name.toLowerCase().endsWith(".thumb.jpg");
+    }
+
+    private async hasThumb(name: string): Promise<boolean> {
+        return await FileUtils.checkExists(`${name}.thumb.jpg`);
+    }
 
     public getImagesForBuilding(buildingName: string): BuildingImage[] {
         const building = app.buildingManager.getBuildingByName(buildingName);
