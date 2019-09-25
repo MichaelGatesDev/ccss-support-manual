@@ -142,7 +142,7 @@ export class RoomUtils {
     /**
      * @returns true if roomA and roomB share the same building name and room number
      */
-    public static isSameAs(roomA: Room, roomB: Room): boolean {
+    public static isSameAs(roomA: Room | SimpleRoom, roomB: Room | SimpleRoom): boolean {
         return roomA.buildingName === roomB.buildingName && roomA.number === roomB.number;
     }
 

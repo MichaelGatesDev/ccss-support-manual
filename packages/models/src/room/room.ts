@@ -45,7 +45,7 @@ export interface Room {
  */
 export interface SimpleRoom {
     buildingName: string;
-    roomNumber: string | number;
+    number: string | number;
 }
 
 
@@ -73,7 +73,7 @@ export class RoomFactory {
         return this;
     }
 
-    public withNumber(number: string): RoomFactory {
+    public withNumber(number: string | number): RoomFactory {
         this._number = number;
         return this;
     }
@@ -112,7 +112,7 @@ export class RoomFactory {
     public buildSimple(): SimpleRoom {
         return {
             buildingName: this._buildingName,
-            roomNumber: this._number
+            number: this._number
         };
     }
 }

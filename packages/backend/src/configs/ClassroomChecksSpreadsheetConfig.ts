@@ -7,6 +7,11 @@ export class ClassroomChecksSpreadsheetConfig extends GoogleSpreadsheetConfig {
     public buildingsOfficialNameHeader: string = "Official Name";
     public buildingsNicknamesHeader: string = "Nicknames";
 
+    public roomsListSheetName: string = "Rooms List";
+    public roomsListSheetHeaderRow: number = 1;
+    public roomsListBuildingHeader: string = "Building";
+    public roomsListNumberHeader: string = "Room #";
+
     public roomsSheetName: string = "Rooms";
     public roomsSheetHeaderRow: number = 1;
 

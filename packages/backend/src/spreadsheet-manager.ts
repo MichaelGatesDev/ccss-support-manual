@@ -29,11 +29,13 @@ import {
     DeviceType,
     SpreadsheetType,
     SpreadsheetImportMode,
-    ClassroomChecksSpreadsheetVersion
+    ClassroomChecksSpreadsheetVersion,
+    SimpleRoom
 } from '@ccss-support-manual/models';
-import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
+import { SpreadsheetUtils, RoomUtils, BuildingUtils } from "@ccss-support-manual/utilities";
 import { FileUtils } from "@michaelgatesdev/common-io";
 import { app } from "./app";
+import _ from "lodash";
 
 export interface ClassroomChecksSpreadsheetImportResult {
     buildings: Building[];
@@ -400,7 +402,43 @@ export class SpreadsheetManager {
             Logger.info("No rooms sheet defined");
         }
 
-        app.imageManager.initialize(); // create new image directories if needed
+
+        if (ss.roomsListSheetName !== undefined) {
+            let roomsSheet = jsonObjects.get(ss.roomsListSheetName);
+            if (ss.roomsListBuildingHeader !== undefined && ss.roomsListNumberHeader !== undefined) {
+                for (const row of roomsSheet) {
+                    let buildingName = row[ss.roomsListBuildingHeader];
+                    const building = app.buildingManager.getBuildingByName(buildingName);
+                    if (building === undefined) continue; // invalid building name
+                    let roomNumber = row[ss.roomsListNumberHeader];
+                    const room: SimpleRoom = {
+                        buildingName: building.officialName,
+                        number: roomNumber,
+                    };
+
+                    const found = _.find(importedRooms, (toCheck: Room) => {
+                        const checkBuilding = app.buildingManager.getBuildingByName(toCheck.buildingName);
+                        if (checkBuilding === undefined) return undefined;
+                        return (
+                            building.internalName === checkBuilding.internalName &&
+                            room.number.toString().toLowerCase() === toCheck.number.toString().toLowerCase()
+                        );
+                    });
+
+                    if (found === undefined) {
+                        importedRooms.push(
+                            new RoomFactory()
+                                .withBuildingName(room.buildingName)
+                                .withNumber(room.number)
+                                .build()
+                        );
+                        Logger.debug(`Adding incomplete room: ${room.buildingName} ${room.number}`);
+                    }
+                }
+            }
+        }
+
+        // 
 
         return {
             buildings: importedBuildings,
@@ -421,6 +459,14 @@ abstract class ClassroomChecksSpreadsheetBase {
     buildingsSheetName?: string;
     buildingsOfficialNameHeader?: string;
     buildingsNicknamesHeader?: string;
+
+    // =================================== \\
+    //              ROOMS LIST             \\
+    // =================================== \\
+    roomsListSheetName?: string;
+    roomsListSheetHeaderRow?: number;
+    roomsListBuildingHeader?: string;
+    roomsListNumberHeader?: string;
 
     // =================================== \\
     //              ROOMS                  \\
@@ -476,6 +522,11 @@ class ClassroomChecksSpreadsheet_Summer2017 extends ClassroomChecksSpreadsheetBa
         this.roomsSheetName = "Main";
         this.roomsBuildingNameHeader = "Building";
         this.roomsNumberHeader = "Room #";
+
+        this.roomsListSheetName = "Rooms";
+        this.roomsListSheetHeaderRow = 1;
+        this.roomsListBuildingHeader = "Building";
+        this.roomsListNumberHeader = "Room #";
     }
 }
 
@@ -488,6 +539,11 @@ class ClassroomChecksSpreadsheet_Winter2017 extends ClassroomChecksSpreadsheetBa
         this.roomsCapacityHeader = "Capacity";
         this.roomsLockTypeHeader = "Lock Type";
         this.roomsPhoneExtensionHeader = "Phone Extension";
+
+        this.roomsListSheetName = "Rooms";
+        this.roomsListSheetHeaderRow = 1;
+        this.roomsListBuildingHeader = "Building";
+        this.roomsListNumberHeader = "Room #";
     }
 }
 
@@ -500,6 +556,11 @@ class ClassroomChecksSpreadsheet_Summer2018 extends ClassroomChecksSpreadsheetBa
         this.roomsCapacityHeader = "Capacity";
         this.roomsLockTypeHeader = "Lock Type";
         this.roomsPhoneExtensionHeader = "Phone Extension";
+
+        this.roomsListSheetName = "Rooms";
+        this.roomsListSheetHeaderRow = 1;
+        this.roomsListBuildingHeader = "Building";
+        this.roomsListNumberHeader = "Room #";
     }
 }
 
@@ -510,6 +571,10 @@ class ClassroomChecksSpreadsheet_Winter2018 extends ClassroomChecksSpreadsheetBa
         this.buildingsOfficialNameHeader = "Official Name";
         this.buildingsNicknamesHeader = "Other Names";
 
+        this.roomsListSheetName = "Rooms";
+        this.roomsListSheetHeaderRow = 1;
+        this.roomsListBuildingHeader = "Building";
+        this.roomsListNumberHeader = "Room #";
 
         this.roomsSheetName = "Main";
         this.roomsBuildingNameHeader = "Building";
@@ -527,6 +592,11 @@ class ClassroomChecksSpreadsheet_Summer2019 extends ClassroomChecksSpreadsheetBa
         this.buildingsOfficialNameHeader = "Official Name";
         this.buildingsNicknamesHeader = "Nicknames";
 
+        this.roomsListSheetName = "Rooms List";
+        this.roomsListSheetHeaderRow = 1;
+        this.roomsListBuildingHeader = "Building";
+        this.roomsListNumberHeader = "Room #";
+
         this.roomsSheetName = "Rooms";
         this.roomsBuildingNameHeader = "Building";
         this.roomsNumberHeader = "Number";
@@ -534,19 +604,14 @@ class ClassroomChecksSpreadsheet_Summer2019 extends ClassroomChecksSpreadsheetBa
         this.roomsRoomTypeHeader = "Type";
         this.roomsLockTypeHeader = "Lock Type";
         this.roomsCapacityHeader = "Capacity";
-
         this.roomsPhoneExtensionHeader = "Phone Extension";
-
         this.roomsTeachingStationTypeHeader = "Teaching Station Type";
         this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
         this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
-
         this.roomsVideoOutputTypeHeader = "Video Output Type";
         this.roomsDVDPlayerTypeHeader = "DVD Player Type";
-
         this.roomsAudioSystemDependentHeader = "Audio Requires System";
         this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
-
         this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
         this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
     }

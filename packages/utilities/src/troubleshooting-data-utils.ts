@@ -12,14 +12,14 @@ export class TroubleshootingDataUtils {
 
     public static isRoomWhitelisted(data: TroubleshootingData, buildingName: string, roomNumber: string): boolean {
         for (const room of data.whitelistedRooms) {
-            if (room.buildingName === buildingName && room.roomNumber === roomNumber) return true;
+            if (room.buildingName === buildingName && room.number === roomNumber) return true;
         }
         return false;
     }
 
     public static isRoomBlacklisted(data: TroubleshootingData, buildingName: string, roomNumber: string): boolean {
         for (const room of data.blacklistedRooms) {
-            if (room.buildingName === buildingName && room.roomNumber === roomNumber) return true;
+            if (room.buildingName === buildingName && room.number === roomNumber) return true;
         }
         return false;
     }
