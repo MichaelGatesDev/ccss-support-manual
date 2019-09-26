@@ -1,6 +1,14 @@
 export interface Image {
     path: string;
+    actualPath: string;
     type: ImageType;
+
+    thumbnail: ThumbnailImage;
+}
+
+export interface ThumbnailImage {
+    path: string;
+    fileName: string;
 }
 
 export interface BuildingImage extends Image {
@@ -25,10 +33,17 @@ export enum ImageType {
 export class ImageFactory {
 
     private _path: string = "";
+    private _actualPath: string = "";
     private _type: ImageType = ImageType.Other;
+    private _thumb: ThumbnailImage = { fileName: "", path: "" };
 
     public withPath(path: string): ImageFactory {
         this._path = path;
+        return this;
+    }
+
+    public withActualPath(path: string): ImageFactory {
+        this._actualPath = path;
         return this;
     }
 
@@ -37,10 +52,17 @@ export class ImageFactory {
         return this;
     }
 
+    public withThumb(thumb: ThumbnailImage): ImageFactory {
+        this._thumb = thumb;
+        return this;
+    }
+
     public build(): Image {
         return {
             path: this._path,
-            type: this._type
+            actualPath: this._actualPath,
+            type: this._type,
+            thumbnail: this._thumb,
         };
     }
 }

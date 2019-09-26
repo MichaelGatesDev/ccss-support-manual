@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Room, Building } from "@ccss-support-manual/models";
+import { Room, Building, ImageType } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import "./style.scss";
@@ -12,9 +12,10 @@ import RoomCardsGrid from "../../Components/RoomCardsGrid";
 
 import { AppState } from "../../redux/store";
 import { fetchBuilding, fetchBuildings } from "../../redux/buildings/actions";
-import { fetchImages } from "../../redux/images/actions";
+import { fetchBuildingImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
+import ImageCarousel from "../../Components/ImageCarousel";
 
 interface Props {
   match?: any;
@@ -26,7 +27,7 @@ interface Props {
 
   fetchBuildings: Function;
   fetchBuilding: Function;
-  fetchImages: Function;
+  fetchBuildingImages: Function;
 }
 
 interface State {
@@ -49,11 +50,11 @@ class BuildingSection extends Component<Props, State> {
       buildingName,
       fetchBuildings,
       fetchBuilding,
-      fetchImages,
+      fetchBuildingImages,
     } = this.props;
     fetchBuildings();
     fetchBuilding(buildingName);
-    fetchImages();
+    fetchBuildingImages(buildingName);
   }
 
   onSearch(value: string) {
@@ -125,6 +126,12 @@ class BuildingSection extends Component<Props, State> {
         />
         {/* Main content */}
         <section className="container-fluid" id="home-section">
+          <h2>{building.officialName}</h2>
+          <ImageCarousel
+            id="building-panoramas-carousel"
+            height="300"
+            images={imagesState.buildingImages.filter(image => image.type === ImageType.Building).map(image => image.path)}
+          />
           <RoomCardsGrid
             rooms={rooms}
             buildings={buildings}
@@ -145,5 +152,5 @@ const mapStateToProps = (state: AppState, props: Props) => ({
 
 export default connect(
   mapStateToProps,
-  { fetchBuildings, fetchBuilding, fetchImages },
+  { fetchBuildings, fetchBuilding, fetchBuildingImages },
 )(BuildingSection);

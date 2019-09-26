@@ -39,7 +39,7 @@ class RoomCard extends Component<Props, State> {
         <Link to={`/buildings/${building.internalName}/rooms/${room.number}`} target="_blank">
           <div className="card">
             <p className="card-meta"> </p>
-            <img className="card-img-top" src={`/${escape(coverImage)}`} alt={this.getTitle()} />
+            <img className="card-img-top" src={`/${escape(coverImage)}.thumb.jpg`} alt="" />
             <div className="card-body">
               <p className="card-title">{this.getTitle()}</p>
               <p className="card-subtitle">{room.name ? room.name : <br />}</p>

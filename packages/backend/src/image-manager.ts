@@ -23,7 +23,10 @@ export class ImageManager {
         // create buildings dir if it does not exist
         await this.createDirectoryIfNotExists(app.BUILDING_IMAGES_DIR);
 
+        // load images
         await this.loadImages();
+        // generate thumbnails
+        await this.createThumbnails();
 
         // let us know which images we're missing
         this.logMissing();
@@ -45,9 +48,7 @@ export class ImageManager {
     }
 
     public async loadImages(): Promise<void> {
-
         for (const building of app.buildingManager.buildings) {
-
             // building images
             const buildingDir = `${app.BUILDING_IMAGES_DIR}/${building.internalName}`;
             // create building dir if not exists
@@ -103,15 +104,18 @@ export class ImageManager {
         const files = await fs.promises.readdir(dir, { withFileTypes: true });
         const imagesPromise = files.map(async (file) => {
             if (file.isDirectory()) return undefined;
+            if (file.name.endsWith(".thumb.jpg")) return undefined;
 
-            const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
-            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, thumbnailWidth, false);
+            const fileName = file.name;
+            const filePath = `${dir}/${fileName}`;
 
-            const newPath = `${dir}/${file.name}.thumb.jpg`.replace(`${app.PUBLIC_DIR}/`, "");
+            const newPath = filePath.replace(`${app.PUBLIC_DIR}/`, "");
             const image = new BuildingImageFactory(
                 new ImageFactory()
                     .ofType(type)
                     .withPath(newPath)
+                    .withActualPath(filePath)
+                    .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
             )
                 .withBuildingName(buildingName)
@@ -126,15 +130,18 @@ export class ImageManager {
         const files = await fs.promises.readdir(dir, { withFileTypes: true });
         const imagesPromise = files.map(async (file) => {
             if (file.isDirectory()) return undefined;
+            if (file.name.endsWith(".thumb.jpg")) return undefined;
 
-            const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.roomImageThumbnailWidth : 350;
-            await this.createThumbnailIfNotExists(`${dir}/${file.name}`, thumbnailWidth, false);
+            const fileName = file.name;
+            const filePath = `${dir}/${fileName}`;
 
-            const newPath = `${dir}/${file.name}.thumb.jpg`.replace(`${app.PUBLIC_DIR}/`, "");
+            const newPath = filePath.replace(`${app.PUBLIC_DIR}/`, "");
             const image = new RoomImageFactory(
                 new ImageFactory()
                     .ofType(type)
                     .withPath(newPath)
+                    .withActualPath(filePath)
+                    .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
             )
                 .withBuildingName(buildingName)
@@ -155,36 +162,34 @@ export class ImageManager {
         return false;
     }
 
+    private async createThumbnails(): Promise<void> {
+        for (const image of this.getAllImages()) {
+            if (this.isThumbnail(image.path) || await this.hasThumbnail(image.actualPath)) continue; // don't create thumbnails for thumbnails
+            const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
+            await this.createThumbnail(`${app.PUBLIC_DIR}/${image.path}`, `${app.PUBLIC_DIR}/${image.thumbnail.path}`, thumbnailWidth);
+        }
+    }
+
     public async createThumbnail(path: string, dest: string, width: number, height?: number): Promise<void> {
         try {
+            Logger.debug(`Creating thumbnail for ${path} (width: ${width})...`);
             await sharp(path)
                 .resize(width, height)
                 .jpeg({ quality: 100 })
                 .toFile(dest);
-        } catch (e) {
-            throw e;
+            Logger.info(`Created thumbnail for ${path} (width: ${width})!`);
+        } catch (error) {
+            Logger.error(`Error while generating thumbnail for ${path}`);
+            Logger.error(error);
         }
     }
 
-    private async createThumbnailIfNotExists(path: string, width: number, forceCreate?: boolean): Promise<void> {
-        if (!this.isThumb(path) && (!await this.hasThumb(`${path}`) || forceCreate)) {
-            Logger.warning(`No thumbnail exists for ${path}`);
-            try {
-                await this.createThumbnail(`${path}`, `${path}.thumb.jpg`, width);
-                Logger.info(`Created thumbnail for ${path} (width: ${width})`);
-            } catch (error) {
-                Logger.error(`Error while generating thumbnail for ${path}`);
-                Logger.error(error);
-            }
-        }
+    private isThumbnail(name: string): boolean {
+        return name.toLowerCase().includes(".thumb.jpg");
     }
 
-    private isThumb(name: string): boolean {
-        return name.toLowerCase().endsWith(".thumb.jpg");
-    }
-
-    private async hasThumb(name: string): Promise<boolean> {
-        return await FileUtils.checkExists(`${name}.thumb.jpg`);
+    private async hasThumbnail(path: string): Promise<boolean> {
+        return await FileUtils.checkExists(`${path}.thumb.jpg`);
     }
 
     public getImagesForBuilding(buildingName: string): BuildingImage[] {

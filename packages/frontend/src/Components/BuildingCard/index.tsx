@@ -33,7 +33,7 @@ export default class BuildingCard extends PureComponent<Props, State> {
         <Link to={`buildings/${building.internalName}/`} target="_blank">
           <div className="card">
             <p className="card-meta"> </p>
-            <img className="card-img-top" src={`/${escape(coverImage)}`} alt={building.internalName} />
+            <img className="card-img-top" src={`/${escape(coverImage)}.thumb.jpg`} alt="" />
             <div className="card-body">
               <p className="card-title">{building.officialName}</p>
               <p className="card-subtitle">{building.nicknames ? building.nicknames.join(", ") : <br />}</p>
