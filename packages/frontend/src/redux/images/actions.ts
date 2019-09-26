@@ -5,7 +5,7 @@ import {
 } from "@ccss-support-manual/models";
 import { ImageUtils } from "@ccss-support-manual/utilities";
 import { Dispatch } from "redux";
-import { FETCH_IMAGES, FETCH_BUILDING_IMAGES } from "./types";
+import { FETCH_IMAGES, FETCH_BUILDING_IMAGES, FETCH_BUILDING_ROOM_IMAGES } from "./types";
 
 export function fetchImages() {
   return (dispatch: Dispatch) => {
@@ -43,6 +43,23 @@ export function fetchBuildingImages(buildingName: string) {
         });
       }).catch(error => {
         console.error(`Failed to fetch images for building ${buildingName}`);
+        console.error(error);
+      });
+  };
+}
+export function fetchRoomImagesForBuilding(buildingName: string) {
+  return (dispatch: Dispatch) => {
+    fetch(`/api/v1/images/buildings/${buildingName}/rooms`)
+      .then(response => response.json())
+      .then((images: RoomImage[]) => {
+        dispatch({
+          type: FETCH_BUILDING_ROOM_IMAGES,
+          payload: {
+            images,
+          },
+        });
+      }).catch(error => {
+        console.error(`Failed to fetch room images for building ${buildingName}`);
         console.error(error);
       });
   };

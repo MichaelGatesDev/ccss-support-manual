@@ -3,6 +3,7 @@ import {
   ImagesState,
   FETCH_IMAGES,
   FETCH_BUILDING_IMAGES,
+  FETCH_BUILDING_ROOM_IMAGES,
 } from "./types";
 
 const initialState: ImagesState = {
@@ -29,6 +30,12 @@ export function imagesReducer(state = initialState, action: ImagesActionTypes): 
         ...state,
         imagesLoading: false,
         buildingImages: action.payload.images,
+      };
+    case FETCH_BUILDING_ROOM_IMAGES:
+      return {
+        ...state,
+        imagesLoading: false,
+        roomImages: action.payload.images,
       };
     default:
       return state;

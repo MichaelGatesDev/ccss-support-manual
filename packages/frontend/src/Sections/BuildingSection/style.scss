@@ -1,0 +1,11 @@
+#building-section {
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .ImageCarousel-Component {
+        width: 85%;
+        padding: 1em 0;
+    }
+}

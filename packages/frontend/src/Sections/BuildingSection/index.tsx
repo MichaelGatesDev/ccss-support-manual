@@ -12,7 +12,7 @@ import RoomCardsGrid from "../../Components/RoomCardsGrid";
 
 import { AppState } from "../../redux/store";
 import { fetchBuilding, fetchBuildings } from "../../redux/buildings/actions";
-import { fetchBuildingImages } from "../../redux/images/actions";
+import { fetchBuildingImages, fetchRoomImagesForBuilding } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import ImageCarousel from "../../Components/ImageCarousel";
@@ -28,6 +28,7 @@ interface Props {
   fetchBuildings: Function;
   fetchBuilding: Function;
   fetchBuildingImages: Function;
+  fetchRoomImagesForBuilding: Function;
 }
 
 interface State {
@@ -51,10 +52,12 @@ class BuildingSection extends Component<Props, State> {
       fetchBuildings,
       fetchBuilding,
       fetchBuildingImages,
+      fetchRoomImagesForBuilding,
     } = this.props;
     fetchBuildings();
     fetchBuilding(buildingName);
     fetchBuildingImages(buildingName);
+    fetchRoomImagesForBuilding(buildingName);
   }
 
   onSearch(value: string) {
@@ -125,13 +128,29 @@ class BuildingSection extends Component<Props, State> {
           fixed
         />
         {/* Main content */}
-        <section className="container-fluid" id="home-section">
+        <section className="container-fluid" id="building-section">
+
           <h2>{building.officialName}</h2>
           <ImageCarousel
             id="building-panoramas-carousel"
-            height="300"
+            height="300px"
             images={imagesState.buildingImages.filter(image => image.type === ImageType.Building).map(image => image.path)}
           />
+
+          <h3>Description</h3>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Earum quibusdam nisi nihil repudiandae quidem ipsam?
+            Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Earum quibusdam nisi nihil repudiandae quidem ipsam?
+            Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            Earum quibusdam nisi nihil repudiandae quidem ipsam?
+            Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
+          </p>
+
+          <h3>Rooms</h3>
           <RoomCardsGrid
             rooms={rooms}
             buildings={buildings}
@@ -152,5 +171,10 @@ const mapStateToProps = (state: AppState, props: Props) => ({
 
 export default connect(
   mapStateToProps,
-  { fetchBuildings, fetchBuilding, fetchBuildingImages },
+  {
+    fetchBuildings,
+    fetchBuilding,
+    fetchBuildingImages,
+    fetchRoomImagesForBuilding,
+  },
 )(BuildingSection);
