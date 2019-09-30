@@ -51,31 +51,16 @@ class Home extends Component<Props, State> {
     });
   }
 
-  getParentBuilding(room: Room): Building | undefined {
-    const { buildingsState } = this.props;
-    for (const building of buildingsState.buildings) {
-      if (BuildingUtils.hasName(building, room.buildingName)) return building;
-    }
-    return undefined;
-  }
-
-  getAllRooms(): Room[] {
-    const { buildingsState } = this.props;
-    let result: Room[] = [];
-    for (const building of buildingsState.buildings) {
-      result = result.concat(building.rooms);
-    }
-    return result;
-  }
-
   private isLoading(): boolean {
     const { buildingsState, imagesState } = this.props;
     return buildingsState.buildingsLoading || imagesState.imagesLoading;
   }
 
   filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
+    const { buildingsState } = this.props;
+    const { buildings } = buildingsState;
     return rooms.filter((room: Room) => {
-      const pb: Building | undefined = this.getParentBuilding(room);
+      const pb: Building | undefined = BuildingUtils.getParentBuilding(room, buildings);
       if (pb === undefined) return false;
       return (
         (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
@@ -94,11 +79,12 @@ class Home extends Component<Props, State> {
 
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
+    const { buildings } = buildingsState;
 
     const query = filterSearch;
     const queries = query.split(" ");
 
-    let rooms = _.sortBy(this.getAllRooms(), ["buildingName", "number"]);
+    let rooms = _.sortBy(BuildingUtils.getAllRooms(buildings), ["buildingName", "number"]);
 
     if (queries.length > 0) {
       for (let query of queries) {

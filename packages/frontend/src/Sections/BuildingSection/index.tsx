@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Room, Building, ImageType } from "@ccss-support-manual/models";
+import { Room, ImageType } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import "./style.scss";
@@ -71,17 +71,11 @@ class BuildingSection extends Component<Props, State> {
     return buildingsState.buildingsLoading || imagesState.imagesLoading;
   }
 
-  private getParentBuilding(room: Room): Building | undefined {
-    const { buildingsState } = this.props;
-    for (const building of buildingsState.buildings) {
-      if (BuildingUtils.hasName(building, room.buildingName)) return building;
-    }
-    return undefined;
-  }
-
   private filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
+    const { buildingsState } = this.props;
+    const { buildings } = buildingsState;
     return rooms.filter((room: Room) => {
-      const pb: Building | undefined = this.getParentBuilding(room);
+      const pb = BuildingUtils.getParentBuilding(room, buildings);
       if (pb === undefined) return false;
       return (
         (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||

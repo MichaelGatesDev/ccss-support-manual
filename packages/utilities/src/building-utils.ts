@@ -59,4 +59,13 @@ export class BuildingUtils {
         return undefined;
     }
 
+
+    public static getAllRooms(buildings: Building[]): Room[] {
+        let result: Room[] = [];
+        for (const building of buildings) {
+            result = result.concat(building.rooms);
+        }
+        return result;
+    }
+
 }
