@@ -29,6 +29,8 @@ module.exports = {
       "error",
       "always"
     ],
+    "brace-style": "off",
+    "@typescript-eslint/brace-style": 0,
     "max-len": 0,
     "import/no-extraneous-dependencies": 0,
     "import/prefer-default-export": 0,

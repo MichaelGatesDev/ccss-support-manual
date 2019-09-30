@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { Room, Building } from "@ccss-support-manual/models";
@@ -92,7 +92,7 @@ class BuildingsSection extends Component<Props, State> {
     }
 
     return (
-      <Fragment>
+      <>
         {/* Top navigation */}
         <NavBar
           title="CCSS Support Manual"
@@ -107,7 +107,7 @@ class BuildingsSection extends Component<Props, State> {
             images={imagesState}
           />
         </section>
-      </Fragment>
+      </>
     );
   }
 }

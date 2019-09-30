@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { Fragment, PureComponent } from "react";
+import React, { PureComponent } from "react";
 import shortid from "shortid";
 
 
@@ -50,9 +50,10 @@ export default class ImageCarousel extends PureComponent<Props, State> {
               items
             }
           </div>
-          {images.length > 1 &&
+          {
+            images.length > 1 &&
             (
-              <Fragment>
+              <>
                 <a className="carousel-control-prev" href={`#${id}`} role="button" data-slide="prev">
                   <span className="carousel-control-prev-icon" aria-hidden="true" />
                   <span className="sr-only">Previous</span>
@@ -61,7 +62,7 @@ export default class ImageCarousel extends PureComponent<Props, State> {
                   <span className="carousel-control-next-icon" aria-hidden="true" />
                   <span className="sr-only">Next</span>
                 </a>
-              </Fragment>
+              </>
             )
           }
         </div>

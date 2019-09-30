@@ -56,19 +56,21 @@ export default class BackToTopButton extends Component<Props, State> {
     // if (!visible) return null;
     return (
       <PoseGroup flipMove={false}>
-        {visible &&
+        {
+          visible &&
           (
             <BackToTopButtonDiv className="BackToTopButton-Component" key="back-to-top-button">
               <button
+                id="backToTop"
                 type="submit"
                 className="btn btn-primary"
                 onClick={this.onClick}
                 data-toggle="tooltip"
                 title="Back to Top"
               >
-                {/* eslint jsx-a11y/label-has-associated-control: 0 */}
-                {/* eslint jsx-a11y/label-has-for: 0 */}
-                <label htmlFor="backToTop"><i className="fas fa-arrow-alt-circle-up" /></label>
+                <span>
+                  <i className="fas fa-arrow-alt-circle-up" />
+                </span>
               </button>
             </BackToTopButtonDiv>
           )

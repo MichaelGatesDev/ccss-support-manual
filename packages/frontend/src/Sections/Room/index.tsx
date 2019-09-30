@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import _ from "lodash";
 
 import "./style.scss";
@@ -153,7 +153,7 @@ export default class RoomSection extends Component<Props, State> {
 
     if (loading) return <LoadingSplash />;
     return (
-      <Fragment>
+      <>
         <NavBar
           title="CCSS Support Manual"
           searchable={false}
@@ -202,32 +202,33 @@ export default class RoomSection extends Component<Props, State> {
               <h5>Technology</h5>
               <hr />
 
-              <Fragment>
+              <>
                 <p className="detail-header">
                   Audio
                 </p>
                 <span>
-                  {room.audioRequiresProjector ?
-                    (
-                      <i
-                        className="fas fa-volume-up"
-                        style={{ color: "orange" }}
-                        data-toggle="tooltip"
-                        title="Audio requires projector"
-                      />
-                    )
-                    :
-                    (
-                      <i
-                        className="fas fa-volume-up"
-                        style={{ color: "gray" }}
-                        data-toggle="tooltip"
-                        title="Audio does not require projector"
-                      />
-                    )
+                  {
+                    room.audioRequiresProjector ?
+                      (
+                        <i
+                          className="fas fa-volume-up"
+                          style={{ color: "orange" }}
+                          data-toggle="tooltip"
+                          title="Audio requires projector"
+                        />
+                      )
+                      :
+                      (
+                        <i
+                          className="fas fa-volume-up"
+                          style={{ color: "gray" }}
+                          data-toggle="tooltip"
+                          title="Audio does not require projector"
+                        />
+                      )
                   }
                 </span>
-              </Fragment>
+              </>
 
             </div>
           </div>
@@ -277,7 +278,7 @@ export default class RoomSection extends Component<Props, State> {
           </p>
 
         </section>
-      </Fragment>
+      </>
     );
   }
 }

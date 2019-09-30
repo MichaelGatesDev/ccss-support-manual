@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { PureComponent, Fragment, ChangeEvent } from "react";
+import React, { PureComponent, ChangeEvent } from "react";
 import { EnumUtils } from "@michaelgatesdev/common";
 import {
   SpreadsheetImportMode,
@@ -229,7 +229,7 @@ export default class Settings extends PureComponent<Props, State> {
     } = this.state;
 
     return (
-      <Fragment>
+      <>
         {/* Top navigation */}
         <NavBar
           title="CCSS Support Manual"
@@ -377,7 +377,7 @@ export default class Settings extends PureComponent<Props, State> {
           </div>
 
         </section>
-      </Fragment>
+      </>
     );
   }
 }

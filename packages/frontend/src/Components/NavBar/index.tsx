@@ -64,7 +64,8 @@ class NavBar extends Component<Props, State> {
           {/* Center */}
           <div className="mx-auto order-1 w-75">
 
-            {searchable &&
+            {
+              searchable &&
               (
                 <FormInput
                   type="text"
