@@ -122,34 +122,82 @@ class BuildingSection extends Component<Props, State> {
           fixed
         />
         {/* Main content */}
-        <section className="container-fluid" id="building-section">
+        <section className="container" id="building-section">
 
-          <h2>{building.officialName}</h2>
-          <ImageCarousel
-            id="building-panoramas-carousel"
-            height="300px"
-            images={imagesState.buildingImages.filter(image => image.type === ImageType.Building).map(image => image.path)}
-          />
+          {/* Meta */}
+          <div className="row">
+            {/* Photos */}
+            <div className="col-sm">
+              <ImageCarousel
+                id="building-panoramas-carousel"
+                height="300px"
+                images={imagesState.buildingImages.filter(image => image.type === ImageType.Building).map(image => image.path)}
+              />
+            </div>
+            {/* Info */}
+            <div className="col">
+              {/* Building Name Header */}
+              <div className="row">
+                <div className="col">
+                  <h2>Official Name</h2>
+                </div>
+              </div>
+              {/* Building Name */}
+              <div className="row">
+                <div className="col">
+                  <p>{building.officialName}</p>
+                </div>
+              </div>
+              {/* Nicknames Header */}
+              <div className="row">
+                <div className="col">
+                  <h2>Nicknames</h2>
+                </div>
+              </div>
+              {/* Nicknames */}
+              <div className="row">
+                <div className="col">
+                  <p>
+                    Nicknames:&nbsp;
+                    {building.nicknames.join(", ")}
+                  </p>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <h2>Description</h2>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Earum quibusdam nisi nihil repudiandae quidem ipsam?
+                    Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <h3>Description</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Earum quibusdam nisi nihil repudiandae quidem ipsam?
-            Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Earum quibusdam nisi nihil repudiandae quidem ipsam?
-            Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Earum quibusdam nisi nihil repudiandae quidem ipsam?
-            Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
-          </p>
+          <div className="row">
+            <div className="col">
+              <h2>Rooms</h2>
+            </div>
+          </div>
 
-          <h3>Rooms</h3>
-          <RoomCardsGrid
-            rooms={rooms}
-            buildings={buildings}
-            images={imagesState}
-          />
+          <div className="row">
+            <div className="col">
+              <RoomCardsGrid
+                rooms={rooms}
+                buildings={buildings}
+                images={imagesState}
+              />
+            </div>
+          </div>
+
+
         </section>
       </>
     );
