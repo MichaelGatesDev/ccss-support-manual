@@ -87,14 +87,14 @@ export class ImageManager {
                 const panoramasDir = `${roomDir}/panoramas`;
                 // create panoramas dir if it doesnt exist
                 await this.createDirectoryIfNotExists(panoramasDir);
-                const panoramicImages = await this.createRoomImagesFromDirectory(titlesDir, building.internalName, room.number.toString(), ImageType.RoomPanorama);
+                const panoramicImages = await this.createRoomImagesFromDirectory(panoramasDir, building.internalName, room.number.toString(), ImageType.RoomPanorama);
                 this.roomImages.push(...panoramicImages);
 
                 // equipment images
                 const equipmentDir = `${roomDir}/equipment`;
                 // create equipment dir if it doesnt exist
                 await this.createDirectoryIfNotExists(equipmentDir);
-                const equipmentImages = await this.createRoomImagesFromDirectory(titlesDir, building.internalName, room.number.toString(), ImageType.RoomEquipment);
+                const equipmentImages = await this.createRoomImagesFromDirectory(equipmentDir, building.internalName, room.number.toString(), ImageType.RoomEquipment);
                 this.roomImages.push(...equipmentImages);
             }
         }
