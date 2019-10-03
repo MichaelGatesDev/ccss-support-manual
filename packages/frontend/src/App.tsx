@@ -12,6 +12,7 @@ import BuildingSection from "./Sections/BuildingSection";
 import BuildingsSection from "./Sections/BuildingsSection";
 
 import BackToTopButton from "./Components/BackToTopButton";
+import RoomSection from "./Sections/RoomSection";
 
 
 export default function App() {
@@ -24,15 +25,15 @@ export default function App() {
         />
         <div className="App">
           <Route exact path="/" component={Home} />
-          <Route exact path="/settings" component={Settings} />
+          <Route path="/settings" component={Settings} />
 
           <Route exact path="/buildings" component={BuildingsSection} />
-          <Route path="/buildings/:buildingName" component={BuildingSection} />
+          <Route exact path="/buildings/:buildingName" component={BuildingSection} />
           {/* <Route path="/buildings/:buildingName/rooms" component={Rooms} /> */}
           {/* <Route exact path="/buildings/create" component={CreateBuilding} /> */}
 
+          <Route path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
           {/* <Route exact path="/buildings/:buildingName/rooms/create" component={CreateRoom} /> */}
-          {/* <Route path="/buildings/:buildingName/rooms/:roomNumber" component={Room} /> */}
         </div>
       </BrowserRouter>
     </Provider>

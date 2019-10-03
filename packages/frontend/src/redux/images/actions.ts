@@ -47,6 +47,7 @@ export function fetchBuildingImages(buildingName: string) {
       });
   };
 }
+
 export function fetchRoomImagesForBuilding(buildingName: string) {
   return (dispatch: Dispatch) => {
     fetch(`/api/v1/images/buildings/${buildingName}/rooms`)
@@ -60,6 +61,25 @@ export function fetchRoomImagesForBuilding(buildingName: string) {
         });
       }).catch(error => {
         console.error(`Failed to fetch room images for building ${buildingName}`);
+        console.error(error);
+      });
+  };
+}
+
+
+export function fetchRoomImagesForRoom(buildingName: string, roomNumber: string | number) {
+  return (dispatch: Dispatch) => {
+    fetch(`/api/v1/images/buildings/${buildingName}/rooms/${roomNumber}`)
+      .then(response => response.json())
+      .then((images: RoomImage[]) => {
+        dispatch({
+          type: FETCH_BUILDING_ROOM_IMAGES,
+          payload: {
+            images,
+          },
+        });
+      }).catch(error => {
+        console.error(`Failed to fetch room images for room ${buildingName} ${roomNumber}`);
         console.error(error);
       });
   };

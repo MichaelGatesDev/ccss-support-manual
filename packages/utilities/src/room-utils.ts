@@ -29,7 +29,7 @@ import _ from "lodash";
 
 export class RoomUtils {
 
-    public static RoomNumberPattern: RegExp = /[\d]{3}[A-Za-z]{0,1}/; //TODO make this configurable
+    public static RoomNumberPattern = /[\d]{3}[A-Za-z]{0,1}/; //TODO make this configurable
 
     public static exampleRoom = new RoomFactory()
         .withBuildingName(BuildingUtils.exampleBuilding.officialName)
@@ -111,12 +111,8 @@ export class RoomUtils {
      * Gets a room within the building with the specified number
      * @param number The room number
      */
-    public static getRoomByNumber(building: Building, number: string): Room | undefined {
-        for (const room of building.rooms) {
-            if (room.number === number)
-                return room;
-        }
-        return undefined;
+    public static getRoomByNumber(building: Building, number: string | number): Room | undefined {
+        return building.rooms.find((room) => `${room.number}` === `${number}`);
     }
 
     public static getSimplified(room: Room): SimpleRoom {

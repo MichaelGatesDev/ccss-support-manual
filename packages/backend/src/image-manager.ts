@@ -198,15 +198,9 @@ export class ImageManager {
         return this.buildingImages.filter((image: BuildingImage) => BuildingUtils.hasName(building, image.buildingName));
     }
 
-
     public getImagesForRoom(buildingName: string, roomNumber: string): RoomImage[] {
-        return this.roomImages.filter((image: RoomImage) => {
-            const building = app.buildingManager.getBuildingByName(buildingName);
-            if (building === undefined) return false;
-            return BuildingUtils.hasName(building, image.buildingName) && image.roomNumber === roomNumber;
-        });
+        return this.roomImages.filter(image => image.buildingName === buildingName && image.roomNumber === roomNumber);
     }
-
 
     public getAllImages(): Image[] {
         return [

@@ -25,7 +25,7 @@ export default class ImageCarousel extends PureComponent<Props, State> {
       <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={shortid.generate()}>
         <img
           className="d-block"
-          src={`/${image}`}
+          src={`/${escape(image)}`}
           style={{ height }}
           alt=""
         />
