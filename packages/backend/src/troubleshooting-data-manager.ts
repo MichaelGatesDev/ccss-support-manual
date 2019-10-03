@@ -12,8 +12,16 @@ export class TroubleshootingDataManager {
         this.troubleshootingData = [];
     }
 
-    public addTroubleshootingData(data: TroubleshootingData): void {
+    public add(data: TroubleshootingData): void {
         this.troubleshootingData.push(data);
+    }
+
+    public addAll(data: TroubleshootingData[]): void {
+        this.troubleshootingData.push(...data);
+    }
+
+    public getTroubleshootingData(): TroubleshootingData[] {
+        return this.troubleshootingData;
     }
 
     public getTroubleshootingDataForRoom(buildingName: string, roomNumber: string): TroubleshootingData[] {
@@ -90,4 +98,9 @@ export class TroubleshootingDataManager {
 
         return results;
     }
+
+    public clear(): void {
+        this.troubleshootingData = [];
+    }
+
 }

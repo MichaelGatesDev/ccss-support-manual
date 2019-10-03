@@ -84,6 +84,7 @@ export default class Settings extends PureComponent<Props, State> {
   import = () => {
     const {
       file,
+      fileType,
       fileVersion,
       importMode,
     } = this.state;
@@ -105,11 +106,9 @@ export default class Settings extends PureComponent<Props, State> {
       }
     }
 
-    console.debug(`${file.name} ${fileVersion} ${importMode}`);
-
     console.debug("Beginning upload..");
     this.setState({ uploading: true }, () => {
-      fetch("/api/v1/upload/classroom-checks", { method: "POST", body: data })
+      fetch(`/api/v1/upload/${fileType === SpreadsheetType.ClassroomChecks ? "classroom-checks" : "troubleshooting-data"}`, { method: "POST", body: data })
         .then(() => {
           this.setState({ uploading: false }, () => {
             console.debug("Upload complete");
@@ -129,6 +128,44 @@ export default class Settings extends PureComponent<Props, State> {
     const { value } = target;
     this.setState({
       selectedRestorePoint: value,
+    });
+  };
+
+  onImportTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { target } = event;
+    if (target === null) return;
+    const { value } = target;
+    if (value === null || value === undefined) return;
+    const parsed = EnumUtils.parse(SpreadsheetType, value);
+    if (parsed === undefined) return;
+    this.setState({
+      fileType: parsed,
+    });
+  };
+
+  onImportVersionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { target } = event;
+    if (target === null) return;
+    const { value } = target;
+    if (value === null || value === undefined) return;
+    const { fileType } = this.state;
+
+    const parsed = EnumUtils.parse(fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion : TroubleshootingSpreadsheetVersion, value);
+    if (parsed === undefined) return;
+    this.setState({
+      fileVersion: parsed,
+    });
+  };
+
+  onImportModeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { target } = event;
+    if (target === null) return;
+    const { value } = target;
+    if (value === null || value === undefined) return;
+    const parsed = EnumUtils.parse(SpreadsheetImportMode, value);
+    if (parsed === undefined) return;
+    this.setState({
+      importMode: parsed,
     });
   };
 
@@ -176,44 +213,6 @@ export default class Settings extends PureComponent<Props, State> {
         console.error("Failed to save ");
         console.error(error);
       });
-  };
-
-  onImportTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    if (target === null) return;
-    const { value } = target;
-    if (value === null || value === undefined) return;
-    const parsed = EnumUtils.parse(SpreadsheetType, value);
-    if (parsed === undefined) return;
-    this.setState({
-      fileType: parsed,
-    });
-  };
-
-  onImportVersionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    if (target === null) return;
-    const { value } = target;
-    if (value === null || value === undefined) return;
-    const { fileType } = this.state;
-
-    const parsed = EnumUtils.parse(fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion : TroubleshootingSpreadsheetVersion, value);
-    if (parsed === undefined) return;
-    this.setState({
-      fileVersion: parsed,
-    });
-  };
-
-  onImportModeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    if (target === null) return;
-    const { value } = target;
-    if (value === null || value === undefined) return;
-    const parsed = EnumUtils.parse(SpreadsheetImportMode, value);
-    if (parsed === undefined) return;
-    this.setState({
-      importMode: parsed,
-    });
   };
 
   render() {

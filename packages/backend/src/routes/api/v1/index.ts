@@ -23,9 +23,8 @@ router.get("/", (_req: Request, res: Response): void => {
   res.status(200).send("This is the primary API v1 route");
 });
 
-router.get("/save", (_req: Request, res: Response): void => {
-  app.dataManager.saveBuildings();
-  app.dataManager.saveRooms();
+router.get("/save", async (_req: Request, res: Response): Promise<void> => {
+  await app.dataManager.save();
   res.status(200).json({});
 });
 

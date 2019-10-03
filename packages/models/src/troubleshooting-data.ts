@@ -13,16 +13,13 @@ export interface TroubleshootingData {
 
 
 export class TroubleshootingDataFactory {
-    private _title: string = "";
-    private _description: string = "";
-    private _solution: string = "";
+    private _title = "";
+    private _description = "";
+    private _solution = "";
     private _types: string[] = [];
     private _tags: string[] = [];
     private _whitelistedRooms: SimpleRoom[] = [];
     private _blacklistedRooms: SimpleRoom[] = [];
-
-    public constructor() {
-    }
 
     public withTitle(title: string): TroubleshootingDataFactory {
         this._title = title;

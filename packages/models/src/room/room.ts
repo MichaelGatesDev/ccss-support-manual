@@ -48,16 +48,38 @@ export interface SimpleRoom {
     number: string | number;
 }
 
+export class SimpleRoomFactory {
+    private _buildingName = "";
+    private _roomNumber: string | number = "";
+
+    public withBuildingName(name: string): SimpleRoomFactory {
+        this._buildingName = name;
+        return this;
+    }
+
+    public withRoomNumber(number: string | number): SimpleRoomFactory {
+        this._roomNumber = number;
+        return this;
+    }
+
+    public build(): SimpleRoom {
+        return {
+            buildingName: this._buildingName,
+            number: this._roomNumber
+        };
+    }
+}
+
 
 
 export class RoomFactory {
 
-    private _buildingName: string = "";
+    private _buildingName = "";
     private _number: string | number = "";
-    private _name: string = "";
+    private _name = "";
     private _type: RoomType = RoomType.Other;
     private _lockType: LockType = LockType.Other;
-    private _capacity: number = -1;
+    private _capacity = -1;
 
     public constructor(room?: Room) {
         if (room === undefined) return;

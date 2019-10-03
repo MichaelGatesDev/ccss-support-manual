@@ -2,13 +2,14 @@ import { Logger, StringUtils } from '@michaelgatesdev/common';
 import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from './app';
-import { BuildingUtils, RoomUtils } from '@ccss-support-manual/utilities';
-import { Building, Room } from '@ccss-support-manual/models';
+import { BuildingUtils, RoomUtils, TroubleshootingDataUtils } from '@ccss-support-manual/utilities';
+import { Building, Room, TroubleshootingData } from '@ccss-support-manual/models';
 
 
 export class DataManager {
     private buildingsFilePath?: string;
     private roomsFilePath?: string;
+    private troubleshootingDataFilePath?: string;
 
     public async initialize(): Promise<void> {
 
@@ -47,11 +48,30 @@ export class DataManager {
         const loadedRooms = await this.loadRoomsFile();
         app.roomManager.addRooms(loadedRooms);
         Logger.info(`Loaded ${loadedRooms.length} rooms`);
+
+        // troubleshooting data file
+        this.troubleshootingDataFilePath = `${app.DATA_DIR}/troubleshooting.json`
+        if (!await FileUtils.checkExists(this.troubleshootingDataFilePath)) {
+            Logger.info(`No troubleshooting data file found at ${this.troubleshootingDataFilePath}. Creating default...`);
+            try {
+                const result = await this.createDefaultTroubleshootingDataFile();
+                if (result) {
+                    Logger.info("Created default troubleshooting data file");
+                }
+            } catch (error) {
+                Logger.error("There was an error while trying to create the default troubleshooting data file");
+                Logger.error(error);
+            }
+        }
+        const loadedData = await this.loadTroubleshootingDataFile();
+        app.troubleshootingDataManager.addAll(loadedData);
+        Logger.info(`Loaded ${loadedData.length} troubleshooting entries`);
     }
 
     public async reinitialize(): Promise<void> {
         app.roomManager.clear();
         app.buildingManager.clear();
+        app.troubleshootingDataManager.clear();
         //TODO clear troubleshooting data
         //TODO clear images
         // app.imageManager.clear();
@@ -145,12 +165,56 @@ export class DataManager {
         return json;
     }
 
+
+    /**
+     * Saves all of the troubleshooting data currently stored in the RoomManager
+     * @returns true if successful otherwise false
+     */
+    public async saveTroubleshootingData(): Promise<boolean> {
+        return await this.writeTroubleshootingDataFile(app.troubleshootingDataManager.getTroubleshootingData());
+    }
+
+    /**
+     * Creates the troubleshooting data file with an example room
+     * @returns true if successful otherwise false
+     */
+    private async createDefaultTroubleshootingDataFile(): Promise<boolean> {
+        return await this.writeTroubleshootingDataFile([TroubleshootingDataUtils.exampleData]);
+    }
+
+    /**
+     * Writes the specified troubleshooting data
+     * Note: overwrites, does not append
+     * @param data The troubleshooting data to be written to the file
+     * @returns true if successful otherwise false
+     */
+    private async writeTroubleshootingDataFile(data: TroubleshootingData[]): Promise<boolean> {
+        if (this.troubleshootingDataFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
+        return await FileUtils.writeJSON(
+            this.troubleshootingDataFilePath,
+            data
+        );
+    }
+
+    /**
+     * Loads troubleshooting data
+     * @returns an array of the loaded troubleshooting data
+     */
+    private async loadTroubleshootingDataFile(): Promise<TroubleshootingData[]> {
+        if (this.troubleshootingDataFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
+        const json = await FileUtils.readJSON<TroubleshootingData[]>(this.troubleshootingDataFilePath);
+        if (json === undefined) throw new Error("Troubleshooting Data is corrupted");
+        return json;
+    }
+
+
+
     public async backup(): Promise<void> {
         Logger.info("Performing backup...");
         const now = new Date();
 
         const month = StringUtils.pad(`${now.getMonth()}`, "0", 2);
-        const day = StringUtils.pad(`${now.getMonth()}`, "0", 2);
+        const day = StringUtils.pad(`${now.getDate()}`, "0", 2);
         const hours = StringUtils.pad(`${now.getHours()}`, "0", 2);
         const minutes = StringUtils.pad(`${now.getMinutes()}`, "0", 2);
         const seconds = StringUtils.pad(`${now.getSeconds()}`, "0", 2);
@@ -185,6 +249,18 @@ export class DataManager {
         await FileUtils.copy(`${path}/settings`, app.SETTINGS_DIR);
 
         await this.reinitialize();
+    }
+
+    public async save() {
+        Logger.info("Saving buildings data...");
+        await this.saveBuildings();
+        Logger.info("Finished saving buildings data");
+        Logger.info("Saving rooms data...");
+        await this.saveRooms();
+        Logger.info("Finished saving rooms data");
+        Logger.info("Saving troubleshooting data...");
+        await this.saveTroubleshootingData();
+        Logger.info("Finished saving troubleshooting data");
     }
 
 }

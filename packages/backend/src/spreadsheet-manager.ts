@@ -30,7 +30,10 @@ import {
     SpreadsheetType,
     SpreadsheetImportMode,
     ClassroomChecksSpreadsheetVersion,
-    SimpleRoom
+    SimpleRoom,
+    TroubleshootingData,
+    TroubleshootingDataFactory,
+    SimpleRoomFactory
 } from '@ccss-support-manual/models';
 import { SpreadsheetUtils, RoomUtils, BuildingUtils } from "@ccss-support-manual/utilities";
 import { FileUtils } from "@michaelgatesdev/common-io";
@@ -43,6 +46,7 @@ export interface ClassroomChecksSpreadsheetImportResult {
 }
 
 export interface TroubleshootingSpreadsheetImportResult {
+    troubleshootingData: TroubleshootingData[];
 }
 
 
@@ -447,7 +451,88 @@ export class SpreadsheetManager {
     }
 
     public static async importTroubleshooting(path: string): Promise<TroubleshootingSpreadsheetImportResult> {
-        throw new Error("Method not implemented.");
+        let ss = new TroubleshootingDataSpreadsheet();
+        const jsonObjects = await this.convertSpreadsheetToJson(path);
+
+        const importedTroubleshootingData: TroubleshootingData[] = [];
+        if (ss.sheetName !== undefined) {
+            let sheet = jsonObjects.get(ss.sheetName);
+            for (const entry of sheet) {
+                let dataFactory = new TroubleshootingDataFactory();
+
+                // title
+                if (ss.titleHeader !== undefined && ss.titleHeader in entry) {
+                    let title: string = entry[ss.titleHeader];
+                    dataFactory = dataFactory.withTitle(title);
+                }
+                // description
+                if (ss.descriptionHeader !== undefined && ss.descriptionHeader in entry) {
+                    let description: string = entry[ss.descriptionHeader];
+                    dataFactory = dataFactory.withDescription(description);
+                }
+                // solution
+                if (ss.solutionHeader !== undefined && ss.solutionHeader in entry) {
+                    let solution: string = entry[ss.solutionHeader];
+                    dataFactory = dataFactory.withSolution(solution);
+                }
+                // types
+                if (ss.typesHeader !== undefined && ss.typesHeader in entry) {
+                    let types: string[] = entry[ss.typesHeader].split(",");
+                    dataFactory = dataFactory.withTypes(types);
+                }
+                // tags
+                if (ss.tagsHeader !== undefined && ss.tagsHeader in entry) {
+                    let tags: string[] = entry[ss.tagsHeader].split(",");
+                    dataFactory = dataFactory.withTags(tags);
+                }
+                // whitelisted rooms
+                if (ss.whitelistedRoomsHeader !== undefined && ss.whitelistedRoomsHeader in entry) {
+                    let rawRooms: string[] = entry[ss.whitelistedRoomsHeader].split(",");
+                    let rooms: SimpleRoom[] = [];
+                    for (const rawRoom of rawRooms) {
+                        let split = rawRoom.split("|");
+                        if (split.length < 2) continue;
+                        let buildingName = split[0];
+                        let roomNumber = split[1];
+                        rooms.push(
+                            new SimpleRoomFactory()
+                                .withBuildingName(buildingName)
+                                .withRoomNumber(roomNumber)
+                                .build()
+                        );
+                    }
+                    dataFactory = dataFactory.withWhitelistedRooms(rooms);
+                }
+                // blacklisted rooms
+                if (ss.blacklistedRoomsHeader !== undefined && ss.blacklistedRoomsHeader in entry) {
+                    let rawRooms: string[] = entry[ss.blacklistedRoomsHeader].split(",");
+                    let rooms: SimpleRoom[] = [];
+                    for (const rawRoom of rawRooms) {
+                        let split = rawRoom.split("|");
+                        if (split.length < 2) continue;
+                        let buildingName = split[0];
+                        let roomNumber = split[1];
+                        rooms.push(
+                            new SimpleRoomFactory()
+                                .withBuildingName(buildingName)
+                                .withRoomNumber(roomNumber)
+                                .build()
+                        );
+                    }
+                    dataFactory = dataFactory.withBlacklistedRooms(rooms);
+                }
+
+                importedTroubleshootingData.push(dataFactory.build());
+            }
+        }
+        else {
+            Logger.error("No troubleshooting sheet defined");
+        }
+
+
+        return {
+            troubleshootingData: importedTroubleshootingData,
+        }
     }
 }
 
@@ -646,5 +731,31 @@ class ClassroomChecksSpreadsheet_Winter2019 extends ClassroomChecksSpreadsheetBa
 
         this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
         this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+    }
+}
+
+
+abstract class TroubleshootingDataSpreadsheetBase {
+    sheetName?: string;
+    titleHeader?: string;
+    descriptionHeader?: string;
+    solutionHeader?: string;
+    typesHeader?: string;
+    tagsHeader?: string;
+    whitelistedRoomsHeader?: string;
+    blacklistedRoomsHeader?: string;
+}
+
+class TroubleshootingDataSpreadsheet extends TroubleshootingDataSpreadsheetBase {
+    public constructor() {
+        super();
+        this.sheetName = "Troubleshooting";
+        this.titleHeader = "Incident";
+        this.descriptionHeader = "Description";
+        this.solutionHeader = "Solution";
+        this.typesHeader = "Types";
+        this.tagsHeader = "Tags";
+        this.whitelistedRoomsHeader = "Whitelisted Rooms";
+        this.blacklistedRoomsHeader = "Blacklisted Rooms";
     }
 }
