@@ -119,20 +119,20 @@ export class RoomUtils {
         return new RoomFactory(room).buildSimple();
     }
 
-    public static isRoom(obj: any): obj is Room {
+    public static isRoom(obj: {}): obj is Room {
         return (obj as Room).buildingName !== undefined;
     }
 
-    public static isClassroom(obj: any): obj is Classroom {
-        return (obj as Classroom).phone !== undefined;
+    public static isClassroom(room: Room): room is Classroom {
+        return (room as Classroom).phone !== undefined;
     }
 
-    public static isSmartClassroom(obj: any): obj is SmartClassroom {
-        return (obj as SmartClassroom).teachingStation !== undefined;
+    public static isSmartClassroom(room: Room): room is SmartClassroom {
+        return (room as SmartClassroom).teachingStation !== undefined;
     }
 
-    public static isComputerClassroom(obj: any): obj is ComputerClassroom {
-        return (obj as ComputerClassroom).printer !== undefined;
+    public static isComputerClassroom(room: Room): room is ComputerClassroom {
+        return (room as ComputerClassroom).printer !== undefined;
     }
 
     /**

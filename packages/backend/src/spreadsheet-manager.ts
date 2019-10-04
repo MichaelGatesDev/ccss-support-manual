@@ -463,27 +463,27 @@ export class SpreadsheetManager {
                 // title
                 if (ss.titleHeader !== undefined && ss.titleHeader in entry) {
                     let title: string = entry[ss.titleHeader];
-                    dataFactory = dataFactory.withTitle(title);
+                    dataFactory = dataFactory.withTitle(title.toLowerCase().trim());
                 }
                 // description
                 if (ss.descriptionHeader !== undefined && ss.descriptionHeader in entry) {
                     let description: string = entry[ss.descriptionHeader];
-                    dataFactory = dataFactory.withDescription(description);
+                    dataFactory = dataFactory.withDescription(description.toLowerCase().trim());
                 }
                 // solution
                 if (ss.solutionHeader !== undefined && ss.solutionHeader in entry) {
                     let solution: string = entry[ss.solutionHeader];
-                    dataFactory = dataFactory.withSolution(solution);
+                    dataFactory = dataFactory.withSolution(solution.toLowerCase().trim());
                 }
                 // types
                 if (ss.typesHeader !== undefined && ss.typesHeader in entry) {
                     let types: string[] = entry[ss.typesHeader].split(",");
-                    dataFactory = dataFactory.withTypes(types);
+                    dataFactory = dataFactory.withTypes(types.map(type => type.trim().toLowerCase()));
                 }
                 // tags
                 if (ss.tagsHeader !== undefined && ss.tagsHeader in entry) {
                     let tags: string[] = entry[ss.tagsHeader].split(",");
-                    dataFactory = dataFactory.withTags(tags);
+                    dataFactory = dataFactory.withTags(tags.map(type => type.trim().toLowerCase()));
                 }
                 // whitelisted rooms
                 if (ss.whitelistedRoomsHeader !== undefined && ss.whitelistedRoomsHeader in entry) {
@@ -492,8 +492,8 @@ export class SpreadsheetManager {
                     for (const rawRoom of rawRooms) {
                         let split = rawRoom.split("|");
                         if (split.length < 2) continue;
-                        let buildingName = split[0];
-                        let roomNumber = split[1];
+                        let buildingName = split[0].trim().toLowerCase();
+                        let roomNumber = split[1].trim().toLowerCase();
                         rooms.push(
                             new SimpleRoomFactory()
                                 .withBuildingName(buildingName)

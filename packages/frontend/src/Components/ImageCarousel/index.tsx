@@ -33,7 +33,7 @@ export default class ImageCarousel extends PureComponent<Props, State> {
     ), this);
 
     return (
-      <div className="ImageCarousel-Component">
+      <div className="ImageCarousel-Component" style={{ height }}>
         <div id={id} className="carousel slide" data-ride="carousel">
           {
             indicators.length > 1 &&

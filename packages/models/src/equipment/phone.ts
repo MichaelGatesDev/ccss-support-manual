@@ -24,9 +24,9 @@ export class PhoneFactory {
 
     private _device: Device;
 
-    private _extension: string = "0000";
-    private _hasDisplay: boolean = false;
-    private _hasSpeaker: boolean = false;
+    private _extension = "0000";
+    private _hasDisplay = false;
+    private _hasSpeaker = false;
 
     public constructor(device: Device) {
         this._device = device;

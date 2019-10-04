@@ -13,7 +13,7 @@ export interface Audio {
 
 export class AudioFactory {
 
-    private _systemDependent: boolean = false;
+    private _systemDependent = false;
     // private _audioDevices: Map<DeviceType, Device[]> = new Map<DeviceType, Device[]>();;
     private _speakerType: SpeakerType = SpeakerType.Other;
 

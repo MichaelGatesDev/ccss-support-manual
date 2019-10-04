@@ -38,4 +38,26 @@ export class TroubleshootingDataUtils {
         }
         return false;
     }
+
+    public static getAllTypes(data: TroubleshootingData[]): string[] {
+        const results: string[] = [];
+        data.forEach((td: TroubleshootingData) => {
+            td.types.forEach((type: string) => {
+                if (results.includes(type.toLowerCase())) return;
+                results.push(type.toLowerCase());
+            });
+        });
+        return results;
+    }
+
+    public static getAllTags(data: TroubleshootingData[]): string[] {
+        const results: string[] = [];
+        data.forEach((td: TroubleshootingData) => {
+            td.tags.forEach((tag: string) => {
+                if (results.includes(tag.toLowerCase())) return;
+                results.push(tag.toLowerCase());
+            });
+        });
+        return results;
+    }
 }

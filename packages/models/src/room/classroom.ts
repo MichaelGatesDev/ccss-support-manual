@@ -20,7 +20,7 @@ export class ClassroomFactory {
 
     private _room: Room;
     private _phone: Phone = new PhoneFactory(new DeviceFactory().ofType(DeviceType.Phone).build()).build();
-    private _lastChecked: string = "";
+    private _lastChecked = "";
 
     public constructor(room: Room) {
         room.roomType = RoomType.Classroom;

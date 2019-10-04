@@ -6,14 +6,15 @@ import { ImagesConfig } from "./configs/ImagesConfig";
 import { ClassroomChecksSpreadsheetConfig } from "./configs/ClassroomChecksSpreadsheetConfig";
 import { TroubleshootingSpreadsheetConfig } from "./configs/TroubleshootingSpreadsheetConfig";
 import { app } from "./app";
+import { TroubleshootingKeywords } from "./configs/TroubleshootingKeywords";
 
 export class ConfigManager {
 
     public appConfig?: AppConfig;
-    public imagesConfig?: ImagesConfig;
-
     public classroomChecksSpreadsheetConfig?: ClassroomChecksSpreadsheetConfig;
     public troubleshootingSpreadsheetConfig?: TroubleshootingSpreadsheetConfig;
+    public imagesConfig?: ImagesConfig;
+    public troubleshootingKeywordsConfig?: TroubleshootingKeywords;
 
     public constructor() {
     }
@@ -88,6 +89,23 @@ export class ConfigManager {
             }
             this.imagesConfig = result.loaded as ImagesConfig;
             Logger.info("Loaded images config");
+        } catch (error) {
+            throw error;
+        }
+
+        // Create troubleshooting keywords
+        try {
+            const result: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<TroubleshootingKeywords>(
+                TroubleshootingKeywords,
+                [
+                    `${app.SETTINGS_DIR}/troubleshooting-keywords-config.json`
+                ]
+            );
+            if (result.wasCreated) {
+                Logger.info("Created troubleshooting keywords config!");
+            }
+            this.troubleshootingKeywordsConfig = result.loaded as TroubleshootingKeywords;
+            Logger.info("Loaded troubleshooting keywords config");
         } catch (error) {
             throw error;
         }

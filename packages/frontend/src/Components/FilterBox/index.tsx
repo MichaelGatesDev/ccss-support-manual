@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import _ from "lodash";
 import shortid from "shortid";
 
@@ -81,12 +81,12 @@ class FilterBox extends Component<Props, State> {
           {
             filters.length > 0 ?
               (
-                <Fragment>
+                <>
                   <div className="col">
                     {filters}
                   </div>
                   <button className="btn btn-primary w-100" onClick={this.resetFilters} type="button">{buttonText}</button>
-                </Fragment>
+                </>
               )
               :
               (

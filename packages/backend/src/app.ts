@@ -48,8 +48,8 @@ export class App {
         this.configManager = new ConfigManager();
         this.imageManager = new ImageManager();
         this.buildingManager = new BuildingManager();
-        this.roomManager = new RoomManager(this.buildingManager);
-        this.troubleshootingDataManager = new TroubleshootingDataManager(this.roomManager);
+        this.roomManager = new RoomManager();
+        this.troubleshootingDataManager = new TroubleshootingDataManager();
         this.dataManager = new DataManager();
     }
 

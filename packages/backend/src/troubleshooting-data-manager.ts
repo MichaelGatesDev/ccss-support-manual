@@ -1,14 +1,13 @@
-import { TroubleshootingData, SmartClassroom } from "@ccss-support-manual/models";
+import { TroubleshootingData, SmartClassroom, Classroom } from "@ccss-support-manual/models";
 import { TroubleshootingDataUtils, RoomUtils } from "@ccss-support-manual/utilities";
-import { RoomManager } from "./room-manager";
+import { app } from "./app";
+import { Logger } from "@michaelgatesdev/common";
 
 export class TroubleshootingDataManager {
 
-    private roomManager: RoomManager;
     public troubleshootingData: TroubleshootingData[];
 
-    public constructor(roomManager: RoomManager) {
-        this.roomManager = roomManager;
+    public constructor() {
         this.troubleshootingData = [];
     }
 
@@ -24,74 +23,73 @@ export class TroubleshootingDataManager {
         return this.troubleshootingData;
     }
 
-    public getTroubleshootingDataForRoom(buildingName: string, roomNumber: string): TroubleshootingData[] {
+    public getTroubleshootingDataForRoom(buildingName: string, roomNumber: string | number): TroubleshootingData[] {
+        let room = app.roomManager.getRoom(buildingName, `${roomNumber}`);
+        if (room === undefined) return []; // no room with that ID found
+
+        Logger.debug(`trouble data size: ${this.troubleshootingData.length}`);
+
         let results: TroubleshootingData[] = [];
-
-        let room = this.roomManager.getRoom(buildingName, roomNumber);
-
-        if (!room) return results; // no room with that ID found
-
         for (const td of this.troubleshootingData) {
 
             // trouble data doesn't apply for this room
-            if (TroubleshootingDataUtils.isRoomBlacklisted(td, buildingName, roomNumber)) continue;
+            if (TroubleshootingDataUtils.isRoomBlacklisted(td, buildingName, `${roomNumber}`)) continue;
 
             // whitelisted room
-            if (TroubleshootingDataUtils.isRoomWhitelisted(td, buildingName, roomNumber)) {
-                results.push(td);
+            if (td.whitelistedRooms.length > 0) {
+                if (TroubleshootingDataUtils.isRoomWhitelisted(td, buildingName, `${roomNumber}`)) {
+                    results.push(td);
+                    continue;
+                }
                 continue;
             }
 
+            if (RoomUtils.isRoom(room)) {
+                const config = app.configManager.troubleshootingKeywordsConfig;
+                if (config !== undefined) {
+                    Logger.debug(`${buildingName} ${roomNumber} is room`);
+                    const match = td.types.find((type: string) => config.roomKeywords.includes(type.toLowerCase()));
+                    if (match !== undefined) {
+                        results.push(td);
+                        continue;
+                    }
+                }
+            }
 
             if (RoomUtils.isClassroom(room)) {
-                // const classroom = room as Classroom;
+                const config = app.configManager.troubleshootingKeywordsConfig;
+                if (config !== undefined) {
+                    Logger.debug(`${buildingName} ${roomNumber} is classroom`);
+                    const match = td.types.find((type: string) => config.classroomKeywords.includes(type.toLowerCase()));
+                    if (match !== undefined) {
+                        results.push(td);
+                        Logger.debug(`${match}`);
+                        continue;
+                    }
+                }
             }
 
             if (RoomUtils.isSmartClassroom(room)) {
-                const smartClassroom = room as SmartClassroom;
-
-                // audio
-                if (smartClassroom.audio) {
-                    if (td.types.includes("audio")) {
+                const config = app.configManager.troubleshootingKeywordsConfig;
+                if (config !== undefined) {
+                    Logger.debug(`${buildingName} ${roomNumber} is smart classroom`);
+                    const match = td.types.find((type: string) => config.smartClassroomKeywords.includes(type.toLowerCase()));
+                    if (match !== undefined) {
                         results.push(td);
                         continue;
                     }
                 }
-                // video
-                if (smartClassroom.video) {
-                    if (td.types.includes("projector")) {
+            }
+
+            if (RoomUtils.isComputerClassroom(room)) {
+                const config = app.configManager.troubleshootingKeywordsConfig;
+                if (config !== undefined) {
+                    Logger.debug(`${buildingName} ${roomNumber} is computer classroom`);
+                    const match = td.types.find((type: string) => config.computerClassroomKeywords.includes(type.toLowerCase()));
+                    if (match !== undefined) {
                         results.push(td);
                         continue;
                     }
-                    // dvd player
-                    if (smartClassroom.video.dvdPlayer) {
-                        if (td.types.includes("dvd")) {
-                            results.push(td);
-                            continue;
-                        }
-                    }
-                }
-                // computer
-                if (smartClassroom.teachingStation) {
-                    if (smartClassroom.teachingStation.teachingStationComputer) {
-                        if (td.types.includes("computer")) {
-                            results.push(td);
-                            continue;
-                        }
-                    }
-                }
-                // printer
-                // if (smartClassroom.printer) {
-                //     if (td.types.includes("printer")) {
-                //         results.push(td);
-                //         continue;
-                //     }
-                // }
-
-                // if there are no types, it is general
-                if (td.types.length === 0) {
-                    results.push(td);
-                    continue;
                 }
             }
         }

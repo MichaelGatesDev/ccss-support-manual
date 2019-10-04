@@ -1,8 +1,9 @@
-import _ from "lodash";
-
-import { Room, Building } from "@ccss-support-manual/models";
+import { app } from "./app";
+import { Room, Building, RoomImage } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 import { BuildingManager } from "./building-manager";
+
+import _ from "lodash";
 
 /**
  * A utility class for managing rooms
@@ -10,20 +11,11 @@ import { BuildingManager } from "./building-manager";
 export class RoomManager {
 
     /**
-     * A reference to the BuildingManager (used for all things related to building)
-     */
-    private buildingManager: BuildingManager;
-
-    public constructor(buildingManager: BuildingManager) {
-        this.buildingManager = buildingManager;
-    }
-
-    /**
      * Gets every room across all buildings
      */
     public getRooms(): Room[] {
         let result: Room[] = [];
-        for (const building of this.buildingManager.buildings) {
+        for (const building of app.buildingManager.buildings) {
             result = result.concat(building.rooms);
         }
         return result;
@@ -33,7 +25,7 @@ export class RoomManager {
      * Clears all rooms from buildings
      */
     public clear(): void {
-        for (const building of this.buildingManager.buildings) {
+        for (const building of app.buildingManager.buildings) {
             building.rooms = [];
         }
     }
@@ -44,17 +36,10 @@ export class RoomManager {
      * @param buildingName The name of the building
      * @param roomNumber The room number
      */
-    public getRoom(buildingName: string, roomNumber: string): Room | undefined {
-        for (const room of this.getRooms()) {
-            let building = this.buildingManager.getBuildingByName(room.buildingName);
-            if (!building) continue;
-            if (
-                BuildingUtils.hasName(building, buildingName) &&
-                room.number === roomNumber.toLowerCase().trim()
-            )
-                return room;
-        }
-        return undefined;
+    public getRoom(buildingName: string, roomNumber: string | number): Room | undefined {
+        const building = app.buildingManager.getBuildingByName(buildingName);
+        if (building === undefined) return undefined;
+        return this.getRooms().find((room: Room) => BuildingUtils.hasName(building, room.buildingName) && `${room.number}` === `${roomNumber}`);
     }
 
     public getRoomDisplayName(building: Building, room: Room): string {
@@ -62,14 +47,14 @@ export class RoomManager {
     }
 
     public addRoom(room: Room) {
-        const pb = this.buildingManager.getBuildingByName(room.buildingName);
+        const pb = app.buildingManager.getBuildingByName(room.buildingName);
         if (pb === undefined) return;
         if (pb.rooms === undefined) pb.rooms = [];
         pb.rooms.push(room);
     }
 
     public removeRoom(room: Room) {
-        const pb = this.buildingManager.getBuildingByName(room.buildingName);
+        const pb = app.buildingManager.getBuildingByName(room.buildingName);
         if (pb === undefined) return;
         if (pb.rooms === undefined) pb.rooms = [];
         if (!_.includes(pb.rooms, room)) return;

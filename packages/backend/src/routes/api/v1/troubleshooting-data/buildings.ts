@@ -1,30 +1,23 @@
 import { Router, Response, NextFunction } from "express";
 import { app } from "../../../../app";
 
+import roomsRoute from "./rooms";
+
 const router: Router = Router();
 
-
 router.get("/", (_req, res): void => {
-    res.json(app.troubleshootingDataManager.troubleshootingData);
+    res.status(403).json({});
 });
 
 router.param("buildingName", (req: any, _res: Response, next: NextFunction, buildingName: string): void => {
-    let building = app.buildingManager.getBuildingByName(buildingName);
-    if (building) {
-        req.building = building;
-        next();
-        return;
-    }
-    next(new Error("Failed to find building: " + buildingName));
-    return;
+    req.buildingName = buildingName;
+    next();
 });
 
 router.get("/:buildingName", (_req: any, res): void => {
     res.status(403).json({});
-    console.warn("This route should not be used.");
 });
 
-import roomsRoute from "./rooms";
 router.use("/:buildingName/rooms", roomsRoute);
 
 export default router;
