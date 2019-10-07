@@ -23,6 +23,7 @@ class Filter extends Component<Props, State> {
 
   onSelect() {
     const { onChange, name, selected } = this.props;
+    // console.log(`${name} is now ${!selected}`);
     onChange(name, !selected);
   }
 

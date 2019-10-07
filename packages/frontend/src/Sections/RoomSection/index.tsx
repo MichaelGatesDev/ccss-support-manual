@@ -273,7 +273,6 @@ class RoomSection extends Component<Props, State> {
                 keys={_.sortBy(TroubleshootingDataUtils.getAllTags(data))}
                 buttonText="Reset"
                 onChange={this.onTagFilterChange}
-                enabledByDefault={false}
               />
             </div>
             <div className="col">

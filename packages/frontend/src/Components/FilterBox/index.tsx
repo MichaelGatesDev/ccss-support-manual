@@ -9,7 +9,7 @@ import Filter from "./Filter";
 
 interface Props {
   onChange: Function;
-  enabledByDefault: boolean;
+  enabledByDefault?: boolean;
   keys: string[];
   label: string;
   buttonText: string;
@@ -41,16 +41,17 @@ class FilterBox extends Component<Props, State> {
     this.setState({
       activeFilters: becomeActive ? [...activeFilters, name] : activeFilters.filter(item => item !== name),
     }, () => {
+      const { activeFilters } = this.state;
       onChange(activeFilters);
     });
   }
 
   resetFilters() {
     const { enabledByDefault, keys, onChange } = this.props;
-    const { activeFilters } = this.state;
     this.setState({
       activeFilters: enabledByDefault ? keys : [],
     }, () => {
+      const { activeFilters } = this.state;
       onChange(activeFilters);
     });
   }
