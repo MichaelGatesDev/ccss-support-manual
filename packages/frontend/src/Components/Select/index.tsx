@@ -32,7 +32,7 @@ export default class Select extends Component<SelectComponentProps> {
       <div className="Select-Component">
         <select disabled={readonly} value={current} onChange={this.onChange} size={size}>
           {
-            size !== undefined && size <= 1 &&
+            size !== undefined && size > 0 &&
             <option>{placeholder}</option>
           }
           {

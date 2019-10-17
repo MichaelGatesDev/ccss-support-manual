@@ -47,7 +47,6 @@ interface State {
 
 const Settings = (props: Props) => {
 
-  const [importing, setImporting] = useState<boolean>(false);
   const [importSpreadsheetURL, setImportSpreadsheetURL] = useState<string>("");
   const [importFile, setImportFile] = useState<File | FileList | undefined>();
   const [importFileType, setImportFileType] = useState<string>();
@@ -55,8 +54,6 @@ const Settings = (props: Props) => {
 
   const [restorePoint, setRestorePoint] = useState<string | undefined>();
 
-  useEffect(() => {
-  }, []);
 
   const performImport = () => {
     const { uploadSpreadsheetToImport } = props;
@@ -65,9 +62,6 @@ const Settings = (props: Props) => {
       alert("You must select something to import");
       return;
     }
-
-    setImporting(true);
-    console.debug(`Importing: ${importing}`);
 
     // if there's a URL in there, try that first
     if (!StringUtils.isBlank(importSpreadsheetURL)) {
@@ -150,10 +144,17 @@ const Settings = (props: Props) => {
   };
 
 
+  const { backupState, restoreState, saveState } = props;
+
+  useEffect(() => {
+    // console.log("Index mount");
+  }, [
+    backupState,
+    restoreState,
+    saveState,
+  ]);
+
   const SelectWithRestoreOptions = withRestoreOptions(Select);
-
-  const { backupState } = props;
-
   return (
     <>
       {/* Top navigation */}
@@ -240,7 +241,7 @@ const Settings = (props: Props) => {
               <div className="col">
                 <button
                   type="button"
-                  disabled={importing}
+                  // disabled={importing}
                   onClick={performImport}
                   className="btn btn-primary btn-block"
                 >
@@ -325,7 +326,6 @@ const Settings = (props: Props) => {
               <div className="row">
                 <div className="col">
                   <SelectWithRestoreOptions
-                    placeholder="Select restore point..."
                     size={1}
                     onChange={setRestorePoint}
                     current={restorePoint}
@@ -336,7 +336,7 @@ const Settings = (props: Props) => {
                 <div className="col">
                   <button
                     type="button"
-                    // disabled={restoreState.restoring}
+                    disabled={restoreState.restoring}
                     onClick={restore}
                     className="btn btn-primary btn-block"
                   >
@@ -356,7 +356,7 @@ const Settings = (props: Props) => {
                 <div className="col">
                   <button
                     type="button"
-                    // disabled={saveState.saving}
+                    disabled={saveState.saving}
                     onClick={save}
                     className="btn btn-primary btn-block"
                   >

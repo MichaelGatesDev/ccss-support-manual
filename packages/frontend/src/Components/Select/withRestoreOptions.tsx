@@ -12,16 +12,20 @@ interface Props extends SelectComponentProps {
 
 const withRestoreOptions = (WrappedComponent: any) => ((props: Props) => {
 
+  const { restoreState, fetchRestoreOptions } = props;
+
   useEffect(() => {
-    const { fetchRestoreOptions } = props;
-    fetchRestoreOptions();
+    // Fix this from being a patch to the infinite load bug
+    if (restoreState.loadingOptions) {
+      fetchRestoreOptions();
+    }
   }, []);
 
-  const { restoreState } = props;
   return (
     <WrappedComponent
       {...props}
-      values={restoreState.loadingOptions ? ["Loading restore options..."] : restoreState.options}
+      placeholder={restoreState.loadingOptions ? "[Loading restore options...]" : "Select a restore point..."}
+      values={restoreState.loadingOptions ? [] : restoreState.options}
     />
   );
 });
