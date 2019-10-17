@@ -5,7 +5,7 @@ import "./style.scss";
 import FormInput from "../FormInput";
 
 interface Props {
-  onChange: Function;
+  onChange: (newValue: string) => void;
   label: string;
   value: string;
   buttonText: string;
@@ -40,7 +40,6 @@ class SearchBox extends Component<Props, State> {
           <h5>{label}</h5>
           <hr />
           <FormInput
-            type="text"
             placeholder="Search by title"
             onChange={onChange}
             value={value}

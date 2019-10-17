@@ -213,7 +213,7 @@ export class DataManager {
         Logger.info("Performing backup...");
         const now = new Date();
 
-        const month = StringUtils.pad(`${now.getMonth()}`, "0", 2);
+        const month = StringUtils.pad(`${now.getMonth() + 1}`, "0", 2);
         const day = StringUtils.pad(`${now.getDate()}`, "0", 2);
         const hours = StringUtils.pad(`${now.getHours()}`, "0", 2);
         const minutes = StringUtils.pad(`${now.getMinutes()}`, "0", 2);

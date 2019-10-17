@@ -1,382 +1,394 @@
 import "./style.scss";
 
-import React, { PureComponent, ChangeEvent } from "react";
-import { EnumUtils } from "@michaelgatesdev/common";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+
+import { EnumUtils, StringUtils } from "@michaelgatesdev/common";
 import {
   SpreadsheetImportMode,
   SpreadsheetType,
-  ClassroomChecksSpreadsheetVersion,
-  TroubleshootingSpreadsheetVersion,
 } from "@ccss-support-manual/models";
-import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
 
 import NavBar from "../../Components/NavBar";
 import Select from "../../Components/Select";
 import FileSelect from "../../Components/FileSelect";
+import Collapse from "../../Components/Collapse";
+import FormInput from "../../Components/FormInput";
+import withRestoreOptions from "../../Components/Select/withRestoreOptions";
+
+import { BackupState } from "../../redux/backup/types";
+import { AppState } from "../../redux/store";
+import { uploadSpreadsheetToImport } from "../../redux/uploads/actions";
+import { downloadSpreadsheetToImport } from "../../redux/downloads/actions";
+import { performBackup } from "../../redux/backup/actions";
+import { performRestore } from "../../redux/restore/actions";
+import { RestoreState } from "../../redux/restore/types";
+import { SaveState } from "../../redux/save/types";
+import { performSave } from "../../redux/save/actions";
+
 
 interface Props {
+  uploadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
+  downloadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
 
+  backupState: BackupState;
+  performBackup: () => Promise<void>;
+
+  restoreState: RestoreState;
+  performRestore: (restorePoint: string) => Promise<void>;
+
+  saveState: SaveState;
+  performSave: () => Promise<void>;
 }
 
 interface State {
-
-  uploading: boolean;
-
-  file?: File;
-  fileType: SpreadsheetType;
-  fileVersion?: ClassroomChecksSpreadsheetVersion | TroubleshootingSpreadsheetVersion;
-  importMode: SpreadsheetImportMode;
-
-  selectedRestorePoint?: string;
-  restoreOptions?: string[];
 }
 
-export default class Settings extends PureComponent<Props, State> {
 
-  constructor(props: Props) {
-    super(props);
-    this.import = this.import.bind(this);
-    this.state = {
-      uploading: false,
-      fileType: SpreadsheetType.ClassroomChecks,
-      importMode: SpreadsheetImportMode.OverwriteAndAppend,
-    };
-  }
+const Settings = (props: Props) => {
 
-  componentDidMount() {
-    this.fetchRestoreOptions();
-  }
+  const [importing, setImporting] = useState<boolean>(false);
+  const [importSpreadsheetURL, setImportSpreadsheetURL] = useState<string>("");
+  const [importFile, setImportFile] = useState<File | FileList | undefined>();
+  const [importFileType, setImportFileType] = useState<string>();
+  const [importFileMode, setImportFileMode] = useState<string>();
 
-  fetchRestoreOptions() {
-    fetch("/api/v1/restore")
-      .then(response => response.json())
-      .then((options): void => {
-        this.setState({ restoreOptions: options });
-      }).catch(error => {
-        console.error("Failed to fetch restore options");
-        console.error(error);
-      });
-  }
+  const [restorePoint, setRestorePoint] = useState<string | undefined>();
 
-  onSpreadsheetToImportSelect = (selected?: File | FileList): void => {
-    if (selected !== undefined && selected instanceof File) {
-      const type = this.getTypeFromFileName(selected.name);
-      if (type === undefined) return;
-      const version = SpreadsheetUtils.matchVersion(type, selected.name);
-      this.setState({
-        file: selected,
-        fileType: type,
-        fileVersion: version,
-      });
-    }
-  };
+  useEffect(() => {
+  }, []);
 
-  getTypeFromFileName = (name: string): SpreadsheetType | undefined => {
-    if (name.toLocaleLowerCase().includes("classroom checks")) {
-      return SpreadsheetType.ClassroomChecks;
-    }
-    if (name.toLocaleLowerCase().includes("troubleshooting")) {
-      return SpreadsheetType.Troubleshooting;
-    }
-    return undefined;
-  };
+  const performImport = () => {
+    const { uploadSpreadsheetToImport } = props;
 
-  import = () => {
-    const {
-      file,
-      fileType,
-      fileVersion,
-      importMode,
-    } = this.state;
-
-    if (file === undefined) {
+    if (importFile === undefined && (importSpreadsheetURL === undefined || StringUtils.isBlank(importSpreadsheetURL))) {
       alert("You must select something to import");
       return;
     }
 
-    console.debug("Compiling form data..");
-    const data = new FormData();
-    if (file !== undefined) {
-      data.append("file", file);
-      if (fileVersion !== undefined) {
-        data.append("fileVersion", `${fileVersion}`);
+    setImporting(true);
+    console.debug(`Importing: ${importing}`);
+
+    // if there's a URL in there, try that first
+    if (!StringUtils.isBlank(importSpreadsheetURL)) {
+      console.debug(`Attempting to import from ${importSpreadsheetURL} ...`);
+    } else {
+      if (importFile === undefined) {
+        console.error("Can not import file because it is undefined!");
+        return;
       }
-      if (importMode !== undefined) {
-        data.append("importMode", `${importMode}`);
+      console.debug("Compiling form data..");
+      const data = new FormData();
+      data.append("file", importFile as File);
+
+      if (importFileMode === undefined) {
+        console.error("File Import Mode not specified");
+        return;
       }
+      data.append("importMode", `${importFileMode}`);
+
+      if (importFileType === undefined) {
+        console.error("File Import Type not specified");
+        return;
+      }
+
+      const parsedFileType = EnumUtils.parse(SpreadsheetType, importFileType);
+      if (parsedFileType === undefined) {
+        console.error("File Import Type (parsed) is invalid");
+        return;
+      }
+
+      console.debug("Beginning upload..");
+      uploadSpreadsheetToImport(parsedFileType, data);
     }
-
-    console.debug("Beginning upload..");
-    this.setState({ uploading: true }, () => {
-      fetch(`/api/v1/upload/${fileType === SpreadsheetType.ClassroomChecks ? "classroom-checks" : "troubleshooting-data"}`, { method: "POST", body: data })
-        .then(() => {
-          this.setState({ uploading: false }, () => {
-            console.debug("Upload complete");
-          });
-        }).catch(error => {
-          console.error("Failed to upload file");
-          console.error(error);
-        });
-    });
   };
 
-  export = () => {
+  // TODO implement exporting to spreadsheet
+  // const performExport = () => {
+  // };
+
+
+  const backup = async () => {
+    const { performBackup, backupState } = props;
+    if (backupState.backingUp) {
+      alert("A backup is already being performed!");
+      return;
+    }
+    console.log("Performing backup...");
+    await performBackup();
+    console.log("Backup complete!");
+    alert("Backup complete!");
   };
 
-  onRestoreChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    const { value } = target;
-    this.setState({
-      selectedRestorePoint: value,
-    });
-  };
-
-  onImportTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    if (target === null) return;
-    const { value } = target;
-    if (value === null || value === undefined) return;
-    const parsed = EnumUtils.parse(SpreadsheetType, value);
-    if (parsed === undefined) return;
-    this.setState({
-      fileType: parsed,
-    });
-  };
-
-  onImportVersionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    if (target === null) return;
-    const { value } = target;
-    if (value === null || value === undefined) return;
-    const { fileType } = this.state;
-
-    const parsed = EnumUtils.parse(fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion : TroubleshootingSpreadsheetVersion, value);
-    if (parsed === undefined) return;
-    this.setState({
-      fileVersion: parsed,
-    });
-  };
-
-  onImportModeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { target } = event;
-    if (target === null) return;
-    const { value } = target;
-    if (value === null || value === undefined) return;
-    const parsed = EnumUtils.parse(SpreadsheetImportMode, value);
-    if (parsed === undefined) return;
-    this.setState({
-      importMode: parsed,
-    });
-  };
-
-  backup = () => {
-    fetch("/api/v1/backup")
-      .then(() => {
-        console.log("Backup complete");
-      }).catch(error => {
-        console.error("Failed to backup ");
-        console.error(error);
-      });
-  };
-
-  restore = () => {
-    const { selectedRestorePoint } = this.state;
-    if (selectedRestorePoint === undefined) {
+  const restore = async () => {
+    if (restorePoint === undefined) {
       alert("You must select a restore point!");
       return;
     }
 
-    console.debug(`Restoring ${selectedRestorePoint}`);
-
-    fetch("/api/v1/restore", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        restorePoint: selectedRestorePoint,
-      }),
-    })
-      .then(() => {
-        console.log("Restore complete");
-      }).catch(error => {
-        console.error("Failed to restore ");
-        console.error(error);
-      });
+    const { performRestore, restoreState } = props;
+    if (restoreState.restoring) {
+      alert("A backup is already being performed!");
+      return;
+    }
+    console.log(`Performing restore to ${restorePoint}...`);
+    await performRestore(restorePoint);
+    console.log("Restore complete!");
+    alert("Restore complete!");
   };
 
-  save = () => {
-    fetch("/api/v1/save")
-      .then(() => {
-        console.log("Save complete");
-      }).catch(error => {
-        console.error("Failed to save ");
-        console.error(error);
-      });
+  const save = async () => {
+    const { performSave, saveState } = props;
+    if (saveState.saving) {
+      alert("A save is already being performed!");
+      return;
+    }
+    console.log("Saving...");
+    await performSave();
+    console.log("Save complete!");
+    alert("Save complete!");
   };
 
-  render() {
 
-    const {
-      uploading,
-      file,
-      fileType,
-      fileVersion,
-      importMode,
+  const SelectWithRestoreOptions = withRestoreOptions(Select);
 
-      restoreOptions,
-    } = this.state;
+  const { backupState } = props;
 
-    return (
-      <>
-        {/* Top navigation */}
-        <NavBar
-          title="CCSS Support Manual"
-          fixed
-        />
-        {/* Main content */}
-        <section className="container" id="settings-section">
+  return (
+    <>
+      {/* Top navigation */}
+      <NavBar
+        title="CCSS Support Manual"
+        fixed
+      />
+      {/* Main content */}
+      <section className="container" id="settings-section">
 
+        {/* Data Header */}
+        <div className="row">
+          <div className="col">
+            <h2>Data</h2>
+          </div>
+        </div>
 
-          <div id="#data">
+        {/* Import Data from Spreadsheet */}
+        <div className="row segment">
+          <div className="col">
+            {/* Import Header */}
             <div className="row">
               <div className="col">
-                <h2>Data</h2>
+                <h3>Import data from spreadsheet</h3>
               </div>
             </div>
-
-            {/* Import Data from Spreadsheet */}
-            <div className="row segment">
+            <div className="row">
               <div className="col">
-                <h3>Import Data from Spreadsheet</h3>
-
-                <div className="row">
-                  <div className="col">
-                    <h4>Spreadsheet File</h4>
-                    <FileSelect
-                      types={["xlsx"]}
-                      onSelect={this.onSpreadsheetToImportSelect}
-                    />
-                  </div>
-                  <div className="col">
-                    <h4>Spreadsheet Type</h4>
-                    <Select
-                      readonly={file === undefined}
-                      values={EnumUtils.values(SpreadsheetType)}
-                      onChange={this.onImportTypeChange}
-                      current={SpreadsheetType[fileType]}
-                    />
-                  </div>
-                  <div className="col">
-                    <h4>Spreadsheet Version</h4>
-                    <Select
-                      readonly={file === undefined}
-                      values={EnumUtils.values(fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion : TroubleshootingSpreadsheetVersion)}
-                      onChange={this.onImportVersionChange}
-                      current={fileType === SpreadsheetType.ClassroomChecks ? ClassroomChecksSpreadsheetVersion[fileVersion!] : TroubleshootingSpreadsheetVersion[fileVersion!]}
-                    />
-                  </div>
-                  <div className="col">
-                    <h4>Data Import Mode</h4>
-                    <Select
-                      readonly={file === undefined}
-                      values={EnumUtils.values(SpreadsheetImportMode)}
-                      onChange={this.onImportModeChange}
-                      current={SpreadsheetImportMode[importMode]}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <button
-                      type="button"
-                      disabled={uploading}
-                      onClick={this.import}
-                    >
-                      Import
-                    </button>
-                  </div>
-                </div>
+                <Collapse
+                  items={[
+                    {
+                      title: "Google Sheets",
+                      show: true,
+                      content: (
+                        <div className="row">
+                          <div className="col">
+                            <FormInput
+                              value={importSpreadsheetURL}
+                              placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
+                              onChange={setImportSpreadsheetURL}
+                            />
+                          </div>
+                        </div>
+                      ),
+                    },
+                    {
+                      title: "File",
+                      content: (
+                        <div className="row">
+                          <div className="col">
+                            <h5>Spreadsheet File</h5>
+                            <FileSelect
+                              types={["xlsx"]}
+                              onSelect={setImportFile}
+                            />
+                          </div>
+                          <div className="col">
+                            <h5>Spreadsheet Type</h5>
+                            <Select
+                              readonly={importFile === undefined}
+                              values={EnumUtils.values(SpreadsheetType)}
+                              onChange={setImportFileType}
+                              current={importFileType}
+                            />
+                          </div>
+                          <div className="col">
+                            <h5>Data Import Mode</h5>
+                            <Select
+                              readonly={importFile === undefined}
+                              values={EnumUtils.values(SpreadsheetImportMode)}
+                              onChange={setImportFileMode}
+                              current={importFileMode}
+                            />
+                          </div>
+                        </div>
+                      ),
+                    },
+                  ]}
+                />
               </div>
             </div>
-
-
-            {/* Export Data to Spreadsheet */}
-            <div className="row segment">
+            {/* Import Button */}
+            <div className="row">
               <div className="col">
-                <div className="row">
-                  <div className="col">
-                    <h3>Export Data to Spreadsheet</h3>
-                  </div>
+                <button
+                  type="button"
+                  disabled={importing}
+                  onClick={performImport}
+                  className="btn btn-primary btn-block"
+                >
+                  Import
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="#data">
+
+          {/* Export Data to Spreadsheet */}
+          <div className="row segment">
+            <div className="col">
+              <div className="row">
+                <div className="col">
+                  <h5>Export Data to Spreadsheet</h5>
                 </div>
-                <div className="row">
-                  <div className="col">
-                    <p>This feature is not available yet</p>
-                  </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <p>This feature is not available yet</p>
                 </div>
               </div>
             </div>
-
-
-            {/* Backup Data */}
-            <div className="row segment">
-              <div className="col">
-                <div className="row">
-                  <div className="col">
-                    <h3>Backup Data</h3>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <button type="button" onClick={this.backup}>Backup</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            {/* Restore Data */}
-            <div className="row segment">
-              <div className="col">
-                <div className="row">
-                  <div className="col">
-                    <h3>Restore Data</h3>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <Select
-                      size={5}
-                      values={restoreOptions}
-                      onChange={this.onRestoreChange}
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <button type="button" onClick={this.restore}>Restore</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            {/* Save Data */}
-            <div className="row segment">
-              <div className="col">
-                <h3>Save Data</h3>
-                <div className="row">
-                  <div className="col">
-                    <button type="button" onClick={this.save}>Save</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
 
-        </section>
-      </>
-    );
-  }
-}
+
+          {/* Backup Data */}
+          <div className="row segment">
+            <div className="col">
+              <div className="row">
+                <div className="col">
+                  <h5>Backup Data</h5>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button
+                    type="button"
+                    disabled={backupState.backingUp}
+                    onClick={backup}
+                    className="btn btn-primary btn-block"
+                  >
+                    Backup
+                  </button>
+                </div>
+              </div>
+              {
+                backupState.backingUp &&
+                (
+                  <div className="row">
+                    <div className="col">
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-striped progress-bar-animated"
+                          role="progressbar"
+                          aria-valuenow={100}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+
+
+          {/* Restore Data */}
+          <div className="row segment">
+            <div className="col">
+              <div className="row">
+                <div className="col">
+                  <h5>Restore Data</h5>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <SelectWithRestoreOptions
+                    placeholder="Select restore point..."
+                    size={1}
+                    onChange={setRestorePoint}
+                    current={restorePoint}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button
+                    type="button"
+                    // disabled={restoreState.restoring}
+                    onClick={restore}
+                    className="btn btn-primary btn-block"
+                  >
+                    Restore
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {/* Save Data */}
+          <div className="row segment">
+            <div className="col">
+              <h5>Save Data</h5>
+              <div className="row">
+                <div className="col">
+                  <button
+                    type="button"
+                    // disabled={saveState.saving}
+                    onClick={save}
+                    className="btn btn-primary btn-block"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+    </>
+  );
+};
+
+const mapStateToProps = (state: AppState) => ({
+  backupState: state.backup,
+  restoreState: state.restore,
+  saveState: state.save,
+});
+
+export const mapDispatchToProps = {
+  uploadSpreadsheetToImport,
+  downloadSpreadsheetToImport,
+  performBackup,
+  performRestore,
+  performSave,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Settings);

@@ -68,7 +68,6 @@ class NavBar extends Component<Props, State> {
               searchable &&
               (
                 <FormInput
-                  type="text"
                   placeholder="Search for building, room name, or room number.."
                   onChange={this.onSearch}
                   value={searchQuery}

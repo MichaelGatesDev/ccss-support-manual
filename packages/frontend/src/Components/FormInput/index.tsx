@@ -3,12 +3,12 @@ import React, { Component } from "react";
 import "./style.scss";
 
 interface Props {
+  onChange: (newValue: string) => void;
+  placeholder: string;
+  value: string;
+
   selectedByDefault?: boolean;
   alwaysSelected?: boolean;
-  onChange: any;
-  placeholder: string;
-  type: string;
-  value: string;
 }
 
 interface State {
@@ -60,12 +60,12 @@ class FormInput extends Component<Props, State> {
 
   render() {
     const {
-      type, placeholder, value,
+      placeholder, value,
     } = this.props;
     return (
       <div className="FormInput-Component">
         <input
-          type={type}
+          type="text"
           className="form-control"
           placeholder={placeholder}
           onChange={this.onChange}
