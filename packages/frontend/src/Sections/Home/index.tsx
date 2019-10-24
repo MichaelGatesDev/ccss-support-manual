@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { Room, Building } from "@ccss-support-manual/models";
@@ -20,44 +20,24 @@ interface Props {
   buildingsState: BuildingsState;
   imagesState: ImagesState;
 
-  fetchBuildings: Function;
-  fetchImages: Function;
+  fetchBuildings: () => void;
+  fetchImages: () => void;
 }
 
-interface State {
-  filterSearch: string;
-}
+const Home = (props: Props) => {
+  const [filterSearch, setFilterSearch] = useState<string>("");
 
-class Home extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+  const { fetchBuildings, fetchImages } = props;
+  const { buildingsState, imagesState } = props;
 
-    this.state = {
-      filterSearch: "",
-    };
-
-    this.onSearch = this.onSearch.bind(this);
-  }
-
-  componentDidMount() {
-    const { fetchBuildings, fetchImages } = this.props;
+  useEffect(() => {
     fetchBuildings();
     fetchImages();
-  }
+  }, []);
 
-  onSearch(value: string) {
-    this.setState({
-      filterSearch: value,
-    });
-  }
+  const isLoading = (): boolean => buildingsState.buildingsLoading || imagesState.imagesLoading;
 
-  private isLoading(): boolean {
-    const { buildingsState, imagesState } = this.props;
-    return buildingsState.buildingsLoading || imagesState.imagesLoading;
-  }
-
-  filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
-    const { buildingsState } = this.props;
+  const filterRoomsByName = (rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] => {
     const { buildings } = buildingsState;
     return rooms.filter((room: Room) => {
       const pb: Building | undefined = BuildingUtils.getParentBuilding(room, buildings);
@@ -67,53 +47,50 @@ class Home extends Component<Props, State> {
         (filterName && room.name.toLocaleLowerCase().includes(name)) ||
         (filterBuildingName && BuildingUtils.hasName(pb, name))
       );
-    }, this);
+    });
+  };
+
+
+  // Display splash when loading
+  if (isLoading()) {
+    return <LoadingSplash />;
   }
 
+  const { buildings } = buildingsState;
 
-  render() {
-    // Display splash when loading
-    if (this.isLoading()) {
-      return <LoadingSplash />;
+  const query = filterSearch;
+  const queries = query.split(" ");
+
+  let rooms = _.sortBy(BuildingUtils.getAllRooms(buildings), ["buildingName", "number"]);
+
+  if (queries.length > 0) {
+    for (let query of queries) {
+      query = query.toLocaleLowerCase();
+      rooms = filterRoomsByName(rooms, query);
     }
+  }
 
-    const { filterSearch } = this.state;
-    const { buildingsState, imagesState } = this.props;
-    const { buildings } = buildingsState;
-
-    const query = filterSearch;
-    const queries = query.split(" ");
-
-    let rooms = _.sortBy(BuildingUtils.getAllRooms(buildings), ["buildingName", "number"]);
-
-    if (queries.length > 0) {
-      for (let query of queries) {
-        query = query.toLocaleLowerCase();
-        rooms = this.filterRoomsByName(rooms, query);
-      }
-    }
-
-    return (
-      <>
-        {/* Top navigation */}
-        <NavBar
-          title="CCSS Support Manual"
-          searchable
-          onSearch={this.onSearch}
-          fixed
+  return (
+    <>
+      {/* Top navigation */}
+      <NavBar
+        title="CCSS Support Manual"
+        searchable
+        onSearch={setFilterSearch}
+        fixed
+      />
+      {/* Main content */}
+      <section className="container-fluid" id="home-section">
+        <RoomCardsGrid
+          rooms={rooms}
+          buildings={buildingsState.buildings}
+          images={imagesState}
         />
-        {/* Main content */}
-        <section className="container-fluid" id="home-section">
-          <RoomCardsGrid
-            rooms={rooms}
-            buildings={buildingsState.buildings}
-            images={imagesState}
-          />
-        </section>
-      </>
-    );
-  }
-}
+      </section>
+    </>
+  );
+
+};
 
 const mapStateToProps = (state: AppState) => ({
   buildingsState: state.buildings,
