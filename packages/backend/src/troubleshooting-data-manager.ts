@@ -2,6 +2,7 @@ import { TroubleshootingData, SmartClassroom, Classroom } from "@ccss-support-ma
 import { TroubleshootingDataUtils, RoomUtils } from "@ccss-support-manual/utilities";
 import { app } from "./app";
 import { Logger } from "@michaelgatesdev/common";
+import { conditionalExpression } from "@babel/types";
 
 export class TroubleshootingDataManager {
 
@@ -27,7 +28,8 @@ export class TroubleshootingDataManager {
         let room = app.roomManager.getRoom(buildingName, `${roomNumber}`);
         if (room === undefined) return []; // no room with that ID found
 
-        Logger.debug(`trouble data size: ${this.troubleshootingData.length}`);
+        const config = app.configManager.troubleshootingKeywordsConfig;
+        if (config === undefined) return []; // no keywords config
 
         let results: TroubleshootingData[] = [];
         for (const td of this.troubleshootingData) {
@@ -39,57 +41,39 @@ export class TroubleshootingDataManager {
             if (td.whitelistedRooms.length > 0) {
                 if (TroubleshootingDataUtils.isRoomWhitelisted(td, buildingName, `${roomNumber}`)) {
                     results.push(td);
-                    continue;
                 }
                 continue;
             }
 
             if (RoomUtils.isRoom(room)) {
-                const config = app.configManager.troubleshootingKeywordsConfig;
-                if (config !== undefined) {
-                    Logger.debug(`${buildingName} ${roomNumber} is room`);
-                    const match = td.types.find((type: string) => config.roomKeywords.includes(type.toLowerCase()));
-                    if (match !== undefined) {
-                        results.push(td);
-                        continue;
-                    }
+                const match = config.roomKeywords.find((keyword: string) => TroubleshootingDataUtils.hasAny(td, keyword));
+                if (match !== undefined) {
+                    results.push(td);
+                    continue;
                 }
             }
 
             if (RoomUtils.isClassroom(room)) {
-                const config = app.configManager.troubleshootingKeywordsConfig;
-                if (config !== undefined) {
-                    Logger.debug(`${buildingName} ${roomNumber} is classroom`);
-                    const match = td.types.find((type: string) => config.classroomKeywords.includes(type.toLowerCase()));
-                    if (match !== undefined) {
-                        results.push(td);
-                        Logger.debug(`${match}`);
-                        continue;
-                    }
+                const match = config.classroomKeywords.find((keyword: string) => TroubleshootingDataUtils.hasAny(td, keyword));
+                if (match !== undefined) {
+                    results.push(td);
+                    continue;
                 }
             }
 
             if (RoomUtils.isSmartClassroom(room)) {
-                const config = app.configManager.troubleshootingKeywordsConfig;
-                if (config !== undefined) {
-                    Logger.debug(`${buildingName} ${roomNumber} is smart classroom`);
-                    const match = td.types.find((type: string) => config.smartClassroomKeywords.includes(type.toLowerCase()));
-                    if (match !== undefined) {
-                        results.push(td);
-                        continue;
-                    }
+                const match = config.smartClassroomKeywords.find((keyword: string) => TroubleshootingDataUtils.hasAny(td, keyword));
+                if (match !== undefined) {
+                    results.push(td);
+                    continue;
                 }
             }
 
             if (RoomUtils.isComputerClassroom(room)) {
-                const config = app.configManager.troubleshootingKeywordsConfig;
-                if (config !== undefined) {
-                    Logger.debug(`${buildingName} ${roomNumber} is computer classroom`);
-                    const match = td.types.find((type: string) => config.computerClassroomKeywords.includes(type.toLowerCase()));
-                    if (match !== undefined) {
-                        results.push(td);
-                        continue;
-                    }
+                const match = config.computerClassroomKeywords.find((keyword: string) => TroubleshootingDataUtils.hasAny(td, keyword));
+                if (match !== undefined) {
+                    results.push(td);
+                    continue;
                 }
             }
         }

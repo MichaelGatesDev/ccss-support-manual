@@ -60,4 +60,27 @@ export class TroubleshootingDataUtils {
         });
         return results;
     }
+
+
+    public static hasAnyType(data: TroubleshootingData, types: string): boolean {
+        const matches = data.types.filter((type: string) => types.includes(type.toLowerCase()));
+        return matches.length > 0;
+    }
+
+    public static hasAnyTag(data: TroubleshootingData, tags: string): boolean {
+        const matches = data.tags.filter((tag: string) => tags.includes(tag.toLowerCase()));
+        return matches.length > 0;
+    }
+
+    public static hasAnyWord(data: TroubleshootingData, word: string): boolean {
+        return (
+            data.title.includes(word.toLowerCase()) ||
+            data.description.includes(word.toLowerCase()) ||
+            data.solution.includes(word.toLowerCase())
+        );
+    }
+
+    public static hasAny(data: TroubleshootingData, any: string): boolean {
+        return this.hasAnyType(data, any) || this.hasAnyTag(data, any) || this.hasAnyWord(data, any);
+    }
 }
