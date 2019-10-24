@@ -25,6 +25,7 @@ import { performRestore } from "../../redux/restore/actions";
 import { RestoreState } from "../../redux/restore/types";
 import { SaveState } from "../../redux/save/types";
 import { performSave } from "../../redux/save/actions";
+import { UploadState } from "../../redux/uploads/types";
 
 
 interface Props {
@@ -37,22 +38,29 @@ interface Props {
   saveState: SaveState;
   performSave: () => Promise<void>;
 
+  uploadState: UploadState;
+  uploadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => Promise<void>;
+
   // importState: ImportState;
-  uploadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
-  downloadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
+  // downloadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => Promise<void>;
 }
 
 const Settings = (props: Props) => {
 
   const [importSpreadsheetURL, setImportSpreadsheetURL] = useState<string>("");
   const [importFile, setImportFile] = useState<File | FileList | undefined>();
-  const [importFileType, setImportFileType] = useState<string>();
-  const [importFileMode, setImportFileMode] = useState<string>();
+  const [importFileType, setImportFileType] = useState<string | undefined>(SpreadsheetType[SpreadsheetType.ClassroomChecks]);
+  const [importFileMode, setImportFileMode] = useState<string | undefined>(SpreadsheetImportMode[SpreadsheetImportMode.ClearAndWrite]);
 
   const [restorePoint, setRestorePoint] = useState<string | undefined>();
 
 
-  const { backupState, restoreState, saveState } = props;
+  const {
+    backupState,
+    restoreState,
+    saveState,
+    uploadState,
+  } = props;
   const {
     uploadSpreadsheetToImport,
     performBackup,
@@ -64,7 +72,7 @@ const Settings = (props: Props) => {
   }, []);
 
 
-  const performImport = () => {
+  const performImport = async () => {
 
     if (importFile === undefined && (importSpreadsheetURL === undefined || StringUtils.isBlank(importSpreadsheetURL))) {
       alert("You must select something to import");
@@ -87,7 +95,7 @@ const Settings = (props: Props) => {
         console.error("File Import Mode not specified");
         return;
       }
-      data.append("importMode", `${importFileMode}`);
+      data.append("importMode", importFileMode);
 
       if (importFileType === undefined) {
         console.error("File Import Type not specified");
@@ -100,8 +108,15 @@ const Settings = (props: Props) => {
         return;
       }
 
-      console.debug("Beginning upload..");
-      uploadSpreadsheetToImport(parsedFileType, data);
+      try {
+        console.debug("Beginning upload..");
+        await uploadSpreadsheetToImport(parsedFileType, data);
+        console.debug("Upload complete");
+        alert("Upload complete!");
+      } catch (error) {
+        console.error("An error occured while attempting to upload the file.");
+        console.log(error);
+      }
     }
   };
 
@@ -235,7 +250,7 @@ const Settings = (props: Props) => {
               <div className="col">
                 <button
                   type="button"
-                  // disabled={importing}
+                  disabled={uploadState.uploading}
                   onClick={performImport}
                   className="btn btn-primary btn-block"
                 >
@@ -369,6 +384,7 @@ const Settings = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
+  uploadState: state.uploads,
   backupState: state.backup,
   restoreState: state.restore,
   saveState: state.save,

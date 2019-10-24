@@ -3,7 +3,7 @@ import multer from "multer";
 import { SpreadsheetManager, TroubleshootingSpreadsheetImportResult } from "../../../../spreadsheet-manager";
 import { SpreadsheetType, SpreadsheetImportMode } from "@ccss-support-manual/models";
 import { app } from "../../../../app";
-import { Logger } from "@michaelgatesdev/common";
+import { Logger, EnumUtils } from "@michaelgatesdev/common";
 
 const router: Router = Router();
 
@@ -16,12 +16,18 @@ const upload = multer({ storage });
 
 
 router.post('/', upload.single('file'), async (req, res) => {
-    const mode: number = req.body.importMode;
-    // const version: number = req.body.fileVersion;
+
+    const mode = EnumUtils.parse(SpreadsheetImportMode, req.body.importMode);
+    if (mode === undefined) {
+        res.status(500).json({});
+        return;
+    }
+    
     const result = await SpreadsheetManager.importSpreadsheet(`${req.file.destination}/${req.file.originalname}`, SpreadsheetType.Troubleshooting, mode) as TroubleshootingSpreadsheetImportResult;
 
     switch (+mode) {
         default:
+            Logger.debug("DEFAULT MODE! " + mode);
             break;
         case SpreadsheetImportMode.Append:
             Logger.debug("Append data");
@@ -48,7 +54,7 @@ router.post('/', upload.single('file'), async (req, res) => {
             break;
     }
 
-    app.imageManager.initialize();
+    await app.imageManager.initialize();
 
     res.status(200).json({});
 });

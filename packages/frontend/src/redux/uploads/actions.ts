@@ -1,7 +1,11 @@
 import { Dispatch } from "redux";
 import { SpreadsheetType } from "@ccss-support-manual/models";
 
-import { UPLOAD_SPREADSHEET_TO_IMPORT } from "./types";
+import {
+  UPLOAD_SPREADSHEET_TO_IMPORT,
+  UPLOAD_SPREADSHEET_TO_IMPORT_SUCCESS,
+  UPLOAD_SPREADSHEET_TO_IMPORT_FAILURE,
+} from "./types";
 
 
 function getSpreadsheetURL(fileType: SpreadsheetType) {
@@ -14,21 +18,27 @@ function getSpreadsheetURL(fileType: SpreadsheetType) {
 }
 
 export function uploadSpreadsheetToImport(fileType: SpreadsheetType, formData: FormData) {
-  return (dispatch: Dispatch) => {
-    fetch(
-      `/api/v1/upload/${getSpreadsheetURL(fileType)}`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    )
-      .then(() => {
-        dispatch({
-          type: UPLOAD_SPREADSHEET_TO_IMPORT,
-        });
-      }).catch(error => {
-        console.error("Failed to upload file");
-        console.error(error);
+  return async (dispatch: Dispatch) => {
+    try {
+      dispatch({
+        type: UPLOAD_SPREADSHEET_TO_IMPORT,
       });
+      await fetch(
+        `/api/v1/upload/${getSpreadsheetURL(fileType)}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+      dispatch({
+        type: UPLOAD_SPREADSHEET_TO_IMPORT_SUCCESS,
+      });
+    }
+    catch (error) {
+      dispatch({
+        type: UPLOAD_SPREADSHEET_TO_IMPORT_FAILURE,
+        payload: error,
+      });
+    }
   };
 }
