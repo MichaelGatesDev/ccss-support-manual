@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { Room, Building } from "@ccss-support-manual/models";
@@ -24,93 +24,67 @@ interface Props {
   fetchImages: Function;
 }
 
-interface State {
-  filterSearch: string;
-}
+const BuildingsSection = (props: Props) => {
 
-class BuildingsSection extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+  const [filterSearch, setFilterSearch] = useState<string>("");
 
-    this.state = {
-      filterSearch: "",
-    };
+  const { buildingsState, imagesState } = props;
+  const { fetchBuildings, fetchImages } = props;
 
-    this.onSearch = this.onSearch.bind(this);
-  }
-
-  componentDidMount() {
-    const { fetchBuildings, fetchImages } = this.props;
+  useEffect(() => {
     fetchBuildings();
     fetchImages();
-  }
+  }, []);
 
-  onSearch(value: string) {
-    this.setState({
-      filterSearch: value,
-    });
-  }
-
-  getAllRooms(): Room[] {
-    const { buildingsState } = this.props;
+  const getAllRooms = (): Room[] => {
     let result: Room[] = [];
     for (const building of buildingsState.buildings) {
       result = result.concat(building.rooms);
     }
     return result;
+  };
+
+  const isLoading = (): boolean => buildingsState.buildingsLoading || imagesState.imagesLoading;
+
+  const filterBuildingsByName = (buildings: Building[], name: string): Building[] => buildings.filter((building: Building) => BuildingUtils.hasName(building, name));
+
+
+  // Display splash when loading
+  if (isLoading()) {
+    return <LoadingSplash />;
   }
 
-  private isLoading(): boolean {
-    const { buildingsState, imagesState } = this.props;
-    return buildingsState.buildingsLoading || imagesState.imagesLoading;
-  }
+  const query = filterSearch;
+  const queries = query.split(" ");
 
-  filterBuildingsByName(buildings: Building[], name: string): Building[] {
-    return buildings.filter((building: Building) => BuildingUtils.hasName(building, name), this);
-  }
+  let filteredBuildings = _.sortBy(buildingsState.buildings, ["internalName"]);
 
-  render() {
-    // Display splash when loading
-    if (this.isLoading()) {
-      return <LoadingSplash />;
+  if (queries.length > 0) {
+    for (let query of queries) {
+      query = query.toLocaleLowerCase();
+      filteredBuildings = filterBuildingsByName(filteredBuildings, query);
     }
+  }
 
-    const { filterSearch } = this.state;
-    const { buildingsState, imagesState } = this.props;
-    const { buildings } = buildingsState;
-
-    const query = filterSearch;
-    const queries = query.split(" ");
-
-    let filteredBuildings = _.sortBy(buildings, ["internalName"]);
-
-    if (queries.length > 0) {
-      for (let query of queries) {
-        query = query.toLocaleLowerCase();
-        filteredBuildings = this.filterBuildingsByName(filteredBuildings, query);
-      }
-    }
-
-    return (
-      <>
-        {/* Top navigation */}
-        <NavBar
-          title="CCSS Support Manual"
-          searchable
-          onSearch={this.onSearch}
-          fixed
+  return (
+    <>
+      {/* Top navigation */}
+      <NavBar
+        title="CCSS Support Manual"
+        searchable
+        onSearch={setFilterSearch}
+        fixed
+      />
+      {/* Main content */}
+      <section className="container-fluid" id="home-section">
+        <BuildingCardsGrid
+          buildings={filteredBuildings}
+          images={imagesState}
         />
-        {/* Main content */}
-        <section className="container-fluid" id="home-section">
-          <BuildingCardsGrid
-            buildings={filteredBuildings}
-            images={imagesState}
-          />
-        </section>
-      </>
-    );
-  }
-}
+      </section>
+    </>
+  );
+};
 
 const mapStateToProps = (state: AppState) => ({
   buildingsState: state.buildings,
