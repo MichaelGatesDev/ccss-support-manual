@@ -163,6 +163,7 @@ class RoomSection extends Component<Props, State> {
             <div className="col text-center">
               <h2 className="room-title capitalized">
                 {building.officialName}
+                &nbsp;
                 {room.number}
               </h2>
             </div>
