@@ -245,9 +245,25 @@ class RoomSection extends Component<Props, State> {
             {/* Photos */}
             <div className="col-4">
               <ImageCarousel
-                id="room-carousel"
+                id="room-carousel-titles"
+                height="300px"
+                images={imagesState.roomImages.filter(image => image.type === ImageType.RoomTitle).map(image => image.path)}
+              />
+            </div>
+            {/* Photos */}
+            <div className="col-4">
+              <ImageCarousel
+                id="room-carousel-room"
                 height="300px"
                 images={imagesState.roomImages.filter(image => image.type === ImageType.Room).map(image => image.path)}
+              />
+            </div>
+            {/* Photos */}
+            <div className="col-4">
+              <ImageCarousel
+                id="room-carousel-equipment"
+                height="300px"
+                images={imagesState.roomImages.filter(image => image.type === ImageType.RoomEquipment).map(image => image.path)}
               />
             </div>
           </div>
