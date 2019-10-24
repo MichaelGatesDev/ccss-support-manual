@@ -18,13 +18,14 @@ import { ImagesState } from "../../redux/images/types";
 
 interface Props {
   buildingsState: BuildingsState;
-  imagesState: ImagesState;
-
   fetchBuildings: () => void;
+
+  imagesState: ImagesState;
   fetchImages: () => void;
 }
 
 const Home = (props: Props) => {
+
   const [filterSearch, setFilterSearch] = useState<string>("");
 
   const { fetchBuildings, fetchImages } = props;

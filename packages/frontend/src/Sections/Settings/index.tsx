@@ -28,9 +28,6 @@ import { performSave } from "../../redux/save/actions";
 
 
 interface Props {
-  uploadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
-  downloadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
-
   backupState: BackupState;
   performBackup: () => Promise<void>;
 
@@ -39,11 +36,11 @@ interface Props {
 
   saveState: SaveState;
   performSave: () => Promise<void>;
-}
 
-interface State {
+  // importState: ImportState;
+  uploadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
+  downloadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => void;
 }
-
 
 const Settings = (props: Props) => {
 
@@ -55,8 +52,19 @@ const Settings = (props: Props) => {
   const [restorePoint, setRestorePoint] = useState<string | undefined>();
 
 
+  const { backupState, restoreState, saveState } = props;
+  const {
+    uploadSpreadsheetToImport,
+    performBackup,
+    performRestore,
+    performSave,
+  } = props;
+
+  useEffect(() => {
+  }, []);
+
+
   const performImport = () => {
-    const { uploadSpreadsheetToImport } = props;
 
     if (importFile === undefined && (importSpreadsheetURL === undefined || StringUtils.isBlank(importSpreadsheetURL))) {
       alert("You must select something to import");
@@ -103,7 +111,6 @@ const Settings = (props: Props) => {
 
 
   const backup = async () => {
-    const { performBackup, backupState } = props;
     if (backupState.backingUp) {
       alert("A backup is already being performed!");
       return;
@@ -120,7 +127,6 @@ const Settings = (props: Props) => {
       return;
     }
 
-    const { performRestore, restoreState } = props;
     if (restoreState.restoring) {
       alert("A backup is already being performed!");
       return;
@@ -132,7 +138,6 @@ const Settings = (props: Props) => {
   };
 
   const save = async () => {
-    const { performSave, saveState } = props;
     if (saveState.saving) {
       alert("A save is already being performed!");
       return;
@@ -142,17 +147,6 @@ const Settings = (props: Props) => {
     console.log("Save complete!");
     alert("Save complete!");
   };
-
-
-  const { backupState, restoreState, saveState } = props;
-
-  useEffect(() => {
-    // console.log("Index mount");
-  }, [
-    backupState,
-    restoreState,
-    saveState,
-  ]);
 
   const SelectWithRestoreOptions = withRestoreOptions(Select);
   return (
