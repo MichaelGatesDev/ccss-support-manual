@@ -1,31 +1,33 @@
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
+import { execSync } from "child_process";
+import fs from "fs";
+import path from "path";
 
 const rootDir = path.join(__dirname, "..");
 const packagesDir = `${rootDir}/packages`;
 
-const excludedDirectories: string[] = [
-    "frontend"
-];
-
-
-// build frontend
-console.log("==== TYPESCRIPT BUILD STARTED ====");
+// transpile frontend
+console.log("==== TYPESCRIPT TRANSPILE STARTED ====");
 console.log("");
 
-const packages = fs.readdirSync(packagesDir);
-for (const item of packages) {
-    if (excludedDirectories.includes(item)) continue;
-    console.log(`Building typescript files in ${packagesDir}/${item}`);
-    try {
-        execSync(`cd ${packagesDir}/` + item + " && tsc --build");
-    } catch (error) {
-        // console.error(error);
-        console.error("There was an building typescript files");
-    }
+const packages = [
+    "models",
+    "utilities",
+    "backend",
+];
+for (const pkg of packages) {
+    transpile(`${packagesDir}/${pkg}`);
 }
 
 console.log("");
-console.log("==== TYPESCRIPT BUILD COMPLETE ====");
+console.log("==== TYPESCRIPT TRANSPILE COMPLETE ====");
 console.log("");
+
+function transpile(path: string) {
+    try {
+        console.log(`Transpiling typescript files in ${path}`);
+        execSync(`cd ${path} && tsc --build`);
+        console.log(`Finished transpiling typescript files in ${path}`);
+    } catch (error) {
+        console.error(`There was an transpiling typescript files  ${path}`);
+    }
+}
