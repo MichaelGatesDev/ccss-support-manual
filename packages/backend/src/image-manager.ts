@@ -2,7 +2,7 @@ import { Logger, ArrayUtils } from '@michaelgatesdev/common';
 import { FileUtils } from "@michaelgatesdev/common-io";
 
 import fs from "fs";
-import sharp from "sharp";
+import jimp from "jimp";
 import { app } from "./app";
 import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
@@ -173,10 +173,9 @@ export class ImageManager {
     public async createThumbnail(path: string, dest: string, width: number, height?: number): Promise<void> {
         try {
             Logger.debug(`Creating thumbnail for ${path} (width: ${width})...`);
-            await sharp(path)
-                .resize(width, height)
-                .jpeg({ quality: 100 })
-                .toFile(dest);
+            const img = await jimp.read(path);
+            img.resize(width, jimp.AUTO).quality(100);
+            await img.writeAsync(dest);
             Logger.info(`Created thumbnail for ${path} (width: ${width})!`);
         } catch (error) {
             Logger.error(`Error while generating thumbnail for ${path}`);
