@@ -16,7 +16,7 @@ export default class TableRow extends PureComponent<Props> {
 
     if (data === undefined) return null;
 
-    const mapped = data.map(item => {
+    const mapped = data.map((item) => {
       switch (item.type) {
         default:
           return null;

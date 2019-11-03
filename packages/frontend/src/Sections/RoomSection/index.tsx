@@ -235,7 +235,7 @@ class RoomSection extends Component<Props, State> {
               <ImageCarousel
                 id="room-panoramas-carousel"
                 height="200px"
-                images={imagesState.roomImages.filter(image => image.type === ImageType.RoomPanorama).map(image => image.path)}
+                images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomPanorama).map((image) => image.path)}
               />
             </div>
           </div>
@@ -247,7 +247,7 @@ class RoomSection extends Component<Props, State> {
               <ImageCarousel
                 id="room-carousel-titles"
                 height="300px"
-                images={imagesState.roomImages.filter(image => image.type === ImageType.RoomTitle).map(image => image.path)}
+                images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomTitle).map((image) => image.path)}
               />
             </div>
             {/* Photos */}
@@ -255,7 +255,7 @@ class RoomSection extends Component<Props, State> {
               <ImageCarousel
                 id="room-carousel-room"
                 height="300px"
-                images={imagesState.roomImages.filter(image => image.type === ImageType.Room).map(image => image.path)}
+                images={imagesState.roomImages.filter((image) => image.type === ImageType.Room).map((image) => image.path)}
               />
             </div>
             {/* Photos */}
@@ -263,7 +263,7 @@ class RoomSection extends Component<Props, State> {
               <ImageCarousel
                 id="room-carousel-equipment"
                 height="300px"
-                images={imagesState.roomImages.filter(image => image.type === ImageType.RoomEquipment).map(image => image.path)}
+                images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomEquipment).map((image) => image.path)}
               />
             </div>
           </div>

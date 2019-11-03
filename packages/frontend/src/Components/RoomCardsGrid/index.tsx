@@ -34,13 +34,13 @@ export default class RoomCardsGrid extends Component<Props, State> {
   getImagesForRoom(buildingName: string, roomNumber: string): RoomImage[] {
     const { images } = this.props;
     if (images === undefined) return [];
-    return images.roomImages.filter(image => image.buildingName === buildingName && image.roomNumber === roomNumber);
+    return images.roomImages.filter((image) => image.buildingName === buildingName && image.roomNumber === roomNumber);
   }
 
   render() {
     const { rooms, buildings } = this.props;
 
-    const items = rooms.map(room => {
+    const items = rooms.map((room) => {
       const parentBuilding = BuildingUtils.getParentBuilding(room, buildings);
       if (parentBuilding === undefined) return null;
       const images = this.getImagesForRoom(parentBuilding.internalName, room.number.toString());

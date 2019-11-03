@@ -37,7 +37,7 @@ export default class Select extends Component<SelectComponentProps> {
           }
           {
             values !== undefined &&
-            values.map(value => (
+            values.map((value) => (
               <option
                 key={StringUtils.internalize(value)}
                 value={value}

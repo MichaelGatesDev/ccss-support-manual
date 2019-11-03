@@ -5,10 +5,10 @@ import { buildingsReducer } from "./buildings/reducers";
 import { roomsReducer } from "./rooms/reducers";
 import { imagesReducer } from "./images/reducers";
 import { troubleshootingReducer } from "./troubleshooting/reducers";
-import { uploadsReducer } from "./uploads/reducers";
 import { backupReducer } from "./backup/reducers";
 import { restoreReducer } from "./restore/reducers";
 import { saveReducer } from "./save/reducers";
+import { importsReducer } from "./import/reducers";
 
 const rootReducer = combineReducers({
   buildings: buildingsReducer,
@@ -16,7 +16,8 @@ const rootReducer = combineReducers({
   troubleshooting: troubleshootingReducer,
   images: imagesReducer,
 
-  uploads: uploadsReducer,
+  import: importsReducer,
+
   backup: backupReducer,
   restore: restoreReducer,
   save: saveReducer,
@@ -24,7 +25,16 @@ const rootReducer = combineReducers({
 
 export type AppState = ReturnType<typeof rootReducer>;
 
-const middleware = [thunk];
+
+const successFalureMiddleware = ({ dispatch }: any) => (next: any) => (action: any) => {
+  if (typeof action === "function") {
+    return action(dispatch);
+  }
+  return next(action);
+};
+
+
+const middleware = [thunk, successFalureMiddleware];
 
 export const store = createStore(
   rootReducer,

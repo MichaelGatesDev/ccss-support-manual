@@ -131,7 +131,7 @@ class BuildingSection extends Component<Props, State> {
               <ImageCarousel
                 id="building-panoramas-carousel"
                 height="300px"
-                images={imagesState.buildingImages.filter(image => image.type === ImageType.Building).map(image => image.path)}
+                images={imagesState.buildingImages.filter((image) => image.type === ImageType.Building).map((image) => image.path)}
               />
             </div>
             {/* Info */}

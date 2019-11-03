@@ -28,12 +28,12 @@ export default class TroubleshootingTips extends PureComponent<Props, State> {
 
     let data = troubleshootingData;
 
-    data = data.filter(item => item.types.find((type: string) => typeFilters.includes(type)));
-    if (tagFilters.length > 0) data = data.filter(item => item.tags.find((tag: string) => tagFilters.includes(tag)));
+    data = data.filter((item) => item.types.find((type: string) => typeFilters.includes(type)));
+    if (tagFilters.length > 0) data = data.filter((item) => item.tags.find((tag: string) => tagFilters.includes(tag)));
 
     const queries = search.split(" ");
     for (const q of queries) {
-      data = data.filter(item => (item.title.includes(q) || item.description.includes(q) || item.types.includes(q) || item.tags.includes(q)), this);
+      data = data.filter((item) => ((item).title.includes(q) || item.description.includes(q) || item.types.includes(q) || item.tags.includes(q)), this);
     }
 
 

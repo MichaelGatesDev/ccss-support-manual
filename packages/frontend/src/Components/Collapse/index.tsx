@@ -19,7 +19,7 @@ export default class Collapse extends PureComponent<Props, State> {
 
     const { items } = this.props;
 
-    const mapped = items.map(item => (
+    const mapped = items.map((item) => (
       <div className="card" key={`card-${StringUtils.internalize(item.title)}`}>
         <div className="card-header" id="headingOne">
           <h2 className="mb-0">

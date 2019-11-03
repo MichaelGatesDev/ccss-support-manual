@@ -32,13 +32,13 @@ export default class BuildingCardsGrid extends Component<Props, State> {
   getImagesForBuilding(buildingName: string): BuildingImage[] {
     const { images } = this.props;
     if (images === undefined) return [];
-    return images.buildingImages.filter(image => image.buildingName === buildingName);
+    return images.buildingImages.filter((image) => image.buildingName === buildingName);
   }
 
   render() {
     const { buildings } = this.props;
 
-    const items = buildings.map(building => {
+    const items = buildings.map((building) => {
       const images = this.getImagesForBuilding(building.internalName);
       return (
         <li key={shortid.generate()}>

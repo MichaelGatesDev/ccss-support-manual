@@ -18,7 +18,7 @@ export default class Table extends PureComponent<Props> {
               <thead>
                 <tr>
                   {
-                    headers.map(header => (
+                    headers.map((header) => (
                       <th scope="col" key={shortid.generate()}>{header}</th>
                     ))
                   }

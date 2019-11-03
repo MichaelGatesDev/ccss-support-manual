@@ -33,50 +33,82 @@ import {
     SimpleRoom,
     TroubleshootingData,
     TroubleshootingDataFactory,
-    SimpleRoomFactory
+    SimpleRoomFactory,
+    TroubleshootingSpreadsheetVersion
 } from '@ccss-support-manual/models';
 import { SpreadsheetUtils, RoomUtils, BuildingUtils } from "@ccss-support-manual/utilities";
 import { FileUtils } from "@michaelgatesdev/common-io";
 import { app } from "./app";
 import _ from "lodash";
 
-export interface ClassroomChecksSpreadsheetImportResult {
+
+export interface SpreadsheetImportResult {
+
+}
+
+export interface ClassroomChecksSpreadsheetImportResult extends SpreadsheetImportResult {
     buildings: Building[];
     rooms: Room[];
 }
 
-export interface TroubleshootingSpreadsheetImportResult {
+export interface TroubleshootingSpreadsheetImportResult extends SpreadsheetImportResult {
     troubleshootingData: TroubleshootingData[];
 }
 
 
 export class SpreadsheetManager {
 
-    private static ClassroomChecksSpreadsheetVersionPattern = /((Summer|Winter)\s20[0-9]{2})/gi;
+    private static VersionPattern = /((Summer|Winter)\s20[0-9]{2})/gi;
 
-    public async initialize(): Promise<void> {
-        // const path = "public/tmp/Classroom Checks - Summer 2019.xlsx";
-        // if (!await FileUtils.checkExists(path)) {
-        //     Logger.debug(`No file: ${path}`);
-        // }
-        // try {
-        //     Logger.info(`Importing spreadsheet data from ${path}`);
-        //     const result = await SpreadsheetManager.importSpreadsheet(
-        //         path,
-        //         SpreadsheetType.ClassroomChecks,
-        //         SpreadsheetImportMode.ClearAndWrite
-        //     ) as ClassroomChecksSpreadsheetImportResult;
-        //     Logger.info(`Succesfully imported ${result.buildings.length} buildings and ${result.rooms.length} rooms from "${path}"`);
-        // } catch (error) {
-        //     Logger.error(`There was an error importing spreadsheet data from ${path}`);
-        //     Logger.error(error);
-        // }
+    public static async getSpreadsheetVersion(type: SpreadsheetType, path: string): Promise<ClassroomChecksSpreadsheetVersion | TroubleshootingSpreadsheetVersion | undefined> {
+        if (!await FileUtils.checkExists(path)) throw new Error(`File not found: ${path}`);
+
+        const json = await this.convertSpreadsheetToJson(path);
+        const infoTab = json.get("INFO");
+        if (infoTab === undefined) throw new Error(`Failed to find 'info' tab!`);
+        if (infoTab.length === 0) throw new Error(`No info data found!`);
+        const row = infoTab[0];
+        const version = row['Version'];
+        if (version === undefined) throw new Error(`No version value found!`);
+
+        return this.matchVersion(type, version);
+    }
+
+
+    public static matchVersion(type: SpreadsheetType, rawVersion: string): ClassroomChecksSpreadsheetVersion | TroubleshootingSpreadsheetVersion | undefined {
+        const matches = rawVersion.match(this.VersionPattern);
+        if (matches === null || matches.length !== 1) throw new Error("No version match found for spreadsheet");
+
+        switch (type) {
+            default:
+                return undefined;
+            case SpreadsheetType.ClassroomChecks:
+                return EnumUtils.parse(ClassroomChecksSpreadsheetVersion, matches[0]);
+            case SpreadsheetType.Troubleshooting:
+                return EnumUtils.parse(TroubleshootingSpreadsheetVersion, matches[0]);
+        }
+    }
+
+    public static matchClassroomChecksVersion(rawVersion: string): ClassroomChecksSpreadsheetVersion {
+        const matches = rawVersion.match(this.VersionPattern);
+        if (matches === null || matches.length !== 1) throw new Error("No version match found for spreadsheet");
+        const version = EnumUtils.parse(ClassroomChecksSpreadsheetVersion, matches[0]);
+        if (version === undefined) throw new Error(`No classroom checks spreadsheet version match found in ${rawVersion}`);
+        return version;
+    }
+
+    public static matchTroubleshootingVersion(rawVersion: string): TroubleshootingSpreadsheetVersion {
+        const matches = rawVersion.match(this.VersionPattern);
+        if (matches === null || matches.length !== 1) throw new Error("No version match found for spreadsheet");
+        const version = EnumUtils.parse(TroubleshootingSpreadsheetVersion, matches[0]);
+        if (version === undefined) throw new Error(`No troubleshooting spreadsheet version match found in ${rawVersion}`);
+        return version;
     }
 
     public static async convertSpreadsheetToJson(path: string): Promise<Map<string, any>> {
         if (!await FileUtils.checkExists(path)) throw new Error();
 
-        let result: Map<string, any> = new Map<string, any>();
+        const result: Map<string, any> = new Map<string, any>();
 
         const workbook = XLSX.readFile(path);
         const sheets = workbook.SheetNames;
@@ -89,17 +121,21 @@ export class SpreadsheetManager {
         return result;
     }
 
-
-    public static async importSpreadsheet(path: string, ssType: SpreadsheetType, mode: SpreadsheetImportMode): Promise<ClassroomChecksSpreadsheetImportResult | TroubleshootingSpreadsheetImportResult> {
+    public static async importSpreadsheet(path: string, type: SpreadsheetType, mode: SpreadsheetImportMode): Promise<SpreadsheetImportResult | undefined> {
         if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
-        Logger.debug(`Importing ${SpreadsheetType[ssType]} as mode ${SpreadsheetImportMode[mode]} from ${path}`)
-        switch (ssType) {
-            case SpreadsheetType.ClassroomChecks:
-                const version = SpreadsheetUtils.matchClassroomChecksVersion(path);
-                if (version === undefined) throw new Error(`No classroom checks spreadsheet version match found in ${path}`);
-                return this.importClassroomChecks(path, version);
-            case SpreadsheetType.Troubleshooting:
-                return this.importTroubleshooting(path);
+        Logger.debug(`Importing spreadsheet as mode ${SpreadsheetImportMode[mode]} from ${path}`);
+
+        const version = await this.getSpreadsheetVersion(type, path);
+        if (version === undefined) throw new Error(`No spreadsheet version match found`);
+        switch (+type) {
+            default:
+                return undefined;
+            case SpreadsheetType.ClassroomChecks: {
+                return this.importClassroomChecks(path, version as ClassroomChecksSpreadsheetVersion);
+            }
+            case SpreadsheetType.Troubleshooting: {
+                return this.importTroubleshooting(path, version as TroubleshootingSpreadsheetVersion);
+            }
         }
     }
 
@@ -450,8 +486,15 @@ export class SpreadsheetManager {
         };
     }
 
-    public static async importTroubleshooting(path: string): Promise<TroubleshootingSpreadsheetImportResult> {
-        let ss = new TroubleshootingDataSpreadsheet();
+    public static async importTroubleshooting(path: string, version: TroubleshootingSpreadsheetVersion): Promise<TroubleshootingSpreadsheetImportResult> {
+        let ss: TroubleshootingDataSpreadsheetBase | undefined;
+        switch (version) {
+            case TroubleshootingSpreadsheetVersion.Summer2019:
+                ss = new TroubleshootingDataSpreadsheet_Summer2019();
+                break;
+        }
+        if (ss === undefined) throw new Error("Spreadsheet undefined");
+
         const jsonObjects = await this.convertSpreadsheetToJson(path);
 
         const importedTroubleshootingData: TroubleshootingData[] = [];
@@ -746,7 +789,7 @@ abstract class TroubleshootingDataSpreadsheetBase {
     blacklistedRoomsHeader?: string;
 }
 
-class TroubleshootingDataSpreadsheet extends TroubleshootingDataSpreadsheetBase {
+class TroubleshootingDataSpreadsheet_Summer2019 extends TroubleshootingDataSpreadsheetBase {
     public constructor() {
         super();
         this.sheetName = "Troubleshooting";
@@ -759,3 +802,5 @@ class TroubleshootingDataSpreadsheet extends TroubleshootingDataSpreadsheetBase 
         this.blacklistedRoomsHeader = "Blacklisted Rooms";
     }
 }
+
+

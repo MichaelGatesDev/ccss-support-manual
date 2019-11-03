@@ -28,7 +28,7 @@ class RoomCard extends Component<Props, State> {
 
     let coverImage = "img/300x200.png";
     if (images.length > 0) {
-      const possibleCover = images.find(image => image.type === ImageType.Room);
+      const possibleCover = images.find((image) => image.type === ImageType.Room);
       if (possibleCover !== undefined) {
         coverImage = possibleCover.thumbnail.path;
       }

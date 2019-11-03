@@ -27,6 +27,8 @@ export class App {
 
     public ROOT_DIR: string = "./";
     public PUBLIC_DIR: string = `${this.ROOT_DIR}/public`;
+    public TEMP_DIR: string = `${this.ROOT_DIR}/temp`;
+    public DOWNLOADS_DIR: string = `${this.PUBLIC_DIR}/downloads`;
     public UPLOADS_DIR: string = `${this.PUBLIC_DIR}/uploads`;
     public BACKUPS_DIR: string = `${this.PUBLIC_DIR}/backups`;
     public DATA_DIR: string = `${this.PUBLIC_DIR}/data`;
@@ -83,8 +85,6 @@ export class App {
         // }
 
         await this.dataManager.initialize();
-
-        await this.spreadsheetManager.initialize();
 
 
         // load images
@@ -152,6 +152,16 @@ export class App {
         if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
             if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
                 Logger.info(`Created public directory: ${this.PUBLIC_DIR}`);
+            }
+        }
+        if (!await FileUtils.checkExists(this.DOWNLOADS_DIR)) {
+            if (await FileUtils.createDirectory(this.DOWNLOADS_DIR)) {
+                Logger.info(`Created public directory: ${this.DOWNLOADS_DIR}`);
+            }
+        }
+        if (!await FileUtils.checkExists(this.UPLOADS_DIR)) {
+            if (await FileUtils.createDirectory(this.UPLOADS_DIR)) {
+                Logger.info(`Created public directory: ${this.UPLOADS_DIR}`);
             }
         }
         if (!await FileUtils.checkExists(this.BACKUPS_DIR)) {

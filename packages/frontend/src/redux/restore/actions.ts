@@ -11,13 +11,13 @@ import {
 export function fetchRestoreOptions() {
   return (dispatch: Dispatch) => {
     fetch("/api/v1/restore")
-      .then(response => response.json())
+      .then((response) => response.json())
       .then((options: string[]): void => {
         dispatch({
           type: FETCH_RESTORE_OPTIONS,
           payload: options,
         });
-      }).catch(error => {
+      }).catch((error) => {
         console.error("Failed to fetch restore options");
         console.error(error);
       });

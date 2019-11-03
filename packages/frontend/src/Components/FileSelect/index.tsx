@@ -29,7 +29,7 @@ export default class FileSelect extends PureComponent<Props, State> {
 
     let accept;
     if (types !== undefined) {
-      const mappedTypes = types.map(type => `.${type}`);
+      const mappedTypes = types.map((type) => `.${type}`);
       accept = mappedTypes.join(", ");
     }
 

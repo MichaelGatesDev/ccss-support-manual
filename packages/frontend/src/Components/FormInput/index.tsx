@@ -70,7 +70,7 @@ class FormInput extends Component<Props, State> {
           placeholder={placeholder}
           onChange={this.onChange}
           value={value}
-          ref={elem => { this.textInput = elem; }}
+          ref={(elem) => { this.textInput = elem; }}
           // onFocus={this.onFocus}
           onBlur={this.onBlur}
         />

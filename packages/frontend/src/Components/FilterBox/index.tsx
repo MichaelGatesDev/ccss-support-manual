@@ -39,7 +39,7 @@ class FilterBox extends Component<Props, State> {
     const { onChange } = this.props;
     const { activeFilters } = this.state;
     this.setState({
-      activeFilters: becomeActive ? [...activeFilters, name] : activeFilters.filter(item => item !== name),
+      activeFilters: becomeActive ? [...activeFilters, name] : activeFilters.filter((item) => item !== name),
     }, () => {
       const { activeFilters } = this.state;
       onChange(activeFilters);

@@ -5,8 +5,7 @@ import { connect } from "react-redux";
 
 import { EnumUtils, StringUtils } from "@michaelgatesdev/common";
 import {
-  SpreadsheetImportMode,
-  SpreadsheetType,
+  SpreadsheetImportMode, SpreadsheetType,
 } from "@ccss-support-manual/models";
 
 import NavBar from "../../Components/NavBar";
@@ -16,16 +15,19 @@ import Collapse from "../../Components/Collapse";
 import FormInput from "../../Components/FormInput";
 import withRestoreOptions from "../../Components/Select/withRestoreOptions";
 
-import { BackupState } from "../../redux/backup/types";
 import { AppState } from "../../redux/store";
-import { uploadSpreadsheetToImport } from "../../redux/uploads/actions";
-import { downloadSpreadsheetToImport } from "../../redux/downloads/actions";
+
+import { BackupState } from "../../redux/backup/types";
 import { performBackup } from "../../redux/backup/actions";
-import { performRestore } from "../../redux/restore/actions";
+
 import { RestoreState } from "../../redux/restore/types";
+import { performRestore } from "../../redux/restore/actions";
+
 import { SaveState } from "../../redux/save/types";
 import { performSave } from "../../redux/save/actions";
-import { UploadState } from "../../redux/uploads/types";
+
+import { ImportState } from "../../redux/import/types";
+import { importSpreadsheet } from "../../redux/import/actions";
 
 
 interface Props {
@@ -38,16 +40,13 @@ interface Props {
   saveState: SaveState;
   performSave: () => Promise<void>;
 
-  uploadState: UploadState;
-  uploadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => Promise<void>;
-
-  // importState: ImportState;
-  // downloadSpreadsheetToImport: (fileType: SpreadsheetType, formData: FormData) => Promise<void>;
+  importState: ImportState;
+  importSpreadsheet: (formData: FormData) => Promise<void>;
 }
 
 const Settings = (props: Props) => {
 
-  const [importSpreadsheetURL, setImportSpreadsheetURL] = useState<string>("");
+  const [importURL, setImportSpreadsheetURL] = useState<string>("");
   const [importFile, setImportFile] = useState<File | FileList | undefined>();
   const [importFileType, setImportFileType] = useState<string | undefined>(SpreadsheetType[SpreadsheetType.ClassroomChecks]);
   const [importFileMode, setImportFileMode] = useState<string | undefined>(SpreadsheetImportMode[SpreadsheetImportMode.ClearAndWrite]);
@@ -59,10 +58,10 @@ const Settings = (props: Props) => {
     backupState,
     restoreState,
     saveState,
-    uploadState,
+    importState,
   } = props;
   const {
-    uploadSpreadsheetToImport,
+    importSpreadsheet,
     performBackup,
     performRestore,
     performSave,
@@ -72,51 +71,53 @@ const Settings = (props: Props) => {
   }, []);
 
 
-  const performImport = async () => {
+  const resetImportForm = () => {
+    setImportSpreadsheetURL("");
+    setImportFile(undefined);
+    setImportFileType(SpreadsheetType[SpreadsheetType.ClassroomChecks]);
+    setImportFileMode(SpreadsheetImportMode[SpreadsheetImportMode.ClearAndWrite]);
+  };
 
-    if (importFile === undefined && (importSpreadsheetURL === undefined || StringUtils.isBlank(importSpreadsheetURL))) {
+  const performImport = async () => {
+    const hasFile = importFile !== undefined;
+    const hasURL = importURL !== undefined && !StringUtils.isBlank(importURL);
+    if (!hasFile && !hasURL) {
       alert("You must select something to import");
       return;
     }
 
+    console.debug("Compiling form data..");
+    const data = new FormData();
+
+    if (importFileMode === undefined) {
+      console.error("File Import Mode not specified");
+      return;
+    }
+    data.append("importMode", importFileMode);
+
+    if (importFileType === undefined) {
+      console.error("File Import Type not specified");
+      return;
+    }
+    data.append("importType", importFileType);
+
     // if there's a URL in there, try that first
-    if (!StringUtils.isBlank(importSpreadsheetURL)) {
-      console.debug(`Attempting to import from ${importSpreadsheetURL} ...`);
-    } else {
-      if (importFile === undefined) {
-        console.error("Can not import file because it is undefined!");
-        return;
-      }
-      console.debug("Compiling form data..");
-      const data = new FormData();
+    if (hasURL) {
+      console.debug(`Attempting to import from URL: ${importURL} ...`);
+      data.append("url", importURL);
+    }
+    else {
+      console.debug(`Attempting to import local file: ${(importFile as File).name} ...`);
       data.append("file", importFile as File);
+    }
 
-      if (importFileMode === undefined) {
-        console.error("File Import Mode not specified");
-        return;
-      }
-      data.append("importMode", importFileMode);
-
-      if (importFileType === undefined) {
-        console.error("File Import Type not specified");
-        return;
-      }
-
-      const parsedFileType = EnumUtils.parse(SpreadsheetType, importFileType);
-      if (parsedFileType === undefined) {
-        console.error("File Import Type (parsed) is invalid");
-        return;
-      }
-
-      try {
-        console.debug("Beginning upload..");
-        await uploadSpreadsheetToImport(parsedFileType, data);
-        console.debug("Upload complete");
-        alert("Upload complete!");
-      } catch (error) {
-        console.error("An error occured while attempting to upload the file.");
-        console.log(error);
-      }
+    try {
+      await importSpreadsheet(data);
+    } catch (error) {
+      console.error("An error occured while attempting to import data.");
+      console.log(error);
+    } finally {
+      resetImportForm();
     }
   };
 
@@ -173,7 +174,6 @@ const Settings = (props: Props) => {
       />
       {/* Main content */}
       <section className="container" id="settings-section">
-
         {/* Data Header */}
         <div className="row">
           <div className="col">
@@ -187,9 +187,24 @@ const Settings = (props: Props) => {
             {/* Import Header */}
             <div className="row">
               <div className="col">
-                <h3>Import data from spreadsheet</h3>
+                <h3>Import data</h3>
               </div>
             </div>
+
+            {/* Error messages row */}
+            <div className="row">
+              <div className="col">
+                {
+                  importState.error &&
+                  (
+                    <div className="alert alert-danger" role="alert">
+                      {importState.error}
+                    </div>
+                  )
+                }
+              </div>
+            </div>
+
             <div className="row">
               <div className="col">
                 <Collapse
@@ -200,11 +215,22 @@ const Settings = (props: Props) => {
                       content: (
                         <div className="row">
                           <div className="col">
-                            <FormInput
-                              value={importSpreadsheetURL}
-                              placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
-                              onChange={setImportSpreadsheetURL}
-                            />
+                            {/* Header row */}
+                            <div className="row">
+                              <div className="col">
+                                <h5>Spreadsheet URL</h5>
+                              </div>
+                            </div>
+                            {/* Input row */}
+                            <div className="row">
+                              <div className="col">
+                                <FormInput
+                                  value={importURL}
+                                  placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
+                                  onChange={setImportSpreadsheetURL}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ),
@@ -212,31 +238,24 @@ const Settings = (props: Props) => {
                     {
                       title: "File",
                       content: (
+
                         <div className="row">
                           <div className="col">
-                            <h5>Spreadsheet File</h5>
-                            <FileSelect
-                              types={["xlsx"]}
-                              onSelect={setImportFile}
-                            />
-                          </div>
-                          <div className="col">
-                            <h5>Spreadsheet Type</h5>
-                            <Select
-                              readonly={importFile === undefined}
-                              values={EnumUtils.values(SpreadsheetType)}
-                              onChange={setImportFileType}
-                              current={importFileType}
-                            />
-                          </div>
-                          <div className="col">
-                            <h5>Data Import Mode</h5>
-                            <Select
-                              readonly={importFile === undefined}
-                              values={EnumUtils.values(SpreadsheetImportMode)}
-                              onChange={setImportFileMode}
-                              current={importFileMode}
-                            />
+                            {/* Header row */}
+                            <div className="row">
+                              <div className="col">
+                                <h5>Spreadsheet File</h5>
+                              </div>
+                            </div>
+                            {/* Input row */}
+                            <div className="row">
+                              <div className="col">
+                                <FileSelect
+                                  types={["xlsx"]}
+                                  onSelect={setImportFile}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ),
@@ -245,12 +264,36 @@ const Settings = (props: Props) => {
                 />
               </div>
             </div>
+            {/* Spreadsheet Type */}
+            <div className="row">
+              <div className="col">
+                <h5>Spreadsheet Type</h5>
+                <Select
+                  readonly={importFile === undefined && (importURL === undefined || StringUtils.isBlank(importURL))}
+                  values={EnumUtils.values(SpreadsheetType)}
+                  onChange={setImportFileType}
+                  current={importFileType}
+                />
+              </div>
+            </div>
+            {/* Import Mode */}
+            <div className="row">
+              <div className="col">
+                <h5>Data Import Mode</h5>
+                <Select
+                  readonly={importFile === undefined && (importURL === undefined || StringUtils.isBlank(importURL))}
+                  values={EnumUtils.values(SpreadsheetImportMode)}
+                  onChange={setImportFileMode}
+                  current={importFileMode}
+                />
+              </div>
+            </div>
             {/* Import Button */}
             <div className="row">
               <div className="col">
                 <button
                   type="button"
-                  disabled={uploadState.uploading}
+                  disabled={importState.importing}
                   onClick={performImport}
                   className="btn btn-primary btn-block"
                 >
@@ -384,15 +427,15 @@ const Settings = (props: Props) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  uploadState: state.uploads,
+  importState: state.import,
+
   backupState: state.backup,
   restoreState: state.restore,
   saveState: state.save,
 });
 
 export const mapDispatchToProps = {
-  uploadSpreadsheetToImport,
-  downloadSpreadsheetToImport,
+  importSpreadsheet,
   performBackup,
   performRestore,
   performSave,

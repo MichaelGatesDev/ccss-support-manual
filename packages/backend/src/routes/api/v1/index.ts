@@ -4,7 +4,7 @@ import buildingsRoute from "./buildings";
 import roomsRoute from "./rooms";
 import imagesRoute from "./images";
 import troubleshootingRoute from "./troubleshooting-data";
-import uploadRoute from "./upload";
+import importRoute from "./import";
 import backupRoute from "./backup";
 import restoreRoute from "./restore";
 
@@ -15,7 +15,7 @@ router.use("/buildings", buildingsRoute);
 router.use("/rooms", roomsRoute);
 router.use("/images", imagesRoute);
 router.use("/troubleshooting-data", troubleshootingRoute);
-router.use("/upload", uploadRoute);
+router.use("/import", importRoute);
 router.use("/backup", backupRoute);
 router.use("/restore", restoreRoute);
 
