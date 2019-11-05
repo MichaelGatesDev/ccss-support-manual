@@ -25,16 +25,7 @@ const rootReducer = combineReducers({
 
 export type AppState = ReturnType<typeof rootReducer>;
 
-
-const successFalureMiddleware = ({ dispatch }: any) => (next: any) => (action: any) => {
-  if (typeof action === "function") {
-    return action(dispatch);
-  }
-  return next(action);
-};
-
-
-const middleware = [thunk, successFalureMiddleware];
+const middleware = [thunk];
 
 export const store = createStore(
   rootReducer,

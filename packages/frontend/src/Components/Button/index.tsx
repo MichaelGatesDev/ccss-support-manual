@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-
 import "./style.scss";
+
+import React, { Component } from "react";
 
 interface Props {
   disabled?: boolean;
@@ -44,6 +44,7 @@ class Button extends Component<Props, State> {
           type="button"
           value={title}
           onClick={this.onClick}
+          className="btn btn-primary btn-block"
         />
       </div>
     );
