@@ -215,6 +215,25 @@ const ImportDataSegment = (props: Props) => {
             />
           </div>
         </div>
+        {
+          importState.importing &&
+          (
+            <div className="row">
+              <div className="col">
+                <div className="progress">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    aria-valuenow={100}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   );
