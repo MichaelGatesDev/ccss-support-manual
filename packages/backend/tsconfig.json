@@ -4,7 +4,11 @@
     "target": "es6",
     "module": "commonjs",
     "rootDir": "src",
-    "outDir": "build"
+    "outDir": "build",
+    "lib": [
+      "es6",
+      "dom",
+    ]
   },
   "include": [
     "src/**/*.ts"

@@ -1,11 +1,11 @@
 import { Router } from "express";
 import multer from "multer";
-import { SpreadsheetManager, ClassroomChecksSpreadsheetImportResult } from "../../../../spreadsheet-manager";
-import { SpreadsheetType, SpreadsheetImportMode, ClassroomChecksSpreadsheetVersion } from "@ccss-support-manual/models";
+import { SpreadsheetManager } from "../../../../spreadsheet-manager";
+import { SpreadsheetType, SpreadsheetImportMode } from "@ccss-support-manual/models";
 import { app } from "../../../../app";
 import { Logger, EnumUtils } from "@michaelgatesdev/common";
-import { RoomUtils, SpreadsheetUtils } from "@ccss-support-manual/utilities";
-import { WebDownloader, GoogleDriveDownloader, FileUtils } from "@michaelgatesdev/common-io";
+import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
+import { GoogleDriveDownloader, FileUtils } from "@michaelgatesdev/common-io";
 
 const router: Router = Router();
 
@@ -49,7 +49,7 @@ router.post('/', upload.single('file'), async (req, res) => {
             Logger.debug(`Download complete`);
             file = downloadPath;
         } catch (error) {
-            res.status(500).send(error);
+            res.status(500).send(error.message !== undefined ? error.message : error);
             Logger.error(error);
         }
     }
@@ -59,7 +59,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         file = req.file;
     }
 
-    const path = typeof file == "string" ? file : `${req.file.destination}/${req.file.originalname}`;
+    const path = typeof file === "string" ? file : `${req.file.destination}/${req.file.originalname}`;
 
     const importType = EnumUtils.parse(SpreadsheetType, req.body.importType);
     if (importType === undefined) {
@@ -79,26 +79,12 @@ router.post('/', upload.single('file'), async (req, res) => {
 
     try {
         Logger.debug("Performing import...");
-        const importResult = await SpreadsheetManager.importSpreadsheet(path, importType, importMode);
-        switch (+importMode) {
-            default:
-                Logger.debug("Default import mode. This shouldn't happen.");
-                break;
-            case SpreadsheetImportMode.Append:
-                Logger.debug("Append data");
-                Logger.error("NOT SUPPORTED!");
-                break;
-            case SpreadsheetImportMode.ClearAndWrite:
-                Logger.debug("Clear and Write data");
-                break;
-            case SpreadsheetImportMode.OverwriteAndAppend:
-                Logger.debug("Overwrite and Append data");
-                Logger.error("NOT SUPPORTED!");
-                break;
-        }
+        await SpreadsheetManager.importSpreadsheet(path, importType, importMode);
+        Logger.debug("Import complete!");
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send(error.message !== undefined ? error.message : error);
         Logger.error(error);
+        return;
     } finally {
         if (await FileUtils.delete(path)) {
             Logger.debug(`Deleted downloaded file at ${path}`);

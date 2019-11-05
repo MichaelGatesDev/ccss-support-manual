@@ -36,14 +36,12 @@ import {
     SimpleRoomFactory,
     TroubleshootingSpreadsheetVersion
 } from '@ccss-support-manual/models';
-import { SpreadsheetUtils, RoomUtils, BuildingUtils } from "@ccss-support-manual/utilities";
 import { FileUtils } from "@michaelgatesdev/common-io";
 import { app } from "./app";
 import _ from "lodash";
 
 
 export interface SpreadsheetImportResult {
-
 }
 
 export interface ClassroomChecksSpreadsheetImportResult extends SpreadsheetImportResult {
@@ -110,7 +108,7 @@ export class SpreadsheetManager {
 
         const result: Map<string, any> = new Map<string, any>();
 
-        const workbook = XLSX.readFile(path);
+        const workbook = XLSX.readFile(path, {});
         const sheets = workbook.SheetNames;
 
         sheets.forEach(async (sheet: string): Promise<void> => {
@@ -121,47 +119,78 @@ export class SpreadsheetManager {
         return result;
     }
 
-    public static async importSpreadsheet(path: string, type: SpreadsheetType, mode: SpreadsheetImportMode): Promise<SpreadsheetImportResult | undefined> {
+    public static async importSpreadsheet(path: string, type: SpreadsheetType, importMode: SpreadsheetImportMode): Promise<void> {
         if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
-        Logger.debug(`Importing spreadsheet as mode ${SpreadsheetImportMode[mode]} from ${path}`);
+        Logger.debug(`Importing ${SpreadsheetType[type]} spreadsheet as mode ${SpreadsheetImportMode[importMode]} from ${path}`);
 
         const version = await this.getSpreadsheetVersion(type, path);
         if (version === undefined) throw new Error(`No spreadsheet version match found`);
+
         switch (+type) {
-            default:
-                return undefined;
+            default: return undefined;
             case SpreadsheetType.ClassroomChecks: {
-                return this.importClassroomChecks(path, version as ClassroomChecksSpreadsheetVersion);
+                const result = await this.importClassroomChecks(path, version as ClassroomChecksSpreadsheetVersion);
+
+                Logger.debug(
+                    "Import result:"
+                    + `\nBuildings: ${result.buildings.length}`
+                    + `\nRooms: ${result.rooms.length}`
+                );
+
+                switch (+importMode) {
+                    default:
+                        Logger.debug("Default import mode. This fires if an invalid import mode is specified.");
+                        break;
+                    case SpreadsheetImportMode.Append:
+                        Logger.debug("Append data");
+                        break;
+                    case SpreadsheetImportMode.ClearAndWrite:
+                        Logger.debug("Clearing all data");
+                        app.buildingManager.clear();
+                        app.roomManager.clear();
+                        Logger.debug("Writing new data");
+                        app.buildingManager.addBuildings(result.buildings);
+                        app.roomManager.addRooms(result.rooms);
+                        break;
+                    case SpreadsheetImportMode.OverwriteAndAppend:
+                        Logger.debug("Overwrite and Append data");
+                        break;
+                }
+
+                break;
             }
             case SpreadsheetType.Troubleshooting: {
-                return this.importTroubleshooting(path, version as TroubleshootingSpreadsheetVersion);
+                const result = await this.importTroubleshooting(path, version as TroubleshootingSpreadsheetVersion);
+                Logger.debug(
+                    "Import result:"
+                    + `\nTroubleshooting Data: ${result.troubleshootingData.length}`
+                );
+
+                switch (+importMode) {
+                    default:
+                        Logger.debug("Default import mode. This fires if an invalid import mode is specified.");
+                        break;
+                    case SpreadsheetImportMode.Append:
+                        Logger.debug("Append data");
+                        break;
+                    case SpreadsheetImportMode.ClearAndWrite:
+                        Logger.debug("Clearing all data");
+                        app.troubleshootingDataManager.clear();
+                        Logger.debug("Writing new data");
+                        app.troubleshootingDataManager.addAll(result.troubleshootingData);
+                        break;
+                    case SpreadsheetImportMode.OverwriteAndAppend:
+                        Logger.debug("Overwrite and Append data");
+                        break;
+                }
+                break;
             }
         }
     }
 
     private static async importClassroomChecks(path: string, version: ClassroomChecksSpreadsheetVersion): Promise<ClassroomChecksSpreadsheetImportResult> {
-        let ss: ClassroomChecksSpreadsheetBase | undefined;
-        switch (version) {
-            case ClassroomChecksSpreadsheetVersion.Summer2017:
-                ss = new ClassroomChecksSpreadsheet_Summer2017();
-                break;
-            case ClassroomChecksSpreadsheetVersion.Winter2017:
-                ss = new ClassroomChecksSpreadsheet_Winter2017();
-                break;
-            case ClassroomChecksSpreadsheetVersion.Summer2018:
-                ss = new ClassroomChecksSpreadsheet_Summer2018();
-                break;
-            case ClassroomChecksSpreadsheetVersion.Winter2018:
-                ss = new ClassroomChecksSpreadsheet_Winter2018();
-                break;
-            case ClassroomChecksSpreadsheetVersion.Summer2019:
-                ss = new ClassroomChecksSpreadsheet_Summer2019();
-                break;
-            case ClassroomChecksSpreadsheetVersion.Winter2019:
-                ss = new ClassroomChecksSpreadsheet_Winter2019();
-                break;
-        }
-        if (ss === undefined) throw new Error("Spreadsheet undefined");
+        const ss = new (<any>SpreadsheetVersions)[`ClassroomChecksSpreadsheet_${ClassroomChecksSpreadsheetVersion[version]}`];
+        if (ss === undefined) throw new Error("Could not import Classroom Checks spreadsheet (spreadsheet undefined)");
 
         const jsonObjects = await this.convertSpreadsheetToJson(path);
 
@@ -478,8 +507,6 @@ export class SpreadsheetManager {
             }
         }
 
-        // 
-
         return {
             buildings: importedBuildings,
             rooms: importedRooms
@@ -487,13 +514,8 @@ export class SpreadsheetManager {
     }
 
     public static async importTroubleshooting(path: string, version: TroubleshootingSpreadsheetVersion): Promise<TroubleshootingSpreadsheetImportResult> {
-        let ss: TroubleshootingDataSpreadsheetBase | undefined;
-        switch (version) {
-            case TroubleshootingSpreadsheetVersion.Summer2019:
-                ss = new TroubleshootingDataSpreadsheet_Summer2019();
-                break;
-        }
-        if (ss === undefined) throw new Error("Spreadsheet undefined");
+        const ss = new (<any>SpreadsheetVersions)[`TroubleshootingDataSpreadsheet_${TroubleshootingSpreadsheetVersion[version]}`];
+        if (ss === undefined) throw new Error("Could not import Troubleshooting spreadsheet (spreadsheet undefined)");
 
         const jsonObjects = await this.convertSpreadsheetToJson(path);
 
@@ -580,226 +602,228 @@ export class SpreadsheetManager {
 }
 
 
-abstract class ClassroomChecksSpreadsheetBase {
-    // =================================== \\
-    //              BUILDINGS              \\
-    // =================================== \\
-    buildingsSheetName?: string;
-    buildingsOfficialNameHeader?: string;
-    buildingsNicknamesHeader?: string;
+export namespace SpreadsheetVersions {
 
-    // =================================== \\
-    //              ROOMS LIST             \\
-    // =================================== \\
-    roomsListSheetName?: string;
-    roomsListSheetHeaderRow?: number;
-    roomsListBuildingHeader?: string;
-    roomsListNumberHeader?: string;
+    export abstract class ClassroomChecksSpreadsheetBase {
+        // =================================== \\
+        //              BUILDINGS              \\
+        // =================================== \\
+        buildingsSheetName?: string;
+        buildingsOfficialNameHeader?: string;
+        buildingsNicknamesHeader?: string;
 
-    // =================================== \\
-    //              ROOMS                  \\
-    // =================================== \\
-    roomsSheetName?: string;
+        // =================================== \\
+        //              ROOMS LIST             \\
+        // =================================== \\
+        roomsListSheetName?: string;
+        roomsListSheetHeaderRow?: number;
+        roomsListBuildingHeader?: string;
+        roomsListNumberHeader?: string;
 
-    // room
-    roomsBuildingNameHeader?: string;
-    roomsNumberHeader?: string;
-    roomsNameHeader?: string;
-    roomsRoomTypeHeader?: string;
-    roomsLockTypeHeader?: string;
-    roomsCapacityHeader?: string;
+        // =================================== \\
+        //              ROOMS                  \\
+        // =================================== \\
+        roomsSheetName?: string;
 
-    // classroom
-    roomsLastCheckedHeader?: string;
-    // classroom - phone
-    roomsPhoneMakeHeader?: string;
-    roomsPhoneModelHeader?: string;
-    roomsPhoneExtensionHeader?: string;
-    roomsPhoneHasDisplayHeader?: string;
-    roomsPhoneHasSpeakerHeader?: string;
+        // room
+        roomsBuildingNameHeader?: string;
+        roomsNumberHeader?: string;
+        roomsNameHeader?: string;
+        roomsRoomTypeHeader?: string;
+        roomsLockTypeHeader?: string;
+        roomsCapacityHeader?: string;
 
-    // smart classroom - teaching station
-    roomsTeachingStationTypeHeader?: string;
-    roomsTeachingStationComputerMakeHeader?: string;
-    roomsTeachingStationComputerModelHeader?: string;
-    roomsTeachingStationComputerTypeHeader?: string;
-    roomsTeachingStationComputerOperatingSystemHeader?: string;
-    roomsTeachingStationComputerHasWebcamHeader?: string;
-    // smart classroom - audio
-    roomsAudioSystemDependentHeader?: string;
-    roomsAudioSpeakerTypeHeader?: string;
-    roomsAudioSpeakerMakeHeader?: string;
-    roomsAudioSpeakerModelHeader?: string;
-    // smart classroom - video
-    roomsVideoOutputTypeHeader?: string;
-    roomsDVDPlayerTypeHeader?: string;
-    roomsDVDPlayerMakeHeader?: string;
-    roomsDVDPlayerModelHeader?: string;
+        // classroom
+        roomsLastCheckedHeader?: string;
+        // classroom - phone
+        roomsPhoneMakeHeader?: string;
+        roomsPhoneModelHeader?: string;
+        roomsPhoneExtensionHeader?: string;
+        roomsPhoneHasDisplayHeader?: string;
+        roomsPhoneHasSpeakerHeader?: string;
 
-    // computer classroom
-    roomsPrinterMakeHeader?: string;
-    roomsPrinterModelHeader?: string;
-    roomsPrinterSymquestNumberHeader?: string;
-    roomsPrinterCartridgeTypeHeader?: string;
-}
+        // smart classroom - teaching station
+        roomsTeachingStationTypeHeader?: string;
+        roomsTeachingStationComputerMakeHeader?: string;
+        roomsTeachingStationComputerModelHeader?: string;
+        roomsTeachingStationComputerTypeHeader?: string;
+        roomsTeachingStationComputerOperatingSystemHeader?: string;
+        roomsTeachingStationComputerHasWebcamHeader?: string;
+        // smart classroom - audio
+        roomsAudioSystemDependentHeader?: string;
+        roomsAudioSpeakerTypeHeader?: string;
+        roomsAudioSpeakerMakeHeader?: string;
+        roomsAudioSpeakerModelHeader?: string;
+        // smart classroom - video
+        roomsVideoOutputTypeHeader?: string;
+        roomsDVDPlayerTypeHeader?: string;
+        roomsDVDPlayerMakeHeader?: string;
+        roomsDVDPlayerModelHeader?: string;
 
-
-class ClassroomChecksSpreadsheet_Summer2017 extends ClassroomChecksSpreadsheetBase {
-    public constructor() {
-        super();
-        this.roomsSheetName = "Main";
-        this.roomsBuildingNameHeader = "Building";
-        this.roomsNumberHeader = "Room #";
-
-        this.roomsListSheetName = "Rooms";
-        this.roomsListSheetHeaderRow = 1;
-        this.roomsListBuildingHeader = "Building";
-        this.roomsListNumberHeader = "Room #";
+        // computer classroom
+        roomsPrinterMakeHeader?: string;
+        roomsPrinterModelHeader?: string;
+        roomsPrinterSymquestNumberHeader?: string;
+        roomsPrinterCartridgeTypeHeader?: string;
     }
-}
 
-class ClassroomChecksSpreadsheet_Winter2017 extends ClassroomChecksSpreadsheetBase {
-    public constructor() {
-        super();
-        this.roomsSheetName = "Main";
-        this.roomsBuildingNameHeader = "Building";
-        this.roomsNumberHeader = "Room #";
-        this.roomsCapacityHeader = "Capacity";
-        this.roomsLockTypeHeader = "Lock Type";
-        this.roomsPhoneExtensionHeader = "Phone Extension";
+    export class ClassroomChecksSpreadsheet_Summer2017 extends ClassroomChecksSpreadsheetBase {
+        public constructor() {
+            super();
+            this.roomsSheetName = "Main";
+            this.roomsBuildingNameHeader = "Building";
+            this.roomsNumberHeader = "Room #";
 
-        this.roomsListSheetName = "Rooms";
-        this.roomsListSheetHeaderRow = 1;
-        this.roomsListBuildingHeader = "Building";
-        this.roomsListNumberHeader = "Room #";
+            this.roomsListSheetName = "Rooms";
+            this.roomsListSheetHeaderRow = 1;
+            this.roomsListBuildingHeader = "Building";
+            this.roomsListNumberHeader = "Room #";
+        }
     }
-}
 
-class ClassroomChecksSpreadsheet_Summer2018 extends ClassroomChecksSpreadsheetBase {
-    public constructor() {
-        super();
-        this.roomsSheetName = "Main";
-        this.roomsBuildingNameHeader = "Building";
-        this.roomsNumberHeader = "Room #";
-        this.roomsCapacityHeader = "Capacity";
-        this.roomsLockTypeHeader = "Lock Type";
-        this.roomsPhoneExtensionHeader = "Phone Extension";
 
-        this.roomsListSheetName = "Rooms";
-        this.roomsListSheetHeaderRow = 1;
-        this.roomsListBuildingHeader = "Building";
-        this.roomsListNumberHeader = "Room #";
+    export class ClassroomChecksSpreadsheet_Winter2017 extends ClassroomChecksSpreadsheetBase {
+        public constructor() {
+            super();
+            this.roomsSheetName = "Main";
+            this.roomsBuildingNameHeader = "Building";
+            this.roomsNumberHeader = "Room #";
+            this.roomsCapacityHeader = "Capacity";
+            this.roomsLockTypeHeader = "Lock Type";
+            this.roomsPhoneExtensionHeader = "Phone Extension";
+
+            this.roomsListSheetName = "Rooms";
+            this.roomsListSheetHeaderRow = 1;
+            this.roomsListBuildingHeader = "Building";
+            this.roomsListNumberHeader = "Room #";
+        }
     }
-}
 
-class ClassroomChecksSpreadsheet_Winter2018 extends ClassroomChecksSpreadsheetBase {
-    public constructor() {
-        super();
-        this.buildingsSheetName = "Buildings";
-        this.buildingsOfficialNameHeader = "Official Name";
-        this.buildingsNicknamesHeader = "Other Names";
+    export class ClassroomChecksSpreadsheet_Summer2018 extends ClassroomChecksSpreadsheetBase {
+        public constructor() {
+            super();
+            this.roomsSheetName = "Main";
+            this.roomsBuildingNameHeader = "Building";
+            this.roomsNumberHeader = "Room #";
+            this.roomsCapacityHeader = "Capacity";
+            this.roomsLockTypeHeader = "Lock Type";
+            this.roomsPhoneExtensionHeader = "Phone Extension";
 
-        this.roomsListSheetName = "Rooms";
-        this.roomsListSheetHeaderRow = 1;
-        this.roomsListBuildingHeader = "Building";
-        this.roomsListNumberHeader = "Room #";
-
-        this.roomsSheetName = "Main";
-        this.roomsBuildingNameHeader = "Building";
-        this.roomsNumberHeader = "Room #";
-        this.roomsCapacityHeader = "Capacity";
-        this.roomsLockTypeHeader = "Lock Type";
-        this.roomsPhoneExtensionHeader = "Phone Extension";
+            this.roomsListSheetName = "Rooms";
+            this.roomsListSheetHeaderRow = 1;
+            this.roomsListBuildingHeader = "Building";
+            this.roomsListNumberHeader = "Room #";
+        }
     }
-}
 
-class ClassroomChecksSpreadsheet_Summer2019 extends ClassroomChecksSpreadsheetBase {
-    public constructor() {
-        super();
-        this.buildingsSheetName = "Buildings";
-        this.buildingsOfficialNameHeader = "Official Name";
-        this.buildingsNicknamesHeader = "Nicknames";
+    export class ClassroomChecksSpreadsheet_Winter2018 extends ClassroomChecksSpreadsheetBase {
+        public constructor() {
+            super();
+            this.buildingsSheetName = "Buildings";
+            this.buildingsOfficialNameHeader = "Official Name";
+            this.buildingsNicknamesHeader = "Other Names";
 
-        this.roomsListSheetName = "Rooms List";
-        this.roomsListSheetHeaderRow = 1;
-        this.roomsListBuildingHeader = "Building";
-        this.roomsListNumberHeader = "Room #";
+            this.roomsListSheetName = "Rooms";
+            this.roomsListSheetHeaderRow = 1;
+            this.roomsListBuildingHeader = "Building";
+            this.roomsListNumberHeader = "Room #";
 
-        this.roomsSheetName = "Rooms";
-        this.roomsBuildingNameHeader = "Building";
-        this.roomsNumberHeader = "Number";
-        this.roomsNameHeader = "Name";
-        this.roomsRoomTypeHeader = "Type";
-        this.roomsLockTypeHeader = "Lock Type";
-        this.roomsCapacityHeader = "Capacity";
-        this.roomsPhoneExtensionHeader = "Phone Extension";
-        this.roomsTeachingStationTypeHeader = "Teaching Station Type";
-        this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
-        this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
-        this.roomsVideoOutputTypeHeader = "Video Output Type";
-        this.roomsDVDPlayerTypeHeader = "DVD Player Type";
-        this.roomsAudioSystemDependentHeader = "Audio Requires System";
-        this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
-        this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
-        this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+            this.roomsSheetName = "Main";
+            this.roomsBuildingNameHeader = "Building";
+            this.roomsNumberHeader = "Room #";
+            this.roomsCapacityHeader = "Capacity";
+            this.roomsLockTypeHeader = "Lock Type";
+            this.roomsPhoneExtensionHeader = "Phone Extension";
+        }
     }
-}
 
-class ClassroomChecksSpreadsheet_Winter2019 extends ClassroomChecksSpreadsheetBase {
-    public constructor() {
-        super();
-        this.buildingsSheetName = "Buildings";
-        this.buildingsOfficialNameHeader = "Official Name";
-        this.buildingsNicknamesHeader = "Nicknames";
+    export class ClassroomChecksSpreadsheet_Summer2019 extends ClassroomChecksSpreadsheetBase {
+        public constructor() {
+            super();
+            this.buildingsSheetName = "Buildings";
+            this.buildingsOfficialNameHeader = "Official Name";
+            this.buildingsNicknamesHeader = "Nicknames";
 
-        this.roomsSheetName = "Rooms";
-        this.roomsBuildingNameHeader = "Building";
-        this.roomsNumberHeader = "Number";
-        this.roomsNameHeader = "Name";
-        this.roomsRoomTypeHeader = "Type";
-        this.roomsLockTypeHeader = "Lock Type";
-        this.roomsCapacityHeader = "Capacity";
+            this.roomsListSheetName = "Rooms List";
+            this.roomsListSheetHeaderRow = 1;
+            this.roomsListBuildingHeader = "Building";
+            this.roomsListNumberHeader = "Room #";
 
-        this.roomsPhoneExtensionHeader = "Phone Extension";
-
-        this.roomsTeachingStationTypeHeader = "Teaching Station Type";
-        this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
-        this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
-
-        this.roomsVideoOutputTypeHeader = "Video Output Type";
-        this.roomsDVDPlayerTypeHeader = "DVD Player Type";
-
-        this.roomsAudioSystemDependentHeader = "Audio Requires System";
-        this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
-
-        this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
-        this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+            this.roomsSheetName = "Rooms";
+            this.roomsBuildingNameHeader = "Building";
+            this.roomsNumberHeader = "Number";
+            this.roomsNameHeader = "Name";
+            this.roomsRoomTypeHeader = "Type";
+            this.roomsLockTypeHeader = "Lock Type";
+            this.roomsCapacityHeader = "Capacity";
+            this.roomsPhoneExtensionHeader = "Phone Extension";
+            this.roomsTeachingStationTypeHeader = "Teaching Station Type";
+            this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
+            this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
+            this.roomsVideoOutputTypeHeader = "Video Output Type";
+            this.roomsDVDPlayerTypeHeader = "DVD Player Type";
+            this.roomsAudioSystemDependentHeader = "Audio Requires System";
+            this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
+            this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
+            this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+        }
     }
-}
 
+    export class ClassroomChecksSpreadsheet_Winter2019 extends ClassroomChecksSpreadsheetBase {
+        public constructor() {
+            super();
+            this.buildingsSheetName = "Buildings";
+            this.buildingsOfficialNameHeader = "Official Name";
+            this.buildingsNicknamesHeader = "Nicknames";
 
-abstract class TroubleshootingDataSpreadsheetBase {
-    sheetName?: string;
-    titleHeader?: string;
-    descriptionHeader?: string;
-    solutionHeader?: string;
-    typesHeader?: string;
-    tagsHeader?: string;
-    whitelistedRoomsHeader?: string;
-    blacklistedRoomsHeader?: string;
-}
+            this.roomsSheetName = "Rooms";
+            this.roomsBuildingNameHeader = "Building";
+            this.roomsNumberHeader = "Number";
+            this.roomsNameHeader = "Name";
+            this.roomsRoomTypeHeader = "Type";
+            this.roomsLockTypeHeader = "Lock Type";
+            this.roomsCapacityHeader = "Capacity";
 
-class TroubleshootingDataSpreadsheet_Summer2019 extends TroubleshootingDataSpreadsheetBase {
-    public constructor() {
-        super();
-        this.sheetName = "Troubleshooting";
-        this.titleHeader = "Incident";
-        this.descriptionHeader = "Description";
-        this.solutionHeader = "Solution";
-        this.typesHeader = "Types";
-        this.tagsHeader = "Tags";
-        this.whitelistedRoomsHeader = "Whitelisted Rooms";
-        this.blacklistedRoomsHeader = "Blacklisted Rooms";
+            this.roomsPhoneExtensionHeader = "Phone Extension";
+
+            this.roomsTeachingStationTypeHeader = "Teaching Station Type";
+            this.roomsTeachingStationComputerTypeHeader = "Teaching Station Computer Type";
+            this.roomsTeachingStationComputerOperatingSystemHeader = "Teaching Station Computer Operating System";
+
+            this.roomsVideoOutputTypeHeader = "Video Output Type";
+            this.roomsDVDPlayerTypeHeader = "DVD Player Type";
+
+            this.roomsAudioSystemDependentHeader = "Audio Requires System";
+            this.roomsAudioSpeakerTypeHeader = "Audio Speakers Type";
+
+            this.roomsPrinterSymquestNumberHeader = "Printer SymQuest Number";
+            this.roomsPrinterCartridgeTypeHeader = "Printer Cartridge Type";
+        }
+    }
+
+    export abstract class TroubleshootingDataSpreadsheetBase {
+        sheetName?: string;
+        titleHeader?: string;
+        descriptionHeader?: string;
+        solutionHeader?: string;
+        typesHeader?: string;
+        tagsHeader?: string;
+        whitelistedRoomsHeader?: string;
+        blacklistedRoomsHeader?: string;
+    }
+
+    export class TroubleshootingDataSpreadsheet_Summer2019 extends TroubleshootingDataSpreadsheetBase {
+        public constructor() {
+            super();
+            this.sheetName = "Troubleshooting";
+            this.titleHeader = "Incident";
+            this.descriptionHeader = "Description";
+            this.solutionHeader = "Solution";
+            this.typesHeader = "Types";
+            this.tagsHeader = "Tags";
+            this.whitelistedRoomsHeader = "Whitelisted Rooms";
+            this.blacklistedRoomsHeader = "Blacklisted Rooms";
+        }
     }
 }
 
