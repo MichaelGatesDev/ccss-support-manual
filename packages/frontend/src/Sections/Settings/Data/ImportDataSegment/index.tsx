@@ -14,6 +14,7 @@ import FileSelect from "../../../../Components/FileSelect";
 import Select from "../../../../Components/Select";
 import Button from "../../../../Components/Button";
 import { AppState } from "../../../../redux/store";
+import { SettingsSegment } from "../../SettingsSegment";
 
 interface Props {
   importState?: ImportState;
@@ -34,8 +35,6 @@ const ImportDataSegment = (props: Props) => {
 
   useEffect(() => {
   }, []);
-
-  console.log(importState);
 
   if (importState === undefined) {
     return <p>Waiting for import state..</p>; // TODO splash screen
@@ -98,144 +97,141 @@ const ImportDataSegment = (props: Props) => {
 
 
   return (
-    <div className="row segment">
-      <div className="col">
-        {/* Import Header */}
-        <div className="row">
-          <div className="col">
-            <h3>Import data</h3>
-          </div>
-        </div>
-
-        {/* Error messages row */}
-        <div className="row">
-          <div className="col">
-            {
-              importState !== undefined && importState.error &&
-              (
-                <div className="alert alert-danger" role="alert">
-                  {importState.error}
-                </div>
-              )
-            }
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <Collapse
-              items={[
-                {
-                  title: "Google Sheets",
-                  show: true,
-                  content: (
-                    <div className="row">
-                      <div className="col">
-                        {/* Header row */}
-                        <div className="row">
-                          <div className="col">
-                            <h5>Spreadsheet URL</h5>
-                          </div>
-                        </div>
-                        {/* Input row */}
-                        <div className="row">
-                          <div className="col">
-                            <FormInput
-                              value={importURL}
-                              placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
-                              onChange={setImportSpreadsheetURL}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ),
-                },
-                {
-                  title: "File",
-                  content: (
-
-                    <div className="row">
-                      <div className="col">
-                        {/* Header row */}
-                        <div className="row">
-                          <div className="col">
-                            <h5>Spreadsheet File</h5>
-                          </div>
-                        </div>
-                        {/* Input row */}
-                        <div className="row">
-                          <div className="col">
-                            <FileSelect
-                              types={["xlsx"]}
-                              onSelect={setImportFile}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ),
-                },
-              ]}
-            />
-          </div>
-        </div>
-        {/* Spreadsheet Type */}
-        <div className="row">
-          <div className="col">
-            <h5>Spreadsheet Type</h5>
-            <Select
-              readonly={importFile === undefined && (importURL === undefined || StringUtils.isBlank(importURL))}
-              values={EnumUtils.values(SpreadsheetType)}
-              onChange={setImportFileType}
-              current={importFileType}
-            />
-          </div>
-        </div>
-        {/* Import Mode */}
-        <div className="row">
-          <div className="col">
-            <h5>Data Import Mode</h5>
-            <Select
-              readonly={importFile === undefined && (importURL === undefined || StringUtils.isBlank(importURL))}
-              values={EnumUtils.values(SpreadsheetImportMode)}
-              onChange={setImportFileMode}
-              current={importFileMode}
-            />
-          </div>
-        </div>
-        {/* Import Button */}
-        <div className="row">
-          <div className="col">
-            <Button
-              title="Import"
-              disabled={(importState !== undefined && importState.importing)}
-              onClick={performImport}
-              preventDefault
-            />
-          </div>
-        </div>
-        {
-          importState.importing &&
-          (
-            <div className="row">
-              <div className="col">
-                <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-striped progress-bar-animated"
-                    role="progressbar"
-                    aria-valuenow={100}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    style={{ width: "100%" }}
-                  />
+    <SettingsSegment
+      id="import-data"
+      segmentTitle="Import Data"
+      segmentContent={(
+        <>
+          {/* Error messages row */}
+          {
+            importState !== undefined && importState.error &&
+            (
+              <div className="row">
+                <div className="col">
+                  <div className="alert alert-danger" role="alert">
+                    {importState.error}
+                  </div>
                 </div>
               </div>
+            )
+          }
+
+          <div className="row">
+            <div className="col">
+              <Collapse
+                items={[
+                  {
+                    title: "Google Sheets",
+                    show: true,
+                    content: (
+                      <div className="row">
+                        <div className="col">
+                          {/* Header row */}
+                          <div className="row">
+                            <div className="col">
+                              <h5>Spreadsheet URL</h5>
+                            </div>
+                          </div>
+                          {/* Input row */}
+                          <div className="row">
+                            <div className="col">
+                              <FormInput
+                                value={importURL}
+                                placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
+                                onChange={setImportSpreadsheetURL}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                  },
+                  {
+                    title: "File",
+                    content: (
+
+                      <div className="row">
+                        <div className="col">
+                          {/* Header row */}
+                          <div className="row">
+                            <div className="col">
+                              <h5>Spreadsheet File</h5>
+                            </div>
+                          </div>
+                          {/* Input row */}
+                          <div className="row">
+                            <div className="col">
+                              <FileSelect
+                                types={["xlsx"]}
+                                onSelect={setImportFile}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                  },
+                ]}
+              />
             </div>
-          )
-        }
-      </div>
-    </div>
+          </div>
+          {/* Spreadsheet Type */}
+          <div className="row">
+            <div className="col">
+              <h5>Spreadsheet Type</h5>
+              <Select
+                readonly={importFile === undefined && (importURL === undefined || StringUtils.isBlank(importURL))}
+                values={EnumUtils.values(SpreadsheetType)}
+                onChange={setImportFileType}
+                current={importFileType}
+              />
+            </div>
+          </div>
+          {/* Import Mode */}
+          <div className="row">
+            <div className="col">
+              <h5>Data Import Mode</h5>
+              <Select
+                readonly={importFile === undefined && (importURL === undefined || StringUtils.isBlank(importURL))}
+                values={EnumUtils.values(SpreadsheetImportMode)}
+                onChange={setImportFileMode}
+                current={importFileMode}
+              />
+            </div>
+          </div>
+          {/* Import Button */}
+          <div className="row">
+            <div className="col">
+              <Button
+                title="Import"
+                disabled={(importState !== undefined && importState.importing)}
+                onClick={performImport}
+                preventDefault
+              />
+            </div>
+          </div>
+          {
+            importState.importing &&
+            (
+              <div className="row">
+                <div className="col">
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-bar-striped progress-bar-animated"
+                      role="progressbar"
+                      aria-valuenow={100}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )
+          }
+        </>
+      )}
+    />
   );
 };
 

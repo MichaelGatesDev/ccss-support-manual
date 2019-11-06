@@ -3,10 +3,13 @@ import {
 } from "./types";
 
 const initialState: RestoreState = {
+  restoring: false,
+
   loadingOptions: true,
   options: [],
 
-  restoring: false,
+  data: undefined,
+  error: undefined,
 };
 
 export function restoreReducer(state = initialState, action: RestoreActionTypes): RestoreState {
@@ -26,11 +29,13 @@ export function restoreReducer(state = initialState, action: RestoreActionTypes)
       return {
         ...state,
         restoring: false,
+        data: action.data,
       };
     case PERFORM_RESTORE_FAILURE:
       return {
         ...state,
         restoring: false,
+        error: action.error,
       };
     default:
       return state;

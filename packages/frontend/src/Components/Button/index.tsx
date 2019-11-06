@@ -6,7 +6,7 @@ interface Props {
   disabled?: boolean;
   preventDefault: boolean;
   title: string;
-  onClick?: Function;
+  onClick?: () => void;
 }
 
 interface State {
@@ -31,7 +31,7 @@ class Button extends Component<Props, State> {
       e.preventDefault();
     }
     if (onClick !== undefined) {
-      onClick(e);
+      onClick();
     }
   }
 

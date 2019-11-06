@@ -43,5 +43,5 @@ export interface ImageBackupOptions {
 export interface SettingsBackupOptions {
     applicationConfig?: boolean;
     imagesConfig?: boolean;
-    classroomChecksSpreadsheetConfig?: boolean;
+    troubleshootingKeywordsConfig?: boolean;
 }

@@ -4,41 +4,25 @@ import React, { } from "react";
 import { connect } from "react-redux";
 
 import { AppState } from "../../../../redux/store";
+import { SettingsSegment } from "../../SettingsSegment";
 
 interface Props {
 }
 
 const ExportDataSegment = () => (
-  <div className="row segment">
-    <div className="col">
-      {/* Import Header */}
-      <div className="row">
-        <div className="col">
-          <h3>Export data</h3>
+  <SettingsSegment
+    id="export-data"
+    segmentTitle="Export Data"
+    segmentContent={(
+      <>
+        <div className="row">
+          <div className="col">
+            <p>This feature is not available yet</p>
+          </div>
         </div>
-      </div>
-
-      {/* Error messages row */}
-      <div className="row">
-        <div className="col">
-          {
-            // exportState !== undefined && exportState.error &&
-            // (
-            //   <div className="alert alert-danger" role="alert">
-            //     {exportState.error}
-            //   </div>
-            // )
-          }
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col">
-          <p>This feature is not available yet</p>
-        </div>
-      </div>
-    </div>
-  </div>
+      </>
+    )}
+  />
 );
 
 

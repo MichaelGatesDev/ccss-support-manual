@@ -1,8 +1,9 @@
 export interface RestoreState {
+  restoring: boolean;
   loadingOptions: boolean;
   options: string[];
-
-  restoring: boolean;
+  data: any | undefined,
+  error: string | undefined;
 }
 
 // Describing the different ACTION NAMES available
@@ -22,10 +23,12 @@ interface PerformRestoreAction {
 
 interface PerformRestoreSuccessAction {
   type: typeof PERFORM_RESTORE_SUCCESS;
+  data: any;
 }
 
 interface PerformRestoreFailureAction {
   type: typeof PERFORM_RESTORE_FAILURE;
+  error: string;
 }
 
 export type RestoreActionTypes = FetchRestoreOptionsAction | PerformRestoreAction | PerformRestoreSuccessAction | PerformRestoreFailureAction;

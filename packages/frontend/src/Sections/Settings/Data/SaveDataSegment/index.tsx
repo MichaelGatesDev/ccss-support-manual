@@ -7,6 +7,7 @@ import { AppState } from "../../../../redux/store";
 import { performSave } from "../../../../redux/save/actions";
 import { SaveState } from "../../../../redux/save/types";
 import Button from "../../../../Components/Button";
+import { SettingsSegment } from "../../SettingsSegment";
 
 interface Props {
   saveState: SaveState;
@@ -35,27 +36,24 @@ const SaveDataSegment = (props: Props) => {
   };
 
   return (
-    <div className="row segment">
-      <div className="col">
-        {/* Import Header */}
-        <div className="row">
-          <div className="col">
-            <h3>Save data</h3>
+    <SettingsSegment
+      id="save-data"
+      segmentTitle="Save Data"
+      segmentContent={(
+        <>
+          <div className="row">
+            <div className="col">
+              <Button
+                title="Save"
+                disabled={saveState.saving}
+                onClick={save}
+                preventDefault
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <Button
-              title="Restore"
-              disabled={saveState.saving}
-              onClick={save}
-              preventDefault
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+        </>
+      )}
+    />
   );
 };
 

@@ -10,6 +10,8 @@ import { AppState } from "../../../../redux/store";
 import { RestoreState } from "../../../../redux/restore/types";
 import { performRestore } from "../../../../redux/restore/actions";
 import Button from "../../../../Components/Button";
+import { SettingsSegment } from "../../SettingsSegment";
+import { NamedRow } from "../../../../Components/NamedRow";
 
 interface Props {
   restoreState: RestoreState;
@@ -47,36 +49,77 @@ const RestoreDataSegment = (props: Props) => {
   const SelectWithRestoreOptions = withRestoreOptions(Select);
 
   return (
-    <div className="row segment">
-      <div className="col">
-        {/* Import Header */}
-        <div className="row">
-          <div className="col">
-            <h3>Restore data</h3>
-          </div>
-        </div>
+    <SettingsSegment
+      segmentTitle="Restore Data"
+      segmentContent={(
+        <>
+          {/* Backup File Name */}
+          <NamedRow
+            headerType={4}
+            columns={[
+              {
+                title: "Restore Point",
+                content: (
+                  <>
+                    {/* Error messages row */}
+                    {
+                      restoreState !== undefined && restoreState.error &&
+                      (
+                        <div className="row">
+                          <div className="col">
+                            <div className="alert alert-danger" role="alert">
+                              {restoreState.error}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                    {/* Options */}
+                    <SelectWithRestoreOptions
+                      size={1}
+                      onChange={setRestorePoint}
+                      current={restorePoint}
+                    />
+                  </>
+                ),
+              },
+            ]}
+          />
 
-        <div className="row">
-          <div className="col">
-            <SelectWithRestoreOptions
-              size={1}
-              onChange={setRestorePoint}
-              current={restorePoint}
-            />
+          {/* Button */}
+          <div className="row">
+            <div className="col">
+              <Button
+                title="Restore"
+                disabled={restoreState.restoring}
+                onClick={restore}
+                preventDefault
+              />
+            </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <Button
-              title="Restore"
-              disabled={restoreState.restoring}
-              onClick={restore}
-              preventDefault
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+          {/* Progress Bar */}
+          {
+            restoreState.restoring &&
+            (
+              <div className="row">
+                <div className="col">
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-bar-striped progress-bar-animated"
+                      role="progressbar"
+                      aria-valuenow={100}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )
+          }
+        </>
+      )}
+    />
   );
 };
 
