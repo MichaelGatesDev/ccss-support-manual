@@ -1,6 +1,7 @@
 export interface BackupState {
   backingUp: boolean;
-  error?: string;
+  data: any | undefined,
+  error: string | undefined;
 }
 
 // Describing the different ACTION NAMES available
@@ -14,10 +15,12 @@ interface PerformBackupAction {
 
 interface PerformBackupActionSuccess {
   type: typeof PERFORM_BACKUP_SUCCESS;
+  data: any;
 }
+
 interface PerformBackupActionFailure {
   type: typeof PERFORM_BACKUP_FAILURE;
-  payload: string;
+  error: string;
 }
 
 export type BackupActionTypes = PerformBackupAction | PerformBackupActionSuccess | PerformBackupActionFailure;

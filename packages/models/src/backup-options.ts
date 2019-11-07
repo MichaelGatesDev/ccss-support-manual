@@ -26,12 +26,16 @@ export interface BackupOptions {
 }
 
 export interface DataBackupOptions {
+    all: boolean;
+
     buildings?: boolean;
     rooms?: boolean;
     troubleshooting?: boolean;
 }
 
 export interface ImageBackupOptions {
+    all: boolean;
+
     buildingImages?: boolean;
 
     room_equipmentImages?: boolean;
@@ -41,6 +45,8 @@ export interface ImageBackupOptions {
 }
 
 export interface SettingsBackupOptions {
+    all: boolean;
+    
     applicationConfig?: boolean;
     imagesConfig?: boolean;
     troubleshootingKeywordsConfig?: boolean;

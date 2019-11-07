@@ -3,18 +3,24 @@ import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from './app';
 import { BuildingUtils, RoomUtils, TroubleshootingDataUtils } from '@ccss-support-manual/utilities';
-import { Building, Room, TroubleshootingData } from '@ccss-support-manual/models';
+import { Building, Room, TroubleshootingData, BackupOptions } from '@ccss-support-manual/models';
 
 
 export class DataManager {
+
+    public buildingsFileName = "buildings.json";
     private buildingsFilePath?: string;
+
+    public roomsFileName = "rooms.json";
     private roomsFilePath?: string;
-    private troubleshootingDataFilePath?: string;
+
+    public troubleshootingFileName = "troubleshooting.json";
+    private troubleshootingFilePath?: string;
 
     public async initialize(): Promise<void> {
 
         // buildings file
-        this.buildingsFilePath = `${app.DATA_DIR}/buildings.json`
+        this.buildingsFilePath = `${app.DATA_DIR}/${this.buildingsFileName}`
         if (!await FileUtils.checkExists(this.buildingsFilePath)) {
             Logger.info(`No buildings file found at ${this.buildingsFilePath}. Creating default...`);
             try {
@@ -32,7 +38,7 @@ export class DataManager {
         Logger.info(`Loaded ${loadedBuildings.length} buildings`);
 
         // rooms file
-        this.roomsFilePath = `${app.DATA_DIR}/rooms.json`
+        this.roomsFilePath = `${app.DATA_DIR}/${this.roomsFileName}`
         if (!await FileUtils.checkExists(this.roomsFilePath)) {
             Logger.info(`No rooms file found at ${this.roomsFilePath}. Creating default...`);
             try {
@@ -50,9 +56,9 @@ export class DataManager {
         Logger.info(`Loaded ${loadedRooms.length} rooms`);
 
         // troubleshooting data file
-        this.troubleshootingDataFilePath = `${app.DATA_DIR}/troubleshooting.json`
-        if (!await FileUtils.checkExists(this.troubleshootingDataFilePath)) {
-            Logger.info(`No troubleshooting data file found at ${this.troubleshootingDataFilePath}. Creating default...`);
+        this.troubleshootingFilePath = `${app.DATA_DIR}/${this.troubleshootingFileName}`
+        if (!await FileUtils.checkExists(this.troubleshootingFilePath)) {
+            Logger.info(`No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`);
             try {
                 const result = await this.createDefaultTroubleshootingDataFile();
                 if (result) {
@@ -189,9 +195,9 @@ export class DataManager {
      * @returns true if successful otherwise false
      */
     private async writeTroubleshootingDataFile(data: TroubleshootingData[]): Promise<boolean> {
-        if (this.troubleshootingDataFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
+        if (this.troubleshootingFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
         return await FileUtils.writeJSON(
-            this.troubleshootingDataFilePath,
+            this.troubleshootingFilePath,
             data
         );
     }
@@ -201,30 +207,58 @@ export class DataManager {
      * @returns an array of the loaded troubleshooting data
      */
     private async loadTroubleshootingDataFile(): Promise<TroubleshootingData[]> {
-        if (this.troubleshootingDataFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
-        const json = await FileUtils.readJSON<TroubleshootingData[]>(this.troubleshootingDataFilePath);
+        if (this.troubleshootingFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
+        const json = await FileUtils.readJSON<TroubleshootingData[]>(this.troubleshootingFilePath);
         if (json === undefined) throw new Error("Troubleshooting Data is corrupted");
         return json;
     }
 
 
 
-    public async backup(): Promise<void> {
-        Logger.info("Performing backup...");
-        const now = new Date();
-
-        const month = StringUtils.pad(`${now.getMonth() + 1}`, "0", 2);
-        const day = StringUtils.pad(`${now.getDate()}`, "0", 2);
-        const hours = StringUtils.pad(`${now.getHours()}`, "0", 2);
-        const minutes = StringUtils.pad(`${now.getMinutes()}`, "0", 2);
-        const seconds = StringUtils.pad(`${now.getSeconds()}`, "0", 2);
-        const nowStr = `${now.getFullYear()}${month}${day}${hours}${minutes}${seconds}`;
-        Logger.info(`Backup directory: ${app.BACKUPS_DIR}/${nowStr}`);
-        const destDir = `${app.BACKUPS_DIR}/${nowStr}`;
+    public async backup(options: BackupOptions): Promise<void> {
+        if (StringUtils.isBlank(options.name)) throw new Error("The backup name can not be blank!");
+        const destDir = `${app.BACKUPS_DIR}/${options.name}`;
+        Logger.info(`Performing backup (${app.BACKUPS_DIR}/${options.name})`);
         if (await FileUtils.createDirectory(destDir)) Logger.info("Created directory");
-        if (await FileUtils.copy(app.DATA_DIR, `${destDir}/data`)) Logger.info("Copied data");
-        if (await FileUtils.copy(app.IMAGES_DIR, `${destDir}/images`)) Logger.info("Copied images");
-        if (await FileUtils.copy(app.SETTINGS_DIR, `${destDir}/settings`)) Logger.info("Copied settings");
+
+        const dataOptions = options.data;
+        if (dataOptions !== undefined) {
+            if (dataOptions.all) {
+                if (await FileUtils.copy(app.DATA_DIR, `${destDir}/data`)) Logger.info("Copied all data");
+            }
+            else {
+                if (dataOptions.buildings) {
+                    if (await FileUtils.copy(`${app.DATA_DIR}/${this.buildingsFileName}`, `${destDir}/data/${this.buildingsFileName}`)) Logger.info("Copied buildings data");
+                }
+                if (dataOptions.rooms) {
+                    if (await FileUtils.copy(`${app.DATA_DIR}/${this.roomsFileName}`, `${destDir}/data/${this.roomsFileName}`)) Logger.info("Copied rooms data");
+                }
+                if (dataOptions.troubleshooting) {
+                    if (await FileUtils.copy(`${app.DATA_DIR}/${this.troubleshootingFileName}`, `${destDir}/data/${this.troubleshootingFileName}`)) Logger.info("Copied troubleshooting data");
+                }
+            }
+        }
+
+        const imageOptions = options.images;
+        if (imageOptions !== undefined) {
+            if (imageOptions.all) {
+                if (await FileUtils.copy(app.IMAGES_DIR, `${destDir}/images`)) Logger.info("Copied all images");
+            }
+            else {
+                //TODO implement specific image type
+            }
+        }
+
+        const settingsOptions = options.settings;
+        if (settingsOptions !== undefined) {
+            if (settingsOptions.all) {
+                if (await FileUtils.copy(app.SETTINGS_DIR, `${destDir}/settings`)) Logger.info("Copied all settings");
+            }
+            else {
+                //TODO implement specific image type
+            }
+        }
+
         Logger.info("Backup complete");
     }
 

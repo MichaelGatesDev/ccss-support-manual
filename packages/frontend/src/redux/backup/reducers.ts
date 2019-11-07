@@ -4,10 +4,14 @@ import {
 
 const initialState: BackupState = {
   backingUp: false,
+  data: undefined,
+  error: undefined,
 };
 
 export function backupReducer(state = initialState, action: BackupActionTypes): BackupState {
   switch (action.type) {
+    default:
+      return state;
     case PERFORM_BACKUP:
       return {
         ...state,
@@ -17,14 +21,13 @@ export function backupReducer(state = initialState, action: BackupActionTypes): 
       return {
         ...state,
         backingUp: false,
+        data: action.data,
       };
     case PERFORM_BACKUP_FAILURE:
       return {
         ...state,
         backingUp: false,
-        error: action.payload,
+        error: action.error,
       };
-    default:
-      return state;
   }
 }

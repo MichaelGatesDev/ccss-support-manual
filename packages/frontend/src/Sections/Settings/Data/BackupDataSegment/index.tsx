@@ -58,42 +58,6 @@ const BackupDataSegment = (props: Props) => {
   useEffect(() => {
   }, []);
 
-  const backup = async () => {
-    if (backupState.backingUp) {
-      alert("A backup is already being performed!");
-      return;
-    }
-
-    if (StringUtils.isBlank(backupName)) {
-      alert("You must specify a name for the backup");
-      return;
-    }
-
-    console.log("Performing backup...");
-    await performBackup({
-      name: backupName,
-      data: {
-        buildings: backupBuildings,
-        rooms: backupRooms,
-        troubleshooting: backupTroubleshooting,
-      },
-      images: {
-        buildingImages: backupBuildingImages,
-        room_equipmentImages: backupRoomEquipmentImages,
-        room_panoramicImages: backupRoomPanoramicImages,
-        room_titleImages: backupRoomTitleImages,
-        room_coverImages: backupRoomCoverImages,
-      },
-      settings: {
-        applicationConfig: backupApplicationConfig,
-        imagesConfig: backupImagesConfig,
-        troubleshootingKeywordsConfig: backupTroubleshootingKeywordsConfig,
-      },
-    });
-    console.log("Backup complete!");
-    alert("Backup complete!");
-  };
-
   const modifyAll = (type: BackupSettingsType, active: boolean): void => {
     switch (type) {
       default: break;
@@ -117,12 +81,76 @@ const BackupDataSegment = (props: Props) => {
     }
   };
 
+  const resetBackupForm = () => {
+    modifyAll(BackupSettingsType.Data, true);
+    modifyAll(BackupSettingsType.Images, true);
+    modifyAll(BackupSettingsType.Settings, true);
+    setBackupName("");
+  };
+
+  const backup = async () => {
+    if (backupState.backingUp) {
+      alert("A backup is already being performed!");
+      return;
+    }
+
+    if (StringUtils.isBlank(backupName)) {
+      alert("You must specify a name for the backup");
+      return;
+    }
+
+    try {
+      await performBackup({
+        name: backupName,
+        data: {
+          all: backupBuildings && backupRooms && backupTroubleshooting,
+          buildings: backupBuildings,
+          rooms: backupRooms,
+          troubleshooting: backupTroubleshooting,
+        },
+        images: {
+          all: backupBuildingImages && backupRoomEquipmentImages && backupRoomEquipmentImages && backupRoomPanoramicImages && backupRoomTitleImages && backupRoomCoverImages,
+          buildingImages: backupBuildingImages,
+          room_equipmentImages: backupRoomEquipmentImages,
+          room_panoramicImages: backupRoomPanoramicImages,
+          room_titleImages: backupRoomTitleImages,
+          room_coverImages: backupRoomCoverImages,
+        },
+        settings: {
+          all: backupApplicationConfig && backupImagesConfig && backupTroubleshootingKeywordsConfig,
+          applicationConfig: backupApplicationConfig,
+          imagesConfig: backupImagesConfig,
+          troubleshootingKeywordsConfig: backupTroubleshootingKeywordsConfig,
+        },
+      });
+    } catch (error) {
+      Logger.error("An error occured while attempting to backup data.");
+      Logger.error(error);
+    } finally {
+      resetBackupForm();
+    }
+  };
+
   return (
     <SettingsSegment
       id="backup-data"
       segmentTitle="Backup Data"
       segmentContent={(
         <>
+          {/* Error messages row */}
+          {
+            backupState !== undefined && backupState.error &&
+            (
+              <div className="row">
+                <div className="col">
+                  <div className="alert alert-danger" role="alert">
+                    {backupState.error}
+                  </div>
+                </div>
+              </div>
+            )
+          }
+
           {/* Backup File Name */}
           <NamedRow
             id="backup-file-name-row"
@@ -297,20 +325,6 @@ const BackupDataSegment = (props: Props) => {
               },
             ]}
           />
-
-          {/* Error messages row */}
-          {
-            backupState !== undefined && backupState.error &&
-            (
-              <div className="row">
-                <div className="col">
-                  <div className="alert alert-danger" role="alert">
-                    {backupState.error}
-                  </div>
-                </div>
-              </div>
-            )
-          }
 
           {/* Button */}
           <div className="row">

@@ -25,7 +25,7 @@ export const NamedRow = (props: Props) => {
   } = props;
 
   const mapped = columns.map((column) => (
-    <div className="col">
+    <div className="col" key={column.title}>
       <div className="row">
         <div className="col">
           {headerType === undefined && <span>{column.title}</span>}

@@ -103,7 +103,7 @@ export class App {
         Logger.debug("Setting up middleware");
         expressApp.use(express.json());
         expressApp.use(express.urlencoded({
-            extended: false
+            extended: true,
         }));
         expressApp.use(cookieParser());
 

@@ -2,12 +2,7 @@ import { Dispatch } from "redux";
 import { BackupOptions } from "@ccss-support-manual/models";
 import { PERFORM_BACKUP, PERFORM_BACKUP_SUCCESS, PERFORM_BACKUP_FAILURE } from "./types";
 
-export const performBackup = (
-  options: BackupOptions,
-) => async (dispatch: Dispatch) => {
-
-  const formData = new FormData();
-  formData.append("options", JSON.stringify(options));
+export const performBackup = (options: BackupOptions) => async (dispatch: Dispatch) => {
 
   dispatch({
     type: PERFORM_BACKUP,
@@ -15,7 +10,10 @@ export const performBackup = (
   try {
     const response = await fetch("/api/v1/backup", {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(options),
     });
 
     // Bad response (error)
