@@ -3,7 +3,7 @@
  * 
  * If no options are specified, everything will be backed up
  */
-export interface BackupOptions {
+export interface BackupRestoreOptions {
     /**
      * The name to assign the backup (will be the folder name)
      */

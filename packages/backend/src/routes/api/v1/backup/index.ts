@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { app } from "../../../../app";
-import { BackupOptions } from "@ccss-support-manual/models";
+import { BackupRestoreOptions } from "@ccss-support-manual/models";
 import { Logger } from "@michaelgatesdev/common";
 
 const router: Router = Router();
@@ -11,7 +11,7 @@ router.get("/", async (_req: Request, res: Response): Promise<void> => {
 
 router.post("/", async (req: any, res): Promise<void> => {
   try {
-    const options: BackupOptions | undefined = req.body;
+    const options: BackupRestoreOptions | undefined = req.body;
     if (options === undefined) {
       res.status(500).send("No backup options found");
       Logger.error("No backup options found");

@@ -1,4 +1,5 @@
 import { Dispatch } from "redux";
+import { BackupRestoreOptions } from "@ccss-support-manual/models";
 
 import {
   FETCH_RESTORE_OPTIONS,
@@ -6,7 +7,6 @@ import {
   PERFORM_RESTORE_SUCCESS,
   PERFORM_RESTORE_FAILURE,
 } from "./types";
-
 
 export function fetchRestoreOptions() {
   return (dispatch: Dispatch) => {
@@ -24,30 +24,41 @@ export function fetchRestoreOptions() {
   };
 }
 
-export function performRestore(restorePoint: string) {
-  return async (dispatch: Dispatch) => {
-    try {
-      dispatch({
-        type: PERFORM_RESTORE,
-      });
-      await fetch("/api/v1/restore", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          restorePoint,
-        }),
-      });
-      dispatch({
-        type: PERFORM_RESTORE_SUCCESS,
-      });
-    }
-    catch (error) {
+export const performRestore = (options: BackupRestoreOptions) => async (dispatch: Dispatch) => {
+
+  dispatch({
+    type: PERFORM_RESTORE,
+  });
+  try {
+    const response = await fetch("/api/v1/restore", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(options),
+    });
+
+    // Bad response (error)
+    if (!response.ok) {
+      const error = await response.text();
       dispatch({
         type: PERFORM_RESTORE_FAILURE,
-        payload: error,
+        error,
       });
+      return;
     }
-  };
-}
+
+    // Success response
+    // TODO implement return data
+    dispatch({
+      type: PERFORM_RESTORE_SUCCESS,
+      data: undefined,
+    });
+  }
+  catch (error) {
+    dispatch({
+      type: PERFORM_RESTORE_FAILURE,
+      error,
+    });
+  }
+};

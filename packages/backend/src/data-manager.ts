@@ -3,7 +3,7 @@ import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from './app';
 import { BuildingUtils, RoomUtils, TroubleshootingDataUtils } from '@ccss-support-manual/utilities';
-import { Building, Room, TroubleshootingData, BackupOptions } from '@ccss-support-manual/models';
+import { Building, Room, TroubleshootingData, BackupRestoreOptions } from '@ccss-support-manual/models';
 
 
 export class DataManager {
@@ -78,7 +78,6 @@ export class DataManager {
         app.roomManager.clear();
         app.buildingManager.clear();
         app.troubleshootingDataManager.clear();
-        //TODO clear troubleshooting data
         //TODO clear images
         // app.imageManager.clear();
         await this.initialize();
@@ -215,7 +214,7 @@ export class DataManager {
 
 
 
-    public async backup(options: BackupOptions): Promise<void> {
+    public async backup(options: BackupRestoreOptions): Promise<void> {
         if (StringUtils.isBlank(options.name)) throw new Error("The backup name can not be blank!");
         const destDir = `${app.BACKUPS_DIR}/${options.name}`;
         Logger.info(`Performing backup (${app.BACKUPS_DIR}/${options.name})`);
@@ -269,18 +268,56 @@ export class DataManager {
         });
     }
 
-    public async restore(restorePoint: string) {
-        const path = `${app.BACKUPS_DIR}/${restorePoint}`;
-        if (! await FileUtils.checkExists(path)) return;
-        Logger.info(`Restoring to ${restorePoint}`);
+    public async restore(options: BackupRestoreOptions) {
+        const path = `${app.BACKUPS_DIR}/${options.name}`;
+        if (StringUtils.isBlank(options.name)) throw new Error("The restore name can not be blank!");
+        Logger.info(`Performing restore (${app.BACKUPS_DIR}/${options.name})`);
 
-        await FileUtils.delete(app.DATA_DIR);
-        await FileUtils.delete(app.IMAGES_DIR);
-        await FileUtils.delete(app.SETTINGS_DIR);
+        const dataOptions = options.data;
+        if (dataOptions !== undefined) {
+            // await FileUtils.delete(app.DATA_DIR);
+            // await FileUtils.createDirectory(app.DATA_DIR);
+            if (dataOptions.all) {
+                if (await FileUtils.copy(`${path}/data`, app.DATA_DIR)) Logger.info("Copied all data");
+            }
+            else {
+                if (dataOptions.buildings) {
+                    if (await FileUtils.copy(`${path}/data/${this.buildingsFileName}`, `${app.DATA_DIR}/${this.buildingsFileName}`)) Logger.info("Copied buildings data");
+                }
+                if (dataOptions.rooms) {
+                    if (await FileUtils.copy(`${path}/data/${this.roomsFileName}`, `${app.DATA_DIR}/${this.roomsFileName}`)) Logger.info("Copied rooms data");
+                }
+                if (dataOptions.troubleshooting) {
+                    if (await FileUtils.copy(`${path}/data/${this.troubleshootingFileName}`, `${app.DATA_DIR}/${this.troubleshootingFileName}`)) Logger.info("Copied troubleshooting data");
+                }
+            }
+        }
 
-        await FileUtils.copy(`${path}/data`, app.DATA_DIR);
-        await FileUtils.copy(`${path}/images`, app.IMAGES_DIR);
-        await FileUtils.copy(`${path}/settings`, app.SETTINGS_DIR);
+        const imageOptions = options.images;
+        if (imageOptions !== undefined) {
+            // await FileUtils.delete(app.IMAGES_DIR);
+            // await FileUtils.createDirectory(app.IMAGES_DIR);
+            if (imageOptions.all) {
+                if (await FileUtils.copy(`${path}/images`, app.IMAGES_DIR)) Logger.info("Copied all images");
+            }
+            else {
+                //TODO implement specific image type
+            }
+        }
+
+        const settingsOptions = options.settings;
+        if (settingsOptions !== undefined) {
+            // await FileUtils.delete(app.SETTINGS_DIR);
+            // await FileUtils.createDirectory(app.SETTINGS_DIR);
+            if (settingsOptions.all) {
+                if (await FileUtils.copy(`${path}/settings`, app.SETTINGS_DIR)) Logger.info("Copied all settings");
+            }
+            else {
+                //TODO implement specific image type
+            }
+        }
+
+        Logger.info("Restore complete");
 
         await this.reinitialize();
     }

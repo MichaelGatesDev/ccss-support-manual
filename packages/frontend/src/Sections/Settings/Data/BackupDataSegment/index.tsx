@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { Logger, StringUtils } from "@michaelgatesdev/common";
 
-import { BackupOptions } from "@ccss-support-manual/models";
+import { BackupRestoreOptions } from "@ccss-support-manual/models";
 
 import { AppState } from "../../../../redux/store";
 import { BackupState } from "../../../../redux/backup/types";
@@ -18,7 +18,7 @@ import { LabeledCheckBox } from "../../../../Components/LabeledCheckBox";
 
 interface Props {
   backupState: BackupState;
-  performBackup: (options: BackupOptions) => Promise<void>;
+  performBackup: (options: BackupRestoreOptions) => Promise<void>;
 }
 
 enum BackupSettingsType {

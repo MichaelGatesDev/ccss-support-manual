@@ -2,6 +2,9 @@ import "./style.scss";
 
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Logger, StringUtils } from "@michaelgatesdev/common";
+
+import { BackupRestoreOptions } from "@ccss-support-manual/models";
 
 import withRestoreOptions from "../../../../Components/Select/withRestoreOptions";
 import Select from "../../../../Components/Select";
@@ -12,15 +15,37 @@ import { performRestore } from "../../../../redux/restore/actions";
 import Button from "../../../../Components/Button";
 import { SettingsSegment } from "../../SettingsSegment";
 import { NamedRow } from "../../../../Components/NamedRow";
+import { LabeledCheckBox } from "../../../../Components/LabeledCheckBox";
 
 interface Props {
   restoreState: RestoreState;
-  performRestore: (restorePoint: string) => Promise<void>;
+  performRestore: (options: BackupRestoreOptions) => Promise<void>;
+}
+
+enum RestoreSettingsType {
+  Data,
+  Images,
+  Settings,
 }
 
 const RestoreDataSegment = (props: Props) => {
 
   const [restorePoint, setRestorePoint] = useState<string | undefined>();
+
+  const [restoreBuildings, setRestoreBuildings] = useState<boolean>(true);
+  const [restoreRooms, setRestoreRooms] = useState<boolean>(true);
+  const [restoreTroubleshooting, setRestoreTroubleshooting] = useState<boolean>(true);
+
+  const [restoreBuildingImages, setRestoreBuildingImages] = useState<boolean>(true);
+  const [restoreRoomEquipmentImages, setRestoreRoomEquipmentImages] = useState<boolean>(true);
+  const [restoreRoomPanoramicImages, setRestoreRoomPanoramicImages] = useState<boolean>(true);
+  const [restoreRoomTitleImages, setRestoreRoomTitleImages] = useState<boolean>(true);
+  const [restoreRoomCoverImages, setRestoreRoomCoverImages] = useState<boolean>(true);
+
+  const [restoreApplicationConfig, setRestoreApplicationConfig] = useState<boolean>(true);
+  const [restoreImagesConfig, setRestoreImagesConfig] = useState<boolean>(true);
+  const [restoreTroubleshootingKeywordsConfig, setRestoreTroubleshootingKeywordsConfig] = useState<boolean>(true);
+
 
   const {
     restoreState,
@@ -30,20 +55,77 @@ const RestoreDataSegment = (props: Props) => {
   useEffect(() => {
   }, []);
 
+  const modifyAll = (type: RestoreSettingsType, active: boolean): void => {
+    switch (type) {
+      default: break;
+      case RestoreSettingsType.Data:
+        setRestoreBuildings(active);
+        setRestoreRooms(active);
+        setRestoreTroubleshooting(active);
+        break;
+      case RestoreSettingsType.Images:
+        setRestoreBuildingImages(active);
+        setRestoreRoomEquipmentImages(active);
+        setRestoreRoomPanoramicImages(active);
+        setRestoreRoomTitleImages(active);
+        setRestoreRoomCoverImages(active);
+        break;
+      case RestoreSettingsType.Settings:
+        setRestoreApplicationConfig(active);
+        setRestoreImagesConfig(active);
+        setRestoreTroubleshootingKeywordsConfig(active);
+        break;
+    }
+  };
+
+  const resetRestoreForm = () => {
+    modifyAll(RestoreSettingsType.Data, true);
+    modifyAll(RestoreSettingsType.Images, true);
+    modifyAll(RestoreSettingsType.Settings, true);
+    setRestorePoint(undefined);
+  };
+
   const restore = async () => {
-    if (restorePoint === undefined) {
-      alert("You must select a restore point!");
+    if (restoreState.restoring) {
+      alert("A restore is already being performed!");
       return;
     }
 
-    if (restoreState.restoring) {
-      alert("A backup is already being performed!");
+    if (restorePoint === undefined || StringUtils.isBlank(restorePoint)) {
+      alert("You must specify restore point");
       return;
     }
-    console.log(`Performing restore to ${restorePoint}...`);
-    await performRestore(restorePoint);
-    console.log("Restore complete!");
-    alert("Restore complete!");
+
+    try {
+      await performRestore({
+        name: restorePoint,
+        data: {
+          all: restoreBuildings && restoreRooms && restoreTroubleshooting,
+          buildings: restoreBuildings,
+          rooms: restoreRooms,
+          troubleshooting: restoreTroubleshooting,
+        },
+        images: {
+          all: restoreBuildingImages && restoreRoomEquipmentImages && restoreRoomEquipmentImages && restoreRoomPanoramicImages && restoreRoomTitleImages && restoreRoomCoverImages,
+          buildingImages: restoreBuildingImages,
+          room_equipmentImages: restoreRoomEquipmentImages,
+          room_panoramicImages: restoreRoomPanoramicImages,
+          room_titleImages: restoreRoomTitleImages,
+          room_coverImages: restoreRoomCoverImages,
+        },
+        settings: {
+          all: restoreApplicationConfig && restoreImagesConfig && restoreTroubleshootingKeywordsConfig,
+          applicationConfig: restoreApplicationConfig,
+          imagesConfig: restoreImagesConfig,
+          troubleshootingKeywordsConfig: restoreTroubleshootingKeywordsConfig,
+        },
+      });
+    } catch (error) {
+      Logger.error("An error occured while attempting to restore data.");
+      Logger.error(error);
+    } finally {
+      resetRestoreForm();
+    }
   };
 
   const SelectWithRestoreOptions = withRestoreOptions(Select);
@@ -53,7 +135,7 @@ const RestoreDataSegment = (props: Props) => {
       segmentTitle="Restore Data"
       segmentContent={(
         <>
-          {/* Backup File Name */}
+          {/* Restore File Name */}
           <NamedRow
             headerType={4}
             columns={[
@@ -80,6 +162,163 @@ const RestoreDataSegment = (props: Props) => {
                       onChange={setRestorePoint}
                       current={restorePoint}
                     />
+                  </>
+                ),
+              },
+            ]}
+          />
+
+          {/* Restore Data Options */}
+          <NamedRow
+            headerType={4}
+            columns={[
+              {
+                title: "Restore Data",
+                content: (
+                  <>
+                    <div className="row">
+                      <div className="col">
+                        <Button title="Select All" onClick={() => { modifyAll(RestoreSettingsType.Data, true); }} preventDefault />
+                      </div>
+                      <div className="col">
+                        <Button title="Select None" onClick={() => { modifyAll(RestoreSettingsType.Data, false); }} preventDefault />
+                      </div>
+                    </div>
+                    <ul>
+                      <li>
+                        <LabeledCheckBox
+                          title="Buildings"
+                          id="restoreBuildings"
+                          titleRight
+                          onChange={setRestoreBuildings}
+                          checked={restoreBuildings}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="Rooms"
+                          id="restoreRooms"
+                          titleRight
+                          onChange={setRestoreRooms}
+                          checked={restoreRooms}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="Troubleshooting"
+                          id="restoreTroubleshooting"
+                          titleRight
+                          onChange={setRestoreTroubleshooting}
+                          checked={restoreTroubleshooting}
+                        />
+                      </li>
+                    </ul>
+                  </>
+                ),
+              },
+              {
+                title: "Restore Images",
+                content: (
+                  <>
+                    <div className="row">
+                      <div className="col">
+                        <Button title="Select All" onClick={() => { modifyAll(RestoreSettingsType.Images, true); }} preventDefault />
+                      </div>
+                      <div className="col">
+                        <Button title="Select None" onClick={() => { modifyAll(RestoreSettingsType.Images, false); }} preventDefault />
+                      </div>
+                    </div>
+                    <ul>
+                      <li>
+                        <LabeledCheckBox
+                          title="Building Images"
+                          id="restoreBuildingImages"
+                          titleRight
+                          onChange={setRestoreBuildingImages}
+                          checked={restoreBuildingImages}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="(Room) Equipment Images"
+                          id="restoreRoomEquipmentImages"
+                          titleRight
+                          onChange={setRestoreRoomEquipmentImages}
+                          checked={restoreRoomEquipmentImages}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="(Room) Panoramic Images"
+                          id="restoreRoomPanoramicImages"
+                          titleRight
+                          onChange={setRestoreRoomPanoramicImages}
+                          checked={restoreRoomPanoramicImages}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="(Room) Title Images"
+                          id="restoreRoomTitleImages"
+                          titleRight
+                          onChange={setRestoreRoomTitleImages}
+                          checked={restoreRoomTitleImages}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="(Room) Cover Images"
+                          id="restoreRoomCoverImages"
+                          titleRight
+                          onChange={setRestoreRoomCoverImages}
+                          checked={restoreRoomCoverImages}
+                        />
+                      </li>
+                    </ul>
+                  </>
+                ),
+              },
+              {
+                title: "Restore Settings",
+                content: (
+                  <>
+                    <div className="row">
+                      <div className="col">
+                        <Button title="Select All" onClick={() => { modifyAll(RestoreSettingsType.Settings, true); }} preventDefault />
+                      </div>
+                      <div className="col">
+                        <Button title="Select None" onClick={() => { modifyAll(RestoreSettingsType.Settings, false); }} preventDefault />
+                      </div>
+                    </div>
+                    <ul>
+                      <li>
+                        <LabeledCheckBox
+                          title="Application Config"
+                          id="restoreBuildingImages"
+                          titleRight
+                          onChange={setRestoreApplicationConfig}
+                          checked={restoreApplicationConfig}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="Images Config"
+                          id="restoreRoomEquipmentImages"
+                          titleRight
+                          onChange={setRestoreImagesConfig}
+                          checked={restoreImagesConfig}
+                        />
+                      </li>
+                      <li>
+                        <LabeledCheckBox
+                          title="Troubleshooting Keywords Config"
+                          id="restoreRoomPanoramicImages"
+                          titleRight
+                          onChange={setRestoreTroubleshootingKeywordsConfig}
+                          checked={restoreTroubleshootingKeywordsConfig}
+                        />
+                      </li>
+                    </ul>
                   </>
                 ),
               },

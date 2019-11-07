@@ -1,8 +1,8 @@
 import { Dispatch } from "redux";
-import { BackupOptions } from "@ccss-support-manual/models";
+import { BackupRestoreOptions } from "@ccss-support-manual/models";
 import { PERFORM_BACKUP, PERFORM_BACKUP_SUCCESS, PERFORM_BACKUP_FAILURE } from "./types";
 
-export const performBackup = (options: BackupOptions) => async (dispatch: Dispatch) => {
+export const performBackup = (options: BackupRestoreOptions) => async (dispatch: Dispatch) => {
 
   dispatch({
     type: PERFORM_BACKUP,
