@@ -81,6 +81,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         Logger.debug("Performing import...");
         await SpreadsheetManager.importSpreadsheet(path, importType, importMode);
         Logger.debug("Import complete!");
+        res.sendStatus(200);
     } catch (error) {
         res.status(500).send(error.message !== undefined ? error.message : error);
         Logger.error(error);
