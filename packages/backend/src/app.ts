@@ -16,6 +16,7 @@ import { ImageManager } from "./image-manager";
 import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
 import { SpreadsheetManager } from "./spreadsheet-manager";
 import { DataManager } from './data-manager';
+import { BackupManager } from "./backup-manager";
 
 export const expressApp: express.Application = express();
 
@@ -43,6 +44,7 @@ export class App {
     public roomManager: RoomManager;
     public troubleshootingDataManager: TroubleshootingDataManager;
     public dataManager: DataManager;
+    public backupManager: BackupManager;
 
 
     public constructor() {
@@ -53,6 +55,7 @@ export class App {
         this.roomManager = new RoomManager();
         this.troubleshootingDataManager = new TroubleshootingDataManager();
         this.dataManager = new DataManager();
+        this.backupManager = new BackupManager();
     }
 
     public async initialize(): Promise<void> {
@@ -88,6 +91,24 @@ export class App {
 
 
         // load images
+        await this.imageManager.initialize();
+    }
+
+    public async reinitialize(): Promise<void> {
+        // create directories 
+        await this.setupDirectories();
+
+        // create and load configuration files
+        try {
+            Logger.info("Initializing configuration manager...");
+            await this.configManager.initialize();
+            Logger.info("Finished initializing configuration manager");
+        } catch (error) {
+            Logger.error(error);
+        }
+
+        await this.dataManager.initialize();
+
         await this.imageManager.initialize();
     }
 

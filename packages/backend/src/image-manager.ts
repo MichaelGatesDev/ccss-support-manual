@@ -32,6 +32,11 @@ export class ImageManager {
         this.logMissing();
     }
 
+    public async clear(): Promise<void> {
+        this.buildingImages = [];
+        this.roomImages = [];
+    }
+
     private logMissing() {
         for (const building of app.buildingManager.buildings) {
             const buildingImages = this.getImagesForBuilding(building.internalName);

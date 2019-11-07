@@ -17,7 +17,7 @@ router.post("/", async (req: any, res): Promise<void> => {
       Logger.error("No backup options found");
       return;
     }
-    await app.dataManager.backup(options);
+    await app.backupManager.backup(options);
     res.sendStatus(200);
   } catch (error) {
     res.status(500).send(error.message !== undefined ? error.message : error);

@@ -6,7 +6,7 @@ import { Logger } from "@michaelgatesdev/common";
 const router: Router = Router();
 
 router.get("/", async (_req: Request, res: Response): Promise<void> => {
-  res.status(200).json(await app.dataManager.getRestoreOptions());
+  res.status(200).json(await app.backupManager.getRestoreOptions());
 });
 
 router.post("/", async (req: any, res): Promise<void> => {
@@ -17,7 +17,8 @@ router.post("/", async (req: any, res): Promise<void> => {
       Logger.error("No restore options found");
       return;
     }
-    await app.dataManager.restore(options);
+    await app.backupManager.restore(options);
+    await app.reinitialize();
     res.sendStatus(200);
   } catch (error) {
     res.status(500).send(error.message !== undefined ? error.message : error);

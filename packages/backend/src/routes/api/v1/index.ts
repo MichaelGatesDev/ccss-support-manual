@@ -28,4 +28,9 @@ router.get("/save", async (_req: Request, res: Response): Promise<void> => {
   res.status(200).json({});
 });
 
+router.get("/nuke", async (_req: Request, res: Response): Promise<void> => {
+  await app.dataManager.nuke();
+  res.sendStatus(200);
+});
+
 export default router;
