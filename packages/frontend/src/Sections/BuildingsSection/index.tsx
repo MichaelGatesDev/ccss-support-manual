@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { Room, Building } from "@ccss-support-manual/models";
@@ -15,6 +15,9 @@ import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import BuildingCardsGrid from "../../Components/BuildingCardsGrid";
+import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
+import Button from "../../Components/Button";
+import { AnchorButton } from "../../Components/AnchorButton";
 
 interface Props {
   buildingsState: BuildingsState;
@@ -36,13 +39,6 @@ const BuildingsSection = (props: Props) => {
     fetchImages();
   }, []);
 
-  const getAllRooms = (): Room[] => {
-    let result: Room[] = [];
-    for (const building of buildingsState.buildings) {
-      result = result.concat(building.rooms);
-    }
-    return result;
-  };
 
   const isLoading = (): boolean => buildingsState.buildingsLoading || imagesState.imagesLoading;
 
@@ -81,6 +77,26 @@ const BuildingsSection = (props: Props) => {
           buildings={filteredBuildings}
           images={imagesState}
         />
+        <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
+          <AnchorButton
+            href="buildings/add"
+            content={(
+              <span>
+                Add
+                <i className="fas fa-plus" />
+              </span>
+            )}
+          />
+          <AnchorButton
+            href="buildings/remove"
+            content={(
+              <span>
+                Remove
+                <i className="fas fa-minus" />
+              </span>
+            )}
+          />
+        </FloatingGroup>
       </section>
     </>
   );
