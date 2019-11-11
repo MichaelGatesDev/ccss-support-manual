@@ -17,6 +17,7 @@ import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
 import { SpreadsheetManager } from "./spreadsheet-manager";
 import { DataManager } from './data-manager';
 import { BackupManager } from "./backup-manager";
+import { UpdateManager } from "./update-manager";
 
 export const expressApp: express.Application = express();
 
@@ -45,7 +46,9 @@ export class App {
     public troubleshootingDataManager: TroubleshootingDataManager;
     public dataManager: DataManager;
     public backupManager: BackupManager;
+    public updateManager: UpdateManager;
 
+    public isProduction: boolean;
 
     public constructor() {
         this.spreadsheetManager = new SpreadsheetManager();
@@ -56,10 +59,12 @@ export class App {
         this.troubleshootingDataManager = new TroubleshootingDataManager();
         this.dataManager = new DataManager();
         this.backupManager = new BackupManager();
+        this.updateManager = new UpdateManager();
+
+        this.isProduction = false;
     }
 
     public async initialize(): Promise<void> {
-
         // Setup express stuff
         Logger.debug("Setting up express server...");
         Logger.debug("Setting up express server...");
@@ -70,6 +75,14 @@ export class App {
         // create directories 
         await this.setupDirectories();
 
+        // detect running mode (dev or prod)
+        if (await FileUtils.checkExists(this.ROOT_DIR)) {
+            const children = await FileUtils.list(this.ROOT_DIR);
+            const executable = children.find((child) => child.path.includes("application-"));
+            if (executable !== undefined) {
+                this.isProduction = true;
+            }
+        }
 
         // create and load configuration files
         try {
@@ -81,14 +94,18 @@ export class App {
         }
 
         // check for updates
-        // if (this.configManager.appConfig !== undefined) {
-        //     if (this.configManager.appConfig.checkForDataUpdates) {
-        //         // await this.checkForUpdates();
-        //     }
-        // }
+        if (this.configManager.appConfig?.checkForProgramUpdates && this.isProduction) {
+            try {
+                Logger.info("Checking for updates...");
+                await this.updateManager.check();
+            } catch (error) {
+                Logger.error("There was an error checking for updates");
+                Logger.error(error);
+            }
+        }
 
+        // load data
         await this.dataManager.initialize();
-
 
         // load images
         await this.imageManager.initialize();

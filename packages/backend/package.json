@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "@michaelgatesdev/common": "^1.1.2",
-    "@michaelgatesdev/common-io": "1.0.3",
+    "@michaelgatesdev/common-io": "1.0.4",
     "@types/jest": "^24.0.13",
     "cardboard-config": "1.0.3",
     "cookie-parser": "^1.4.4",
@@ -31,6 +31,7 @@
     "jimp": "^0.8.5",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "node-fetch": "^2.6.0",
     "path": "^0.12.7",
     "pkg": "^4.4.0",
     "request": "^2.88.0",
