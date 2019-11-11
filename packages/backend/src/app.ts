@@ -78,7 +78,7 @@ export class App {
         // detect running mode (dev or prod)
         if (await FileUtils.checkExists(this.ROOT_DIR)) {
             const children = await FileUtils.list(this.ROOT_DIR);
-            const executable = children.find((child) => child.path.includes("ccss-support-manual-app"));
+            const executable = children.find((child) => child.path.includes("application-"));
             if (executable !== undefined) {
                 this.isProduction = true;
             }
@@ -94,7 +94,7 @@ export class App {
         }
 
         // check for updates
-        if (this.configManager.appConfig !== undefined && this.isProduction && this.configManager.appConfig.checkForProgramUpdates) {
+        if (this.configManager.appConfig?.checkForProgramUpdates && this.isProduction) {
             try {
                 Logger.info("Checking for updates...");
                 await this.updateManager.check();
@@ -104,8 +104,8 @@ export class App {
             }
         }
 
+        // load data
         await this.dataManager.initialize();
-
 
         // load images
         await this.imageManager.initialize();

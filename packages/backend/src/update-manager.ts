@@ -1,8 +1,10 @@
-import { app } from "./app";
-import { Logger } from "@michaelgatesdev/common";
-
 import fetch from "node-fetch";
+import os from "os";
+
+import { Logger } from "@michaelgatesdev/common";
 import { WebDownloader } from "@michaelgatesdev/common-io";
+
+import { app } from "./app";
 
 interface ReleaseDownload {
     name: string;
@@ -34,7 +36,7 @@ export class UpdateManager {
         if (json.length < 1) throw new Error("There are no releases!");
 
         const newest = json[0];
-        const version = newest.tag_name; // v1.3.6
+        const version = newest.tag_name; // i.e. v1.3.6
 
         const assets = newest.assets;
 
@@ -89,6 +91,22 @@ export class UpdateManager {
         }
     }
 
+    public async afterUpdate() {
+        return new Promise(() => {
+            Logger.info("To complete the update, the application must exit. You will need to reopen it manually.")
+            let remaining = 5;
+            const timer = setInterval(() => {
+                if (remaining <= 0) {
+                    clearInterval(timer);
+                    process.exit(0);
+                    return;
+                }
+                Logger.info(`Application will close in ${remaining} seconds`);
+                remaining--;
+            }, 1000);
+        });
+    }
+
     /**
      * Returns the version comparison for the left compared to the right
      */
@@ -110,8 +128,27 @@ export class UpdateManager {
     };
 
     private async updateTo(release: Release): Promise<void> {
-        
+        let download: ReleaseDownload | undefined = undefined;
+        switch (os.type().toLowerCase()) {
+            case "linux":
+                download = release.downloads.find((download) => download.name.includes("linux"));
+                break;
+            case "darwin":
+                download = release.downloads.find((download) => download.name.includes("mac"));
+                break;
+            case "windows_nt":
+                download = release.downloads.find((download) => download.name.includes("win"));
+                break;
+        }
+        if (download === undefined) throw new Error();
+        Logger.info(`Downloading ${download.name}...`);
+        await new WebDownloader(download.url, `${app.ROOT_DIR}/${download.name}`).download();
+        Logger.info("Download complete!");
 
-        new WebDownloader(release.downloads.find(()=> return undefined)).download();
+        await this.afterUpdate();
+    }
+
+    public async forceDownloadLatest(): Promise<void> {
+        await this.updateTo(await this.getLatestUpdate());
     }
 }
