@@ -44,11 +44,12 @@ const SaveDataSegment = (props: Props) => {
           <div className="row">
             <div className="col">
               <Button
-                title="Save"
                 disabled={saveState.saving}
                 onClick={save}
                 preventDefault
-              />
+              >
+                <span>Save</span>
+              </Button>
             </div>
           </div>
         </>

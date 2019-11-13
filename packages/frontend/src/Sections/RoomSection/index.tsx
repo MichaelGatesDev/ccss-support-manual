@@ -95,7 +95,7 @@ class RoomSection extends Component<Props, State> {
       troubleshootingState,
       imagesState,
     } = this.props;
-    return buildingsState.buildingsLoading || roomsState.roomsLoading || troubleshootingState.loading || imagesState.imagesLoading;
+    return buildingsState.fetchingBuilding || roomsState.roomsLoading || troubleshootingState.loading || imagesState.imagesLoading;
   }
 
   onTypeFilterChange(activeTypeFilters: string[]) {
@@ -128,7 +128,7 @@ class RoomSection extends Component<Props, State> {
       troubleshootingState,
       imagesState,
     } = this.props;
-    const { building } = buildingsState;
+    const { fetchedBuilding } = buildingsState;
     const { room } = roomsState;
     const { data } = troubleshootingState;
 
@@ -138,7 +138,7 @@ class RoomSection extends Component<Props, State> {
       activeTroubleshootingTagFilters,
     } = this.state;
 
-    if (building === undefined) {
+    if (fetchedBuilding === undefined) {
       return <p>Building not found</p>;
     }
 
@@ -162,7 +162,7 @@ class RoomSection extends Component<Props, State> {
           <div className="row">
             <div className="col text-center">
               <h2 className="room-title capitalized">
-                {building.officialName}
+                {fetchedBuilding.officialName}
                 &nbsp;
                 {room.number}
               </h2>

@@ -1,9 +1,13 @@
 import { Router, Response, NextFunction } from "express";
 import { app } from "../../../../app";
 
+import all from "./all";
+import single from "./single";
+
 const router: Router = Router();
 
 router.param("buildingName", (req: any, _res: Response, next: NextFunction, id: string): void => {
+    if (id === "add" || id === "edit" || id === "remove") return; //TODO make this better
     let building = app.buildingManager.getBuildingByName(id);
     if (building) {
         req.building = building;
@@ -13,10 +17,8 @@ router.param("buildingName", (req: any, _res: Response, next: NextFunction, id: 
     next(new Error("Failed to find building: " + id));
 });
 
-import all from "./all";
 router.use("/", all);
 
-import single from "./single";
 router.use("/:buildingName", single);
 
 export default router;

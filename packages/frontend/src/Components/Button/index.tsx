@@ -1,54 +1,48 @@
 import "./style.scss";
 
-import React, { Component } from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
   disabled?: boolean;
   preventDefault: boolean;
-  title: string;
-  onClick?: () => void;
+
+  fullWidth?: boolean;
+
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+
+  children?: ReactNode;
 }
 
-interface State {
-}
 
-class Button extends Component<Props, State> {
-  constructor(props: any) {
-    super(props);
+const Button: React.FunctionComponent<Props> = (props: Props) => {
+  const {
+    disabled,
+    preventDefault,
 
-    this.state = {
-    };
+    fullWidth,
 
-    this.onClick = this.onClick.bind(this);
-  }
+    onClick,
 
-  componentDidMount() {
-  }
+    children,
+  } = props;
 
-  onClick(e: React.MouseEvent<HTMLInputElement>) {
-    const { preventDefault, onClick } = this.props;
-    if (preventDefault) {
-      e.preventDefault();
-    }
-    if (onClick !== undefined) {
-      onClick();
-    }
-  }
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (preventDefault) e.preventDefault();
+    if (onClick !== undefined) onClick(e);
+  };
 
-  render() {
-    const { title, disabled } = this.props;
-    return (
-      <div className="Button-Component">
-        <input
-          disabled={disabled}
-          type="button"
-          value={title}
-          onClick={this.onClick}
-          className="btn btn-primary btn-block"
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="Button-Component">
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={handleClick}
+        className={`btn btn-primary ${(fullWidth ? "btn-block " : "")}`}
+      >
+        {children}
+      </button>
+    </div>
+  );
+};
 
 export default Button;

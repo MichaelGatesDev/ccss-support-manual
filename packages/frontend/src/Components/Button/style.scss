@@ -1,4 +1,9 @@
 .Button-Component {
+    &.full-width {
+        *{
+            width: 100%;
+        }
+    }
     // input {
     //     border: none;
     //     background-color: #cf102d;

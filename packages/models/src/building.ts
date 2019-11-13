@@ -29,9 +29,9 @@ export interface Building {
 
 export class BuildingFactory {
 
-    private _officialName: string = "";
+    private _officialName = "";
     private _nicknames: string[] = [];
-    private _internalName: string = "";
+    private _internalName = "";
     private _rooms: Room[] = [];
 
     public withOfficialName(name: string): BuildingFactory {

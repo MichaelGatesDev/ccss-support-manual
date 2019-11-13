@@ -203,11 +203,12 @@ const ImportDataSegment = (props: Props) => {
           <div className="row">
             <div className="col">
               <Button
-                title="Import"
                 disabled={(importState !== undefined && importState.importing)}
                 onClick={performImport}
                 preventDefault
-              />
+              >
+                <span>Import</span>
+              </Button>
             </div>
           </div>
           {

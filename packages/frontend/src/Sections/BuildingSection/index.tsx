@@ -68,14 +68,13 @@ class BuildingSection extends Component<Props, State> {
 
   private isLoading(): boolean {
     const { buildingsState, imagesState } = this.props;
-    return buildingsState.buildingsLoading || imagesState.imagesLoading;
+    return buildingsState.fetchingBuildings || imagesState.imagesLoading;
   }
 
   private filterRoomsByName(rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] {
     const { buildingsState } = this.props;
-    const { buildings } = buildingsState;
     return rooms.filter((room: Room) => {
-      const pb = BuildingUtils.getParentBuilding(room, buildings);
+      const pb = BuildingUtils.getParentBuilding(room, buildingsState.fetchedBuildings ?? []);
       if (pb === undefined) return false;
       return (
         (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
@@ -93,9 +92,8 @@ class BuildingSection extends Component<Props, State> {
 
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
-    const { building, buildings } = buildingsState;
 
-    if (building === undefined) {
+    if (buildingsState.fetchedBuilding === undefined) {
       return <p>Building not found</p>;
     }
 
@@ -103,7 +101,7 @@ class BuildingSection extends Component<Props, State> {
     const queries = query.split(" ");
 
 
-    let rooms = _.sortBy(building.rooms, ["number"]);
+    let rooms = _.sortBy(buildingsState.fetchedBuilding.rooms, ["number"]);
 
     if (queries.length > 0) {
       for (let query of queries) {
@@ -145,7 +143,7 @@ class BuildingSection extends Component<Props, State> {
               {/* Building Name */}
               <div className="row">
                 <div className="col">
-                  <p>{building.officialName}</p>
+                  <p>{buildingsState.fetchedBuilding.officialName}</p>
                 </div>
               </div>
               {/* Nicknames Header */}
@@ -159,7 +157,7 @@ class BuildingSection extends Component<Props, State> {
                 <div className="col">
                   <p>
                     Nicknames:&nbsp;
-                    {building.nicknames.join(", ")}
+                    {buildingsState.fetchedBuilding.nicknames.join(", ")}
                   </p>
                 </div>
               </div>
@@ -191,7 +189,7 @@ class BuildingSection extends Component<Props, State> {
             <div className="col">
               <RoomCardsGrid
                 rooms={rooms}
-                buildings={buildings}
+                buildings={buildingsState.fetchedBuildings ?? []}
                 images={imagesState}
               />
             </div>

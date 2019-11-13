@@ -1,36 +1,187 @@
 import { Dispatch } from "redux";
 import { Building } from "@ccss-support-manual/models";
 
-import { FETCH_BUILDINGS, FETCH_BUILDING } from "./types";
+import {
+  REQUEST_FETCH_BUILDING, REQUEST_FETCH_BUILDING_SUCCESS, REQUEST_FETCH_BUILDING_FAILURE,
+  REQUEST_FETCH_BUILDINGS, REQUEST_FETCH_BUILDINGS_SUCCESS, REQUEST_FETCH_BUILDINGS_FAILURE,
+  REQUEST_ADD_BUILDING, REQUEST_ADD_BUILDING_FAILURE, REQUEST_ADD_BUILDING_SUCCESS,
+  REQUEST_EDIT_BUILDING, REQUEST_EDIT_BUILDING_FAILURE, REQUEST_EDIT_BUILDING_SUCCESS,
+  REQUEST_REMOVE_BUILDING, REQUEST_REMOVE_BUILDING_FAILURE, REQUEST_REMOVE_BUILDING_SUCCESS,
+} from "./types";
 
-export function fetchBuildings() {
-  return (dispatch: Dispatch) => {
-    fetch("/api/v1/buildings")
-      .then((response) => response.json())
-      .then((buildings: Building[]) => {
-        dispatch({
-          type: FETCH_BUILDINGS,
-          payload: buildings,
-        });
-      }).catch((error) => {
-        console.error("Failed to fetch buildings");
-        console.error(error);
-      });
-  };
-}
 
-export function fetchBuilding(buildingName: string) {
-  return (dispatch: Dispatch) => {
-    fetch(`/api/v1/buildings/${buildingName}`)
-      .then((response) => response.json())
-      .then((building: Building) => {
-        dispatch({
-          type: FETCH_BUILDING,
-          payload: building,
-        });
-      }).catch((error) => {
-        console.error(`Failed to fetch building: ${buildingName}`);
-        console.error(error);
+export const fetchBuilding = (name: string) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: REQUEST_FETCH_BUILDING,
+  });
+  try {
+    const response = await fetch(`/api/v1/buildings/${name}`);
+    // Bad response (error)
+    if (!response.ok) {
+      const error = await response.text();
+      dispatch({
+        type: REQUEST_FETCH_BUILDING_FAILURE,
+        error,
       });
-  };
-}
+      return;
+    }
+
+    const json = await response.json();
+    dispatch({
+      type: REQUEST_FETCH_BUILDING_SUCCESS,
+      data: json as Building,
+    });
+  }
+  catch (error) {
+    dispatch({
+      type: REQUEST_FETCH_BUILDING_FAILURE,
+      error,
+    });
+  }
+};
+
+
+export const fetchBuildings = () => async (dispatch: Dispatch) => {
+  dispatch({
+    type: REQUEST_FETCH_BUILDINGS,
+  });
+  try {
+    const response = await fetch("/api/v1/buildings/");
+    // Bad response (error)
+    if (!response.ok) {
+      const error = await response.text();
+      dispatch({
+        type: REQUEST_FETCH_BUILDINGS_FAILURE,
+        error,
+      });
+      return;
+    }
+
+    const json = await response.json();
+    dispatch({
+      type: REQUEST_FETCH_BUILDINGS_SUCCESS,
+      data: json as Building[],
+    });
+  }
+  catch (error) {
+    dispatch({
+      type: REQUEST_FETCH_BUILDINGS_FAILURE,
+      error,
+    });
+  }
+};
+
+
+export const addBuilding = (officialName: string, nicknames: []) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: REQUEST_ADD_BUILDING,
+  });
+  try {
+    const response = await fetch("/api/v1/buildings/add", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({ officialName, nicknames }),
+    });
+
+    // Bad response (error)
+    if (!response.ok) {
+      const error = await response.text();
+      dispatch({
+        type: REQUEST_ADD_BUILDING_FAILURE,
+        error,
+      });
+      return;
+    }
+
+    // Success response
+    // TODO implement return data
+    dispatch({
+      type: REQUEST_ADD_BUILDING_SUCCESS,
+      data: undefined,
+    });
+  }
+  catch (error) {
+    dispatch({
+      type: REQUEST_ADD_BUILDING_FAILURE,
+      error,
+    });
+  }
+};
+
+
+export const editBuilding = (name: string) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: REQUEST_EDIT_BUILDING,
+  });
+  try {
+    const response = await fetch(`/api/v1/buildings/${name}/edit`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({}), // TODO
+    });
+
+    // Bad response (error)
+    if (!response.ok) {
+      const error = await response.text();
+      dispatch({
+        type: REQUEST_EDIT_BUILDING_FAILURE,
+        error,
+      });
+      return;
+    }
+
+    // Success response
+    // TODO implement return data
+    dispatch({
+      type: REQUEST_EDIT_BUILDING_SUCCESS,
+      data: undefined,
+    });
+  }
+  catch (error) {
+    dispatch({
+      type: REQUEST_EDIT_BUILDING_FAILURE,
+      error,
+    });
+  }
+};
+
+export const removeBuilding = (name: string) => async (dispatch: Dispatch) => {
+  dispatch({
+    type: REQUEST_REMOVE_BUILDING,
+  });
+  try {
+    const response = await fetch(`/api/v1/buildings/${name}/remove`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    // Bad response (error)
+    if (!response.ok) {
+      const error = await response.text();
+      dispatch({
+        type: REQUEST_REMOVE_BUILDING_FAILURE,
+        error,
+      });
+      return;
+    }
+
+    // Success response
+    // TODO implement return data
+    dispatch({
+      type: REQUEST_REMOVE_BUILDING_SUCCESS,
+      data: undefined,
+    });
+  }
+  catch (error) {
+    dispatch({
+      type: REQUEST_REMOVE_BUILDING_FAILURE,
+      error,
+    });
+  }
+};

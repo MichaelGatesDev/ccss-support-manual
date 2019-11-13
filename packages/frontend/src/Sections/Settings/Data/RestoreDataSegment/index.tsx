@@ -178,10 +178,14 @@ const RestoreDataSegment = (props: Props) => {
                   <>
                     <div className="row">
                       <div className="col">
-                        <Button title="Select All" onClick={() => { modifyAll(RestoreSettingsType.Data, true); }} preventDefault />
+                        <Button onClick={() => { modifyAll(RestoreSettingsType.Data, true); }} preventDefault>
+                          <span>Select All</span>
+                        </Button>
                       </div>
                       <div className="col">
-                        <Button title="Select None" onClick={() => { modifyAll(RestoreSettingsType.Data, false); }} preventDefault />
+                        <Button onClick={() => { modifyAll(RestoreSettingsType.Data, false); }} preventDefault>
+                          <span>Select None</span>
+                        </Button>
                       </div>
                     </div>
                     <ul>
@@ -222,10 +226,14 @@ const RestoreDataSegment = (props: Props) => {
                   <>
                     <div className="row">
                       <div className="col">
-                        <Button title="Select All" onClick={() => { modifyAll(RestoreSettingsType.Images, true); }} preventDefault />
+                        <Button onClick={() => { modifyAll(RestoreSettingsType.Images, true); }} preventDefault>
+                          <span>Select All</span>
+                        </Button>
                       </div>
                       <div className="col">
-                        <Button title="Select None" onClick={() => { modifyAll(RestoreSettingsType.Images, false); }} preventDefault />
+                        <Button onClick={() => { modifyAll(RestoreSettingsType.Images, false); }} preventDefault>
+                          <span>Select None</span>
+                        </Button>
                       </div>
                     </div>
                     <ul>
@@ -284,10 +292,14 @@ const RestoreDataSegment = (props: Props) => {
                   <>
                     <div className="row">
                       <div className="col">
-                        <Button title="Select All" onClick={() => { modifyAll(RestoreSettingsType.Settings, true); }} preventDefault />
+                        <Button onClick={() => { modifyAll(RestoreSettingsType.Settings, true); }} preventDefault>
+                          <span>Select All</span>
+                        </Button>
                       </div>
                       <div className="col">
-                        <Button title="Select None" onClick={() => { modifyAll(RestoreSettingsType.Settings, false); }} preventDefault />
+                        <Button onClick={() => { modifyAll(RestoreSettingsType.Settings, false); }} preventDefault>
+                          <span>Select None</span>
+                        </Button>
                       </div>
                     </div>
                     <ul>
@@ -329,11 +341,12 @@ const RestoreDataSegment = (props: Props) => {
           <div className="row">
             <div className="col">
               <Button
-                title="Restore"
                 disabled={restoreState.restoring}
                 onClick={restore}
                 preventDefault
-              />
+              >
+                <span>Restore</span>
+              </Button>
             </div>
           </div>
           {/* Progress Bar */}

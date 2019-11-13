@@ -179,10 +179,14 @@ const BackupDataSegment = (props: Props) => {
                   <>
                     <div className="row">
                       <div className="col">
-                        <Button title="Select All" onClick={() => { modifyAll(BackupSettingsType.Data, true); }} preventDefault />
+                        <Button onClick={() => { modifyAll(BackupSettingsType.Data, true); }} preventDefault>
+                          <span>Select All</span>
+                        </Button>
                       </div>
                       <div className="col">
-                        <Button title="Select None" onClick={() => { modifyAll(BackupSettingsType.Data, false); }} preventDefault />
+                        <Button onClick={() => { modifyAll(BackupSettingsType.Data, false); }} preventDefault>
+                          <span>Select None</span>
+                        </Button>
                       </div>
                     </div>
                     <ul>
@@ -223,10 +227,14 @@ const BackupDataSegment = (props: Props) => {
                   <>
                     <div className="row">
                       <div className="col">
-                        <Button title="Select All" onClick={() => { modifyAll(BackupSettingsType.Images, true); }} preventDefault />
+                        <Button onClick={() => { modifyAll(BackupSettingsType.Images, true); }} preventDefault>
+                          <span>Select All</span>
+                        </Button>
                       </div>
                       <div className="col">
-                        <Button title="Select None" onClick={() => { modifyAll(BackupSettingsType.Images, false); }} preventDefault />
+                        <Button onClick={() => { modifyAll(BackupSettingsType.Images, false); }} preventDefault>
+                          <span>Select None</span>
+                        </Button>
                       </div>
                     </div>
                     <ul>
@@ -285,10 +293,14 @@ const BackupDataSegment = (props: Props) => {
                   <>
                     <div className="row">
                       <div className="col">
-                        <Button title="Select All" onClick={() => { modifyAll(BackupSettingsType.Settings, true); }} preventDefault />
+                        <Button onClick={() => { modifyAll(BackupSettingsType.Settings, true); }} preventDefault>
+                          <span>Select All</span>
+                        </Button>
                       </div>
                       <div className="col">
-                        <Button title="Select None" onClick={() => { modifyAll(BackupSettingsType.Settings, false); }} preventDefault />
+                        <Button onClick={() => { modifyAll(BackupSettingsType.Settings, false); }} preventDefault>
+                          <span>Select None</span>
+                        </Button>
                       </div>
                     </div>
                     <ul>
@@ -330,11 +342,12 @@ const BackupDataSegment = (props: Props) => {
           <div className="row">
             <div className="col">
               <Button
-                title="Backup"
                 disabled={backupState.backingUp}
                 onClick={backup}
                 preventDefault
-              />
+              >
+                <span>Backup</span>
+              </Button>
             </div>
           </div>
           {/* Progress Bar */}

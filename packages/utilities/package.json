@@ -14,7 +14,7 @@
     "lib"
   ],
   "dependencies": {
-    "@michaelgatesdev/common": "1.1.2",
+    "@michaelgatesdev/common": "1.1.3",
     "colors": "^1.3.3"
   },
   "devDependencies": {

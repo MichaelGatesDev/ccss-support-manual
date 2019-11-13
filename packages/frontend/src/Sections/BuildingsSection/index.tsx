@@ -40,7 +40,7 @@ const BuildingsSection = (props: Props) => {
   }, []);
 
 
-  const isLoading = (): boolean => buildingsState.buildingsLoading || imagesState.imagesLoading;
+  const isLoading = (): boolean => buildingsState.fetchingBuildings || imagesState.imagesLoading;
 
   const filterBuildingsByName = (buildings: Building[], name: string): Building[] => buildings.filter((building: Building) => BuildingUtils.hasName(building, name));
 
@@ -53,7 +53,7 @@ const BuildingsSection = (props: Props) => {
   const query = filterSearch;
   const queries = query.split(" ");
 
-  let filteredBuildings = _.sortBy(buildingsState.buildings, ["internalName"]);
+  let filteredBuildings = _.sortBy(buildingsState.fetchedBuildings, ["internalName"]);
 
   if (queries.length > 0) {
     for (let query of queries) {

@@ -6,6 +6,7 @@ interface Props {
   onChange: (newValue: string) => void;
   placeholder: string;
   value: string;
+  name?: string;
 
   selectedByDefault?: boolean;
   alwaysSelected?: boolean;
@@ -60,11 +61,12 @@ class FormInput extends Component<Props, State> {
 
   render() {
     const {
-      placeholder, value,
+      placeholder, value, name,
     } = this.props;
     return (
       <div className="FormInput-Component">
         <input
+          name={name}
           type="text"
           className="form-control"
           placeholder={placeholder}

@@ -36,20 +36,17 @@ const Home = (props: Props) => {
     fetchImages();
   }, []);
 
-  const isLoading = (): boolean => buildingsState.buildingsLoading || imagesState.imagesLoading;
+  const isLoading = (): boolean => buildingsState.fetchingBuildings || imagesState.imagesLoading;
 
-  const filterRoomsByName = (rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] => {
-    const { buildings } = buildingsState;
-    return rooms.filter((room: Room) => {
-      const pb: Building | undefined = BuildingUtils.getParentBuilding(room, buildings);
-      if (pb === undefined) return false;
-      return (
-        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
-        (filterName && room.name.toLocaleLowerCase().includes(name)) ||
-        (filterBuildingName && BuildingUtils.hasName(pb, name))
-      );
-    });
-  };
+  const filterRoomsByName = (rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] => rooms.filter((room: Room) => {
+    const pb: Building | undefined = BuildingUtils.getParentBuilding(room, buildingsState.fetchedBuildings ?? []);
+    if (pb === undefined) return false;
+    return (
+      (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
+      (filterName && room.name.toLocaleLowerCase().includes(name)) ||
+      (filterBuildingName && BuildingUtils.hasName(pb, name))
+    );
+  });
 
 
   // Display splash when loading
@@ -57,12 +54,10 @@ const Home = (props: Props) => {
     return <LoadingSplash />;
   }
 
-  const { buildings } = buildingsState;
-
   const query = filterSearch;
   const queries = query.split(" ");
 
-  let rooms = _.sortBy(BuildingUtils.getAllRooms(buildings), ["buildingName", "number"]);
+  let rooms = _.sortBy(BuildingUtils.getAllRooms(buildingsState.fetchedBuildings ?? []), ["buildingName", "number"]);
 
   if (queries.length > 0) {
     for (let query of queries) {
@@ -84,7 +79,7 @@ const Home = (props: Props) => {
       <section className="container-fluid" id="home-section">
         <RoomCardsGrid
           rooms={rooms}
-          buildings={buildingsState.buildings}
+          buildings={buildingsState.fetchedBuildings ?? []}
           images={imagesState}
         />
       </section>

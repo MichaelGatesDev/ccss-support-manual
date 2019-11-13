@@ -1,24 +1,105 @@
 import { Building } from "@ccss-support-manual/models";
 
 export interface BuildingsState {
-  buildingsLoading: boolean;
+  data?: any,
+  error?: string;
 
-  building: Building | undefined;
-  buildings: Building[];
+  fetchingBuilding: boolean;
+  fetchedBuilding?: Building;
+
+  fetchingBuildings: boolean;
+  fetchedBuildings?: Building[];
+
+  addingBuilding: boolean;
+  removingBuilding: boolean;
+  editingBuilding: boolean;
 }
 
-// Describing the different ACTION NAMES available
-export const FETCH_BUILDINGS = "FETCH_BUILDINGS";
-export const FETCH_BUILDING = "FETCH_BUILDING";
-
-interface FetchBuildingsAction {
-  type: typeof FETCH_BUILDINGS;
-  payload: Building[];
+// FETCH SINGLE BUILDING
+export const REQUEST_FETCH_BUILDING = "REQUEST_FETCH_BUILDING";
+interface RequestFetchBuildingAction {
+  type: typeof REQUEST_FETCH_BUILDING;
+}
+export const REQUEST_FETCH_BUILDING_SUCCESS = "REQUEST_FETCH_BUILDING_SUCCESS";
+interface RequestFetchBuildingSuccessAction {
+  type: typeof REQUEST_FETCH_BUILDING_SUCCESS;
+  data: Building;
+}
+export const REQUEST_FETCH_BUILDING_FAILURE = "REQUEST_FETCH_BUILDING_FAILURE";
+interface RequestFetchBuildingFailureAction {
+  type: typeof REQUEST_FETCH_BUILDING_FAILURE;
+  error: string;
 }
 
-interface FetchBuildingAction {
-  type: typeof FETCH_BUILDING;
-  payload: Building;
+// FETCH ALL BUILDINGS
+export const REQUEST_FETCH_BUILDINGS = "REQUEST_FETCH_BUILDINGS";
+interface RequestFetchBuildingsAction {
+  type: typeof REQUEST_FETCH_BUILDINGS;
+}
+export const REQUEST_FETCH_BUILDINGS_SUCCESS = "REQUEST_FETCH_BUILDINGS_SUCCESS";
+interface RequestFetchBuildingsSuccessAction {
+  type: typeof REQUEST_FETCH_BUILDINGS_SUCCESS;
+  data: Building[];
+}
+export const REQUEST_FETCH_BUILDINGS_FAILURE = "REQUEST_FETCH_BUILDINGS_FAILURE";
+interface RequestFetchBuildingsFailureAction {
+  type: typeof REQUEST_FETCH_BUILDINGS_FAILURE;
+  error: string;
 }
 
-export type BuildingsActionTypes = FetchBuildingsAction | FetchBuildingAction;
+// ADD BUILDING
+export const REQUEST_ADD_BUILDING = "REQUEST_ADD_BUILDING";
+interface RequestAddBuildingAction {
+  type: typeof REQUEST_ADD_BUILDING;
+}
+export const REQUEST_ADD_BUILDING_SUCCESS = "REQUEST_ADD_BUILDING_SUCCESS";
+interface RequestAddBuildingSuccessAction {
+  type: typeof REQUEST_ADD_BUILDING_SUCCESS;
+  data: any;
+}
+export const REQUEST_ADD_BUILDING_FAILURE = "REQUEST_ADD_BUILDING_FAILURE";
+interface RequestAddBuildingFailureAction {
+  type: typeof REQUEST_ADD_BUILDING_FAILURE;
+  error: string;
+}
+
+// EDIT BUILDING
+export const REQUEST_EDIT_BUILDING = "REQUEST_EDIT_BUILDING";
+interface RequestEditBuildingAction {
+  type: typeof REQUEST_EDIT_BUILDING;
+}
+export const REQUEST_EDIT_BUILDING_SUCCESS = "REQUEST_EDIT_BUILDING_SUCCESS";
+interface RequestEditBuildingSuccessAction {
+  type: typeof REQUEST_EDIT_BUILDING_SUCCESS;
+  data: any;
+}
+export const REQUEST_EDIT_BUILDING_FAILURE = "REQUEST_EDIT_BUILDING_FAILURE";
+interface RequestEditBuildingFailureAction {
+  type: typeof REQUEST_EDIT_BUILDING_FAILURE;
+  error: string;
+}
+
+// REMOVE BUILDING
+export const REQUEST_REMOVE_BUILDING = "REQUEST_REMOVE_BUILDING";
+interface RequestRemoveBuildingAction {
+  type: typeof REQUEST_REMOVE_BUILDING;
+}
+export const REQUEST_REMOVE_BUILDING_SUCCESS = "REQUEST_REMOVE_BUILDING_SUCCESS";
+interface RequestRemoveBuildingSuccessAction {
+  type: typeof REQUEST_REMOVE_BUILDING_SUCCESS;
+  data: any;
+}
+export const REQUEST_REMOVE_BUILDING_FAILURE = "REQUEST_REMOVE_BUILDING_FAILURE";
+interface RequestRemoveBuildingFailureAction {
+  type: typeof REQUEST_REMOVE_BUILDING_FAILURE;
+  error: string;
+}
+
+
+export type BuildingsActionTypes = (
+  RequestFetchBuildingAction | RequestFetchBuildingSuccessAction | RequestFetchBuildingFailureAction
+  | RequestFetchBuildingsAction | RequestFetchBuildingsSuccessAction | RequestFetchBuildingsFailureAction
+  | RequestAddBuildingAction | RequestAddBuildingSuccessAction | RequestAddBuildingFailureAction
+  | RequestEditBuildingAction | RequestEditBuildingSuccessAction | RequestEditBuildingFailureAction
+  | RequestRemoveBuildingAction | RequestRemoveBuildingSuccessAction | RequestRemoveBuildingFailureAction
+);
