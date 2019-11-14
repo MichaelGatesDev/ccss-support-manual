@@ -72,7 +72,7 @@ export const fetchBuildings = () => async (dispatch: Dispatch) => {
 };
 
 
-export const addBuilding = (officialName: string, nicknames: []) => async (dispatch: Dispatch) => {
+export const addBuilding = (officialName: string, nicknames: string[]) => async (dispatch: Dispatch) => {
   dispatch({
     type: REQUEST_ADD_BUILDING,
   });
@@ -95,11 +95,12 @@ export const addBuilding = (officialName: string, nicknames: []) => async (dispa
       return;
     }
 
+    const created: Building = await response.json();
+
     // Success response
-    // TODO implement return data
     dispatch({
       type: REQUEST_ADD_BUILDING_SUCCESS,
-      data: undefined,
+      data: created,
     });
   }
   catch (error) {

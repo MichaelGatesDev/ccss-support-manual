@@ -16,7 +16,6 @@ import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import BuildingCardsGrid from "../../Components/BuildingCardsGrid";
 import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
-import Button from "../../Components/Button";
 import { AnchorButton } from "../../Components/AnchorButton";
 
 interface Props {

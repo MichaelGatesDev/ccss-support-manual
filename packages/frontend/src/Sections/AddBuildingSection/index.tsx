@@ -1,17 +1,24 @@
 import "./style.scss";
 
 import React, { useState } from "react";
+import { connect } from "react-redux";
 
 import { StringUtils } from "@michaelgatesdev/common";
+
+import { Building } from "@ccss-support-manual/models";
 
 import NavBar from "../../Components/NavBar";
 import { LabeledFormInput } from "../../Components/LabeledFormInput";
 import { LabeledInputList } from "../../Components/LabeledInputList";
+import { Alert, AlertType } from "../../Components/Alert/alert";
 import Button from "../../Components/Button";
-
+import { AppState } from "../../redux/store";
+import { addBuilding } from "../../redux/buildings/actions";
+import { BuildingsState } from "../../redux/buildings/types";
 
 interface Props {
-  addBuilding: (officialName: string, nicknames: string[]) => {};
+  buildingsState: BuildingsState;
+  addBuilding: (officialName: string, nicknames: string[]) => Promise<void>;
 }
 
 const AddBuildingSection = (props: Props) => {
@@ -20,14 +27,15 @@ const AddBuildingSection = (props: Props) => {
   const [nicknames, setNicknames] = useState<string[]>([]);
 
   const {
+    buildingsState,
     addBuilding,
   } = props;
 
   const performAddBuilding = () => {
-    if (StringUtils.isBlank(officialName)) {
-      alert("The official name must be specified");
-      return;
-    }
+    // if (StringUtils.isBlank(officialName)) {
+    //   alert("The official name must be specified");
+    //   return;
+    // }
     addBuilding(officialName, nicknames);
   };
 
@@ -40,6 +48,31 @@ const AddBuildingSection = (props: Props) => {
       />
       {/* Main content */}
       <section className="container" id="add-building-section">
+
+        <div className="row">
+          <div className="col">
+            {/* Info alert */}
+            {buildingsState.data && (
+              <Alert alertType={AlertType.Info} id="info-alert">
+                <p>Added new building!</p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>Official Name:&nbsp;</span>
+                  <span>{(buildingsState.data as Building).officialName}</span>
+                </p>
+                <p>
+                  <span style={{ fontWeight: "bold" }}>Nicknames:&nbsp;</span>
+                  <span>{(buildingsState.data as Building).nicknames.join(", ")}</span>
+                </p>
+              </Alert>
+            )}
+            {/* Error alert */}
+            {buildingsState.error && (
+              <Alert alertType={AlertType.Danger} id="error-alert">
+                <span>{buildingsState.error}</span>
+              </Alert>
+            )}
+          </div>
+        </div>
 
         <div className="row">
           <div className="col">
@@ -91,4 +124,13 @@ const AddBuildingSection = (props: Props) => {
   );
 };
 
-export default AddBuildingSection;
+const mapStateToProps = (state: AppState) => ({
+  buildingsState: state.buildings,
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    addBuilding,
+  },
+)(AddBuildingSection);

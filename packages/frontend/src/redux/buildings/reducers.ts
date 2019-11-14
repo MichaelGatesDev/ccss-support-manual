@@ -72,6 +72,7 @@ export function buildingsReducer(state = initialState, action: BuildingsActionTy
       return {
         ...state,
         addingBuilding: false,
+        data: action.data,
       };
     case REQUEST_ADD_BUILDING_FAILURE:
       return {

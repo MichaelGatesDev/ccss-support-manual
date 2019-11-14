@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "./App.css";
@@ -25,16 +25,15 @@ export default function App() {
           minScrollAmt={50}
         />
         <div className="App">
-          <Route exact path="/" component={Home} />
-          <Route path="/settings" component={Settings} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/settings" component={Settings} />
 
-          <Route exact path="/buildings" component={BuildingsSection} />
-          <Route exact path="/buildings/:buildingName" component={BuildingSection} />
-          {/* <Route path="/buildings/:buildingName/rooms" component={Rooms} /> */}
-          <Route exact path="/buildings/add" component={AddBuildingSection} />
-
-          <Route path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
-          {/* <Route exact path="/buildings/:buildingName/rooms/create" component={CreateRoom} /> */}
+            <Route exact path="/buildings" component={BuildingsSection} />
+            <Route exact path="/buildings/add" component={AddBuildingSection} />
+            <Route exact path="/buildings/:buildingName" component={BuildingSection} />
+            <Route path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
+          </Switch>
         </div>
       </BrowserRouter>
     </Provider>
