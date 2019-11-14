@@ -48,7 +48,7 @@ export const LabeledInputList = (props: Props) => {
   const removeItem = (itemIndex: number, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     const newValues = [...values];
-    if (newValues.length <= 1) return; // leave at least 1 input
+    if (preventZero && newValues.length <= 1) return; // leave at least 1 input
     newValues.splice(itemIndex, 1);
     if (onChange !== undefined) onChange(newValues);
   };
