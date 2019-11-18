@@ -8,10 +8,10 @@ import single from "./single";
 const router: Router = Router();
 
 router.param("roomNumber", (req: any, _res: Response, next: NextFunction, number: string): void => {
-    let building: Building = req.building;
+    let building: Building = req.body.building;
     let room = RoomUtils.getRoomByNumber(building, number);
-    if (room) {
-        req.room = room;
+    if (room !== undefined) {
+        req.body = { ...room };
         next();
         return;
     }
