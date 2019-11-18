@@ -32,7 +32,7 @@ const Button: React.FunctionComponent<Props> = (props: Props) => {
   };
 
   return (
-    <div className="Button-Component">
+    <div className={`Button-Component ${(fullWidth ? "full-width " : "")}`}>
       <button
         type="button"
         disabled={disabled}
