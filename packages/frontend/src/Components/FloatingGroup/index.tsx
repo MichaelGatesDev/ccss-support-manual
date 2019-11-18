@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React from "react";
+import React, { ReactNode } from "react";
 import shortid from "shortid";
 
 export enum FloatingGroupOrientation {
@@ -9,7 +9,7 @@ export enum FloatingGroupOrientation {
 }
 
 interface Props {
-  children?: any;
+  children?: ReactNode;
 
   orientation: FloatingGroupOrientation;
   top?: boolean;
@@ -29,13 +29,6 @@ export const FloatingGroup = (props: Props) => {
     left,
   } = props;
 
-
-  const mapped = children.map((child: any) => (
-    <div key={shortid.generate()}>
-      {child}
-    </div>
-  ));
-
   let classes = "";
   classes += top ? "top " : "";
   classes += right ? "right " : "";
@@ -48,7 +41,7 @@ export const FloatingGroup = (props: Props) => {
       `FloatingGroup-Component ${classes}`
     }
     >
-      {mapped}
+      {children}
     </div>
   );
 };
