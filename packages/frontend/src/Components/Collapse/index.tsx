@@ -1,47 +1,58 @@
 import "./style.scss";
 
-import React, { PureComponent } from "react";
-import { StringUtils } from "@michaelgatesdev/common";
+import React, { ReactNode } from "react";
 
-interface Props {
-  items: CollapseItem[];
+interface CollapseProps {
+  id: string;
+  children?: ReactNode;
 }
-interface State { }
 
-interface CollapseItem {
-  show?: boolean;
+export const Collapse = (props: CollapseProps) => {
+  const {
+    id,
+    children,
+  } = props;
+  return (
+    <div className="Collapse-Component">
+      <div className="accordion" id={id}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+interface CollapseCardProps {
   title: string;
-  content: any;
+  id: string;
+  headingID: string;
+  parentID: string;
+  show?: boolean;
+  children?: ReactNode;
 }
 
-export default class Collapse extends PureComponent<Props, State> {
-  render() {
-
-    const { items } = this.props;
-
-    const mapped = items.map((item) => (
-      <div className="card" key={`card-${StringUtils.internalize(item.title)}`}>
-        <div className="card-header" id="headingOne">
-          <h2 className="mb-0">
-            <button className="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              {item.title}
-            </button>
-          </h2>
-        </div>
-        <div id="collapseOne" className={`collapse +${(item.show ? " show" : "")}`} aria-labelledby="headingOne" data-parent="#accordionExample">
-          <div className="card-body">
-            {item.content}
-          </div>
+export const CollapseCard = (props: CollapseCardProps) => {
+  const {
+    title,
+    id,
+    headingID,
+    parentID,
+    show,
+    children,
+  } = props;
+  return (
+    <div className="card" id={id}>
+      <div className="card-header" id={headingID}>
+        <h2 className="mb-0">
+          <button className="btn btn-link" type="button" data-toggle="collapse" data-target={`#${id}`} aria-expanded="false" aria-controls={id}>
+            {title}
+          </button>
+        </h2>
+      </div>
+      <div id={id} className={`collapse ${(show ? "show " : "")}`} aria-labelledby={headingID} data-parent={`#${parentID}`}>
+        <div className="card-body">
+          {children}
         </div>
       </div>
-    ));
-
-    return (
-      <div className="Collapse-Component">
-        <div className="accordion" id="accordionExample">
-          {mapped}
-        </div>
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};

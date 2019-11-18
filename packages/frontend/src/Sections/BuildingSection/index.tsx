@@ -16,6 +16,7 @@ import { fetchBuildingImages, fetchRoomImagesForBuilding } from "../../redux/ima
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import ImageCarousel from "../../Components/ImageCarousel";
+import Button from "../../Components/Button";
 
 interface Props {
   match?: any;
@@ -136,8 +137,15 @@ class BuildingSection extends Component<Props, State> {
             <div className="col">
               {/* Building Name Header */}
               <div className="row">
-                <div className="col">
+                <div className="col" id="#official-name">
                   <h2>Official Name</h2>
+                </div>
+                <div className="col">
+                  <div className="d-flex justify-content-end">
+                    <Button preventDefault>
+                      <span>Edit</span>
+                    </Button>
+                  </div>
                 </div>
               </div>
               {/* Building Name */}
@@ -151,21 +159,36 @@ class BuildingSection extends Component<Props, State> {
                 <div className="col">
                   <h2>Nicknames</h2>
                 </div>
+                <div className="col">
+                  <div className="d-flex justify-content-end">
+                    <Button preventDefault>
+                      <span>Edit</span>
+                    </Button>
+                  </div>
+                </div>
               </div>
               {/* Nicknames */}
               <div className="row">
                 <div className="col">
                   <p>
-                    Nicknames:&nbsp;
                     {buildingsState.fetchedBuilding.nicknames.join(", ")}
                   </p>
                 </div>
               </div>
+              {/* Description Header */}
               <div className="row">
                 <div className="col">
                   <h2>Description</h2>
                 </div>
+                <div className="col">
+                  <div className="d-flex justify-content-end">
+                    <Button preventDefault>
+                      <span>Edit</span>
+                    </Button>
+                  </div>
+                </div>
               </div>
+              {/* Description */}
               <div className="row">
                 <div className="col">
                   <p>
@@ -195,6 +218,18 @@ class BuildingSection extends Component<Props, State> {
             </div>
           </div>
 
+          <div className="row">
+            <div className="col">
+              <h2>Admin</h2>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <Button preventDefault fullWidth>
+                <span>Delete</span>
+              </Button>
+            </div>
+          </div>
 
         </section>
       </>
