@@ -63,7 +63,7 @@ export const LabeledInputList = (props: Props) => {
   return (
     <div className="Component-LabeledInputList" id={id}>
 
-      {titleLeft && title}
+      {titleLeft && <span className="left">{title}</span>}
 
       {values.length > 0 && (
         <ul>
@@ -86,7 +86,7 @@ export const LabeledInputList = (props: Props) => {
                     >
                       <span>
                         <i className="fas fa-minus-circle" />
-
+                        &nbsp;Remove
                       </span>
                     </Button>
                   )
@@ -97,7 +97,7 @@ export const LabeledInputList = (props: Props) => {
         </ul>
       )}
 
-      {titleRight && title}
+      {titleRight && <span className="right">{title}</span>}
 
       <Button
         preventDefault
@@ -105,7 +105,7 @@ export const LabeledInputList = (props: Props) => {
       >
         <span>
           <i className="fas fa-plus-circle" />
-          Add
+          &nbsp;Add
         </span>
       </Button>
 
