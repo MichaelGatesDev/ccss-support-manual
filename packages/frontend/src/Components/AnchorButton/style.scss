@@ -1,10 +1,29 @@
 .AnchorButton-Component {
-    // input {
-    //     border: none;
-    //     background-color: #cf102d;
-    //     color: #FFFFFF;
-    //     padding: 0.75em 1.5em;
-    //     font-family: 'Roboto', sans-serif;
-    //     font-weight: 500;
-    // }
+  a {
+    & > *:first-child {
+      display: flex;
+    }
+
+    &.horizontal,
+    &.vertical {
+      padding: 0.5em;
+      * {
+        width: fit-content;
+      }
+      & > *:first-child {
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &.horizontal {
+      & > *:first-child {
+        flex-direction: row;
+      }
+    }
+
+    &.vertical > *:first-child {
+      flex-direction: column;
+    }
+  }
 }

@@ -1,11 +1,14 @@
 import "./style.scss";
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
   href: string;
-  content?: JSX.Element;
   disabled?: boolean;
+
+  vertical?: boolean;
+
+  children?: ReactNode;
 }
 
 
@@ -13,18 +16,21 @@ export const AnchorButton = (props: Props) => {
 
   const {
     href,
-    content,
+    children,
+    vertical,
     disabled,
   } = props;
+
+  const orientation = vertical ? "vertical" : "horizontal";
 
   return (
     <div className="AnchorButton-Component">
       <a
-        className={`btn btn-primary ${(disabled ? "disabled" : "")}`}
+        className={`btn btn-primary ${(disabled ? "disabled" : "")} ${orientation}`}
         href={href}
         role="button"
       >
-        {content}
+        {children}
       </a>
     </div>
   );
