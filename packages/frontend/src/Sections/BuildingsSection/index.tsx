@@ -72,6 +72,21 @@ const BuildingsSection = (props: Props) => {
       />
       {/* Main content */}
       <section className="container-fluid" id="home-section">
+
+        {/* Breadcrumbs */}
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <nav aria-label="breadcrumb">
+                <ol className="breadcrumb">
+                  <li className="breadcrumb-item"><a href="/">Home</a></li>
+                  <li className="breadcrumb-item active" aria-current="page">Buildings</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+
         <BuildingCardsGrid
           buildings={filteredBuildings}
           images={imagesState}

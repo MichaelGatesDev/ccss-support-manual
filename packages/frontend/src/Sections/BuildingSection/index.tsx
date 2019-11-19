@@ -93,16 +93,16 @@ class BuildingSection extends Component<Props, State> {
 
     const { filterSearch } = this.state;
     const { buildingsState, imagesState } = this.props;
+    const building = buildingsState.fetchedBuilding;
 
-    if (buildingsState.fetchedBuilding === undefined) {
+    if (building === undefined) {
       return <p>Building not found</p>;
     }
 
     const query = filterSearch;
     const queries = query.split(" ");
 
-
-    let rooms = _.sortBy(buildingsState.fetchedBuilding.rooms, ["number"]);
+    let rooms = _.sortBy(building.rooms, ["number"]);
 
     if (queries.length > 0) {
       for (let query of queries) {
@@ -110,6 +110,7 @@ class BuildingSection extends Component<Props, State> {
         rooms = this.filterRoomsByName(rooms, query);
       }
     }
+
 
     return (
       <>
@@ -122,6 +123,21 @@ class BuildingSection extends Component<Props, State> {
         />
         {/* Main content */}
         <section className="container" id="building-section">
+
+          {/* Breadcrumbs */}
+          <div className="container">
+            <div className="row">
+              <div className="col">
+                <nav aria-label="breadcrumb">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><a href="/">Home</a></li>
+                    <li className="breadcrumb-item"><a href="/buildings">Buildings</a></li>
+                    <li className="breadcrumb-item active" aria-current="page">{building.officialName}</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
 
           {/* Meta */}
           <div className="row">
@@ -151,7 +167,7 @@ class BuildingSection extends Component<Props, State> {
               {/* Building Name */}
               <div className="row">
                 <div className="col">
-                  <p>{buildingsState.fetchedBuilding.officialName}</p>
+                  <p>{building.officialName}</p>
                 </div>
               </div>
               {/* Nicknames Header */}
@@ -171,7 +187,7 @@ class BuildingSection extends Component<Props, State> {
               <div className="row">
                 <div className="col">
                   <p>
-                    {buildingsState.fetchedBuilding.nicknames.join(", ")}
+                    {building.nicknames.join(", ")}
                   </p>
                 </div>
               </div>
