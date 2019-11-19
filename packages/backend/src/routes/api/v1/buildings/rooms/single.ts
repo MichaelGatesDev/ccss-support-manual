@@ -1,5 +1,6 @@
 import { Router, Response } from "express";
 import { Room } from "@ccss-support-manual/models";
+import { Logger } from "@michaelgatesdev/common";
 
 const router: Router = Router();
 

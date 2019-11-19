@@ -4,14 +4,15 @@ import { RoomUtils } from "@ccss-support-manual/utilities";
 
 import all from "./all";
 import single from "./single";
+import { app } from "../../../../../app";
 
 const router: Router = Router();
 
 router.param("roomNumber", (req: any, _res: Response, next: NextFunction, number: string): void => {
     let building: Building = req.body.building;
-    let room = RoomUtils.getRoomByNumber(building, number);
+    let room = app.roomManager.getRoom(building.internalName, number);
     if (room !== undefined) {
-        req.body = { ...room };
+        req.body = { ...req.body, room: room };
         next();
         return;
     }
