@@ -93,11 +93,24 @@ export class App {
             Logger.error(error);
         }
 
+        // cleanup updates
+        await this.updateManager.initialize();
         // check for updates
-        if (this.configManager.appConfig?.checkForProgramUpdates && this.isProduction) {
+        if (this.configManager.appConfig?.checkUpdates && this.isProduction) {
             try {
+                Logger.info(`Current version: ${app.configManager.appConfig?.currentVersion}`);
+
                 Logger.info("Checking for updates...");
-                await this.updateManager.check();
+                const available = await this.updateManager.check();
+                if (available) {
+                    Logger.info(`New version found: ${app.updateManager?.latestVersion?.version}`);
+                    if (this.configManager.appConfig.applyUpdates) {
+                        Logger.info("Downloading new update...")
+                        await this.updateManager.downloadAndApplyUpdate();
+                    }
+                } else {
+                    Logger.info("Application is up-to-date!");
+                }
             } catch (error) {
                 Logger.error("There was an error checking for updates");
                 Logger.error(error);

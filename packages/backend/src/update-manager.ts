@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import os from "os";
 
 import { Logger } from "@michaelgatesdev/common";
-import { WebDownloader } from "@michaelgatesdev/common-io";
+import { WebDownloader, FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from "./app";
 
@@ -26,6 +26,25 @@ enum VersionComparisonResult {
 export class UpdateManager {
 
     private versionPattern = /((\d+)\.(\d+)\.(\d+))/;
+
+    public latestVersion: Release | undefined;
+
+
+    public async initialize(): Promise<void> {
+        const oldFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".old"));
+        if (oldFiles.length > 0) {
+            const names = oldFiles.map((file) => file.path);
+            Logger.debug(`Found old application files, deleting:\n${names.join("\n")}\n`);
+        }
+
+        const updateFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".update"));
+        if (updateFiles.length > 0) {
+            const first = updateFiles[0];
+            Logger.debug(`Found new application file: ${first.path}`);
+            //TODO apply old downloaded file
+        }
+    }
+
 
     public async getLatestUpdate(): Promise<Release> {
         const config = app.configManager.appConfig;
@@ -56,7 +75,7 @@ export class UpdateManager {
         };
     }
 
-    public async check(): Promise<void> {
+    public async check(): Promise<boolean> {
         const config = app.configManager.appConfig;
         if (config === undefined) throw new Error("Application configuration not found!");
 
@@ -78,17 +97,82 @@ export class UpdateManager {
                 }
             }
 
-            Logger.info(`Current version: ${currentVersion}`);
-            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Lower) {
-                Logger.info(`New version found ! ${latestVersion}`);
-                await this.updateTo(latest);
-            } else {
-                Logger.info(`Application is up-to-date!`);
+            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Equal) {
+                return false;
             }
+
+            this.latestVersion = latest;
+            return true;
         } catch (error) {
             Logger.error("There was an error fetching the latest update!");
             Logger.error(error);
+            return false;
         }
+    }
+
+    public async forceDownloadLatest(): Promise<void> {
+        await this.downloadAndApplyUpdate(await this.getLatestUpdate());
+    }
+
+    public async downloadAndApplyUpdate(release: Release | undefined = this.latestVersion): Promise<void> {
+
+        await this.download(release);
+
+        await this.apply();
+
+        await this.afterUpdate();
+    }
+
+    private async download(release: Release | undefined = this.latestVersion): Promise<void> {
+        if (release === undefined) {
+            throw new Error("There is no release to download & apply");
+        }
+
+        let download: ReleaseDownload | undefined = undefined;
+        switch (os.type().toLowerCase()) {
+            case "linux":
+                download = release.downloads.find((download) => download.name.includes("linux"));
+                break;
+            case "darwin":
+                download = release.downloads.find((download) => download.name.includes("mac"));
+                break;
+            case "windows_nt":
+                download = release.downloads.find((download) => download.name.includes("win"));
+                break;
+        }
+        if (download === undefined) throw new Error("Download is undefined!");
+
+        // download update file
+        Logger.info(`Downloading ${download.name}...`);
+        const updateFilePath = `${process.title}.update`;
+        await new WebDownloader(download.url, updateFilePath).download();
+        Logger.info("Download complete!");
+    }
+
+    private async apply(): Promise<void> {
+
+        if (this.latestVersion === undefined) {
+            throw new Error("Latest version is undefined!");
+        }
+
+        // update config version
+        const config = app.configManager.appConfig;
+        if (config === undefined) return;
+        Logger.debug(`Updated from version ${config.currentVersion} to ${this.latestVersion.version}`);
+        config.currentVersion = this.latestVersion?.version;
+        await config.save();
+
+        // rename current process to append .old
+        if (!await FileUtils.rename(process.title, `${process.title}.old`)) {
+            throw new Error("There was an issue renaming the current process!");
+        }
+        Logger.debug(`Renamed file: ${process.title} -> ${process.title}.old`)
+
+        // rename downloaded file to original process name
+        if (!await FileUtils.rename(`${process.title}.update`, `${process.title}`)) {
+            throw new Error("There was an issue renaming the update file!");
+        }
+        Logger.debug(`Renamed file: ${process.title}.update -> ${process.title}`)
     }
 
     public async afterUpdate() {
@@ -99,13 +183,14 @@ export class UpdateManager {
                 if (remaining <= 0) {
                     clearInterval(timer);
                     process.exit(0);
-                    return;
+                    // return;
                 }
                 Logger.info(`Application will close in ${remaining} seconds`);
                 remaining--;
             }, 1000);
         });
     }
+
 
     /**
      * Returns the version comparison for the left compared to the right
@@ -126,35 +211,4 @@ export class UpdateManager {
 
         return VersionComparisonResult.Equal;
     };
-
-    private async updateTo(release: Release): Promise<void> {
-        let download: ReleaseDownload | undefined = undefined;
-        switch (os.type().toLowerCase()) {
-            case "linux":
-                download = release.downloads.find((download) => download.name.includes("linux"));
-                break;
-            case "darwin":
-                download = release.downloads.find((download) => download.name.includes("mac"));
-                break;
-            case "windows_nt":
-                download = release.downloads.find((download) => download.name.includes("win"));
-                break;
-        }
-        if (download === undefined) throw new Error();
-        Logger.info(`Downloading ${download.name}...`);
-        await new WebDownloader(download.url, `${app.ROOT_DIR}/${download.name}`).download();
-        Logger.info("Download complete!");
-
-        const config = app.configManager.appConfig;
-        if (config === undefined) return;
-        Logger.debug(`Updated from version ${config.currentVersion} to ${release.version}`);
-        config.currentVersion = release.version;
-        await config.save();
-
-        await this.afterUpdate();
-    }
-
-    public async forceDownloadLatest(): Promise<void> {
-        await this.updateTo(await this.getLatestUpdate());
-    }
 }
