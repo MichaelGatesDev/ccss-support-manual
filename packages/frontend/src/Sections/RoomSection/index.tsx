@@ -47,7 +47,7 @@ interface Props {
   fetchTroubleshootingDataForRoom: (buildingName: string, roomNumber: string | number) => void;
 }
 
-export const RoomSection = (props: Props) => {
+const RoomSection = (props: Props) => {
 
   const [activeTroubleshootingTypeFilters, setActiveTroubleshootingTypeFilters] = useState<string[]>([]);
   const [activeTroubleshootingTagFilters, setActiveTroubleshootingTagFilters] = useState<string[]>([]);
