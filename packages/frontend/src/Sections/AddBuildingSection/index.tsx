@@ -39,6 +39,8 @@ const AddBuildingSection = (props: Props) => {
     addBuilding(officialName, nicknames);
   };
 
+  const building = buildingsState.data as Building;
+
   return (
     <>
       {/* Top navigation */}
@@ -53,15 +55,15 @@ const AddBuildingSection = (props: Props) => {
           <div className="col">
             {/* Info alert */}
             {buildingsState.data && (
-              <Alert alertType={AlertType.Info} id="info-alert">
-                <p>Added new building!</p>
+              <Alert alertType={AlertType.Success} id="info-alert">
+                <p>Succesfully addded new building!</p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Official Name:&nbsp;</span>
-                  <span>{(buildingsState.data as Building).officialName}</span>
+                  <span>{building.officialName}</span>
                 </p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Nicknames:&nbsp;</span>
-                  <span>{(buildingsState.data as Building).nicknames.join(", ")}</span>
+                  <span>{building.nicknames.length > 0 ? building.nicknames.join(", ") : "(none specified)"}</span>
                 </p>
               </Alert>
             )}
