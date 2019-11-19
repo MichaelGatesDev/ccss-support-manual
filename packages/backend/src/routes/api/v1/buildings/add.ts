@@ -25,9 +25,11 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
+    const nicknames = json.nicknames.filter((nickname) => !StringUtils.isBlank(nickname));
+
     const created = new BuildingFactory()
         .withOfficialName(json.officialName)
-        .withNicknames(json.nicknames)
+        .withNicknames(nicknames)
         .withInternalName(StringUtils.internalize(json.officialName))
         .withRooms([])
         .build();
