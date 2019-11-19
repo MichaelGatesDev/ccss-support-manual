@@ -145,6 +145,12 @@ export class UpdateManager {
         await new WebDownloader(download.url, `${app.ROOT_DIR}/${download.name}`).download();
         Logger.info("Download complete!");
 
+        const config = app.configManager.appConfig;
+        if (config === undefined) return;
+        Logger.debug(`Updated from version ${config.currentVersion} to ${release.version}`);
+        config.currentVersion = release.version;
+        await config.save();
+
         await this.afterUpdate();
     }
 
