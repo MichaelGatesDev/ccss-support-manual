@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   ImageType,
@@ -41,272 +41,227 @@ interface Props {
   troubleshootingState: TroubleshootingState;
   imagesState: ImagesState;
 
-  fetchBuilding: Function;
-  fetchRoom: Function;
-  fetchRoomImagesForRoom: Function;
-  fetchTroubleshootingDataForRoom: Function;
+  fetchBuilding: (name: string) => void;
+  fetchRoom: (buildingName: string, roomNumber: string | number) => void;
+  fetchRoomImagesForRoom: (buildingName: string, roomNumber: string | number) => void;
+  fetchTroubleshootingDataForRoom: (buildingName: string, roomNumber: string | number) => void;
 }
 
+export const RoomSection = (props: Props) => {
 
-interface State {
-  activeTroubleshootingTypeFilters: string[];
-  activeTroubleshootingTagFilters: string[];
-  activeTroubleshootingSearchQuery: string;
-}
+  const [activeTroubleshootingTypeFilters, setActiveTroubleshootingTypeFilters] = useState<string[]>([]);
+  const [activeTroubleshootingTagFilters, setActiveTroubleshootingTagFilters] = useState<string[]>([]);
+  const [activeTroubleshootingSearchQuery, setActiveTroubleshootingSearchQuery] = useState<string>("");
 
 
-class RoomSection extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+  const {
+    buildingName,
+    roomNumber,
 
-    this.state = {
-      activeTroubleshootingTypeFilters: [],
-      activeTroubleshootingTagFilters: [],
-      activeTroubleshootingSearchQuery: "",
-    };
+    buildingsState,
+    roomsState,
+    troubleshootingState,
+    imagesState,
 
-    this.onTypeFilterChange = this.onTypeFilterChange.bind(this);
-    this.onTagFilterChange = this.onTagFilterChange.bind(this);
-    this.onFilterSearch = this.onFilterSearch.bind(this);
-  }
+    fetchBuilding,
+    fetchRoom,
+    fetchTroubleshootingDataForRoom,
+    fetchRoomImagesForRoom,
+  } = props;
 
-  componentDidMount() {
-
-    const {
-      buildingName,
-      roomNumber,
-
-      fetchBuilding,
-      fetchRoom,
-      fetchTroubleshootingDataForRoom,
-      fetchRoomImagesForRoom,
-    } = this.props;
-
+  useEffect(() => {
     fetchBuilding(buildingName);
     fetchRoom(buildingName, roomNumber);
     fetchTroubleshootingDataForRoom(buildingName, roomNumber);
     fetchRoomImagesForRoom(buildingName, roomNumber);
+  }, []);
+
+
+  const building = buildingsState.fetchedBuilding;
+  if (building === undefined) {
+    return <p>Building not found</p>;
   }
 
-  private isLoading(): boolean {
-    const {
-      buildingsState,
-      roomsState,
-      troubleshootingState,
-      imagesState,
-    } = this.props;
-    return buildingsState.fetchingBuilding || roomsState.roomsLoading || troubleshootingState.loading || imagesState.imagesLoading;
+  const room = roomsState.fetchedRoom;
+  if (room === undefined) {
+    return <p>Room not found</p>;
   }
 
-  onTypeFilterChange(activeTypeFilters: string[]) {
-    this.setState({
-      activeTroubleshootingTypeFilters: activeTypeFilters,
-    });
+  const tsData = troubleshootingState.data;
+  if (tsData === undefined) {
+    return <p>Troubleshooting Data not found</p>;
   }
 
-  onTagFilterChange(activeTagFilters: string[]) {
-    this.setState({
-      activeTroubleshootingTagFilters: activeTagFilters,
-    });
+
+  const isLoading = (): boolean => (buildingsState.fetchingBuilding || roomsState.fetchingRoom || troubleshootingState.loading || imagesState.imagesLoading);
+
+
+  // Display splash when loading
+  if (isLoading()) {
+    return <LoadingSplash />;
   }
 
-  onFilterSearch(query: string) {
-    this.setState({
-      activeTroubleshootingSearchQuery: query,
-    });
-  }
 
-  render() {
-    // Display splash when loading
-    if (this.isLoading()) {
-      return <LoadingSplash />;
-    }
+  return (
+    <>
+      {/* Top navigation */}
+      <NavBar
+        title="CCSS Support Manual"
+        fixed
+      />
 
-    const {
-      buildingsState,
-      roomsState,
-      troubleshootingState,
-      imagesState,
-    } = this.props;
-    const { fetchedBuilding } = buildingsState;
-    const { room } = roomsState;
-    const { data } = troubleshootingState;
-
-    const {
-      activeTroubleshootingSearchQuery,
-      activeTroubleshootingTypeFilters,
-      activeTroubleshootingTagFilters,
-    } = this.state;
-
-    if (fetchedBuilding === undefined) {
-      return <p>Building not found</p>;
-    }
-
-    if (room === undefined) {
-      return <p>Room not found</p>;
-    }
-
-    return (
-      <>
-        {/* Top navigation */}
-        <NavBar
-          title="CCSS Support Manual"
-          fixed
-        />
-
-        {/* Main content */}
-        <section className="container" id="room-section">
+      {/* Main content */}
+      <section className="container" id="room-section">
 
 
-          {/* Room Title */}
-          <div className="row">
-            <div className="col text-center">
-              <h2 className="room-title capitalized">
-                {fetchedBuilding.officialName}
-                &nbsp;
-                {room.number}
-              </h2>
+        {/* Room Title */}
+        <div className="row">
+          <div className="col text-center">
+            <h2 className="room-title capitalized">
+              {building.officialName}
+              &nbsp;
+              {room.number}
+            </h2>
+          </div>
+        </div>
+
+        {/* Room Name */}
+        <div className="row">
+          <div className="col text-center">
+            <h3>{StringUtils.isBlank(room.name) ? "" : room.name}</h3>
+          </div>
+        </div>
+
+        {/* 3 Column Meta */}
+        <div className="row">
+
+          <div className="col-lg">
+            <div className="row">
+              <div className="col text-center">
+                <h4>Room Type</h4>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col text-center">
+                <p className="capitalized">{StringUtils.splitCompressedTitle(RoomType[room.roomType]).join(" ")}</p>
+              </div>
             </div>
           </div>
 
-          {/* Room Name */}
-          <div className="row">
-            <div className="col text-center">
-              <h3>{StringUtils.isBlank(room.name) ? "" : room.name}</h3>
+          <div className="col-lg text-center">
+            <div className="row">
+              <div className="col text-center">
+                <h4>Room Capacity</h4>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col text-center">
+                <p className="capitalized">{room.capacity === -1 ? "N/A" : `${room.capacity}`}</p>
+              </div>
             </div>
           </div>
 
-          {/* 3 Column Meta */}
-          <div className="row">
-
-            <div className="col-lg">
-              <div className="row">
-                <div className="col text-center">
-                  <h4>Room Type</h4>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col text-center">
-                  <p className="capitalized">{StringUtils.splitCompressedTitle(RoomType[room.roomType]).join(" ")}</p>
-                </div>
+          <div className="col-lg-4 text-center">
+            <div className="row">
+              <div className="col text-center">
+                <h4>Room Extension</h4>
               </div>
             </div>
-
-            <div className="col-lg text-center">
-              <div className="row">
-                <div className="col text-center">
-                  <h4>Room Capacity</h4>
-                </div>
+            <div className="row">
+              <div className="col text-center">
+                <p className="capitalized">
+                  {
+                    !RoomUtils.isClassroom(room) || (room as Classroom).phone.extension === "0000"
+                      ?
+                      "N/A"
+                      :
+                      (room as Classroom).phone.extension
+                  }
+                </p>
               </div>
-              <div className="row">
-                <div className="col text-center">
-                  <p className="capitalized">{room.capacity === -1 ? "N/A" : `${room.capacity}`}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-4 text-center">
-              <div className="row">
-                <div className="col text-center">
-                  <h4>Room Extension</h4>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col text-center">
-                  <p className="capitalized">
-                    {
-                      !RoomUtils.isClassroom(room) || (room as Classroom).phone.extension === "0000"
-                        ?
-                        "N/A"
-                        :
-                        (room as Classroom).phone.extension
-                    }
-                  </p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-
-          {/* Panorama Photos */}
-          <div className="row" id="panoramas-row">
-            <div className="col">
-              <ImageCarousel
-                id="room-panoramas-carousel"
-                height="200px"
-                images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomPanorama).map((image) => image.path)}
-              />
             </div>
           </div>
 
-          {/* Meta */}
-          <div className="row">
-            {/* Photos */}
-            <div className="col-4">
-              <ImageCarousel
-                id="room-carousel-titles"
-                height="300px"
-                images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomTitle).map((image) => image.path)}
-              />
-            </div>
-            {/* Photos */}
-            <div className="col-4">
-              <ImageCarousel
-                id="room-carousel-room"
-                height="300px"
-                images={imagesState.roomImages.filter((image) => image.type === ImageType.Room).map((image) => image.path)}
-              />
-            </div>
-            {/* Photos */}
-            <div className="col-4">
-              <ImageCarousel
-                id="room-carousel-equipment"
-                height="300px"
-                images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomEquipment).map((image) => image.path)}
-              />
-            </div>
+        </div>
+
+
+        {/* Panorama Photos */}
+        <div className="row" id="panoramas-row">
+          <div className="col">
+            <ImageCarousel
+              id="room-panoramas-carousel"
+              height="200px"
+              images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomPanorama).map((image) => image.path)}
+            />
           </div>
+        </div>
 
-
-          {/* Troubleshooting */}
-          <div className="row" id="troubleshooting-row">
-            <div className="col-sm-3">
-              <SearchBox
-                label="Search"
-                buttonText="Clear"
-                onChange={this.onFilterSearch}
-                value={activeTroubleshootingSearchQuery}
-              />
-              <FilterBox
-                label="Type Filters"
-                keys={_.sortBy(TroubleshootingDataUtils.getAllTypes(data))}
-                buttonText="Reset"
-                onChange={this.onTypeFilterChange}
-                enabledByDefault
-              />
-              <FilterBox
-                label="Tag Filters"
-                keys={_.sortBy(TroubleshootingDataUtils.getAllTags(data))}
-                buttonText="Reset"
-                onChange={this.onTagFilterChange}
-              />
-            </div>
-            <div className="col">
-              <TroubleshootingTips
-                troubleshootingData={data}
-                typeFilters={activeTroubleshootingTypeFilters}
-                tagFilters={activeTroubleshootingTagFilters}
-                search={activeTroubleshootingSearchQuery}
-              />
-            </div>
+        {/* Meta */}
+        <div className="row">
+          {/* Photos */}
+          <div className="col-4">
+            <ImageCarousel
+              id="room-carousel-titles"
+              height="300px"
+              images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomTitle).map((image) => image.path)}
+            />
           </div>
+          {/* Photos */}
+          <div className="col-4">
+            <ImageCarousel
+              id="room-carousel-room"
+              height="300px"
+              images={imagesState.roomImages.filter((image) => image.type === ImageType.Room).map((image) => image.path)}
+            />
+          </div>
+          {/* Photos */}
+          <div className="col-4">
+            <ImageCarousel
+              id="room-carousel-equipment"
+              height="300px"
+              images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomEquipment).map((image) => image.path)}
+            />
+          </div>
+        </div>
 
-        </section>
-      </>
-    );
-  }
-}
+
+        {/* Troubleshooting */}
+        <div className="row" id="troubleshooting-row">
+          <div className="col-sm-3">
+            <SearchBox
+              label="Search"
+              buttonText="Clear"
+              onChange={setActiveTroubleshootingSearchQuery}
+              value={activeTroubleshootingSearchQuery}
+            />
+            <FilterBox
+              label="Type Filters"
+              keys={_.sortBy(TroubleshootingDataUtils.getAllTypes(tsData))}
+              buttonText="Reset"
+              onChange={setActiveTroubleshootingTypeFilters}
+              enabledByDefault
+            />
+            <FilterBox
+              label="Tag Filters"
+              keys={_.sortBy(TroubleshootingDataUtils.getAllTags(tsData))}
+              buttonText="Reset"
+              onChange={setActiveTroubleshootingTagFilters}
+            />
+          </div>
+          <div className="col">
+            <TroubleshootingTips
+              troubleshootingData={tsData}
+              typeFilters={activeTroubleshootingTypeFilters}
+              tagFilters={activeTroubleshootingTagFilters}
+              search={activeTroubleshootingSearchQuery}
+            />
+          </div>
+        </div>
+
+      </section>
+    </>
+  );
+};
 
 const mapStateToProps = (state: AppState, props: Props) => ({
   buildingsState: state.buildings,
