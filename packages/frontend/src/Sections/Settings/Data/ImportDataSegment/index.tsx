@@ -8,13 +8,13 @@ import { SpreadsheetType, SpreadsheetImportMode } from "@ccss-support-manual/mod
 
 import { ImportState } from "../../../../redux/import/types";
 import { importSpreadsheet } from "../../../../redux/import/actions";
-import Collapse from "../../../../Components/Collapse";
 import FormInput from "../../../../Components/FormInput";
 import FileSelect from "../../../../Components/FileSelect";
 import Select from "../../../../Components/Select";
 import Button from "../../../../Components/Button";
 import { AppState } from "../../../../redux/store";
 import { SettingsSegment } from "../../SettingsSegment";
+import { Collapse, CollapseCard } from "../../../../Components/Collapse";
 
 interface Props {
   importState?: ImportState;
@@ -118,61 +118,51 @@ const ImportDataSegment = (props: Props) => {
 
           <div className="row">
             <div className="col">
-              <Collapse
-                items={[
-                  {
-                    title: "Google Sheets",
-                    show: true,
-                    content: (
+              <Collapse id="importCollapse">
+                <CollapseCard title="Google Sheets" show parentID="importCollapse" id="importURLCollapse" headingID="importURLCollapseHeading">
+                  <div className="row">
+                    <div className="col">
+                      {/* Header row */}
                       <div className="row">
                         <div className="col">
-                          {/* Header row */}
-                          <div className="row">
-                            <div className="col">
-                              <h5>Spreadsheet URL</h5>
-                            </div>
-                          </div>
-                          {/* Input row */}
-                          <div className="row">
-                            <div className="col">
-                              <FormInput
-                                value={importURL}
-                                placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
-                                onChange={setImportSpreadsheetURL}
-                              />
-                            </div>
-                          </div>
+                          <h5>Spreadsheet URL</h5>
                         </div>
                       </div>
-                    ),
-                  },
-                  {
-                    title: "File",
-                    content: (
-
+                      {/* Input row */}
                       <div className="row">
                         <div className="col">
-                          {/* Header row */}
-                          <div className="row">
-                            <div className="col">
-                              <h5>Spreadsheet File</h5>
-                            </div>
-                          </div>
-                          {/* Input row */}
-                          <div className="row">
-                            <div className="col">
-                              <FileSelect
-                                types={["xlsx"]}
-                                onSelect={setImportFile}
-                              />
-                            </div>
-                          </div>
+                          <FormInput
+                            value={importURL}
+                            placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
+                            onChange={setImportSpreadsheetURL}
+                          />
                         </div>
                       </div>
-                    ),
-                  },
-                ]}
-              />
+                    </div>
+                  </div>
+                </CollapseCard>
+                <CollapseCard title="File" parentID="importCollapse" id="importFileCollapse" headingID="importFileCollapseHeading">
+                  <div className="row">
+                    <div className="col">
+                      {/* Header row */}
+                      <div className="row">
+                        <div className="col">
+                          <h5>Spreadsheet File</h5>
+                        </div>
+                      </div>
+                      {/* Input row */}
+                      <div className="row">
+                        <div className="col">
+                          <FileSelect
+                            types={["xlsx"]}
+                            onSelect={setImportFile}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CollapseCard>
+              </Collapse>
             </div>
           </div>
           {/* Spreadsheet Type */}

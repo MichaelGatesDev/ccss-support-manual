@@ -77,24 +77,14 @@ const BuildingsSection = (props: Props) => {
           images={imagesState}
         />
         <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
-          <AnchorButton
-            href="buildings/add"
-            content={(
+          <AnchorButton href="buildings/add">
+            <>
               <span>
-                Add
                 <i className="fas fa-plus" />
+                &nbsp;Add Building
               </span>
-            )}
-          />
-          <AnchorButton
-            href="buildings/remove"
-            content={(
-              <span>
-                Remove
-                <i className="fas fa-minus" />
-              </span>
-            )}
-          />
+            </>
+          </AnchorButton>
         </FloatingGroup>
       </section>
     </>
