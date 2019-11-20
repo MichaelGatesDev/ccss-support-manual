@@ -38,23 +38,22 @@ const SaveDataSegment = (props: Props) => {
   return (
     <SettingsSegment
       id="save-data"
-      segmentTitle="Save Data"
-      segmentContent={(
-        <>
-          <div className="row">
-            <div className="col">
-              <Button
-                disabled={saveState.saving}
-                onClick={save}
-                preventDefault
-              >
-                <span>Save</span>
-              </Button>
-            </div>
+      title="Save Data"
+    >
+      <>
+        <div className="row">
+          <div className="col">
+            <Button
+              disabled={saveState.saving}
+              onClick={save}
+              preventDefault
+            >
+              <span>Save</span>
+            </Button>
           </div>
-        </>
-      )}
-    />
+        </div>
+      </>
+    </SettingsSegment>
   );
 };
 

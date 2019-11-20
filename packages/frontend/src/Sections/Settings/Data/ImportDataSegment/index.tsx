@@ -99,72 +99,77 @@ const ImportDataSegment = (props: Props) => {
   return (
     <SettingsSegment
       id="import-data"
-      segmentTitle="Import Data"
-      segmentContent={(
-        <>
-          {/* Error messages row */}
-          {
-            importState !== undefined && importState.error &&
-            (
-              <div className="row">
-                <div className="col">
-                  <div className="alert alert-danger" role="alert">
-                    {importState.error}
+      title="Import Data"
+    >
+      <>
+        {/* Error messages row */}
+        {
+          importState !== undefined && importState.error &&
+          (
+            <div className="row">
+              <div className="col">
+                <div className="alert alert-danger" role="alert">
+                  {importState.error}
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+
+        <ul className="nav nav-tabs" id="myTab" role="tablist">
+          <li className="nav-item">
+            <a className="nav-link active" id="google-sheets-tab" data-toggle="tab" href="#google-sheets" role="tab" aria-controls="google-sheets" aria-selected="true">Google Sheets</a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" id="spreadsheet-file-tab" data-toggle="tab" href="#spreadsheet-file" role="tab" aria-controls="spreadsheet file" aria-selected="false">Spreadsheet File</a>
+          </li>
+        </ul>
+        <div className="tab-content" id="myTabContent">
+          {/* -- START TAB CONTENT -- */}
+          {/* Google Sheets */}
+          <div className="tab-pane fade show active" id="google-sheets" role="tabpanel" aria-labelledby="google-sheets-tab">
+            <div className="row">
+              <div className="col">
+                {/* Header row */}
+                <div className="row">
+                  <div className="col">
+                    <h5>Spreadsheet URL</h5>
+                  </div>
+                </div>
+                {/* Input row */}
+                <div className="row">
+                  <div className="col">
+                    <FormInput
+                      value={importURL}
+                      placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
+                      onChange={setImportSpreadsheetURL}
+                    />
                   </div>
                 </div>
               </div>
-            )
-          }
-
-          <div className="row">
-            <div className="col">
-              <Collapse id="importCollapse">
-                <CollapseCard title="Google Sheets" show parentID="importCollapse" id="importURLCollapse" headingID="importURLCollapseHeading">
-                  <div className="row">
-                    <div className="col">
-                      {/* Header row */}
-                      <div className="row">
-                        <div className="col">
-                          <h5>Spreadsheet URL</h5>
-                        </div>
-                      </div>
-                      {/* Input row */}
-                      <div className="row">
-                        <div className="col">
-                          <FormInput
-                            value={importURL}
-                            placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
-                            onChange={setImportSpreadsheetURL}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CollapseCard>
-                <CollapseCard title="File" parentID="importCollapse" id="importFileCollapse" headingID="importFileCollapseHeading">
-                  <div className="row">
-                    <div className="col">
-                      {/* Header row */}
-                      <div className="row">
-                        <div className="col">
-                          <h5>Spreadsheet File</h5>
-                        </div>
-                      </div>
-                      {/* Input row */}
-                      <div className="row">
-                        <div className="col">
-                          <FileSelect
-                            types={["xlsx"]}
-                            onSelect={setImportFile}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CollapseCard>
-              </Collapse>
             </div>
           </div>
+          {/* File */}
+          <div className="tab-pane fade" id="spreadsheet-file" role="tabpanel" aria-labelledby="speadsheet-file-tab">
+            {/* Header row */}
+            <div className="row">
+              <div className="col">
+                <h5>Spreadsheet File</h5>
+              </div>
+            </div>
+            {/* Input Row */}
+            <div className="row">
+              <div className="col">
+                <FileSelect
+                  types={["xlsx"]}
+                  onSelect={setImportFile}
+                />
+              </div>
+            </div>
+          </div>
+          {/* -- END TAB CONTENT */}
+
           {/* Spreadsheet Type */}
           <div className="row">
             <div className="col">
@@ -220,9 +225,10 @@ const ImportDataSegment = (props: Props) => {
               </div>
             )
           }
-        </>
-      )}
-    />
+        </div>
+
+      </>
+    </SettingsSegment>
   );
 };
 

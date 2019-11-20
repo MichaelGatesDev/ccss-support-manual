@@ -132,246 +132,245 @@ const RestoreDataSegment = (props: Props) => {
 
   return (
     <SettingsSegment
-      segmentTitle="Restore Data"
-      segmentContent={(
-        <>
-          {/* Restore File Name */}
-          <NamedRow
-            headerType={4}
-            columns={[
-              {
-                title: "Restore Point",
-                content: (
-                  <>
-                    {/* Error messages row */}
-                    {
-                      restoreState !== undefined && restoreState.error &&
-                      (
-                        <div className="row">
-                          <div className="col">
-                            <div className="alert alert-danger" role="alert">
-                              {restoreState.error}
-                            </div>
+      title="Restore Data"
+    >
+      <>
+        {/* Restore File Name */}
+        <NamedRow
+          headerType={4}
+          columns={[
+            {
+              title: "Restore Point",
+              content: (
+                <>
+                  {/* Error messages row */}
+                  {
+                    restoreState !== undefined && restoreState.error &&
+                    (
+                      <div className="row">
+                        <div className="col">
+                          <div className="alert alert-danger" role="alert">
+                            {restoreState.error}
                           </div>
                         </div>
-                      )
-                    }
-                    {/* Options */}
-                    <SelectWithRestoreOptions
-                      size={1}
-                      onChange={setRestorePoint}
-                      current={restorePoint}
-                    />
-                  </>
-                ),
-              },
-            ]}
-          />
+                      </div>
+                    )
+                  }
+                  {/* Options */}
+                  <SelectWithRestoreOptions
+                    size={1}
+                    onChange={setRestorePoint}
+                    current={restorePoint}
+                  />
+                </>
+              ),
+            },
+          ]}
+        />
 
-          {/* Restore Data Options */}
-          <NamedRow
-            headerType={4}
-            columns={[
-              {
-                title: "Restore Data",
-                content: (
-                  <>
-                    <div className="row">
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(RestoreSettingsType.Data, true); }} preventDefault>
-                          <span>Select All</span>
-                        </Button>
-                      </div>
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(RestoreSettingsType.Data, false); }} preventDefault>
-                          <span>Select None</span>
-                        </Button>
-                      </div>
+        {/* Restore Data Options */}
+        <NamedRow
+          headerType={4}
+          columns={[
+            {
+              title: "Restore Data",
+              content: (
+                <>
+                  <div className="row">
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(RestoreSettingsType.Data, true); }} preventDefault>
+                        <span>Select All</span>
+                      </Button>
                     </div>
-                    <ul>
-                      <li>
-                        <LabeledCheckBox
-                          title="Buildings"
-                          id="restoreBuildings"
-                          titleRight
-                          onChange={setRestoreBuildings}
-                          checked={restoreBuildings}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Rooms"
-                          id="restoreRooms"
-                          titleRight
-                          onChange={setRestoreRooms}
-                          checked={restoreRooms}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Troubleshooting"
-                          id="restoreTroubleshooting"
-                          titleRight
-                          onChange={setRestoreTroubleshooting}
-                          checked={restoreTroubleshooting}
-                        />
-                      </li>
-                    </ul>
-                  </>
-                ),
-              },
-              {
-                title: "Restore Images",
-                content: (
-                  <>
-                    <div className="row">
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(RestoreSettingsType.Images, true); }} preventDefault>
-                          <span>Select All</span>
-                        </Button>
-                      </div>
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(RestoreSettingsType.Images, false); }} preventDefault>
-                          <span>Select None</span>
-                        </Button>
-                      </div>
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(RestoreSettingsType.Data, false); }} preventDefault>
+                        <span>Select None</span>
+                      </Button>
                     </div>
-                    <ul>
-                      <li>
-                        <LabeledCheckBox
-                          title="Building Images"
-                          id="restoreBuildingImages"
-                          titleRight
-                          onChange={setRestoreBuildingImages}
-                          checked={restoreBuildingImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Equipment Images"
-                          id="restoreRoomEquipmentImages"
-                          titleRight
-                          onChange={setRestoreRoomEquipmentImages}
-                          checked={restoreRoomEquipmentImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Panoramic Images"
-                          id="restoreRoomPanoramicImages"
-                          titleRight
-                          onChange={setRestoreRoomPanoramicImages}
-                          checked={restoreRoomPanoramicImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Title Images"
-                          id="restoreRoomTitleImages"
-                          titleRight
-                          onChange={setRestoreRoomTitleImages}
-                          checked={restoreRoomTitleImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Cover Images"
-                          id="restoreRoomCoverImages"
-                          titleRight
-                          onChange={setRestoreRoomCoverImages}
-                          checked={restoreRoomCoverImages}
-                        />
-                      </li>
-                    </ul>
-                  </>
-                ),
-              },
-              {
-                title: "Restore Settings",
-                content: (
-                  <>
-                    <div className="row">
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(RestoreSettingsType.Settings, true); }} preventDefault>
-                          <span>Select All</span>
-                        </Button>
-                      </div>
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(RestoreSettingsType.Settings, false); }} preventDefault>
-                          <span>Select None</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <ul>
-                      <li>
-                        <LabeledCheckBox
-                          title="Application Config"
-                          id="restoreBuildingImages"
-                          titleRight
-                          onChange={setRestoreApplicationConfig}
-                          checked={restoreApplicationConfig}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Images Config"
-                          id="restoreRoomEquipmentImages"
-                          titleRight
-                          onChange={setRestoreImagesConfig}
-                          checked={restoreImagesConfig}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Troubleshooting Keywords Config"
-                          id="restoreRoomPanoramicImages"
-                          titleRight
-                          onChange={setRestoreTroubleshootingKeywordsConfig}
-                          checked={restoreTroubleshootingKeywordsConfig}
-                        />
-                      </li>
-                    </ul>
-                  </>
-                ),
-              },
-            ]}
-          />
-
-          {/* Button */}
-          <div className="row">
-            <div className="col">
-              <Button
-                disabled={restoreState.restoring}
-                onClick={restore}
-                preventDefault
-              >
-                <span>Restore</span>
-              </Button>
-            </div>
-          </div>
-          {/* Progress Bar */}
-          {
-            restoreState.restoring &&
-            (
-              <div className="row">
-                <div className="col">
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-bar-striped progress-bar-animated"
-                      role="progressbar"
-                      aria-valuenow={100}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      style={{ width: "100%" }}
-                    />
                   </div>
+                  <ul>
+                    <li>
+                      <LabeledCheckBox
+                        title="Buildings"
+                        id="restoreBuildings"
+                        titleRight
+                        onChange={setRestoreBuildings}
+                        checked={restoreBuildings}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Rooms"
+                        id="restoreRooms"
+                        titleRight
+                        onChange={setRestoreRooms}
+                        checked={restoreRooms}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Troubleshooting"
+                        id="restoreTroubleshooting"
+                        titleRight
+                        onChange={setRestoreTroubleshooting}
+                        checked={restoreTroubleshooting}
+                      />
+                    </li>
+                  </ul>
+                </>
+              ),
+            },
+            {
+              title: "Restore Images",
+              content: (
+                <>
+                  <div className="row">
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(RestoreSettingsType.Images, true); }} preventDefault>
+                        <span>Select All</span>
+                      </Button>
+                    </div>
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(RestoreSettingsType.Images, false); }} preventDefault>
+                        <span>Select None</span>
+                      </Button>
+                    </div>
+                  </div>
+                  <ul>
+                    <li>
+                      <LabeledCheckBox
+                        title="Building Images"
+                        id="restoreBuildingImages"
+                        titleRight
+                        onChange={setRestoreBuildingImages}
+                        checked={restoreBuildingImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Equipment Images"
+                        id="restoreRoomEquipmentImages"
+                        titleRight
+                        onChange={setRestoreRoomEquipmentImages}
+                        checked={restoreRoomEquipmentImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Panoramic Images"
+                        id="restoreRoomPanoramicImages"
+                        titleRight
+                        onChange={setRestoreRoomPanoramicImages}
+                        checked={restoreRoomPanoramicImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Title Images"
+                        id="restoreRoomTitleImages"
+                        titleRight
+                        onChange={setRestoreRoomTitleImages}
+                        checked={restoreRoomTitleImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Cover Images"
+                        id="restoreRoomCoverImages"
+                        titleRight
+                        onChange={setRestoreRoomCoverImages}
+                        checked={restoreRoomCoverImages}
+                      />
+                    </li>
+                  </ul>
+                </>
+              ),
+            },
+            {
+              title: "Restore Settings",
+              content: (
+                <>
+                  <div className="row">
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(RestoreSettingsType.Settings, true); }} preventDefault>
+                        <span>Select All</span>
+                      </Button>
+                    </div>
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(RestoreSettingsType.Settings, false); }} preventDefault>
+                        <span>Select None</span>
+                      </Button>
+                    </div>
+                  </div>
+                  <ul>
+                    <li>
+                      <LabeledCheckBox
+                        title="Application Config"
+                        id="restoreBuildingImages"
+                        titleRight
+                        onChange={setRestoreApplicationConfig}
+                        checked={restoreApplicationConfig}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Images Config"
+                        id="restoreRoomEquipmentImages"
+                        titleRight
+                        onChange={setRestoreImagesConfig}
+                        checked={restoreImagesConfig}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Troubleshooting Keywords Config"
+                        id="restoreRoomPanoramicImages"
+                        titleRight
+                        onChange={setRestoreTroubleshootingKeywordsConfig}
+                        checked={restoreTroubleshootingKeywordsConfig}
+                      />
+                    </li>
+                  </ul>
+                </>
+              ),
+            },
+          ]}
+        />
+
+        {/* Button */}
+        <div className="row">
+          <div className="col">
+            <Button
+              disabled={restoreState.restoring}
+              onClick={restore}
+              preventDefault
+            >
+              <span>Restore</span>
+            </Button>
+          </div>
+        </div>
+        {/* Progress Bar */}
+        {
+          restoreState.restoring &&
+          (
+            <div className="row">
+              <div className="col">
+                <div className="progress">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    aria-valuenow={100}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    style={{ width: "100%" }}
+                  />
                 </div>
               </div>
-            )
-          }
-        </>
-      )}
-    />
+            </div>
+          )
+        }
+      </>
+    </SettingsSegment>
   );
 };
 

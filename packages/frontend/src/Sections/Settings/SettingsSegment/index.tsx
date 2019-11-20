@@ -1,18 +1,18 @@
 import "./style.scss";
 
-import React, { } from "react";
+import React, { ReactNode } from "react";
 
 interface Props {
   id?: string;
-  segmentTitle: string;
-  segmentContent: any;
+  title: string;
+  children?: ReactNode;
 }
 
 export const SettingsSegment = (props: Props) => {
   const {
     id,
-    segmentTitle,
-    segmentContent,
+    title,
+    children,
   } = props;
 
   return (
@@ -21,11 +21,11 @@ export const SettingsSegment = (props: Props) => {
         {/* Header */}
         <div className="row">
           <div className="col">
-            <h3>{segmentTitle}</h3>
+            <h3>{title}</h3>
           </div>
         </div>
         {/* Content */}
-        {segmentContent}
+        {children}
       </div>
     </div>
   );

@@ -134,245 +134,244 @@ const BackupDataSegment = (props: Props) => {
   return (
     <SettingsSegment
       id="backup-data"
-      segmentTitle="Backup Data"
-      segmentContent={(
-        <>
-          {/* Error messages row */}
-          {
-            backupState !== undefined && backupState.error &&
-            (
-              <div className="row">
-                <div className="col">
-                  <div className="alert alert-danger" role="alert">
-                    {backupState.error}
-                  </div>
+      title="Backup Data"
+    >
+      <>
+        {/* Error messages row */}
+        {
+          backupState !== undefined && backupState.error &&
+          (
+            <div className="row">
+              <div className="col">
+                <div className="alert alert-danger" role="alert">
+                  {backupState.error}
                 </div>
               </div>
-            )
-          }
-
-          {/* Backup File Name */}
-          <NamedRow
-            id="backup-file-name-row"
-            headerType={4}
-            columns={[
-              {
-                title: "Backup File Name",
-                content: (
-                  <FormInput
-                    onChange={setBackupName}
-                    value={backupName}
-                    placeholder="my-cool-backup"
-                  />
-                ),
-              },
-            ]}
-          />
-
-          {/* Backup Data Options */}
-          <NamedRow
-            headerType={4}
-            columns={[
-              {
-                title: "Backup Data",
-                content: (
-                  <>
-                    <div className="row">
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(BackupSettingsType.Data, true); }} preventDefault>
-                          <span>Select All</span>
-                        </Button>
-                      </div>
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(BackupSettingsType.Data, false); }} preventDefault>
-                          <span>Select None</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <ul>
-                      <li>
-                        <LabeledCheckBox
-                          title="Buildings"
-                          id="backupBuildings"
-                          titleRight
-                          onChange={setBackupBuildings}
-                          checked={backupBuildings}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Rooms"
-                          id="backupRooms"
-                          titleRight
-                          onChange={setBackupRooms}
-                          checked={backupRooms}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Troubleshooting"
-                          id="backupTroubleshooting"
-                          titleRight
-                          onChange={setBackupTroubleshooting}
-                          checked={backupTroubleshooting}
-                        />
-                      </li>
-                    </ul>
-                  </>
-                ),
-              },
-              {
-                title: "Backup Images",
-                content: (
-                  <>
-                    <div className="row">
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(BackupSettingsType.Images, true); }} preventDefault>
-                          <span>Select All</span>
-                        </Button>
-                      </div>
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(BackupSettingsType.Images, false); }} preventDefault>
-                          <span>Select None</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <ul>
-                      <li>
-                        <LabeledCheckBox
-                          title="Building Images"
-                          id="backupBuildingImages"
-                          titleRight
-                          onChange={setBackupBuildingImages}
-                          checked={backupBuildingImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Equipment Images"
-                          id="backupRoomEquipmentImages"
-                          titleRight
-                          onChange={setBackupRoomEquipmentImages}
-                          checked={backupRoomEquipmentImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Panoramic Images"
-                          id="backupRoomPanoramicImages"
-                          titleRight
-                          onChange={setBackupRoomPanoramicImages}
-                          checked={backupRoomPanoramicImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Title Images"
-                          id="backupRoomTitleImages"
-                          titleRight
-                          onChange={setBackupRoomTitleImages}
-                          checked={backupRoomTitleImages}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="(Room) Cover Images"
-                          id="backupRoomCoverImages"
-                          titleRight
-                          onChange={setBackupRoomCoverImages}
-                          checked={backupRoomCoverImages}
-                        />
-                      </li>
-                    </ul>
-                  </>
-                ),
-              },
-              {
-                title: "Backup Settings",
-                content: (
-                  <>
-                    <div className="row">
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(BackupSettingsType.Settings, true); }} preventDefault>
-                          <span>Select All</span>
-                        </Button>
-                      </div>
-                      <div className="col">
-                        <Button onClick={() => { modifyAll(BackupSettingsType.Settings, false); }} preventDefault>
-                          <span>Select None</span>
-                        </Button>
-                      </div>
-                    </div>
-                    <ul>
-                      <li>
-                        <LabeledCheckBox
-                          title="Application Config"
-                          id="backupBuildingImages"
-                          titleRight
-                          onChange={setBackupApplicationConfig}
-                          checked={backupApplicationConfig}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Images Config"
-                          id="backupRoomEquipmentImages"
-                          titleRight
-                          onChange={setBackupImagesConfig}
-                          checked={backupImagesConfig}
-                        />
-                      </li>
-                      <li>
-                        <LabeledCheckBox
-                          title="Troubleshooting Keywords Config"
-                          id="backupRoomPanoramicImages"
-                          titleRight
-                          onChange={setBackupTroubleshootingKeywordsConfig}
-                          checked={backupTroubleshootingKeywordsConfig}
-                        />
-                      </li>
-                    </ul>
-                  </>
-                ),
-              },
-            ]}
-          />
-
-          {/* Button */}
-          <div className="row">
-            <div className="col">
-              <Button
-                disabled={backupState.backingUp}
-                onClick={backup}
-                preventDefault
-              >
-                <span>Backup</span>
-              </Button>
             </div>
-          </div>
-          {/* Progress Bar */}
-          {
-            backupState.backingUp &&
-            (
-              <div className="row">
-                <div className="col">
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-bar-striped progress-bar-animated"
-                      role="progressbar"
-                      aria-valuenow={100}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      style={{ width: "100%" }}
-                    />
+          )
+        }
+
+        {/* Backup File Name */}
+        <NamedRow
+          id="backup-file-name-row"
+          headerType={4}
+          columns={[
+            {
+              title: "Backup File Name",
+              content: (
+                <FormInput
+                  onChange={setBackupName}
+                  value={backupName}
+                  placeholder="my-cool-backup"
+                />
+              ),
+            },
+          ]}
+        />
+
+        {/* Backup Data Options */}
+        <NamedRow
+          headerType={4}
+          columns={[
+            {
+              title: "Backup Data",
+              content: (
+                <>
+                  <div className="row">
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(BackupSettingsType.Data, true); }} preventDefault>
+                        <span>Select All</span>
+                      </Button>
+                    </div>
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(BackupSettingsType.Data, false); }} preventDefault>
+                        <span>Select None</span>
+                      </Button>
+                    </div>
                   </div>
+                  <ul>
+                    <li>
+                      <LabeledCheckBox
+                        title="Buildings"
+                        id="backupBuildings"
+                        titleRight
+                        onChange={setBackupBuildings}
+                        checked={backupBuildings}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Rooms"
+                        id="backupRooms"
+                        titleRight
+                        onChange={setBackupRooms}
+                        checked={backupRooms}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Troubleshooting"
+                        id="backupTroubleshooting"
+                        titleRight
+                        onChange={setBackupTroubleshooting}
+                        checked={backupTroubleshooting}
+                      />
+                    </li>
+                  </ul>
+                </>
+              ),
+            },
+            {
+              title: "Backup Images",
+              content: (
+                <>
+                  <div className="row">
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(BackupSettingsType.Images, true); }} preventDefault>
+                        <span>Select All</span>
+                      </Button>
+                    </div>
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(BackupSettingsType.Images, false); }} preventDefault>
+                        <span>Select None</span>
+                      </Button>
+                    </div>
+                  </div>
+                  <ul>
+                    <li>
+                      <LabeledCheckBox
+                        title="Building Images"
+                        id="backupBuildingImages"
+                        titleRight
+                        onChange={setBackupBuildingImages}
+                        checked={backupBuildingImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Equipment Images"
+                        id="backupRoomEquipmentImages"
+                        titleRight
+                        onChange={setBackupRoomEquipmentImages}
+                        checked={backupRoomEquipmentImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Panoramic Images"
+                        id="backupRoomPanoramicImages"
+                        titleRight
+                        onChange={setBackupRoomPanoramicImages}
+                        checked={backupRoomPanoramicImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Title Images"
+                        id="backupRoomTitleImages"
+                        titleRight
+                        onChange={setBackupRoomTitleImages}
+                        checked={backupRoomTitleImages}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="(Room) Cover Images"
+                        id="backupRoomCoverImages"
+                        titleRight
+                        onChange={setBackupRoomCoverImages}
+                        checked={backupRoomCoverImages}
+                      />
+                    </li>
+                  </ul>
+                </>
+              ),
+            },
+            {
+              title: "Backup Settings",
+              content: (
+                <>
+                  <div className="row">
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(BackupSettingsType.Settings, true); }} preventDefault>
+                        <span>Select All</span>
+                      </Button>
+                    </div>
+                    <div className="col">
+                      <Button onClick={() => { modifyAll(BackupSettingsType.Settings, false); }} preventDefault>
+                        <span>Select None</span>
+                      </Button>
+                    </div>
+                  </div>
+                  <ul>
+                    <li>
+                      <LabeledCheckBox
+                        title="Application Config"
+                        id="backupBuildingImages"
+                        titleRight
+                        onChange={setBackupApplicationConfig}
+                        checked={backupApplicationConfig}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Images Config"
+                        id="backupRoomEquipmentImages"
+                        titleRight
+                        onChange={setBackupImagesConfig}
+                        checked={backupImagesConfig}
+                      />
+                    </li>
+                    <li>
+                      <LabeledCheckBox
+                        title="Troubleshooting Keywords Config"
+                        id="backupRoomPanoramicImages"
+                        titleRight
+                        onChange={setBackupTroubleshootingKeywordsConfig}
+                        checked={backupTroubleshootingKeywordsConfig}
+                      />
+                    </li>
+                  </ul>
+                </>
+              ),
+            },
+          ]}
+        />
+
+        {/* Button */}
+        <div className="row">
+          <div className="col">
+            <Button
+              disabled={backupState.backingUp}
+              onClick={backup}
+              preventDefault
+            >
+              <span>Backup</span>
+            </Button>
+          </div>
+        </div>
+        {/* Progress Bar */}
+        {
+          backupState.backingUp &&
+          (
+            <div className="row">
+              <div className="col">
+                <div className="progress">
+                  <div
+                    className="progress-bar progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    aria-valuenow={100}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    style={{ width: "100%" }}
+                  />
                 </div>
               </div>
-            )
-          }
-        </>
-      )}
-    />
+            </div>
+          )
+        }
+      </>
+    </SettingsSegment>
   );
 };
 
