@@ -35,6 +35,7 @@ export class UpdateManager {
         if (oldFiles.length > 0) {
             const names = oldFiles.map((file) => file.path);
             Logger.debug(`Found old application files, deleting:\n${names.join("\n")}\n`);
+            await Promise.all(names.map((name) => FileUtils.delete(name)));
         }
 
         const updateFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".update"));
