@@ -111,7 +111,7 @@ export class SpreadsheetManager {
         const workbook = XLSX.readFile(path, {});
         const sheets = workbook.SheetNames;
 
-        sheets.forEach(async (sheet: string): Promise<void> => {
+        sheets.forEach((sheet: string) => {
             const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
             result.set(sheet, json);
         });
