@@ -104,17 +104,22 @@ export class SpreadsheetManager {
     }
 
     public static async convertSpreadsheetToJson(path: string): Promise<Map<string, any>> {
+        Logger.debug("Ensuring file exists...");
         if (!await FileUtils.checkExists(path)) throw new Error();
 
         const result: Map<string, any> = new Map<string, any>();
 
-        const workbook = XLSX.readFile(path, {});
+        Logger.debug("Reading file...");
+        const workbook = XLSX.readFile(path);
+        Logger.debug("Finished reading file");
         const sheets = workbook.SheetNames;
 
-        sheets.forEach((sheet: string) => {
+        Logger.debug("Converting each sheet to json");
+        for (const sheet of sheets) {
             const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
             result.set(sheet, json);
-        });
+        }
+        Logger.debug("Finished converting sheets to json");
 
         return result;
     }
@@ -123,8 +128,11 @@ export class SpreadsheetManager {
         if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
         Logger.debug(`Importing ${SpreadsheetType[type]} spreadsheet as mode ${SpreadsheetImportMode[importMode]} from ${path}`);
 
+
+        Logger.debug("Getting spreadsheet version...");
         const version = await this.getSpreadsheetVersion(type, path);
         if (version === undefined) throw new Error(`No spreadsheet version match found`);
+        Logger.debug(`Spreadsheet Version: ${version}`);
 
         switch (+type) {
             default: return undefined;
@@ -192,6 +200,7 @@ export class SpreadsheetManager {
         const ss = new (<any>SpreadsheetVersions)[`ClassroomChecksSpreadsheet_${ClassroomChecksSpreadsheetVersion[version]}`];
         if (ss === undefined) throw new Error("Could not import Classroom Checks spreadsheet (spreadsheet undefined)");
 
+        Logger.debug("Converting spreadsheet to json...");
         const jsonObjects = await this.convertSpreadsheetToJson(path);
 
         // buildings
