@@ -61,8 +61,8 @@ export class SpreadsheetManager {
     public static async getSpreadsheetVersion(type: SpreadsheetType, path: string): Promise<ClassroomChecksSpreadsheetVersion | TroubleshootingSpreadsheetVersion | undefined> {
         if (!await FileUtils.checkExists(path)) throw new Error(`File not found: ${path}`);
 
-        const json = await this.convertSpreadsheetToJson(path);
-        const infoTab = json.get("INFO");
+        const dict = await this.convertSpreadsheetToJson(path);
+        const infoTab = dict.find(obj => obj.sheetName === "INFO")?.json;;
         if (infoTab === undefined) throw new Error(`Failed to find 'info' tab!`);
         if (infoTab.length === 0) throw new Error(`No info data found!`);
         const row = infoTab[0];
@@ -103,11 +103,13 @@ export class SpreadsheetManager {
         return version;
     }
 
-    public static async convertSpreadsheetToJson(path: string): Promise<Map<string, any>> {
+    public static async convertSpreadsheetToJson(path: string): Promise<{ sheetName: string, json: any }[]> {
+        Logger.debug("Converting spreadsheet to json...");
+
         Logger.debug("Ensuring file exists...");
         if (!await FileUtils.checkExists(path)) throw new Error();
 
-        const result: Map<string, any> = new Map<string, any>();
+        const result: { sheetName: string, json: any }[] = [];
 
         Logger.debug("Reading file...");
         const workbook = XLSX.readFile(path);
@@ -117,7 +119,7 @@ export class SpreadsheetManager {
         Logger.debug("Converting each sheet to json");
         for (const sheet of sheets) {
             const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-            result.set(sheet, json);
+            result.push({ sheetName: sheet, json: json });
         }
         Logger.debug("Finished converting sheets to json");
 
@@ -128,16 +130,10 @@ export class SpreadsheetManager {
         if (!await FileUtils.checkExists(path)) throw new Error(`Can not import spreadsheet because the file does not exist: ${path}`);
         Logger.debug(`Importing ${SpreadsheetType[type]} spreadsheet as mode ${SpreadsheetImportMode[importMode]} from ${path}`);
 
-
-        Logger.debug("Getting spreadsheet version...");
-        const version = await this.getSpreadsheetVersion(type, path);
-        if (version === undefined) throw new Error(`No spreadsheet version match found`);
-        Logger.debug(`Spreadsheet Version: ${version}`);
-
         switch (+type) {
             default: return undefined;
             case SpreadsheetType.ClassroomChecks: {
-                const result = await this.importClassroomChecks(path, version as ClassroomChecksSpreadsheetVersion);
+                const result = await this.importClassroomChecks(path);
 
                 Logger.debug(
                     "Import result:"
@@ -168,7 +164,7 @@ export class SpreadsheetManager {
                 break;
             }
             case SpreadsheetType.Troubleshooting: {
-                const result = await this.importTroubleshooting(path, version as TroubleshootingSpreadsheetVersion);
+                const result = await this.importTroubleshooting(path);
                 Logger.debug(
                     "Import result:"
                     + `\nTroubleshooting Data: ${result.troubleshootingData.length}`
@@ -196,19 +192,26 @@ export class SpreadsheetManager {
         }
     }
 
-    private static async importClassroomChecks(path: string, version: ClassroomChecksSpreadsheetVersion): Promise<ClassroomChecksSpreadsheetImportResult> {
-        const ss = new (<any>SpreadsheetVersions)[`ClassroomChecksSpreadsheet_${ClassroomChecksSpreadsheetVersion[version]}`];
-        if (ss === undefined) throw new Error("Could not import Classroom Checks spreadsheet (spreadsheet undefined)");
+    private static async importClassroomChecks(path: string): Promise<ClassroomChecksSpreadsheetImportResult> {
 
-        Logger.debug("Converting spreadsheet to json...");
-        const jsonObjects = await this.convertSpreadsheetToJson(path);
+        const dict = await this.convertSpreadsheetToJson(path);
+
+        const infoTab = dict.find(obj => obj.sheetName === "INFO")?.json;;
+        if (infoTab === undefined) throw new Error(`Failed to find 'info' tab!`);
+        if (infoTab.length === 0) throw new Error(`No info data found!`);
+        const row = infoTab[0];
+        const rawVersion = row['Version'];
+        if (rawVersion === undefined) throw new Error(`No version value found!`);
+        const version = this.matchVersion(SpreadsheetType.ClassroomChecks, rawVersion);
+
+        const ss = new (<any>SpreadsheetVersions)[`ClassroomChecksSpreadsheet_${ClassroomChecksSpreadsheetVersion[version as ClassroomChecksSpreadsheetVersion]}`];
+        if (ss === undefined) throw new Error("Could not import Classroom Checks spreadsheet (spreadsheet undefined)");
 
         // buildings
         const importedBuildings: Building[] = [];
         if (ss.buildingsSheetName !== undefined) {
-            let buildingsSheet = jsonObjects.get(ss.buildingsSheetName);
+            let buildingsSheet = dict.find(obj => obj.sheetName === ss.buildingsSheetName)?.json;
             for (const building of buildingsSheet) {
-
                 let factory = new BuildingFactory();
 
                 // official name
@@ -220,6 +223,7 @@ export class SpreadsheetManager {
                         factory = factory.withInternalName(StringUtils.internalize(officialName));
                     }
                 }
+
                 // nicknames
                 if (ss.buildingsNicknamesHeader !== undefined) {
                     if (ss.buildingsNicknamesHeader in building) {
@@ -240,7 +244,7 @@ export class SpreadsheetManager {
         // rooms 
         const importedRooms: Room[] = [];
         if (ss.roomsSheetName !== undefined) {
-            let roomsSheet = jsonObjects.get(ss.roomsSheetName);
+            let roomsSheet = dict.find(obj => obj.sheetName === ss.roomsSheetName)?.json;
             for (const room of roomsSheet) {
 
                 // =========== ROOM ==========
@@ -482,7 +486,7 @@ export class SpreadsheetManager {
 
 
         if (ss.roomsListSheetName !== undefined) {
-            let roomsSheet = jsonObjects.get(ss.roomsListSheetName);
+            let roomsSheet = dict.find(obj => obj.sheetName === ss.roomsListSheetName)?.json;
             if (ss.roomsListBuildingHeader !== undefined && ss.roomsListNumberHeader !== undefined) {
                 for (const row of roomsSheet) {
                     let buildingName = row[ss.roomsListBuildingHeader];
@@ -522,16 +526,26 @@ export class SpreadsheetManager {
         };
     }
 
-    public static async importTroubleshooting(path: string, version: TroubleshootingSpreadsheetVersion): Promise<TroubleshootingSpreadsheetImportResult> {
-        const ss = new (<any>SpreadsheetVersions)[`TroubleshootingDataSpreadsheet_${TroubleshootingSpreadsheetVersion[version]}`];
+    public static async importTroubleshooting(path: string): Promise<TroubleshootingSpreadsheetImportResult> {
+
+        const dict = await this.convertSpreadsheetToJson(path);
+
+        const infoTab = dict.find(obj => obj.sheetName === "INFO")?.json;;
+        if (infoTab === undefined) throw new Error(`Failed to find 'info' tab!`);
+        if (infoTab.length === 0) throw new Error(`No info data found!`);
+        const row = infoTab[0];
+        const rawVersion = row['Version'];
+        if (rawVersion === undefined) throw new Error(`No version value found!`);
+        const version = this.matchVersion(SpreadsheetType.Troubleshooting, rawVersion);
+
+        const ss = new (<any>SpreadsheetVersions)[`TroubleshootingDataSpreadsheet_${TroubleshootingSpreadsheetVersion[version as TroubleshootingSpreadsheetVersion]}`];
         if (ss === undefined) throw new Error("Could not import Troubleshooting spreadsheet (spreadsheet undefined)");
 
-        const jsonObjects = await this.convertSpreadsheetToJson(path);
 
         const importedTroubleshootingData: TroubleshootingData[] = [];
         if (ss.sheetName !== undefined) {
-            let sheet = jsonObjects.get(ss.sheetName);
-            for (const entry of sheet) {
+            let sheet = dict.find(obj => obj.sheetName === ss.sheetName)?.json;
+            for (const entry of sheet.json) {
                 let dataFactory = new TroubleshootingDataFactory();
 
                 // title

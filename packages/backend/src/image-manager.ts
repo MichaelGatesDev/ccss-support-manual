@@ -168,12 +168,7 @@ export class ImageManager {
     }
 
     private async createThumbnails(): Promise<void> {
-        for (const image of this.buildingImages) {
-            if (this.isThumbnail(image.path) || await this.hasThumbnail(image.actualPath)) continue; // don't create thumbnails for thumbnails
-            const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
-            await this.createThumbnail(`${app.PUBLIC_DIR}/${image.path}`, `${app.PUBLIC_DIR}/${image.thumbnail.path}`, thumbnailWidth);
-        }
-        for (const image of this.roomImages) {
+        for (const image of this.getAllImages()) {
             if (this.isThumbnail(image.path) || await this.hasThumbnail(image.actualPath)) continue; // don't create thumbnails for thumbnails
             const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
             await this.createThumbnail(`${app.PUBLIC_DIR}/${image.path}`, `${app.PUBLIC_DIR}/${image.thumbnail.path}`, thumbnailWidth);

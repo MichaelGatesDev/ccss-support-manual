@@ -7,7 +7,7 @@
     "eslint": "npx eslint --ext .ts,.tsx \".\" ",
     "tsc": "tsc --build",
     "build:app": "yarn tsc && pkg package.json -t linux,osx,windows -o application",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/main.ts",
+    "dev": "ts-node-dev --inspect --respawn --transpileOnly ./src/main.ts",
     "prod": "yarn tsc && node ./build/src/main.js",
     "test": "jest --coverage --verbose --detectOpenHandles"
   },
