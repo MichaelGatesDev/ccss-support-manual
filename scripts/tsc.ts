@@ -25,8 +25,10 @@ console.log("");
 function transpile(path: string) {
     try {
         console.log(`Transpiling typescript files in ${path}`);
+        const now = new Date().getMilliseconds();
         execSync(`cd ${path} && tsc --build`);
-        console.log(`Finished transpiling typescript files in ${path}`);
+        const later = new Date().getMilliseconds();
+        console.log(`Finished transpiling typescript files in ${path} in ${later - now} ms`);
     } catch (error) {
         console.error(`There was an transpiling typescript files  ${path}`);
     }
