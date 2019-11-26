@@ -31,9 +31,8 @@ console.log("Compiling binaries...");
 function doCompile(platform: string) {
     compile({
         input: "packages/backend/build/main.js",
-        output: `${finalBuildDir}/application-${platform}`,
+        output: `${finalBuildDir}/${require("../package.json").name}-${platform}`,
         resources: [
-            // "./package.json", // our main package.json file for grabbing the application version
             "packages/backend/views/**/*",
             "packages/backend/build/dist/**/*",
             "node_modules/@ccss-support-manual/models/lib/**/*.js",

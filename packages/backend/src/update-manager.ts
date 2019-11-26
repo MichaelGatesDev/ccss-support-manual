@@ -148,7 +148,7 @@ export class UpdateManager {
 
         // download update file
         Logger.info(`Downloading ${download.name}...`);
-        const updateFilePath = `${process.title}.update`;
+        const updateFilePath = `${app.masterPackageJSON.name}.update`;
         await new WebDownloader(download.url, updateFilePath).download();
         Logger.info("Download complete!");
     }
@@ -160,16 +160,16 @@ export class UpdateManager {
         }
 
         // rename current process to append .old
-        if (!await FileUtils.rename(process.title, `${process.title}.old`)) {
+        if (!await FileUtils.rename(app.masterPackageJSON.name, `${app.masterPackageJSON.name}.old`)) {
             throw new Error("There was an issue renaming the current process!");
         }
-        Logger.debug(`Renamed file: ${process.title} -> ${process.title}.old`)
+        Logger.debug(`Renamed file: ${app.masterPackageJSON.name} -> ${app.masterPackageJSON.name}.old`)
 
         // rename downloaded file to original process name
-        if (!await FileUtils.rename(`${process.title}.update`, `${process.title}`)) {
+        if (!await FileUtils.rename(`${app.masterPackageJSON.name}.update`, `${app.masterPackageJSON.name}`)) {
             throw new Error("There was an issue renaming the update file!");
         }
-        Logger.debug(`Renamed file: ${process.title}.update -> ${process.title}`)
+        Logger.debug(`Renamed file: ${app.masterPackageJSON.name}.update -> ${app.masterPackageJSON.name}`)
     }
 
     public async afterUpdate() {
