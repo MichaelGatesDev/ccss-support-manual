@@ -1,11 +1,12 @@
+import fs from "fs";
+import jimp from "jimp";
+import path from "path";
 import { Logger, ArrayUtils } from '@michaelgatesdev/common';
 import { FileUtils } from "@michaelgatesdev/common-io";
 
-import fs from "fs";
-import jimp from "jimp";
-import { app } from "./app";
 import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
+import { app } from "./app";
 
 /**
  * A utility class for managing images
@@ -55,7 +56,7 @@ export class ImageManager {
     public async loadImages(): Promise<void> {
         for (const building of app.buildingManager.buildings) {
             // building images
-            const buildingDir = `${app.BUILDING_IMAGES_DIR}/${building.internalName}`;
+            const buildingDir = path.join(app.BUILDING_IMAGES_DIR, building.internalName);
             // create building dir if not exists
             await this.createDirectoryIfNotExists(buildingDir);
             const rootBuildingImages = await this.createBuildingImagesFromDirectory(buildingDir, building.internalName, ImageType.Building);
@@ -69,34 +70,34 @@ export class ImageManager {
             // const panoramaBuildingImages = await this.createBuildingImagesFromDirectory(panoramasDir, building.internalName, ImageType.BuildingPanorama);
             // this.buildingImages.push(...panoramaBuildingImages);
 
-            const roomsDir = `${buildingDir}/rooms`;
+            const roomsDir = path.join(buildingDir, "rooms");
             // create rooms dir if not exists
             await this.createDirectoryIfNotExists(roomsDir);
 
             for (const room of building.rooms) {
 
-                const roomDir = `${roomsDir}/${`${room.number}`.toLocaleLowerCase()}`;
+                const roomDir = path.join(roomsDir, `${room.number}`.toLocaleLowerCase());
                 // create room dir if it doesnt exist
                 await this.createDirectoryIfNotExists(roomDir);
                 const rootImages = await this.createRoomImagesFromDirectory(roomDir, building.internalName, room.number.toString(), ImageType.Room);
                 this.roomImages.push(...rootImages);
 
                 // title images
-                const titlesDir = `${roomDir}/titles`;
+                const titlesDir = path.join(roomDir, "titles");
                 // create titles dir if it doesnt exist
                 await this.createDirectoryIfNotExists(titlesDir);
                 const titleImages = await this.createRoomImagesFromDirectory(titlesDir, building.internalName, room.number.toString(), ImageType.RoomTitle);
                 this.roomImages.push(...titleImages);
 
                 // panoramic images
-                const panoramasDir = `${roomDir}/panoramas`;
+                const panoramasDir = path.join(roomDir, "panoramas");
                 // create panoramas dir if it doesnt exist
                 await this.createDirectoryIfNotExists(panoramasDir);
                 const panoramicImages = await this.createRoomImagesFromDirectory(panoramasDir, building.internalName, room.number.toString(), ImageType.RoomPanorama);
                 this.roomImages.push(...panoramicImages);
 
                 // equipment images
-                const equipmentDir = `${roomDir}/equipment`;
+                const equipmentDir = path.join(roomDir, "equipment");
                 // create equipment dir if it doesnt exist
                 await this.createDirectoryIfNotExists(equipmentDir);
                 const equipmentImages = await this.createRoomImagesFromDirectory(equipmentDir, building.internalName, room.number.toString(), ImageType.RoomEquipment);
@@ -112,9 +113,9 @@ export class ImageManager {
             if (file.name.endsWith(".thumb.jpg")) return undefined;
 
             const fileName = file.name;
-            const filePath = `${dir}/${fileName}`;
+            const filePath = path.join(dir, fileName);
 
-            const newPath = filePath.replace(`${app.PUBLIC_DIR}/`, "");
+            const newPath = filePath.replace(`${app.PUBLIC_DIR}${path.sep}`, "");
             const image = new BuildingImageFactory(
                 new ImageFactory()
                     .ofType(type)
@@ -138,9 +139,9 @@ export class ImageManager {
             if (file.name.endsWith(".thumb.jpg")) return undefined;
 
             const fileName = file.name;
-            const filePath = `${dir}/${fileName}`;
+            const filePath = path.join(dir, fileName);
 
-            const newPath = filePath.replace(`${app.PUBLIC_DIR}/`, "");
+            const newPath = filePath.replace(`${app.PUBLIC_DIR}${path.sep}`, "");
             const image = new RoomImageFactory(
                 new ImageFactory()
                     .ofType(type)
@@ -168,11 +169,14 @@ export class ImageManager {
     }
 
     private async createThumbnails(): Promise<void> {
+        const promises: Promise<void>[] = [];
         for (const image of this.getAllImages()) {
             if (this.isThumbnail(image.path) || await this.hasThumbnail(image.actualPath)) continue; // don't create thumbnails for thumbnails
             const thumbnailWidth = app.configManager.imagesConfig !== undefined ? app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
-            await this.createThumbnail(`${app.PUBLIC_DIR}/${image.path}`, `${app.PUBLIC_DIR}/${image.thumbnail.path}`, thumbnailWidth);
+            const promise = this.createThumbnail(path.join(app.PUBLIC_DIR, image.path), path.join(app.PUBLIC_DIR, image.thumbnail.path), thumbnailWidth);
+            promises.push(promise);
         }
+        await Promise.all(promises);
     }
 
     public async createThumbnail(path: string, dest: string, width: number, height?: number): Promise<void> {
@@ -181,7 +185,7 @@ export class ImageManager {
             const img = await jimp.read(path);
             img.resize(width, jimp.AUTO).quality(100);
             await img.writeAsync(dest);
-            Logger.info(`Created thumbnail for ${path} (width: ${width})!`);
+            // Logger.info(`Created thumbnail for ${path} (width: ${width})`);
         } catch (error) {
             Logger.error(`Error while generating thumbnail for ${path}`);
             Logger.error(error);

@@ -33,22 +33,12 @@
     "multer": "^1.4.2",
     "node-fetch": "^2.6.0",
     "path": "^0.12.7",
-    "pkg": "^4.4.0",
     "request": "^2.88.0",
     "ts-node-dev": "^1.0.0-pre.39",
     "tslib": "^1.9.3",
     "typescript": "^3.5.3",
     "underscore": "^1.9.1",
     "xlsx": "^0.15.2"
-  },
-  "pkg": {
-    "scripts": [
-      "./build/**/*.js"
-    ],
-    "assets": [
-      "./views/**/*",
-      "./build/dist/**/*"
-    ]
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
@@ -65,6 +55,7 @@
     "@types/node": "^12.12.11",
     "@types/node-fetch": "^2.5.3",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.8.0"
+    "@typescript-eslint/parser": "^2.8.0",
+    "nexe": "^3.3.2"
   }
 }

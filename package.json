@@ -14,7 +14,7 @@
         "test": "ts-node scripts/test.ts",
         "tsc": "ts-node scripts/tsc.ts",
         "clean": "ts-node scripts/clean.ts",
-        "build": "yarn clean && yarn tsc && ts-node scripts/build.ts",
+        "build": "ts-node scripts/build.ts",
         "build:backend": "yarn tsc && cd packages/backend && yarn build:app",
         "build:frontend": "yarn tsc && cd packages/frontend && yarn build"
     },
