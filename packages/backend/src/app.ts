@@ -23,10 +23,15 @@ export const expressApp: express.Application = express();
 
 export class App {
 
-    // ------------------------------------------------------ \\
-    //              Configure express backend
-    // ------------------------------------------------------ \\
+    // detect running mode (dev or prod)
+    public isProduction: boolean = !process.title.toLowerCase().includes('node');
+    // root package.json file
+    public masterPackageJSON: { name: string; version: string; } = require("../../../package.json");
 
+    // ------------------------------------------------------ \\
+    //              Directories
+    // ------------------------------------------------------ \\
+    // public ROOT_DIR: string = path.resolve(this.isProduction ? path.resolve(process.execPath.replace(process.title.split(path.sep).slice(-1)[0], "")) : "./");
     public ROOT_DIR: string = path.resolve("./");
     public PUBLIC_DIR: string = path.join(this.ROOT_DIR, "public");
     public TEMP_DIR: string = path.join(this.ROOT_DIR, "temp");
@@ -38,6 +43,9 @@ export class App {
     public IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "images");
     public BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "buildings");
 
+    // ------------------------------------------------------ \\
+    //              Managers
+    // ------------------------------------------------------ \\
     public spreadsheetManager: SpreadsheetManager;
     public configManager: ConfigManager;
     public imageManager: ImageManager;
@@ -47,9 +55,6 @@ export class App {
     public dataManager: DataManager;
     public backupManager: BackupManager;
     public updateManager: UpdateManager;
-
-    public isProduction: boolean;
-    public masterPackageJSON: { name: string; version: string; } | undefined;
 
     public constructor() {
         this.spreadsheetManager = new SpreadsheetManager();
@@ -61,12 +66,6 @@ export class App {
         this.dataManager = new DataManager();
         this.backupManager = new BackupManager();
         this.updateManager = new UpdateManager();
-
-        // detect running mode (dev or prod)
-        this.isProduction = !process.title.toLowerCase().includes('node');
-
-        // master json
-        this.masterPackageJSON = require("../../../package.json");
     }
 
     public async initialize(): Promise<void> {
