@@ -22,12 +22,19 @@ export class ImageManager {
 
     public async initialize(): Promise<void> {
         // create buildings dir if it does not exist
-        await this.createDirectoryIfNotExists(app.BUILDING_IMAGES_DIR);
+        if (await this.createDirectoryIfNotExists(app.BUILDING_IMAGES_DIR)) {
+            Logger.debug("Created 'buildings' image directory");
+        }
 
         // load images
+        Logger.info("Loading all images...");
         await this.loadImages();
+        Logger.info("Finished loading images");
+
         // generate thumbnails
+        Logger.info("Creating thumbnails...");
         await this.createThumbnails();
+        Logger.info("Finished creating thumbnails");
 
         // let us know which images we're missing
         this.logMissing();
@@ -119,7 +126,7 @@ export class ImageManager {
             const image = new BuildingImageFactory(
                 new ImageFactory()
                     .ofType(type)
-                    .withPath(newPath)
+                    .withPath(newPath.replace(path.sep, "/"))
                     .withActualPath(filePath)
                     .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
@@ -145,7 +152,7 @@ export class ImageManager {
             const image = new RoomImageFactory(
                 new ImageFactory()
                     .ofType(type)
-                    .withPath(newPath)
+                    .withPath(newPath.replace(path.sep, "/"))
                     .withActualPath(filePath)
                     .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
