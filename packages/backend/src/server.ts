@@ -16,8 +16,6 @@ export class ServerWrapper {
 
     public init(): void {
 
-        Logger.debug("Setting up HTTP server...");
-
         // Get port from environment and store in Express.
         const port = process.env.PORT ? this.normalizePort(process.env.PORT) : 3001;
         expressApp.set("port", port);
@@ -29,8 +27,6 @@ export class ServerWrapper {
         this.server.listen(port);
         this.server.on("error", this.onError.bind(this));
         this.server.on("listening", this.onListening.bind(this));
-
-        Logger.debug("Finished setting up HTTP server");
     }
 
     /**
