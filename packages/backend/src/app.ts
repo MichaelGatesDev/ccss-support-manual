@@ -28,15 +28,15 @@ export class App {
     // ------------------------------------------------------ \\
 
     public ROOT_DIR: string = path.resolve("./");
-    public PUBLIC_DIR: string = path.resolve(`${this.ROOT_DIR}/public`);
-    public TEMP_DIR: string = path.resolve(`${this.ROOT_DIR}/temp`);
-    public DOWNLOADS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/downloads`);
-    public UPLOADS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/uploads`);
-    public BACKUPS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/backups`);
-    public DATA_DIR: string = path.resolve(`${this.PUBLIC_DIR}/data`);
-    public SETTINGS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/settings`);
-    public IMAGES_DIR: string = path.resolve(`${this.PUBLIC_DIR}/images`);
-    public BUILDING_IMAGES_DIR: string = path.resolve(`${this.IMAGES_DIR}/buildings`);
+    public PUBLIC_DIR: string = path.join(this.ROOT_DIR, "public");
+    public TEMP_DIR: string = path.join(this.ROOT_DIR, "temp");
+    public DOWNLOADS_DIR: string = path.join(this.PUBLIC_DIR, "downloads");
+    public UPLOADS_DIR: string = path.join(this.PUBLIC_DIR, "uploads");
+    public BACKUPS_DIR: string = path.join(this.PUBLIC_DIR, "backups");
+    public DATA_DIR: string = path.join(this.PUBLIC_DIR, "data");
+    public SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "settings");
+    public IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "images");
+    public BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "buildings");
 
     public spreadsheetManager: SpreadsheetManager;
     public configManager: ConfigManager;
