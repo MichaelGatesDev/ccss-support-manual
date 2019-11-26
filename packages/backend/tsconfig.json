@@ -9,7 +9,8 @@
     "lib": [
       "es6",
       "dom",
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*.ts"

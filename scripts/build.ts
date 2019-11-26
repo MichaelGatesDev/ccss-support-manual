@@ -20,7 +20,7 @@ execSync("yarn run tsc");
 
 // build frontend
 console.log("Building frontend files...");
-execSync("yarn run build:frontend");
+execSync("yarn run compile:frontend");
 console.log("Moving frontend build files to backend dist folder...");
 fs.renameSync(frontendBuildDir, path.join(backendBuildDir, "dist"));
 
@@ -33,7 +33,7 @@ function doCompile(platform: string) {
         input: "packages/backend/build/main.js",
         output: `${finalBuildDir}/application-${platform}`,
         resources: [
-            "package.json", // our main package.json file for grabbing the application version
+            // "./package.json", // our main package.json file for grabbing the application version
             "packages/backend/views/**/*",
             "packages/backend/build/dist/**/*",
             "node_modules/@ccss-support-manual/models/lib/**/*.js",

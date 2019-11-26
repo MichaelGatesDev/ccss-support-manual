@@ -49,6 +49,7 @@ export class App {
     public updateManager: UpdateManager;
 
     public isProduction: boolean;
+    public masterPackageJSON: { name: string; version: string; } | undefined;
 
     public constructor() {
         this.spreadsheetManager = new SpreadsheetManager();
@@ -63,11 +64,26 @@ export class App {
 
         // detect running mode (dev or prod)
         this.isProduction = !process.title.toLowerCase().includes('node');
+
+        // master json
+        this.masterPackageJSON = require("../../../package.json");
     }
 
     public async initialize(): Promise<void> {
+
+        // Console ascii notice
+        Logger.debug("");
+        Logger.debug("|==================================================|");
+        Logger.debug("|--------------------------------------------------|");
+        Logger.debug("| * Classroom & Customer Support Services Manual * |")
+        Logger.debug("|--------------------------------------------------|");
+        Logger.debug("|==================================================|");
+        Logger.debug("");
+        Logger.debug(`>> Application Version: ${this.masterPackageJSON?.version}`);
+        Logger.debug(`>> Production Mode: ${this.isProduction}`);
+        Logger.debug("");
+
         // Setup express stuff
-        Logger.debug("Setting up express server...");
         Logger.debug("Setting up express server...");
         this.setupExpress();
         Logger.debug("Finished setting up express server.");
@@ -89,7 +105,7 @@ export class App {
         // check for updates
         if (this.configManager.appConfig?.checkUpdates && this.isProduction) {
             try {
-                Logger.info(`Current version: ${app.configManager.appConfig?.currentVersion}`);
+                Logger.info(`Current version: ${this.masterPackageJSON?.version}`);
 
                 Logger.info("Checking for updates...");
                 const available = await this.updateManager.check();
@@ -113,19 +129,6 @@ export class App {
 
         // load images
         await this.imageManager.initialize();
-
-
-        // Console ascii notice
-        Logger.debug("");
-        Logger.debug("|==================================================|");
-        Logger.debug("|--------------------------------------------------|");
-        Logger.debug("| * Classroom & Customer Support Services Manual * |")
-        Logger.debug("|--------------------------------------------------|");
-        Logger.debug("|==================================================|");
-        Logger.debug("");
-        Logger.debug(`Application Version:\t${this.configManager.appConfig?.currentVersion}`);
-        Logger.debug(`Production:\t${this.isProduction}`);
-        Logger.debug("");
     }
 
     public async reinitialize(): Promise<void> {

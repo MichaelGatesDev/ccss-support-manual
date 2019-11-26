@@ -19,8 +19,7 @@
         "build:windows": "ts-node scripts/build.ts --target=windows",
         "build:mac": "ts-node scripts/build.ts --target=mac",
         "build:linux": "ts-node scripts/build.ts --target=linux",
-        "build:backend": "yarn tsc && cd packages/backend && yarn build:app",
-        "build:frontend": "yarn tsc && cd packages/frontend && yarn build"
+        "compile:frontend": "yarn tsc && cd packages/frontend && yarn build"
     },
     "dependencies": {
         "rimraf": "^3.0.0"
@@ -28,9 +27,9 @@
     "devDependencies": {
         "@types/jest": "^24.0.15",
         "@types/rimraf": "^2.0.2",
-        "@typescript-eslint/eslint-plugin": "^2.8.0",
-        "@typescript-eslint/parser": "^2.8.0",
-        "eslint": "^6.0.1",
+        "@typescript-eslint/eslint-plugin": "^2.9.0",
+        "@typescript-eslint/parser": "^2.9.0",
+        "eslint": "^6.7.1",
         "jest": "^24.8.0",
         "ts-jest": "^24.2.0",
         "ts-node": "^8.5.2",

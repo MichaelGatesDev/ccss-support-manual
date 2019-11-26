@@ -77,13 +77,15 @@ export class UpdateManager {
     }
 
     public async check(): Promise<boolean> {
-        const config = app.configManager.appConfig;
-        if (config === undefined) throw new Error("Application configuration not found!");
-
         try {
             const latest = await this.getLatestUpdate();
 
-            let currentVersion = config.currentVersion;
+            const masterPackageJSON = app.masterPackageJSON;
+            if (masterPackageJSON === undefined) {
+                throw new Error("Master package.json not found");
+            }
+
+            let currentVersion = masterPackageJSON.version;
             let latestVersion = latest.version;
             {
                 const match = currentVersion.match(this.versionPattern);
@@ -98,9 +100,10 @@ export class UpdateManager {
                 }
             }
 
-            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Equal) {
-                return false;
-            }
+            // same version
+            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Equal) return false;
+            // current version is higher than latest release version
+            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Greater) return false;
 
             this.latestVersion = latest;
             return true;
@@ -155,13 +158,6 @@ export class UpdateManager {
         if (this.latestVersion === undefined) {
             throw new Error("Latest version is undefined!");
         }
-
-        // update config version
-        const config = app.configManager.appConfig;
-        if (config === undefined) return;
-        Logger.debug(`Updated from version ${config.currentVersion} to ${this.latestVersion.version}`);
-        config.currentVersion = this.latestVersion?.version;
-        await config.save();
 
         // rename current process to append .old
         if (!await FileUtils.rename(process.title, `${process.title}.old`)) {
