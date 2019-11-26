@@ -53,6 +53,28 @@ function doCompile(platform: string) {
     });
 }
 
-doCompile("windows");
-doCompile("linux");
-doCompile("mac");
+const args = process.argv;
+const target: string | undefined = args.find((arg) => arg.startsWith("--target"));
+if (target !== undefined) {
+    const targetOS = target.split("=")[1];
+    switch (targetOS) {
+        default:
+            break;
+        case "all":
+            doCompile("windows");
+            doCompile("linux");
+            doCompile("mac");
+            break;
+        case "windows":
+            doCompile("windows");
+            break;
+        case "linux":
+            doCompile("linux");
+            break;
+        case "mac":
+            doCompile("mac");
+            break;
+    }
+} else {
+    console.error("Specify a build target with --target={target}");
+}

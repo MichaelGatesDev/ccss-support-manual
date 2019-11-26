@@ -14,9 +14,39 @@
             }
         },
         {
-            "label": "build-app",
+            "label": "build-app-all",
             "type": "shell",
             "command": "yarn build",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build-app-linux",
+            "type": "shell",
+            "command": "yarn build:linux",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build-app-windows",
+            "type": "shell",
+            "command": "yarn build:windows",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build-app-mac",
+            "type": "shell",
+            "command": "yarn build:mac",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
