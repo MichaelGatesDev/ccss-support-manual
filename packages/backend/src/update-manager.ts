@@ -159,17 +159,22 @@ export class UpdateManager {
             throw new Error("Latest version is undefined!");
         }
 
+        let appName = app.masterPackageJSON.name;
+        if (os.type().toLowerCase() === "windows_nt") {
+            appName += ".exe";
+        }
+
         // rename current process to append .old
-        if (!await FileUtils.rename(app.masterPackageJSON.name, `${app.masterPackageJSON.name}.old`)) {
+        if (!await FileUtils.rename(appName, `${appName}.old`)) {
             throw new Error("There was an issue renaming the current process!");
         }
-        Logger.debug(`Renamed file: ${app.masterPackageJSON.name} -> ${app.masterPackageJSON.name}.old`)
+        Logger.debug(`Renamed file: ${appName} -> ${appName}.old`)
 
         // rename downloaded file to original process name
-        if (!await FileUtils.rename(`${app.masterPackageJSON.name}.update`, `${app.masterPackageJSON.name}`)) {
+        if (!await FileUtils.rename(`${appName}.update`, `${appName}`)) {
             throw new Error("There was an issue renaming the update file!");
         }
-        Logger.debug(`Renamed file: ${app.masterPackageJSON.name}.update -> ${app.masterPackageJSON.name}`)
+        Logger.debug(`Renamed file: ${appName}.update -> ${appName}`)
     }
 
     public async afterUpdate() {
