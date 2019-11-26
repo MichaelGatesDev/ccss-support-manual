@@ -22,7 +22,7 @@ execSync("yarn run tsc");
 console.log("Building frontend files...");
 execSync("yarn run build:frontend");
 console.log("Moving frontend build files to backend dist folder...");
-fs.renameSync(frontendBuildDir, path.join(backendBuildDir + "dist/"));
+fs.renameSync(frontendBuildDir, path.join(backendBuildDir, "dist"));
 
 // compile executable
 console.log("Compiling binaries...");
@@ -33,7 +33,7 @@ function doCompile(platform: string) {
         input: "packages/backend/build/main.js",
         output: `${finalBuildDir}/application-${platform}`,
         resources: [
-            "package.json",
+            "package.json", // our main package.json file for grabbing the application version
             "packages/backend/views/**/*",
             "packages/backend/build/dist/**/*",
             "node_modules/@ccss-support-manual/models/lib/**/*.js",
@@ -44,6 +44,8 @@ function doCompile(platform: string) {
         targets: [
             `${platform}`,
         ],
+        verbose: true,
+        debugBundle: true,
     }).then(() => {
         console.log(`Finished compiling binaries for ${platform}`);
     }).catch((error) => {
