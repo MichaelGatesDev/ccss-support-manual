@@ -5,10 +5,10 @@ import path from "path";
 
 const rootDir = path.join(__dirname, "..");
 const finalBuildDir = path.join(rootDir, "build");
-const frontendDir = path.join(rootDir, "packages", "frontend/");
-const frontendBuildDir = path.join(frontendDir, "build/");
-const backendDir = path.join(rootDir, "packages", "backend/");
-const backendBuildDir = path.join(backendDir, "build/");
+const frontendDir = path.join(rootDir, "packages", "frontend");
+const frontendBuildDir = path.join(frontendDir, "build");
+const backendDir = path.join(rootDir, "packages", "backend");
+const backendBuildDir = path.join(backendDir, "build");
 
 // cleanup old files
 console.log("Performing cleanup...");
@@ -33,6 +33,7 @@ function doCompile(platform: string) {
         input: "packages/backend/build/main.js",
         output: `${finalBuildDir}/application-${platform}`,
         resources: [
+            "package.json",
             "packages/backend/views/**/*",
             "packages/backend/build/dist/**/*",
             "node_modules/@ccss-support-manual/models/lib/**/*.js",
