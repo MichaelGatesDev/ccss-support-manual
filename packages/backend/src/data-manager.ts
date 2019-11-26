@@ -1,3 +1,4 @@
+import path from "path";
 import { Logger, StringUtils } from '@michaelgatesdev/common';
 import { FileUtils } from "@michaelgatesdev/common-io";
 
@@ -19,7 +20,7 @@ export class DataManager {
     public async initialize(): Promise<void> {
 
         // buildings file
-        this.buildingsFilePath = `${app.DATA_DIR}/${this.buildingsFileName}`
+        this.buildingsFilePath = path.join(app.DATA_DIR, this.buildingsFileName);
         if (!await FileUtils.checkExists(this.buildingsFilePath)) {
             Logger.info(`No buildings file found at ${this.buildingsFilePath}. Creating default...`);
             try {
@@ -37,7 +38,7 @@ export class DataManager {
         Logger.info(`Loaded ${loadedBuildings.length} buildings`);
 
         // rooms file
-        this.roomsFilePath = `${app.DATA_DIR}/${this.roomsFileName}`
+        this.roomsFilePath = path.join(app.DATA_DIR, this.roomsFileName);
         if (!await FileUtils.checkExists(this.roomsFilePath)) {
             Logger.info(`No rooms file found at ${this.roomsFilePath}. Creating default...`);
             try {
@@ -55,7 +56,7 @@ export class DataManager {
         Logger.info(`Loaded ${loadedRooms.length} rooms`);
 
         // troubleshooting data file
-        this.troubleshootingFilePath = `${app.DATA_DIR}/${this.troubleshootingFileName}`
+        this.troubleshootingFilePath = path.join(app.DATA_DIR, this.troubleshootingFileName);
         if (!await FileUtils.checkExists(this.troubleshootingFilePath)) {
             Logger.info(`No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`);
             try {

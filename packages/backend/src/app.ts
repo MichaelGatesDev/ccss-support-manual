@@ -27,16 +27,16 @@ export class App {
     //              Configure express backend
     // ------------------------------------------------------ \\
 
-    public ROOT_DIR: string = "./";
-    public PUBLIC_DIR: string = `${this.ROOT_DIR}/public`;
-    public TEMP_DIR: string = `${this.ROOT_DIR}/temp`;
-    public DOWNLOADS_DIR: string = `${this.PUBLIC_DIR}/downloads`;
-    public UPLOADS_DIR: string = `${this.PUBLIC_DIR}/uploads`;
-    public BACKUPS_DIR: string = `${this.PUBLIC_DIR}/backups`;
-    public DATA_DIR: string = `${this.PUBLIC_DIR}/data`;
-    public SETTINGS_DIR: string = `${this.PUBLIC_DIR}/settings`;
-    public IMAGES_DIR: string = `${this.PUBLIC_DIR}/images`;
-    public BUILDING_IMAGES_DIR: string = `${this.IMAGES_DIR}/buildings`;
+    public ROOT_DIR: string = path.resolve("./");
+    public PUBLIC_DIR: string = path.resolve(`${this.ROOT_DIR}/public`);
+    public TEMP_DIR: string = path.resolve(`${this.ROOT_DIR}/temp`);
+    public DOWNLOADS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/downloads`);
+    public UPLOADS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/uploads`);
+    public BACKUPS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/backups`);
+    public DATA_DIR: string = path.resolve(`${this.PUBLIC_DIR}/data`);
+    public SETTINGS_DIR: string = path.resolve(`${this.PUBLIC_DIR}/settings`);
+    public IMAGES_DIR: string = path.resolve(`${this.PUBLIC_DIR}/images`);
+    public BUILDING_IMAGES_DIR: string = path.resolve(`${this.IMAGES_DIR}/buildings`);
 
     public spreadsheetManager: SpreadsheetManager;
     public configManager: ConfigManager;
@@ -61,7 +61,8 @@ export class App {
         this.backupManager = new BackupManager();
         this.updateManager = new UpdateManager();
 
-        this.isProduction = false;
+        // detect running mode (dev or prod)
+        this.isProduction = !process.title.toLowerCase().includes('node');
     }
 
     public async initialize(): Promise<void> {
@@ -71,18 +72,8 @@ export class App {
         this.setupExpress();
         Logger.debug("Finished setting up express server.");
 
-
         // create directories 
         await this.setupDirectories();
-
-        // detect running mode (dev or prod)
-        if (await FileUtils.checkExists(this.ROOT_DIR)) {
-            const children = await FileUtils.list(this.ROOT_DIR);
-            const executable = children.find((child) => child.path.includes("application-"));
-            if (executable !== undefined) {
-                this.isProduction = true;
-            }
-        }
 
         // create and load configuration files
         try {
@@ -122,6 +113,19 @@ export class App {
 
         // load images
         await this.imageManager.initialize();
+
+
+        // Console ascii notice
+        Logger.debug("");
+        Logger.debug("|==================================================|");
+        Logger.debug("|--------------------------------------------------|");
+        Logger.debug("| * Classroom & Customer Support Services Manual * |")
+        Logger.debug("|--------------------------------------------------|");
+        Logger.debug("|==================================================|");
+        Logger.debug("");
+        Logger.debug(`Application Version:\t${this.configManager.appConfig?.currentVersion}`);
+        Logger.debug(`Production:\t${this.isProduction}`);
+        Logger.debug("");
     }
 
     public async reinitialize(): Promise<void> {
@@ -145,7 +149,7 @@ export class App {
     public setupExpress(): void {
         Logger.debug("Setting up views");
         // view engine setup 
-        expressApp.set("views", path.join(__dirname, "../views"));
+        expressApp.set("views", path.join(__dirname, "..", "views"));
         expressApp.set("view engine", "ejs");
 
         Logger.debug("Using dev logger");
@@ -159,7 +163,7 @@ export class App {
         expressApp.use(cookieParser());
 
         Logger.debug("Setting up static directories");
-        expressApp.use("/images", express.static("public/images"));
+        expressApp.use("/images", express.static(path.join("public", "images")));
         expressApp.use(express.static(path.join(__dirname, "dist")));
 
         Logger.debug("Setting up routes");
