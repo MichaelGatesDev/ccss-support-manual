@@ -8,6 +8,7 @@ on:
   branch: master
 script:
   - yarn test
+  - yarn build
 
 deploy:
   provider: releases
