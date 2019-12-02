@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
+import { execSync } from "child_process";
+import fs from "fs";
+import path from "path";
 
 const rootDir = path.join(__dirname, "..");
 const packagesDir = `${rootDir}/packages`;
@@ -8,14 +8,13 @@ const packagesDir = `${rootDir}/packages`;
 const excludedDirectories: string[] = [
 ];
 
-
 // build frontend
 console.log("==== TESTS STARTED ====");
 console.log("");
 
 const packages = fs.readdirSync(packagesDir);
 for (const item of packages) {
-    if (excludedDirectories.includes(item)) continue;
+    if (excludedDirectories.includes(item)) { continue; }
     console.log(`Running tests in ${packagesDir}/${item}`);
     try {
         execSync(`cd ${packagesDir}/` + item + " && yarn test");

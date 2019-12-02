@@ -1,5 +1,4 @@
 import { execSync } from "child_process";
-import fs from "fs";
 import path from "path";
 
 const rootDir = path.join(__dirname, "..");
@@ -22,14 +21,14 @@ console.log("");
 console.log("==== TYPESCRIPT TRANSPILE COMPLETE ====");
 console.log("");
 
-function transpile(path: string) {
+function transpile(str: string) {
     try {
-        console.log(`Transpiling typescript files in ${path}`);
+        console.log(`Transpiling typescript files in ${str}`);
         const now = new Date().getMilliseconds();
-        execSync(`cd ${path} && tsc --build`);
+        execSync(`cd ${str} && tsc --build`);
         const later = new Date().getMilliseconds();
-        console.log(`Finished transpiling typescript files in ${path} in ${later - now} ms`);
+        console.log(`Finished transpiling typescript files in ${str} in ${later - now} ms`);
     } catch (error) {
-        console.error(`There was an transpiling typescript files  ${path}`);
+        console.error(`There was an transpiling typescript files  ${str}`);
     }
 }
