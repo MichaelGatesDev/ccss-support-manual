@@ -38,12 +38,10 @@ class RoomCard extends Component<Props, State> {
       <div className="RoomCard-Component">
         <Link to={`/buildings/${building.internalName}/rooms/${room.number}`} target="_blank">
           <div className="card">
-            <p className="card-meta"> </p>
             <img className="card-img-top" src={`/${escape(coverImage)}`} alt="" />
             <div className="card-body">
               <p className="card-title">{this.getTitle()}</p>
               <p className="card-subtitle">{room.name ? room.name : <br />}</p>
-              {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card"s content.</p> */}
             </div>
           </div>
         </Link>
