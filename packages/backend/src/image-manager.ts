@@ -126,7 +126,7 @@ export class ImageManager {
             const image = new BuildingImageFactory(
                 new ImageFactory()
                     .ofType(type)
-                    .withPath(newPath.replace(new RegExp("\\\\", 'g'), "/"))
+                    .withPath(newPath.replace(new RegExp("\\\\", 'g'), "\/"))
                     .withActualPath(filePath)
                     .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
@@ -152,7 +152,7 @@ export class ImageManager {
             const image = new RoomImageFactory(
                 new ImageFactory()
                     .ofType(type)
-                    .withPath(newPath.replace(new RegExp("\\\\", 'g'), "/"))
+                    .withPath(newPath.replace(new RegExp("\\\\", 'g'), "\/"))
                     .withActualPath(filePath)
                     .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
