@@ -122,11 +122,11 @@ export class ImageManager {
             const fileName = file.name;
             const filePath = path.join(dir, fileName);
 
-            const newPath = filePath.replace(`${app.PUBLIC_DIR}${path.sep}`, "");
+            const newPath = filePath.replace(`${app.PUBLIC_DIR}${path.sep}`, "").replace(new RegExp("\\\\", 'g'), "\/");
             const image = new BuildingImageFactory(
                 new ImageFactory()
                     .ofType(type)
-                    .withPath(newPath.replace(new RegExp("\\\\", 'g'), "\/"))
+                    .withPath(newPath)
                     .withActualPath(filePath)
                     .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
@@ -148,11 +148,11 @@ export class ImageManager {
             const fileName = file.name;
             const filePath = path.join(dir, fileName);
 
-            const newPath = filePath.replace(`${app.PUBLIC_DIR}${path.sep}`, "");
+            const newPath = filePath.replace(`${app.PUBLIC_DIR}${path.sep}`, "").replace(new RegExp("\\\\", 'g'), "\/");
             const image = new RoomImageFactory(
                 new ImageFactory()
                     .ofType(type)
-                    .withPath(newPath.replace(new RegExp("\\\\", 'g'), "\/"))
+                    .withPath(newPath)
                     .withActualPath(filePath)
                     .withThumb({ fileName, path: `${newPath}.thumb.jpg` })
                     .build()
