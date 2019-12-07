@@ -5,7 +5,7 @@ import {
   REQUEST_FETCH_BUILDING, REQUEST_FETCH_BUILDING_SUCCESS, REQUEST_FETCH_BUILDING_FAILURE,
   REQUEST_FETCH_BUILDINGS, REQUEST_FETCH_BUILDINGS_SUCCESS, REQUEST_FETCH_BUILDINGS_FAILURE,
   REQUEST_ADD_BUILDING, REQUEST_ADD_BUILDING_FAILURE, REQUEST_ADD_BUILDING_SUCCESS,
-  REQUEST_EDIT_BUILDING, REQUEST_EDIT_BUILDING_FAILURE, REQUEST_EDIT_BUILDING_SUCCESS,
+  REQUEST_UPDATE_BUILDING, REQUEST_UPDATE_BUILDING_FAILURE, REQUEST_UPDATE_BUILDING_SUCCESS,
   REQUEST_REMOVE_BUILDING, REQUEST_REMOVE_BUILDING_FAILURE, REQUEST_REMOVE_BUILDING_SUCCESS,
 } from "./types";
 
@@ -112,24 +112,24 @@ export const addBuilding = (officialName: string, nicknames: string[]) => async 
 };
 
 
-export const editBuilding = (name: string) => async (dispatch: Dispatch) => {
+export const updateBuilding = (building: Building, newProperties: Building) => async (dispatch: Dispatch) => {
   dispatch({
-    type: REQUEST_EDIT_BUILDING,
+    type: REQUEST_UPDATE_BUILDING,
   });
   try {
-    const response = await fetch(`/api/v1/buildings/${name}/edit`, {
+    const response = await fetch(`/api/v1/buildings/${building.internalName}/update`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({}), // TODO
+      body: JSON.stringify(newProperties), // TODO
     });
 
     // Bad response (error)
     if (!response.ok) {
       const error = await response.text();
       dispatch({
-        type: REQUEST_EDIT_BUILDING_FAILURE,
+        type: REQUEST_UPDATE_BUILDING_FAILURE,
         error,
       });
       return;
@@ -138,24 +138,24 @@ export const editBuilding = (name: string) => async (dispatch: Dispatch) => {
     // Success response
     // TODO implement return data
     dispatch({
-      type: REQUEST_EDIT_BUILDING_SUCCESS,
+      type: REQUEST_UPDATE_BUILDING_SUCCESS,
       data: undefined,
     });
   }
   catch (error) {
     dispatch({
-      type: REQUEST_EDIT_BUILDING_FAILURE,
+      type: REQUEST_UPDATE_BUILDING_FAILURE,
       error,
     });
   }
 };
 
-export const removeBuilding = (name: string) => async (dispatch: Dispatch) => {
+export const removeBuilding = (buildingName: string) => async (dispatch: Dispatch) => {
   dispatch({
     type: REQUEST_REMOVE_BUILDING,
   });
   try {
-    const response = await fetch(`/api/v1/buildings/${name}/remove`, {
+    const response = await fetch(`/api/v1/buildings/${buildingName}/remove`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",

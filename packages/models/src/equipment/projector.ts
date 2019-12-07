@@ -9,7 +9,7 @@ export class ProjectorFactory {
 
     private _device: Device;
 
-    private _mounted: boolean = false;
+    private _mounted = false;
 
     public constructor(device: Device) {
         this._device = device;

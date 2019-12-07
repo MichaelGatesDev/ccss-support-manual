@@ -22,8 +22,8 @@ export enum DeviceType {
 
 export class DeviceFactory {
 
-    private _make: string = "";
-    private _model: string = "";
+    private _make = "";
+    private _model = "";
     private _type: DeviceType = DeviceType.Other;
 
     public withMake(make: string): DeviceFactory {

@@ -12,7 +12,7 @@ export class DocumentCameraFactory {
 
     private _device: Device;
 
-    private _hasMicrophone: boolean = false;
+    private _hasMicrophone = false;
 
     public constructor(device: Device) {
         this._device = device;

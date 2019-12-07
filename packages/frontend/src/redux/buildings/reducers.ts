@@ -5,7 +5,7 @@ import {
   REQUEST_FETCH_BUILDING, REQUEST_FETCH_BUILDING_FAILURE, REQUEST_FETCH_BUILDING_SUCCESS,
   REQUEST_FETCH_BUILDINGS, REQUEST_FETCH_BUILDINGS_SUCCESS, REQUEST_FETCH_BUILDINGS_FAILURE,
   REQUEST_ADD_BUILDING, REQUEST_ADD_BUILDING_FAILURE, REQUEST_ADD_BUILDING_SUCCESS,
-  REQUEST_EDIT_BUILDING, REQUEST_EDIT_BUILDING_FAILURE, REQUEST_EDIT_BUILDING_SUCCESS,
+  REQUEST_UPDATE_BUILDING, REQUEST_UPDATE_BUILDING_FAILURE, REQUEST_UPDATE_BUILDING_SUCCESS,
   REQUEST_REMOVE_BUILDING, REQUEST_REMOVE_BUILDING_FAILURE, REQUEST_REMOVE_BUILDING_SUCCESS,
 
 } from "./types";
@@ -19,7 +19,7 @@ const initialState: BuildingsState = {
 
   removingBuilding: false,
 
-  editingBuilding: false,
+  updatingBuilding: false,
 };
 
 export function buildingsReducer(state = initialState, action: BuildingsActionTypes): BuildingsState {
@@ -80,21 +80,21 @@ export function buildingsReducer(state = initialState, action: BuildingsActionTy
         addingBuilding: false,
         error: action.error,
       };
-    // EDIT BUILDING
-    case REQUEST_EDIT_BUILDING:
+    // UPDATE BUILDING
+    case REQUEST_UPDATE_BUILDING:
       return {
         ...state,
-        editingBuilding: true,
+        updatingBuilding: true,
       };
-    case REQUEST_EDIT_BUILDING_SUCCESS:
+    case REQUEST_UPDATE_BUILDING_SUCCESS:
       return {
         ...state,
-        editingBuilding: false,
+        updatingBuilding: false,
       };
-    case REQUEST_EDIT_BUILDING_FAILURE:
+    case REQUEST_UPDATE_BUILDING_FAILURE:
       return {
         ...state,
-        editingBuilding: false,
+        updatingBuilding: false,
         error: action.error,
       };
     // REMOVE BUILDING

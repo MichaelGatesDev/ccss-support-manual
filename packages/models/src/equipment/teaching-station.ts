@@ -16,8 +16,6 @@ export class TeachingStationFactory {
     private _type: TeachingStationType = TeachingStationType.Other;
     private _computer: TeachingStationComputer = new TeachingStationComputerFactory(new ComputerFactory(new DeviceFactory().ofType(DeviceType.Computer).build()).build()).build();
 
-    public constructor() { }
-
     public ofType(type: TeachingStationType): TeachingStationFactory {
         this._type = type;
         return this;

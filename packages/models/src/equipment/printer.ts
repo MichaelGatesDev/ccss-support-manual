@@ -20,8 +20,8 @@ export class PrinterFactory {
 
     private _device: Device;
 
-    private _symquestNumber: string = "";
-    private _cartridgeType: string = "";
+    private _symquestNumber = "";
+    private _cartridgeType = "";
 
     public constructor(device: Device) {
         this._device = device;

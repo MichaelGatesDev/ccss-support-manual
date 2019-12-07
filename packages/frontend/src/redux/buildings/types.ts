@@ -12,7 +12,7 @@ export interface BuildingsState {
 
   addingBuilding: boolean;
   removingBuilding: boolean;
-  editingBuilding: boolean;
+  updatingBuilding: boolean;
 }
 
 // FETCH SINGLE BUILDING
@@ -63,19 +63,19 @@ interface RequestAddBuildingFailureAction {
   error: string;
 }
 
-// EDIT BUILDING
-export const REQUEST_EDIT_BUILDING = "REQUEST_EDIT_BUILDING";
-interface RequestEditBuildingAction {
-  type: typeof REQUEST_EDIT_BUILDING;
+// UPDATE BUILDING
+export const REQUEST_UPDATE_BUILDING = "REQUEST_UPDATE_BUILDING";
+interface RequestUPDATEBuildingAction {
+  type: typeof REQUEST_UPDATE_BUILDING;
 }
-export const REQUEST_EDIT_BUILDING_SUCCESS = "REQUEST_EDIT_BUILDING_SUCCESS";
-interface RequestEditBuildingSuccessAction {
-  type: typeof REQUEST_EDIT_BUILDING_SUCCESS;
+export const REQUEST_UPDATE_BUILDING_SUCCESS = "REQUEST_UPDATE_BUILDING_SUCCESS";
+interface RequestUPDATEBuildingSuccessAction {
+  type: typeof REQUEST_UPDATE_BUILDING_SUCCESS;
   data: any;
 }
-export const REQUEST_EDIT_BUILDING_FAILURE = "REQUEST_EDIT_BUILDING_FAILURE";
-interface RequestEditBuildingFailureAction {
-  type: typeof REQUEST_EDIT_BUILDING_FAILURE;
+export const REQUEST_UPDATE_BUILDING_FAILURE = "REQUEST_UPDATE_BUILDING_FAILURE";
+interface RequestUPDATEBuildingFailureAction {
+  type: typeof REQUEST_UPDATE_BUILDING_FAILURE;
   error: string;
 }
 
@@ -100,6 +100,6 @@ export type BuildingsActionTypes = (
   RequestFetchBuildingAction | RequestFetchBuildingSuccessAction | RequestFetchBuildingFailureAction
   | RequestFetchBuildingsAction | RequestFetchBuildingsSuccessAction | RequestFetchBuildingsFailureAction
   | RequestAddBuildingAction | RequestAddBuildingSuccessAction | RequestAddBuildingFailureAction
-  | RequestEditBuildingAction | RequestEditBuildingSuccessAction | RequestEditBuildingFailureAction
+  | RequestUPDATEBuildingAction | RequestUPDATEBuildingSuccessAction | RequestUPDATEBuildingFailureAction
   | RequestRemoveBuildingAction | RequestRemoveBuildingSuccessAction | RequestRemoveBuildingFailureAction
 );

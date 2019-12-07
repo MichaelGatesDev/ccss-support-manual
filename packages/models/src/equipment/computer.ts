@@ -81,7 +81,7 @@ export class TeachingStationComputerFactory {
 
     private _computer: Computer;
 
-    private _hasWebcam: boolean = false;
+    private _hasWebcam = false;
 
     public constructor(computer: Computer) {
         this._computer = computer;
@@ -104,7 +104,7 @@ export class LabComputerFactory {
 
     private _computer: Computer;
 
-    private _id: string = "";
+    private _id = "";
 
     public constructor(computer: Computer) {
         this._computer = computer;

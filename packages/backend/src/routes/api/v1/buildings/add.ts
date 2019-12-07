@@ -20,8 +20,8 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     }
 
     if (app.buildingManager.getBuildingByName(json.officialName) !== undefined) {
-        res.status(500).send(`Could not create building with the name ${json.officialName} building with that name already exists!`);
-        Logger.error(`Could not create building with the name ${json.officialName} building with that name already exists!`);
+        res.status(500).send(`Could not create building with the name "${json.officialName}" because a building with that name already exists!`);
+        Logger.error(`Could not create building with the name "${json.officialName}" because a building with that name already exists!`);
         return;
     }
 
