@@ -22,19 +22,15 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     const updatedBuilding = req.body as Building;
     if (updatedBuilding === undefined) {
         res.status(500).send(`Updated building not found.`);
-        Logger.error(`Updated bnot found.`);
+        Logger.error(`Updated building not found.`);
         return;
     }
 
-    const toUpdate: Building | undefined = app.buildingManager.getBuildingByName(building.internalName);
-    if (toUpdate === undefined) {
-        res.status(500).send(`Building to update not found.`);
-        Logger.error(`Building to update not found.`);
+    if (!app.buildingManager.updateBuilding(building, updatedBuilding)) {
+        res.status(500).send(`Failed to update building.`);
+        Logger.error(`Failed to update building.`);
         return;
     }
-
-    toUpdate.officialName = updatedBuilding.officialName;
-    toUpdate.internalName = updatedBuilding.internalName;
 
     res.status(200).json();
 });

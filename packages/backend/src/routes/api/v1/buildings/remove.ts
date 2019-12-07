@@ -16,6 +16,7 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     }
 
     app.buildingManager.removeBuilding(building);
+    app.dataManager.save();
 
     res.status(200).json(building);
 });

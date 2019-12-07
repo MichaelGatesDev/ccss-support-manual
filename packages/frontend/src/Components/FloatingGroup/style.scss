@@ -1,41 +1,41 @@
 .FloatingGroup-Component {
-    position: fixed;
-    z-index: 9999 !important;
-    padding: 0.25em;
-    
-    display: flex;
-    
-    *{
-        width: 100%;
-    }
+  position: fixed;
+  z-index: 9999 !important;
+  padding: 0.25em;
 
-    &.horizontal {
-        flex-direction: row;
-        *{
-            padding: 0 0.1em;
-        }
-    }
-    
-    &.vertical {
-        flex-direction: column;
-        *{
-            padding: 0.1em 0;
-        }
-    }
+  display: flex;
 
-    &.left{
-        left: 0;
-    }
+  * {
+    width: 100%;
+  }
 
-    &.bottom {
-        bottom: 0;
+  &.horizontal {
+    flex-direction: row;
+    * {
+      padding: 0 0.1em;
     }
+  }
 
-    &.top {
-        top: 0;
+  &.vertical {
+    flex-direction: column;
+    * {
+      padding: 0.1em 0;
     }
+  }
 
-    &.right {
-        right: 0;
-    }
+  &.left {
+    left: 0;
+  }
+
+  &.bottom {
+    bottom: 0;
+  }
+
+  &.top {
+    top: 0;
+  }
+
+  &.right {
+    right: 0;
+  }
 }

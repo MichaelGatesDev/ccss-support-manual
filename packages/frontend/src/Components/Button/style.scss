@@ -1,11 +1,39 @@
 .Button-Component {
+  width: fit-content;
+  display: inline-block;
+
   &.full-width {
     width: 100%;
     * {
       width: 100%;
     }
   }
-  width: fit-content;
-  display: inline-block;
-  margin-right: 0.75em;
+
+  button {
+    & > *:first-child {
+      display: flex;
+    }
+
+    &.horizontal,
+    &.vertical {
+      padding: 0.5em;
+      * {
+        width: fit-content;
+      }
+      & > *:first-child {
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &.horizontal {
+      & > *:first-child {
+        flex-direction: row;
+      }
+    }
+
+    &.vertical > *:first-child {
+      flex-direction: column;
+    }
+  }
 }

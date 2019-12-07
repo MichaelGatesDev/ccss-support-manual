@@ -1,6 +1,7 @@
 import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 import _ from "lodash";
+import { StringUtils } from "@michaelgatesdev/common";
 
 /**
  * A utility class for managing buildings
@@ -39,10 +40,20 @@ export class BuildingManager {
      * @param building Building to remove
      */
     public removeBuilding(building: Building): void {
-        const index = this.buildings.indexOf(building, 0);
-        if (index > -1) {
-            this.buildings.splice(index, 1);
-        }
+        this.buildings = _.remove(this.buildings, building);
+    }
+
+    /**
+     * Updates a a building object's properties
+     * @param building The object to update
+     * @param updated The object with the new properties
+     */
+    public updateBuilding(building: Building, updated: Building): boolean {
+        const fetched = this.getBuildingByName(building.internalName);
+        if (fetched === undefined) return false;
+        fetched.officialName = StringUtils.capitalizeFirstLetter(updated.officialName);
+        fetched.internalName = StringUtils.internalize(updated.internalName);
+        return true;
     }
 
     /**

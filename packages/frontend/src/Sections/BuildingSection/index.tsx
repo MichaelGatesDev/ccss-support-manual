@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { StringUtils } from "@michaelgatesdev/common";
 
 import { Room, ImageType, Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
@@ -13,13 +12,19 @@ import LoadingSplash from "../../Components/LoadingSplash";
 import RoomCardsGrid from "../../Components/RoomCardsGrid";
 
 import { AppState } from "../../redux/store";
-import { fetchBuilding, fetchBuildings, updateBuilding } from "../../redux/buildings/actions";
+import {
+  fetchBuilding,
+  fetchBuildings,
+  updateBuilding,
+  removeBuilding,
+} from "../../redux/buildings/actions";
 import { fetchBuildingImages, fetchRoomImagesForBuilding } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import ImageCarousel from "../../Components/ImageCarousel";
-import Button from "../../Components/Button";
-import { showEditPrompt } from "../../utils/WindowUtils";
+import Button, { ButtonType } from "../../Components/Button";
+import { showEditPrompt, showConfirmPrompt } from "../../utils/WindowUtils";
+import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
 
 interface Props {
   match?: any;
@@ -32,10 +37,10 @@ interface Props {
   fetchBuildings: () => void;
   fetchBuilding: (buildingName: string) => void;
   updateBuilding: (building: Building, newProps: Building) => Promise<void>;
+  removeBuilding: (buildingName: string) => void;
 
   fetchBuildingImages: (buildingName: string) => void;
   fetchRoomImagesForBuilding: (buildingName: string) => void;
-
 }
 
 const BuildingSection = (props: Props) => {
@@ -51,6 +56,7 @@ const BuildingSection = (props: Props) => {
     fetchBuildings,
     fetchBuilding,
     updateBuilding,
+    removeBuilding,
 
     fetchBuildingImages,
     fetchRoomImagesForBuilding,
@@ -131,7 +137,7 @@ const BuildingSection = (props: Props) => {
         {/* Meta */}
         <div className="row">
           {/* Photos */}
-          <div className="col-sm">
+          <div className="col-12 col-lg-5 mb-4">
             <ImageCarousel
               id="building-panoramas-carousel"
               height="300px"
@@ -149,11 +155,12 @@ const BuildingSection = (props: Props) => {
                 <div className="d-flex justify-content-end">
                   <Button
                     preventDefault
+                    buttonType={ButtonType.Primary}
                     onClick={() => {
                       const newName: string | undefined = showEditPrompt(building.officialName);
                       if (newName === undefined) return;
                       console.log(`Updating building name from ${building.officialName} to ${newName}`);
-                      updateBuilding(building, { ...building, officialName: StringUtils.capitalizeFirstLetter(newName), internalName: StringUtils.internalize(newName) });
+                      updateBuilding(building, { ...building, officialName: newName });
                     }}
                   >
                     <span>Edit</span>
@@ -174,7 +181,10 @@ const BuildingSection = (props: Props) => {
               </div>
               <div className="col">
                 <div className="d-flex justify-content-end">
-                  <Button preventDefault>
+                  <Button
+                    preventDefault
+                    buttonType={ButtonType.Primary}
+                  >
                     <span>Edit</span>
                   </Button>
                 </div>
@@ -195,7 +205,10 @@ const BuildingSection = (props: Props) => {
               </div>
               <div className="col">
                 <div className="d-flex justify-content-end">
-                  <Button preventDefault>
+                  <Button
+                    buttonType={ButtonType.Primary}
+                    preventDefault
+                  >
                     <span>Edit</span>
                   </Button>
                 </div>
@@ -215,36 +228,50 @@ const BuildingSection = (props: Props) => {
           </div>
         </div>
 
+        {/* Rooms Header */}
         <div className="row">
           <div className="col">
             <h2>Rooms</h2>
           </div>
         </div>
-
+        {/* Room Cards */}
         <div className="row">
           <div className="col">
-            <RoomCardsGrid
-              rooms={rooms}
-              buildings={buildingsState.fetchedBuildings ?? []}
-              images={imagesState}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <h2>Admin</h2>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <Button preventDefault fullWidth>
-              <span>Delete</span>
-            </Button>
+            {
+              rooms.length > 0 ?
+                (
+                  <RoomCardsGrid
+                    rooms={rooms}
+                    buildings={buildingsState.fetchedBuildings ?? []}
+                    images={imagesState}
+                  />
+                )
+                :
+                (
+                  <p>There are no rooms for this building.</p>
+                )
+            }
           </div>
         </div>
 
       </section>
+
+      <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom right>
+        <Button
+          preventDefault
+          buttonType={ButtonType.Danger}
+          onClick={() => {
+            const confirmDelete = showConfirmPrompt("Are you sure that you want to delete this building?\n\nNote: This action can not be undone.");
+            if (!confirmDelete) return;
+            removeBuilding(buildingName);
+          }}
+        >
+          <span>
+            <i className="fas fa-minus" />
+            &nbsp;Delete Building
+          </span>
+        </Button>
+      </FloatingGroup>
     </>
   );
 };
@@ -262,6 +289,7 @@ export default connect(
     fetchBuildings,
     fetchBuilding,
     updateBuilding,
+    removeBuilding,
 
     fetchBuildingImages,
     fetchRoomImagesForBuilding,

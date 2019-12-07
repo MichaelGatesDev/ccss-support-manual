@@ -17,6 +17,7 @@ import { ImagesState } from "../../redux/images/types";
 import BuildingCardsGrid from "../../Components/BuildingCardsGrid";
 import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
 import { AnchorButton } from "../../Components/AnchorButton";
+import { ButtonType } from "../../Components/Button";
 
 interface Props {
   buildingsState: BuildingsState;
@@ -91,8 +92,12 @@ const BuildingsSection = (props: Props) => {
           buildings={filteredBuildings}
           images={imagesState}
         />
+
         <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
-          <AnchorButton href="buildings/add">
+          <AnchorButton
+            href="buildings/add"
+            buttonType={ButtonType.Success}
+          >
             <>
               <span>
                 <i className="fas fa-plus" />

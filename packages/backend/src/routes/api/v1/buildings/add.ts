@@ -28,14 +28,14 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     const nicknames = json.nicknames.filter((nickname) => !StringUtils.isBlank(nickname));
 
     const created = new BuildingFactory()
-        .withOfficialName(json.officialName)
-        .withNicknames(nicknames)
+        .withOfficialName(StringUtils.capitalizeFirstLetter(json.officialName))
+        .withNicknames(nicknames.map((nick) => nick.toLowerCase()))
         .withInternalName(StringUtils.internalize(json.officialName))
         .withRooms([])
         .build();
 
     app.buildingManager.addBuilding(created);
-    //TODO save
+    app.dataManager.save();
 
     res.status(200).json(created);
 });
