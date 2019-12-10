@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import "./style.scss";
 
@@ -49,14 +50,14 @@ class NavBar extends Component<Props, State> {
 
           {/* Left */}
           <div className="navbar-collapse collapse order-0 dual-collapse2">
-            <a className="navbar-brand" href="/">{title}</a>
+            <Link to="/" className="navbar-brand">{title}</Link>
 
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link" href="/buildings" rel="noopener noreferrer">Buildings</a>
+                <Link to="/buildings" className="nav-link" rel="noopener noreferrer">Buildings</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/settings" rel="noopener noreferrer">Settings</a>
+                <Link to="/settings" className="nav-link" rel="noopener noreferrer">Settings</Link>
               </li>
             </ul>
           </div>

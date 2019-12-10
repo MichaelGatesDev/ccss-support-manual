@@ -1,13 +1,19 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Room, Building } from "@ccss-support-manual/models";
-import { BuildingUtils } from "@ccss-support-manual/utilities";
+import { StringUtils } from "@michaelgatesdev/common";
+
+import {
+  Room,
+  Building,
+  Classroom,
+  ImageType,
+} from "@ccss-support-manual/models";
+import { BuildingUtils, RoomUtils } from "@ccss-support-manual/utilities";
 
 import "./style.scss";
 
 import NavBar from "../../Components/NavBar";
-import RoomCardsGrid from "../../Components/RoomCardsGrid";
 import LoadingSplash from "../../Components/LoadingSplash";
 
 import { AppState } from "../../redux/store";
@@ -15,6 +21,9 @@ import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
+import { CardDeck } from "../../Components/CardDeck";
+import { Card, HoverEffect } from "../../Components/Card";
+import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
 
 interface Props {
   buildingsState: BuildingsState;
@@ -66,6 +75,8 @@ const Home = (props: Props) => {
     }
   }
 
+  const roomsImages = imagesState.roomImages.filter((image) => image.type === ImageType.Room);
+
   return (
     <>
       {/* Top navigation */}
@@ -77,11 +88,14 @@ const Home = (props: Props) => {
       />
       {/* Main content */}
       <section className="container-fluid" id="home-section">
-        <RoomCardsGrid
-          rooms={rooms}
-          buildings={buildingsState.fetchedBuildings ?? []}
-          images={imagesState}
-        />
+        <div className="row">
+          <div className="col">
+            <RoomCardsDeck
+              rooms={rooms}
+              roomsImages={roomsImages}
+            />
+          </div>
+        </div>
       </section>
     </>
   );

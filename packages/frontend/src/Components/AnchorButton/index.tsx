@@ -1,4 +1,5 @@
 import "./style.scss";
+import { Link } from "react-router-dom";
 
 import React, { ReactNode } from "react";
 import { ButtonType } from "../Button";
@@ -32,13 +33,13 @@ export const AnchorButton = (props: Props) => {
 
   return (
     <div className="AnchorButton-Component">
-      <a
+      <Link
         className={`btn btn-${ButtonType[buttonType].toLowerCase()} ${(fullWidth ? "btn-block " : "")} ${orientation} ${(disabled ? "disabled" : "")}`}
-        href={href}
+        to={href}
         role="button"
       >
         {children}
-      </a>
+      </Link>
     </div>
   );
 };

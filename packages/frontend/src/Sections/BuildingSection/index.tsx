@@ -10,7 +10,6 @@ import "./style.scss";
 
 import NavBar from "../../Components/NavBar";
 import LoadingSplash from "../../Components/LoadingSplash";
-import RoomCardsGrid from "../../Components/RoomCardsGrid";
 
 import { AppState } from "../../redux/store";
 import {
@@ -26,6 +25,7 @@ import ImageCarousel from "../../Components/ImageCarousel";
 import Button, { ButtonType } from "../../Components/Button";
 import { showEditPrompt, showConfirmPrompt } from "../../utils/WindowUtils";
 import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
+import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
 
 interface Props {
   match?: any;
@@ -107,6 +107,8 @@ const BuildingSection = (props: Props) => {
     }
   }
 
+  const roomsImages = imagesState.roomImages.filter((image) => image.type === ImageType.Room);
+  console.log(roomsImages.length);
 
   return (
     <>
@@ -241,10 +243,9 @@ const BuildingSection = (props: Props) => {
             {
               rooms.length > 0 ?
                 (
-                  <RoomCardsGrid
+                  <RoomCardsDeck
                     rooms={rooms}
-                    buildings={buildingsState.fetchedBuildings ?? []}
-                    images={imagesState}
+                    roomsImages={roomsImages}
                   />
                 )
                 :
@@ -263,7 +264,7 @@ const BuildingSection = (props: Props) => {
 
       </section>
 
-      <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom right>
+      <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
         <Button
           preventDefault
           buttonType={ButtonType.Danger}
