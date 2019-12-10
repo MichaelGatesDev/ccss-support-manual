@@ -132,7 +132,7 @@ const AddBuildingSection = (props: Props) => {
               fullWidth
               onClick={performAddBuilding}
             >
-              <span>Add Building</span>
+              <span className="w-100">Add Building</span>
             </Button>
           </div>
         </div>
