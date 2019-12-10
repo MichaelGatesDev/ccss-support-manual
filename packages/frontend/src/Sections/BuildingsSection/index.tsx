@@ -18,6 +18,7 @@ import BuildingCardsGrid from "../../Components/BuildingCardsGrid";
 import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
 import { AnchorButton } from "../../Components/AnchorButton";
 import { ButtonType } from "../../Components/Button";
+import { BuildingCardsDeck } from "../../Components/BuildingCardsDeck";
 
 interface Props {
   buildingsState: BuildingsState;
@@ -88,9 +89,9 @@ const BuildingsSection = (props: Props) => {
           </div>
         </div>
 
-        <BuildingCardsGrid
+        <BuildingCardsDeck
           buildings={filteredBuildings}
-          images={imagesState}
+          buildingsImages={imagesState.buildingImages}
         />
 
         <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
