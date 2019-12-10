@@ -80,6 +80,7 @@ router.post('/', upload.single('file'), async (req, res) => {
     try {
         Logger.debug("Performing import...");
         await SpreadsheetManager.importSpreadsheet(path, importType, importMode);
+        app.dataManager.save(); // TODO confirm
         Logger.debug("Import complete!");
         res.sendStatus(200);
     } catch (error) {
