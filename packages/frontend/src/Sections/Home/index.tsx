@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { StringUtils } from "@michaelgatesdev/common";
 
 import {
   Room,
   Building,
-  Classroom,
   ImageType,
 } from "@ccss-support-manual/models";
-import { BuildingUtils, RoomUtils } from "@ccss-support-manual/utilities";
+import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import "./style.scss";
 
@@ -21,8 +19,6 @@ import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
-import { CardDeck } from "../../Components/CardDeck";
-import { Card, HoverEffect } from "../../Components/Card";
 import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
 
 interface Props {
@@ -87,7 +83,7 @@ const Home = (props: Props) => {
         fixed
       />
       {/* Main content */}
-      <section className="container-fluid" id="home-section">
+      <section className="containegonna container-fluid" id="home-section">
         <div className="row">
           <div className="col">
             <RoomCardsDeck

@@ -2,8 +2,7 @@ import "./style.scss";
 
 import React, { useState } from "react";
 import { connect } from "react-redux";
-
-import { StringUtils } from "@michaelgatesdev/common";
+import { Link } from "react-router-dom";
 
 import { Building } from "@ccss-support-manual/models";
 
@@ -57,8 +56,8 @@ const AddBuildingSection = (props: Props) => {
             <div className="col">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                  <li className="breadcrumb-item"><a href="/">Home</a></li>
-                  <li className="breadcrumb-item"><a href="/buildings">Buildings</a></li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
+                  <li className="breadcrumb-item"><Link to="/buildings">Buildings</Link></li>
                   <li className="breadcrumb-item active" aria-current="page">Add Building</li>
                 </ol>
               </nav>

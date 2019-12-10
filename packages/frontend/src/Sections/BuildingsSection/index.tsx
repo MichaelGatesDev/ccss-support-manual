@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import _ from "lodash";
-import { Room, Building } from "@ccss-support-manual/models";
+import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import "./style.scss";
@@ -14,7 +15,6 @@ import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
-import BuildingCardsGrid from "../../Components/BuildingCardsGrid";
 import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
 import { AnchorButton } from "../../Components/AnchorButton";
 import { ButtonType } from "../../Components/Button";
@@ -81,7 +81,7 @@ const BuildingsSection = (props: Props) => {
             <div className="col">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                  <li className="breadcrumb-item"><a href="/">Home</a></li>
+                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
                   <li className="breadcrumb-item active" aria-current="page">Buildings</li>
                 </ol>
               </nav>
