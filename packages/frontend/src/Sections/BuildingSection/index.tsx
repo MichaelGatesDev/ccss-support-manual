@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -248,7 +249,13 @@ const BuildingSection = (props: Props) => {
                 )
                 :
                 (
-                  <p>There are no rooms for this building.</p>
+                  <>
+                    <p className="my-0">
+                      There are no rooms for this building.
+                      &nbsp;
+                      <Link to="rooms/add">Add Room</Link>
+                    </p>
+                  </>
                 )
             }
           </div>
