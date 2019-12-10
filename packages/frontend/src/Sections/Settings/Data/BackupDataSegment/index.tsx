@@ -10,7 +10,7 @@ import { BackupRestoreOptions } from "@ccss-support-manual/models";
 import { AppState } from "../../../../redux/store";
 import { BackupState } from "../../../../redux/backup/types";
 import { performBackup } from "../../../../redux/backup/actions";
-import Button from "../../../../Components/Button";
+import Button, { ButtonType } from "../../../../Components/Button";
 import FormInput from "../../../../Components/FormInput";
 import { SettingsSegment } from "../../SettingsSegment";
 import { NamedRow } from "../../../../Components/NamedRow";
@@ -179,12 +179,20 @@ const BackupDataSegment = (props: Props) => {
                 <>
                   <div className="row">
                     <div className="col">
-                      <Button onClick={() => { modifyAll(BackupSettingsType.Data, true); }} preventDefault>
+                      <Button
+                        buttonType={ButtonType.Secondary}
+                        onClick={() => { modifyAll(BackupSettingsType.Data, true); }}
+                        preventDefault
+                      >
                         <span>Select All</span>
                       </Button>
                     </div>
                     <div className="col">
-                      <Button onClick={() => { modifyAll(BackupSettingsType.Data, false); }} preventDefault>
+                      <Button
+                        buttonType={ButtonType.Secondary}
+                        onClick={() => { modifyAll(BackupSettingsType.Data, false); }}
+                        preventDefault
+                      >
                         <span>Select None</span>
                       </Button>
                     </div>
@@ -227,12 +235,20 @@ const BackupDataSegment = (props: Props) => {
                 <>
                   <div className="row">
                     <div className="col">
-                      <Button onClick={() => { modifyAll(BackupSettingsType.Images, true); }} preventDefault>
+                      <Button
+                        buttonType={ButtonType.Secondary}
+                        onClick={() => { modifyAll(BackupSettingsType.Images, true); }}
+                        preventDefault
+                      >
                         <span>Select All</span>
                       </Button>
                     </div>
                     <div className="col">
-                      <Button onClick={() => { modifyAll(BackupSettingsType.Images, false); }} preventDefault>
+                      <Button
+                        buttonType={ButtonType.Secondary}
+                        onClick={() => { modifyAll(BackupSettingsType.Images, false); }}
+                        preventDefault
+                      >
                         <span>Select None</span>
                       </Button>
                     </div>
@@ -293,12 +309,20 @@ const BackupDataSegment = (props: Props) => {
                 <>
                   <div className="row">
                     <div className="col">
-                      <Button onClick={() => { modifyAll(BackupSettingsType.Settings, true); }} preventDefault>
+                      <Button
+                        buttonType={ButtonType.Secondary}
+                        onClick={() => { modifyAll(BackupSettingsType.Settings, true); }}
+                        preventDefault
+                      >
                         <span>Select All</span>
                       </Button>
                     </div>
                     <div className="col">
-                      <Button onClick={() => { modifyAll(BackupSettingsType.Settings, false); }} preventDefault>
+                      <Button
+                        buttonType={ButtonType.Secondary}
+                        onClick={() => { modifyAll(BackupSettingsType.Settings, false); }}
+                        preventDefault
+                      >
                         <span>Select None</span>
                       </Button>
                     </div>
@@ -342,6 +366,7 @@ const BackupDataSegment = (props: Props) => {
         <div className="row">
           <div className="col">
             <Button
+              buttonType={ButtonType.Secondary}
               disabled={backupState.backingUp}
               onClick={backup}
               preventDefault

@@ -1,7 +1,7 @@
 import "./style.scss";
 
 import React, { useEffect, useState } from "react";
-import Button from "../Button";
+import Button, { ButtonType } from "../Button";
 
 interface Props {
   id?: string;
@@ -81,6 +81,7 @@ export const LabeledInputList = (props: Props) => {
                   (!preventZero || index > 0) &&
                   (
                     <Button
+                      buttonType={ButtonType.Danger}
                       preventDefault
                       onClick={removeItem.bind(null, index)}
                     >
@@ -100,6 +101,7 @@ export const LabeledInputList = (props: Props) => {
       {titleRight && <span className="right">{title}</span>}
 
       <Button
+        buttonType={ButtonType.Success}
         preventDefault
         onClick={addItem}
       >

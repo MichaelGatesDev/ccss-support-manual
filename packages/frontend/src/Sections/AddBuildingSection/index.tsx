@@ -11,7 +11,7 @@ import NavBar from "../../Components/NavBar";
 import { LabeledFormInput } from "../../Components/LabeledFormInput";
 import { LabeledInputList } from "../../Components/LabeledInputList";
 import { Alert, AlertType } from "../../Components/Alert/alert";
-import Button from "../../Components/Button";
+import Button, { ButtonType } from "../../Components/Button";
 import { AppState } from "../../redux/store";
 import { addBuilding } from "../../redux/buildings/actions";
 import { BuildingsState } from "../../redux/buildings/types";
@@ -127,6 +127,7 @@ const AddBuildingSection = (props: Props) => {
         <div className="row">
           <div className="col">
             <Button
+              buttonType={ButtonType.Success}
               preventDefault
               fullWidth
               onClick={performAddBuilding}

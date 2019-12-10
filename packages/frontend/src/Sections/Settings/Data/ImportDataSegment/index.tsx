@@ -11,7 +11,7 @@ import { importSpreadsheet } from "../../../../redux/import/actions";
 import FormInput from "../../../../Components/FormInput";
 import FileSelect from "../../../../Components/FileSelect";
 import Select from "../../../../Components/Select";
-import Button from "../../../../Components/Button";
+import Button, { ButtonType } from "../../../../Components/Button";
 import { AppState } from "../../../../redux/store";
 import { SettingsSegment } from "../../SettingsSegment";
 import { Collapse, CollapseCard } from "../../../../Components/Collapse";
@@ -198,6 +198,7 @@ const ImportDataSegment = (props: Props) => {
           <div className="row">
             <div className="col">
               <Button
+                buttonType={ButtonType.Secondary}
                 disabled={(importState !== undefined && importState.importing)}
                 onClick={performImport}
                 preventDefault

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { AppState } from "../../../../redux/store";
 import { performSave } from "../../../../redux/save/actions";
 import { SaveState } from "../../../../redux/save/types";
-import Button from "../../../../Components/Button";
+import Button, { ButtonType } from "../../../../Components/Button";
 import { SettingsSegment } from "../../SettingsSegment";
 
 interface Props {
@@ -44,6 +44,7 @@ const SaveDataSegment = (props: Props) => {
         <div className="row">
           <div className="col">
             <Button
+              buttonType={ButtonType.Secondary}
               disabled={saveState.saving}
               onClick={save}
               preventDefault
