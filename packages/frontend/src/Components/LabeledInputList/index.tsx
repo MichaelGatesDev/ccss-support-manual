@@ -101,7 +101,7 @@ export const LabeledInputList = (props: Props) => {
       {titleRight && <span className="right">{title}</span>}
 
       <Button
-        buttonType={ButtonType.Success}
+        buttonType={ButtonType.Secondary}
         preventDefault
         onClick={addItem}
       >
