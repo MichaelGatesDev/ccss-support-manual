@@ -85,7 +85,7 @@ export const LabeledInputList = (props: Props) => {
                       preventDefault
                       onClick={removeItem.bind(null, index)}
                     >
-                      <span>
+                      <span className="py-0">
                         <i className="fas fa-minus-circle" />
                         &nbsp;Remove
                       </span>
@@ -105,7 +105,7 @@ export const LabeledInputList = (props: Props) => {
         preventDefault
         onClick={addItem}
       >
-        <span>
+        <span className="py-0">
           <i className="fas fa-plus-circle" />
           &nbsp;Add
         </span>
