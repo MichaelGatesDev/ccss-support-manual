@@ -27,8 +27,7 @@ fs.renameSync(frontendBuildDir, path.join(backendBuildDir, "dist"));
 // compile executable
 console.log("Compiling binaries...");
 
-
-function doCompile(platform: string) {
+function compileNEXE(platform: string) {
     compile({
         input: "packages/backend/build/main.js",
         output: `${finalBuildDir}/${require("../package.json").name}-${platform}`,
@@ -52,28 +51,34 @@ function doCompile(platform: string) {
     });
 }
 
+function compilePKG(platform: string) {
+    const cmd = `yarn run pkg packages/backend/build/main.js --output=${finalBuildDir}/${require("../package.json").name}-${platform}`;
+    execSync(`${cmd} --target=${platform}`);
+}
+
 const args = process.argv;
 const target: string | undefined = args.find((arg) => arg.startsWith("--target"));
-if (target !== undefined) {
-    const targetOS = target.split("=")[1];
-    switch (targetOS) {
-        default:
-            break;
-        case "all":
-            doCompile("windows");
-            doCompile("linux");
-            doCompile("mac");
-            break;
-        case "windows":
-            doCompile("windows");
-            break;
-        case "linux":
-            doCompile("linux");
-            break;
-        case "mac":
-            doCompile("mac");
-            break;
-    }
-} else {
-    console.error("Specify a build target with --target={target}");
+if (target === undefined) { throw new Error("Specify a build target with --target={target}"); }
+const system: string | undefined = args.find((arg) => arg.startsWith("--system"));
+if (system === undefined) { throw new Error("Specify a build system with --system={system}"); }
+
+const targetOS = target.split("=")[1];
+const targetSystem = system.split("=")[1];
+switch (targetOS) {
+    default:
+        break;
+    case "all":
+        targetSystem === "pkg" ? compilePKG("windows") : compileNEXE("windows");
+        targetSystem === "pkg" ? compilePKG("linux") : compileNEXE("linux");
+        targetSystem === "pkg" ? compilePKG("mac") : compileNEXE("mac");
+        break;
+    case "windows":
+        targetSystem === "pkg" ? compilePKG("windows") : compileNEXE("windows");
+        break;
+    case "linux":
+        targetSystem === "pkg" ? compilePKG("linux") : compileNEXE("linux");
+        break;
+    case "mac":
+        targetSystem === "pkg" ? compilePKG("mac") : compileNEXE("mac");
+        break;
 }
