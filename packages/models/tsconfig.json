@@ -1,17 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "lib",
     "rootDir": "src",
-    "module": "commonjs",
-    "composite": true
+    "outDir": "dist",
+    "composite": true,
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "lib",
+    "dist",
     "__tests__/**/*",
     "__mocks__/**/*"
   ]

@@ -20,5 +20,13 @@
     "build",
     "__tests__/**/*",
     "__mocks__/**/*"
+  ],
+  "references": [
+    {
+      "path": "../models"
+    },
+    {
+      "path": "../utilities"
+    }
   ]
 }

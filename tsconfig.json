@@ -1,11 +1,23 @@
 {
-    "extends": "./config/tsconfig.base.json",
+    "extends": "./tsconfig.base.json",
+    "exclude": [
+        "scripts"
+    ],
+    "files": [],
     "paths": {
         "@ccss-support-manual/*": [
             "packages/*/src"
         ]
     },
-    "exclude": [
-        "scripts"
+    "references": [
+        {
+            "path": "./packages/backend"
+        },
+        {
+            "path": "./packages/models"
+        },
+        {
+            "path": "./packages/utilities"
+        }
     ]
 }

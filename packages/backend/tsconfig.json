@@ -1,24 +1,24 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noImplicitAny": false,
-    "target": "es6",
-    "module": "commonjs",
     "rootDir": "src",
-    "outDir": "build",
-    "lib": [
-      "es6",
-      "dom",
-    ],
-    "resolveJsonModule": true
+    "outDir": "build"
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "build",
+    "dist",
     "__tests__/**/*",
     "__mocks__/**/*"
+  ],
+  "references": [
+    {
+      "path": "../models"
+    },
+    {
+      "path": "../utilities"
+    }
   ]
 }

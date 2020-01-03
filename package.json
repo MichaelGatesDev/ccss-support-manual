@@ -9,18 +9,18 @@
         "@types/react": "^16.8.17"
     },
     "scripts": {
+        "tsc": "yarn workspaces run tsc --build",
+        "test": "yarn workspaces run test",
+        "lint": "yarn workspaces run eslint . --ext .ts",
+        
         "start:backend": "cd packages/backend && yarn dev",
         "start:frontend": "cd packages/frontend && yarn start",
-        "eslint": "ts-node scripts/eslint.ts",
-        "test": "ts-node scripts/test.ts",
-        "tsc": "ts-node scripts/tsc.ts",
+        
         "clean": "ts-node scripts/clean.ts",
         "build": "ts-node scripts/build.ts --target=all --system=pkg",
-        "build:pkg": "ts-node scripts/build.ts --target=all --system=pkg",
         "build:windows": "ts-node scripts/build.ts --target=windows --system=pkg",
         "build:mac": "ts-node scripts/build.ts --target=mac --system=pkg",
-        "build:linux": "ts-node scripts/build.ts --target=linux --system=pkg",
-        "compile:frontend": "yarn tsc && cd packages/frontend && yarn build"
+        "build:linux": "ts-node scripts/build.ts --target=linux --system=pkg"
     },
     "dependencies": {
         "rimraf": "^3.0.0"
