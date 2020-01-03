@@ -12,19 +12,15 @@
         "tsc": "yarn workspaces run tsc --build",
         "test": "yarn workspaces run test",
         "lint": "yarn workspaces run eslint . --ext .ts",
-        
         "start:backend": "cd packages/backend && yarn dev",
         "start:frontend": "cd packages/frontend && yarn start",
-        
         "clean": "ts-node scripts/clean.ts",
         "build": "ts-node scripts/build.ts --target=all --system=pkg",
         "build:windows": "ts-node scripts/build.ts --target=windows --system=pkg",
         "build:mac": "ts-node scripts/build.ts --target=mac --system=pkg",
         "build:linux": "ts-node scripts/build.ts --target=linux --system=pkg"
     },
-    "dependencies": {
-        "rimraf": "^3.0.0"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@types/jest": "^24.0.15",
         "@types/rimraf": "^2.0.2",
@@ -34,8 +30,10 @@
         "jest": "^24.8.0",
         "nexe": "^3.3.2",
         "pkg": "^4.4.1",
+        "rimraf": "^3.0.0",
         "ts-jest": "^24.2.0",
         "ts-node": "^8.5.4",
+        "ts-node-dev": "^1.0.0-pre.44",
         "typescript": "^3.7.3"
     }
 }
