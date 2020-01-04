@@ -1,0 +1,17 @@
+{
+    "files": [],
+    "references": [
+        // {
+        //     "path": "./backend"
+        // },
+        // {
+        //     "path": "./frontend"
+        // },
+        {
+            "path": "./models"
+        },
+        {
+            "path": "./utilities"
+        }
+    ]
+}

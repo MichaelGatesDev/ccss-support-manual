@@ -1,3 +1,5 @@
+import { StringUtils } from "@michaelgatesdev/common";
+
 import { Room } from "./room";
 
 /**
@@ -17,6 +19,7 @@ export interface Building {
 
     /**
      * Internal Name which used used by the program to identify the building.
+     * Should be an internalized version of the officialName
      */
     internalName: string;
 
@@ -36,6 +39,7 @@ export class BuildingFactory {
 
     public withOfficialName(name: string): BuildingFactory {
         this._officialName = name;
+        this._internalName = StringUtils.internalize(name);
         return this;
     }
 
@@ -55,6 +59,8 @@ export class BuildingFactory {
     }
 
     public build(): Building {
+        if (StringUtils.isBlank(this._officialName)) throw new Error("The official name must be specified.");
+        if (StringUtils.isBlank(this._internalName)) throw new Error("The internal name must be specified.");
         return {
             officialName: this._officialName,
             nicknames: this._nicknames,

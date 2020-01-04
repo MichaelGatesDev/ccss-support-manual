@@ -4,15 +4,7 @@
         "scripts"
     ],
     "files": [],
-    "paths": {
-        "@ccss-support-manual/*": [
-            "packages/*/src"
-        ]
-    },
     "references": [
-        {
-            "path": "./packages/backend"
-        },
         {
             "path": "./packages/models"
         },

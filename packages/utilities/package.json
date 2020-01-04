@@ -1,17 +1,18 @@
 {
   "name": "@ccss-support-manual/utilities",
   "version": "0.0.0-dev",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "description": "",
   "private": true,
-  "scripts": {
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
-  },
+  "main": "./dist/index",
+  "types": "./dist/index",
+  "description": "",
   "files": [
     "dist"
   ],
+  "scripts": {
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
+  },
   "dependencies": {
+    "@ccss-support-manual/models": "0.0.0-dev",
     "@michaelgatesdev/common": "1.1.4",
     "colors": "^1.3.3"
   },

@@ -1,24 +1,20 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "build"
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
   "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/__tests__/**/*",
-    "__mocks__/**/*"
+    "src"
   ],
   "references": [
     {
-      "path": "../models"
+      "path": "../models",
+      "prepend": false
     },
     {
-      "path": "../utilities"
+      "path": "../utilities",
+      "prepend": false
     }
   ]
 }
