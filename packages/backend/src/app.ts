@@ -222,6 +222,7 @@ export class App {
 
     public async createDirectory(path: string): Promise<void> {
         try {
+            if (await FileUtils.checkExists(path)) return;
             await FileUtils.createDirectory(path);
             Logger.info(`Created directory ${path}`);
         } catch (error) {
