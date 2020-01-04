@@ -1,6 +1,7 @@
+import { StringUtils } from "@michaelgatesdev/common";
+
 import { Building, BuildingFactory, Room, RoomFactory, SimpleRoom } from "@ccss-support-manual/models";
 import { BuildingUtils, RoomUtils } from "@ccss-support-manual/utilities";
-import { StringUtils } from "@michaelgatesdev/common";
 
 const buildingOfficialName = "My Cool Building";
 const buildingNicknames: string[] = ["my", "cool", "building", "mcb"];
@@ -45,7 +46,7 @@ test("gets simplified version of room", (): void => {
     // should have same building name
     expect(simplified.buildingName === exampleRoom.buildingName);
     // should have same number
-    expect(simplified.roomNumber === exampleRoom.number);
+    expect(simplified.number === exampleRoom.number);
 });
 
 test("removes from from building", (): void => {

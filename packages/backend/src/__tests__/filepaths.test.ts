@@ -2,12 +2,12 @@ const unixPath = "/my/path/here/awesome.jpg";
 const windowsPath = "\\my\\path\\here\\awesome.jpg";
 
 test("should convert unix path to windows path", () => {
-    const converted = unixPath.replace(new RegExp("\/", "g"), "\\");
+    const converted = unixPath.replace(new RegExp("/", "g"), "\\");
     expect(converted).toBe(windowsPath);
 });
 
 test("should convert windows path to unix path", () => {
-    const converted = windowsPath.replace(new RegExp("\\\\", "g"), "\/");
+    const converted = windowsPath.replace(new RegExp("\\\\", "g"), "/");
     expect(converted).toBe(unixPath);
 });
 

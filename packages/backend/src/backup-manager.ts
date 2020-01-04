@@ -1,10 +1,8 @@
 import path from "path";
-
 import { FileUtils } from "@michaelgatesdev/common-io";
 import { StringUtils, Logger } from "@michaelgatesdev/common";
 
 import { BackupRestoreOptions } from "@ccss-support-manual/models";
-
 
 import { app } from "./app";
 
@@ -17,24 +15,28 @@ export class BackupManager {
 
     public async backup(options: BackupRestoreOptions): Promise<void> {
         if (StringUtils.isBlank(options.name)) throw new Error("The backup name can not be blank!");
-        const destDir = path.join(app.BACKUPS_DIR, options.name);;
+        const destDir = path.join(app.BACKUPS_DIR, options.name);
         Logger.info(`Performing backup (${destDir})`);
-        if (await FileUtils.createDirectory(destDir)) Logger.info("Created directory");
+        await app.createDirectory(destDir);
 
         const dataOptions = options.data;
         if (dataOptions !== undefined) {
             if (dataOptions.all) {
-                if (await FileUtils.copy(app.DATA_DIR, path.join(destDir, "data"))) Logger.info("Copied all data");
+                await app.copy(app.DATA_DIR, path.join(destDir, "data"));
+                Logger.info("Copied all data");
             }
             else {
                 if (dataOptions.buildings) {
-                    if (await FileUtils.copy(path.join(app.DATA_DIR, this.buildingsFileName), path.join(destDir, "data", this.buildingsFileName))) Logger.info("Copied buildings data");
+                    await app.copy(path.join(app.DATA_DIR, this.buildingsFileName), path.join(destDir, "data", this.buildingsFileName));
+                    Logger.info("Copied buildings data");
                 }
                 if (dataOptions.rooms) {
-                    if (await FileUtils.copy(path.join(app.DATA_DIR, this.roomsFileName), path.join(destDir, "data", this.roomsFileName))) Logger.info("Copied rooms data");
+                    await app.copy(path.join(app.DATA_DIR, this.roomsFileName), path.join(destDir, "data", this.roomsFileName));
+                    Logger.info("Copied rooms data");
                 }
                 if (dataOptions.troubleshooting) {
-                    if (await FileUtils.copy(path.join(app.DATA_DIR, this.troubleshootingFileName), path.join(destDir, "data", this.troubleshootingFileName))) Logger.info("Copied troubleshooting data");
+                    await app.copy(path.join(app.DATA_DIR, this.troubleshootingFileName), path.join(destDir, "data", this.troubleshootingFileName));
+                    Logger.info("Copied troubleshooting data");
                 }
             }
         }
@@ -42,7 +44,8 @@ export class BackupManager {
         const imageOptions = options.images;
         if (imageOptions !== undefined) {
             if (imageOptions.all) {
-                if (await FileUtils.copy(app.IMAGES_DIR, path.join(destDir, "images"))) Logger.info("Copied all images");
+                await app.copy(app.IMAGES_DIR, path.join(destDir, "images"));
+                Logger.info("Copied all images");
             }
             else {
                 //TODO implement specific image type
@@ -52,7 +55,8 @@ export class BackupManager {
         const settingsOptions = options.settings;
         if (settingsOptions !== undefined) {
             if (settingsOptions.all) {
-                if (await FileUtils.copy(app.SETTINGS_DIR, path.join(destDir, "settings"))) Logger.info("Copied all settings");
+                await app.copy(app.SETTINGS_DIR, path.join(destDir, "settings"));
+                Logger.info("Copied all settings");
             }
             else {
                 //TODO implement specific image type
@@ -69,7 +73,7 @@ export class BackupManager {
         });
     }
 
-    public async restore(options: BackupRestoreOptions) {
+    public async restore(options: BackupRestoreOptions): Promise<void> {
         const dir = path.join(app.BACKUPS_DIR, options.name);
         if (StringUtils.isBlank(options.name)) throw new Error("The restore name can not be blank!");
         Logger.info(`Performing restore (${app.BACKUPS_DIR}/${options.name})`);
@@ -79,17 +83,21 @@ export class BackupManager {
             // await FileUtils.delete(app.DATA_DIR);
             // await FileUtils.createDirectory(app.DATA_DIR);
             if (dataOptions.all) {
-                if (await FileUtils.copy(path.join(dir, "data"), app.DATA_DIR)) Logger.info("Copied all data");
+                app.copy(path.join(dir, "data"), app.DATA_DIR);
+                Logger.info("Copied all data");
             }
             else {
                 if (dataOptions.buildings) {
-                    if (await FileUtils.copy(path.join(dir, "data", this.buildingsFileName), path.join(app.DATA_DIR, this.buildingsFileName))) Logger.info("Copied buildings data");
+                    app.copy(path.join(dir, "data", this.buildingsFileName), path.join(app.DATA_DIR, this.buildingsFileName));
+                    Logger.info("Copied buildings data");
                 }
                 if (dataOptions.rooms) {
-                    if (await FileUtils.copy(path.join(dir, "data", this.roomsFileName), path.join(app.DATA_DIR, this.roomsFileName))) Logger.info("Copied rooms data");
+                    app.copy(path.join(dir, "data", this.roomsFileName), path.join(app.DATA_DIR, this.roomsFileName));
+                    Logger.info("Copied rooms data");
                 }
                 if (dataOptions.troubleshooting) {
-                    if (await FileUtils.copy(path.join(dir, "data", this.troubleshootingFileName), path.join(app.DATA_DIR, this.troubleshootingFileName))) Logger.info("Copied troubleshooting data");
+                    app.copy(path.join(dir, "data", this.troubleshootingFileName), path.join(app.DATA_DIR, this.troubleshootingFileName));
+                    Logger.info("Copied troubleshooting data");
                 }
             }
         }
@@ -99,7 +107,8 @@ export class BackupManager {
             // await FileUtils.delete(app.IMAGES_DIR);
             // await FileUtils.createDirectory(app.IMAGES_DIR);
             if (imageOptions.all) {
-                if (await FileUtils.copy(path.join(dir, "images"), app.IMAGES_DIR)) Logger.info("Copied all images");
+                app.copy(path.join(dir, "images"), app.IMAGES_DIR);
+                Logger.info("Copied all images");
             }
             else {
                 //TODO implement specific image type
@@ -111,7 +120,8 @@ export class BackupManager {
             // await FileUtils.delete(app.SETTINGS_DIR);
             // await FileUtils.createDirectory(app.SETTINGS_DIR);
             if (settingsOptions.all) {
-                if (await FileUtils.copy(path.join(dir, "settings"), app.SETTINGS_DIR)) Logger.info("Copied all settings");
+                app.copy(path.join(dir, "settings"), app.SETTINGS_DIR);
+                Logger.info("Copied all settings");
             }
             else {
                 //TODO implement specific image type

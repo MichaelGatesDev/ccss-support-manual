@@ -1,18 +1,14 @@
-#!/usr/bin/env node
+import debug from "debug";
+import http from "http";
+
 import { Logger } from '@michaelgatesdev/common';
 
 import { expressApp } from "./app";
-
-import debug from "debug";
-import http from "http";
 
 export class ServerWrapper {
 
     private server?: http.Server;
     public port?: number;
-
-    public constructor() {
-    }
 
     public init(): void {
 
@@ -33,7 +29,7 @@ export class ServerWrapper {
      * Normalize a port into a number, string, or false.
      */
     public normalizePort(val: string): number {
-        return parseInt(val, 10);;
+        return parseInt(val, 10);
     }
 
 

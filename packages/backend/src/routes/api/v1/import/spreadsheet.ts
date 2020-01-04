@@ -1,11 +1,13 @@
 import { Router } from "express";
 import multer from "multer";
-import { SpreadsheetManager } from "../../../../spreadsheet-manager";
-import { SpreadsheetType, SpreadsheetImportMode } from "@ccss-support-manual/models";
-import { app } from "../../../../app";
 import { Logger, EnumUtils } from "@michaelgatesdev/common";
-import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
 import { GoogleDriveDownloader, FileUtils } from "@michaelgatesdev/common-io";
+
+import { SpreadsheetUtils } from "@ccss-support-manual/utilities";
+import { SpreadsheetType, SpreadsheetImportMode } from "@ccss-support-manual/models";
+
+import { SpreadsheetManager } from "../../../../spreadsheet-manager";
+import { app } from "../../../../app";
 
 const router: Router = Router();
 
@@ -88,9 +90,8 @@ router.post('/', upload.single('file'), async (req, res) => {
         Logger.error(error);
         return;
     } finally {
-        if (await FileUtils.delete(path)) {
-            Logger.debug(`Deleted downloaded file at ${path}`);
-        }
+        await FileUtils.delete(path);
+        Logger.debug(`Deleted downloaded file at ${path}`);
     }
 });
 

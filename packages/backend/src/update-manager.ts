@@ -165,19 +165,15 @@ export class UpdateManager {
         }
 
         // rename current process to append .old
-        if (!await FileUtils.rename(appName, `${appName}.old`)) {
-            throw new Error("There was an issue renaming the current process!");
-        }
-        Logger.debug(`Renamed file: ${appName} -> ${appName}.old`)
+        app.rename(appName, `${appName}.old`);
+        Logger.debug(`Renamed file: ${appName} -> ${appName}.old`);
 
         // rename downloaded file to original process name
-        if (!await FileUtils.rename(`${appName}.update`, `${appName}`)) {
-            throw new Error("There was an issue renaming the update file!");
-        }
-        Logger.debug(`Renamed file: ${appName}.update -> ${appName}`)
+        app.rename(`${appName}.update`, `${appName}`);
+        Logger.debug(`Renamed file: ${appName}.update -> ${appName}`);
     }
 
-    public async afterUpdate() {
+    public async afterUpdate(): Promise<void> {
         return new Promise(() => {
             Logger.info("To complete the update, the application must exit. You will need to reopen it manually.")
             let remaining = 5;
@@ -197,11 +193,11 @@ export class UpdateManager {
     /**
      * Returns the version comparison for the left compared to the right
      */
-    private versionCompare = (left: string, right: string) => {
-        let a = left.split('.'),
-            b = right.split('.'),
-            i = 0,
-            len = Math.max(a.length, b.length);
+    private versionCompare = (left: string, right: string): VersionComparisonResult => {
+        const a = left.split('.');
+        const b = right.split('.');
+        const len = Math.max(a.length, b.length);
+        let i = 0;
 
         for (; i < len; i++) {
             if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {

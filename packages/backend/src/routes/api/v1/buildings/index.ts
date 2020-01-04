@@ -14,7 +14,7 @@ router.use("/", all);
 router.use("/add", add);
 
 router.param("buildingName", (req: any, _res: Response, next: NextFunction, id: string): void => {
-    let building = app.buildingManager.getBuildingByName(id);
+    const building = app.buildingManager.getBuildingByName(id);
     if (building) {
         req.body = { ...req.body, building };
         next();

@@ -1,10 +1,8 @@
 import express, { Response, Request } from "express";
-
 import createError from "http-errors";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-
 import { Logger } from "@michaelgatesdev/common";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
@@ -24,9 +22,9 @@ export const expressApp: express.Application = express();
 export class App {
 
     // detect running mode (dev or prod)
-    public isProduction: boolean = !process.title.toLowerCase().includes('node');
+    public isProduction = !process.title.toLowerCase().includes('node');
     // root package.json file
-    public masterPackageJSON: { name: string; version: string; } = require("../../../package.json");
+    public masterPackageJSON: { name: string; version: string } = require("../../../package.json");
 
     // ------------------------------------------------------ \\
     //              Directories
@@ -109,7 +107,7 @@ export class App {
                 Logger.info("Checking for updates...");
                 const available = await this.updateManager.check();
                 if (available) {
-                    Logger.info(`New version found: ${app.updateManager?.latestVersion?.version}`);
+                    Logger.info(`New version found: ${this.updateManager?.latestVersion?.version}`);
                     if (this.configManager.appConfig.applyUpdates) {
                         Logger.info("Downloading new update...")
                         await this.updateManager.downloadAndApplyUpdate();
@@ -129,6 +127,11 @@ export class App {
         // load images
         await this.imageManager.initialize();
     }
+
+    public deinitialize(): void {
+        Logger.debug("TODO: deinitialize application");
+    }
+
 
     public async reinitialize(): Promise<void> {
         // create directories 
@@ -206,40 +209,41 @@ export class App {
     }
 
     public async setupDirectories(): Promise<void> {
-        if (!await FileUtils.checkExists(this.PUBLIC_DIR)) {
-            if (await FileUtils.createDirectory(this.PUBLIC_DIR)) {
-                Logger.info(`Created public directory: ${this.PUBLIC_DIR}`);
-            }
+        await Promise.all([
+            this.createDirectory(this.PUBLIC_DIR),
+            this.createDirectory(this.DOWNLOADS_DIR),
+            this.createDirectory(this.UPLOADS_DIR),
+            this.createDirectory(this.BACKUPS_DIR),
+            this.createDirectory(this.DATA_DIR),
+            this.createDirectory(this.SETTINGS_DIR),
+            this.createDirectory(this.IMAGES_DIR),
+        ]);
+    }
+
+    public async createDirectory(path: string): Promise<void> {
+        try {
+            await FileUtils.createDirectory(path);
+            Logger.info(`Created directory ${path}`);
+        } catch (error) {
+            Logger.error(error);
         }
-        if (!await FileUtils.checkExists(this.DOWNLOADS_DIR)) {
-            if (await FileUtils.createDirectory(this.DOWNLOADS_DIR)) {
-                Logger.info(`Created public directory: ${this.DOWNLOADS_DIR}`);
-            }
+    }
+
+    public async copy(path: string, dest: string): Promise<void> {
+        try {
+            await FileUtils.copy(path, dest);
+            Logger.info(`Copied directory ${path} to ${dest}`);
+        } catch (error) {
+            Logger.error(error);
         }
-        if (!await FileUtils.checkExists(this.UPLOADS_DIR)) {
-            if (await FileUtils.createDirectory(this.UPLOADS_DIR)) {
-                Logger.info(`Created public directory: ${this.UPLOADS_DIR}`);
-            }
-        }
-        if (!await FileUtils.checkExists(this.BACKUPS_DIR)) {
-            if (await FileUtils.createDirectory(this.BACKUPS_DIR)) {
-                Logger.info(`Created backups directory: ${this.BACKUPS_DIR}`);
-            }
-        }
-        if (!await FileUtils.checkExists(this.DATA_DIR)) {
-            if (await FileUtils.createDirectory(this.DATA_DIR)) {
-                Logger.info(`Created data directory: ${this.DATA_DIR}`);
-            }
-        }
-        if (!await FileUtils.checkExists(this.SETTINGS_DIR)) {
-            if (await FileUtils.createDirectory(this.SETTINGS_DIR)) {
-                Logger.info(`Created settings directory: ${this.SETTINGS_DIR}`);
-            }
-        }
-        if (!await FileUtils.checkExists(this.IMAGES_DIR)) {
-            if (await FileUtils.createDirectory(this.IMAGES_DIR)) {
-                Logger.info(`Created images directory: ${this.IMAGES_DIR}`);
-            }
+    }
+
+    public async rename(path: string, dest: string): Promise<void> {
+        try {
+            await FileUtils.copy(path, dest);
+            Logger.info(`Renamed ${path} to ${dest}`);
+        } catch (error) {
+            Logger.error(error);
         }
     }
 

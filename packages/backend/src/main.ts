@@ -8,3 +8,5 @@ myServer.init();
 
 // initialize the application
 app.initialize();
+
+process.on('SIGINT', () => app.deinitialize());

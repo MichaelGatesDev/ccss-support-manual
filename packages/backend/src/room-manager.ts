@@ -1,9 +1,10 @@
-import { app } from "./app";
-import { Room, Building, RoomImage } from "@ccss-support-manual/models";
-import { BuildingUtils } from "@ccss-support-manual/utilities";
-import { BuildingManager } from "./building-manager";
-
 import _ from "lodash";
+
+import { Room, Building } from "@ccss-support-manual/models";
+import { BuildingUtils } from "@ccss-support-manual/utilities";
+
+import { app } from "./app";
+
 
 /**
  * A utility class for managing rooms
@@ -46,14 +47,14 @@ export class RoomManager {
         return building.officialName + " " + `${room.number}`.toLocaleUpperCase();
     }
 
-    public addRoom(room: Room) {
+    public addRoom(room: Room): void {
         const pb = app.buildingManager.getBuildingByName(room.buildingName);
         if (pb === undefined) return;
         if (pb.rooms === undefined) pb.rooms = [];
         pb.rooms.push(room);
     }
 
-    public removeRoom(room: Room) {
+    public removeRoom(room: Room): void {
         const pb = app.buildingManager.getBuildingByName(room.buildingName);
         if (pb === undefined) return;
         if (pb.rooms === undefined) pb.rooms = [];

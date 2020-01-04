@@ -1,7 +1,8 @@
+import { StringUtils } from "@michaelgatesdev/common";
+
 import { Building, BuildingFactory } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
-import { StringUtils } from "@michaelgatesdev/common";
 
 let building: Building;
 const buildingOfficialName = "My Cool Building";

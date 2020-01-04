@@ -1,10 +1,10 @@
 import path from "path";
-import { Logger, StringUtils } from '@michaelgatesdev/common';
+import { Logger } from '@michaelgatesdev/common';
 import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { app } from './app';
 import { BuildingUtils, RoomUtils, TroubleshootingDataUtils } from '@ccss-support-manual/utilities';
-import { Building, Room, TroubleshootingData, BackupRestoreOptions } from '@ccss-support-manual/models';
+import { Building, Room, TroubleshootingData } from '@ccss-support-manual/models';
 
 
 export class DataManager {
@@ -24,10 +24,8 @@ export class DataManager {
         if (!await FileUtils.checkExists(this.buildingsFilePath)) {
             Logger.info(`No buildings file found at ${this.buildingsFilePath}. Creating default...`);
             try {
-                const result = await this.createDefaultBuildingsFile();
-                if (result) {
-                    Logger.info("Created default buildings file");
-                }
+                await this.createDefaultBuildingsFile();
+                Logger.info("Created default buildings file");
             } catch (error) {
                 Logger.error("There was an error while trying to create the default buildings file");
                 Logger.error(error);
@@ -42,10 +40,8 @@ export class DataManager {
         if (!await FileUtils.checkExists(this.roomsFilePath)) {
             Logger.info(`No rooms file found at ${this.roomsFilePath}. Creating default...`);
             try {
-                const result = await this.createDefaultRoomsFile();
-                if (result) {
-                    Logger.info("Created default rooms file");
-                }
+                await this.createDefaultRoomsFile();
+                Logger.info("Created default rooms file");
             } catch (error) {
                 Logger.error("There was an error while trying to create the default rooms file");
                 Logger.error(error);
@@ -60,10 +56,8 @@ export class DataManager {
         if (!await FileUtils.checkExists(this.troubleshootingFilePath)) {
             Logger.info(`No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`);
             try {
-                const result = await this.createDefaultTroubleshootingDataFile();
-                if (result) {
-                    Logger.info("Created default troubleshooting data file");
-                }
+                await this.createDefaultTroubleshootingDataFile();
+                Logger.info("Created default troubleshooting data file");
             } catch (error) {
                 Logger.error("There was an error while trying to create the default troubleshooting data file");
                 Logger.error(error);
@@ -83,7 +77,7 @@ export class DataManager {
         await this.initialize();
     }
 
-    public async nuke() {
+    public async nuke(): Promise<void> {
         app.roomManager.clear();
         app.buildingManager.clear();
         app.troubleshootingDataManager.clear();
@@ -97,16 +91,16 @@ export class DataManager {
      * Saves all of the buildings currently stored in the BuildingManager
      * @returns true if successful otherwise false
      */
-    public async saveBuildings(): Promise<boolean> {
-        return await this.writeBuildingsFile(app.buildingManager.buildings);
+    public async saveBuildings(): Promise<void> {
+        await this.writeBuildingsFile(app.buildingManager.buildings);
     }
 
     /**
      * Creates the buildings file with an example building
      * @returns true if successful otherwise false
      */
-    private async createDefaultBuildingsFile(): Promise<boolean> {
-        return await this.writeBuildingsFile([BuildingUtils.exampleBuilding]);
+    private async createDefaultBuildingsFile(): Promise<void> {
+        await this.writeBuildingsFile([BuildingUtils.exampleBuilding]);
     }
 
     /**
@@ -115,9 +109,9 @@ export class DataManager {
      * @param buildings The buildings to be written to the file
      * @returns true if successful otherwise false
      */
-    private async writeBuildingsFile(buildings: Building[]): Promise<boolean> {
+    private async writeBuildingsFile(buildings: Building[]): Promise<void> {
         if (this.buildingsFilePath === undefined) throw new Error("Buildings file path is undefined");
-        return await FileUtils.writeJSON(
+        return FileUtils.writeJSON(
             this.buildingsFilePath,
             buildings,
             (key: any, value: any): any => {
@@ -143,16 +137,16 @@ export class DataManager {
      * Saves all of the rooms currently stored in the RoomManager
      * @returns true if successful otherwise false
      */
-    public async saveRooms(): Promise<boolean> {
-        return await this.writeRoomsFile(app.roomManager.getRooms());
+    public async saveRooms(): Promise<void> {
+        await this.writeRoomsFile(app.roomManager.getRooms());
     }
 
     /**
      * Creates the rooms file with an example room
      * @returns true if successful otherwise false
      */
-    private async createDefaultRoomsFile(): Promise<boolean> {
-        return await this.writeRoomsFile([RoomUtils.exampleRoom, RoomUtils.exampleClassroom, RoomUtils.exampleSmartClassroom]);
+    private async createDefaultRoomsFile(): Promise<void> {
+        await this.writeRoomsFile([RoomUtils.exampleRoom, RoomUtils.exampleClassroom, RoomUtils.exampleSmartClassroom]);
     }
 
     /**
@@ -161,9 +155,9 @@ export class DataManager {
      * @param rooms The rooms to be written to the file
      * @returns true if successful otherwise false
      */
-    private async writeRoomsFile(rooms: Room[]): Promise<boolean> {
+    private async writeRoomsFile(rooms: Room[]): Promise<void> {
         if (this.roomsFilePath === undefined) throw new Error("Rooms file path is undefined");
-        return await FileUtils.writeJSON(
+        return FileUtils.writeJSON(
             this.roomsFilePath,
             rooms
         );
@@ -185,16 +179,16 @@ export class DataManager {
      * Saves all of the troubleshooting data currently stored in the RoomManager
      * @returns true if successful otherwise false
      */
-    public async saveTroubleshootingData(): Promise<boolean> {
-        return await this.writeTroubleshootingDataFile(app.troubleshootingDataManager.getTroubleshootingData());
+    public async saveTroubleshootingData(): Promise<void> {
+        await this.writeTroubleshootingDataFile(app.troubleshootingDataManager.getTroubleshootingData());
     }
 
     /**
      * Creates the troubleshooting data file with an example room
      * @returns true if successful otherwise false
      */
-    private async createDefaultTroubleshootingDataFile(): Promise<boolean> {
-        return await this.writeTroubleshootingDataFile([TroubleshootingDataUtils.exampleData]);
+    private async createDefaultTroubleshootingDataFile(): Promise<void> {
+        await this.writeTroubleshootingDataFile([TroubleshootingDataUtils.exampleData]);
     }
 
     /**
@@ -203,7 +197,7 @@ export class DataManager {
      * @param data The troubleshooting data to be written to the file
      * @returns true if successful otherwise false
      */
-    private async writeTroubleshootingDataFile(data: TroubleshootingData[]): Promise<boolean> {
+    private async writeTroubleshootingDataFile(data: TroubleshootingData[]): Promise<void> {
         if (this.troubleshootingFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
         return await FileUtils.writeJSON(
             this.troubleshootingFilePath,
@@ -222,7 +216,7 @@ export class DataManager {
         return json;
     }
 
-    public async save() {
+    public async save(): Promise<void> {
         Logger.info("Saving buildings data...");
         await this.saveBuildings();
         Logger.info("Finished saving buildings data");

@@ -1,5 +1,4 @@
 import { Router, Response, NextFunction } from "express";
-import { app } from "../../../../app";
 
 import roomsRoute from "./rooms";
 

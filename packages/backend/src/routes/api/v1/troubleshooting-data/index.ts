@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { app } from "../../../../app";
 
 import buildingsRoute from "./buildings";

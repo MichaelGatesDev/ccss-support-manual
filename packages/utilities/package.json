@@ -6,7 +6,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles"
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
   },
   "files": [
     "dist"

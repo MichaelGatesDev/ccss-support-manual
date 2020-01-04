@@ -1,8 +1,7 @@
-import { TroubleshootingData, SmartClassroom, Classroom } from "@ccss-support-manual/models";
+import { TroubleshootingData } from "@ccss-support-manual/models";
 import { TroubleshootingDataUtils, RoomUtils } from "@ccss-support-manual/utilities";
+
 import { app } from "./app";
-import { Logger } from "@michaelgatesdev/common";
-import { conditionalExpression } from "@babel/types";
 
 export class TroubleshootingDataManager {
 
@@ -25,13 +24,13 @@ export class TroubleshootingDataManager {
     }
 
     public getTroubleshootingDataForRoom(buildingName: string, roomNumber: string | number): TroubleshootingData[] {
-        let room = app.roomManager.getRoom(buildingName, `${roomNumber}`);
+        const room = app.roomManager.getRoom(buildingName, `${roomNumber}`);
         if (room === undefined) return []; // no room with that ID found
 
         const config = app.configManager.troubleshootingKeywordsConfig;
         if (config === undefined) return []; // no keywords config
 
-        let results: TroubleshootingData[] = [];
+        const results: TroubleshootingData[] = [];
         for (const td of this.troubleshootingData) {
 
             // trouble data doesn't apply for this room

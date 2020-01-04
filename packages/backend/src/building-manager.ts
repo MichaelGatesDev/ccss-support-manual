@@ -1,7 +1,8 @@
-import { Building } from "@ccss-support-manual/models";
-import { BuildingUtils } from "@ccss-support-manual/utilities";
 import _ from "lodash";
 import { StringUtils } from "@michaelgatesdev/common";
+
+import { Building } from "@ccss-support-manual/models";
+import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 /**
  * A utility class for managing buildings
