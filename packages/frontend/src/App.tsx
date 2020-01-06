@@ -15,8 +15,15 @@ import BackToTopButton from "./Components/BackToTopButton";
 import RoomSection from "./Sections/RoomSection";
 import AddBuildingSection from "./Sections/AddBuildingSection";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap-grid.min.css";
+import "bootstrap/dist/css/bootstrap-reboot.min.css";
+import "bootstrap/dist/js/bootstrap.min";
 
-export default function App() {
+import "jquery/dist/jquery.slim";
+
+
+export default function App(): JSX.Element {
   return (
     <Provider store={store}>
       <BrowserRouter>
