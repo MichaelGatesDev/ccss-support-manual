@@ -48,6 +48,7 @@ test("should not add duplicate buildings", () => {
 
 test("should remove building", () => {
     expect(buildingManager.removeBuilding(building)).toBe(true);
+    expect(buildingManager.buildings.length).toBe(0);
 });
 
 test("should clear all buildings", () => {

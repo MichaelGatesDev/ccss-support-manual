@@ -1,12 +1,10 @@
 import { Building, Room, BuildingFactory } from "@ccss-support-manual/models";
-import { StringUtils } from "@michaelgatesdev/common";
 
 export class BuildingUtils {
 
     private static exampleBuildingName = "Example Building";
     public static exampleBuilding = new BuildingFactory()
         .withOfficialName(BuildingUtils.exampleBuildingName)
-        .withInternalName(StringUtils.internalize(BuildingUtils.exampleBuildingName))
         .withNicknames([...BuildingUtils.exampleBuildingName.split(" "), "nicknames"])
         .build();
 
@@ -22,34 +20,7 @@ export class BuildingUtils {
         return false;
     }
 
-    /**
-     * Adds a room to the building
-     * 
-     * @param room Room to add
-     */
-    public static addRoom(building: Building, room: Room): boolean {
-        if (!building.rooms.includes(room)) {
-            building.rooms.push(room);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Removes a room from the building
-     * 
-     * @param room Room to remove
-     */
-    public static removeRoom(building: Building, room: Room): boolean {
-        if (!building.rooms.includes(room)) return false;
-        const index = building.rooms.indexOf(room, 0);
-        if (index > -1) {
-            building.rooms.splice(index, 1);
-        }
-        return true;
-    }
-
-
+    //TODO remove or refractor
     public static getParentBuilding(targetRoom: Room, allBuildings: Building[]): Building | undefined {
         for (const building of allBuildings) {
             for (const room of building.rooms) {
@@ -59,7 +30,7 @@ export class BuildingUtils {
         return undefined;
     }
 
-
+    //TODO remove or refractor
     public static getAllRooms(buildings: Building[]): Room[] {
         let result: Room[] = [];
         for (const building of buildings) {

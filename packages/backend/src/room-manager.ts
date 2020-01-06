@@ -3,7 +3,7 @@ import _ from "lodash";
 import { Room, Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
-import { app } from "./app";
+import { BuildingManager } from "./building-manager";
 
 
 /**
@@ -11,24 +11,73 @@ import { app } from "./app";
  */
 export class RoomManager {
 
+    private buildingManager: BuildingManager;
+
+    constructor(buildingManager: BuildingManager) {
+        this.buildingManager = buildingManager;
+    }
+
     /**
-     * Gets every room across all buildings
+     * Adds a room 
+     * @param room The room to add
+     * @returns True if the room was added, otherwise false
      */
-    public getRooms(): Room[] {
-        let result: Room[] = [];
-        for (const building of app.buildingManager.buildings) {
-            result = result.concat(building.rooms);
+    public addRoom(room: Room): boolean {
+        if (this.hasRoom(room)) return false;
+        const building = this.buildingManager.getBuildingByName(room.buildingName);
+        if (building === undefined) return false;
+        if (building.rooms === undefined) building.rooms = [];
+        building.rooms.push(room);
+        return true;
+    }
+
+    /**
+     * Adds zero, one, or more rooms
+     * @param rooms An array of rooms to add
+     */
+    public addRooms(rooms: Room[]): void {
+        for (const room of rooms) {
+            this.addRoom(room);
         }
-        return result;
+    }
+
+    /**
+     * Removes a room
+     * @param room The remove to remove
+     */
+    public removeRoom(room: Room): boolean {
+        const building = this.buildingManager.getBuildingByName(room.buildingName);
+        if (building === undefined) return false;
+        if (building.rooms === undefined) building.rooms = [];
+        if (!this.hasRoom(room)) return false;
+        _.remove(building.rooms, room);
+
+        return true;
+    }
+
+    public removeRoomByBuildingNameAndNumber(buildingName: string, number: string | number): boolean {
+        const building = this.buildingManager.getBuildingByName(buildingName);
+        if (building === undefined) return false;
+        const room = this.getRoom(buildingName, number);
+        if (room === undefined) return false;
+        return this.removeRoom(room);
     }
 
     /**
      * Clears all rooms from buildings
      */
     public clear(): void {
-        for (const building of app.buildingManager.buildings) {
+        for (const building of this.buildingManager.buildings) {
             building.rooms = [];
         }
+    }
+
+    /**
+     * Clears all rooms for the specified building
+     * @param building The building to clear
+     */
+    public clearFor(building: Building): void {
+        building.rooms = [];
     }
 
     /**
@@ -38,33 +87,51 @@ export class RoomManager {
      * @param roomNumber The room number
      */
     public getRoom(buildingName: string, roomNumber: string | number): Room | undefined {
-        const building = app.buildingManager.getBuildingByName(buildingName);
+        const building = this.buildingManager.getBuildingByName(buildingName);
         if (building === undefined) return undefined;
-        return this.getRooms().find((room: Room) => BuildingUtils.hasName(building, room.buildingName) && `${room.number}` === `${roomNumber}`);
+        return this.getRooms().find((room: Room) => BuildingUtils.hasName(building, room.buildingName) && room.number === roomNumber);
     }
 
+    /**
+     * Gets every room across all buildings
+     */
+    public getRooms(): Room[] {
+        let result: Room[] = [];
+        for (const building of this.buildingManager.buildings) {
+            result = result.concat(building.rooms);
+        }
+        return result;
+    }
+
+    /**
+     * Checks if the room exists
+     * @param room The room to check
+     * @return True if it exists, otherwise false
+     */
+    public hasRoom(room: Room): boolean {
+        return this.getRoom(room.buildingName, room.number) !== undefined;
+    }
+
+    /**
+     * Checks if the specified room exists
+     * @param buildingName The name of the building the room is in
+     * @param number The number of the room
+     * @return True if it exists, otherwise false
+     */
+    public hasRoomWithBuildingNameAndNumber(buildingName: string, number: string | number): boolean {
+        const building = this.buildingManager.getBuildingByName(buildingName);
+        if (building === undefined) return false;
+        const room = this.getRoom(buildingName, number);
+        if (room === undefined) return false;
+        return true;
+    }
+
+    /**
+     * @param building 
+     * @param room 
+     * @return The display name of the room (official building name + number) e.g. "Awesome Building 131D"
+     */
     public getRoomDisplayName(building: Building, room: Room): string {
         return building.officialName + " " + `${room.number}`.toLocaleUpperCase();
-    }
-
-    public addRoom(room: Room): void {
-        const pb = app.buildingManager.getBuildingByName(room.buildingName);
-        if (pb === undefined) return;
-        if (pb.rooms === undefined) pb.rooms = [];
-        pb.rooms.push(room);
-    }
-
-    public removeRoom(room: Room): void {
-        const pb = app.buildingManager.getBuildingByName(room.buildingName);
-        if (pb === undefined) return;
-        if (pb.rooms === undefined) pb.rooms = [];
-        if (!_.includes(pb.rooms, room)) return;
-        pb.rooms = _.remove(pb.rooms, room);
-    }
-
-    public addRooms(rooms: Room[]): void {
-        for (const room of rooms) {
-            this.addRoom(room);
-        }
     }
 }

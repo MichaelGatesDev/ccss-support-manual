@@ -8,6 +8,7 @@ import { BuildingUtils } from "@ccss-support-manual/utilities";
  * A utility class for managing buildings
  */
 export class BuildingManager {
+
     /**
      * An array of all buildings
      */
@@ -46,9 +47,7 @@ export class BuildingManager {
      */
     public removeBuilding(building: Building): boolean {
         if (!this.hasBuilding(building)) return false;
-        const result = _.remove(this.buildings, building);
-        if (result.length === this.buildings.length) return false;
-        this.buildings = result;
+        _.remove(this.buildings, building);
         return true;
     }
 
