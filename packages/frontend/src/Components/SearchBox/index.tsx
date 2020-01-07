@@ -11,10 +11,7 @@ interface Props {
   buttonText: string;
 }
 
-interface State {
-}
-
-class SearchBox extends Component<Props, State> {
+class SearchBox extends Component<Props> {
   constructor(props: Props) {
     super(props);
 

@@ -2,7 +2,7 @@ export interface RestoreState {
   restoring: boolean;
   loadingOptions: boolean;
   options: string[];
-  data: any | undefined,
+  data: any | undefined;
   error: string | undefined;
 }
 

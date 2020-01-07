@@ -6,10 +6,7 @@ interface Props {
   onSelect: (selected?: File | FileList) => void;
 }
 
-interface State {
-}
-
-export default class FileSelect extends PureComponent<Props, State> {
+export default class FileSelect extends PureComponent<Props> {
   constructor(props: Props) {
     super(props);
     this.onChange = this.onChange.bind(this);

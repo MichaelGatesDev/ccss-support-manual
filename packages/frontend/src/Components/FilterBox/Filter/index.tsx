@@ -8,10 +8,7 @@ interface Props {
   onChange: any;
 }
 
-interface State {
-}
-
-class Filter extends Component<Props, State> {
+class Filter extends Component<Props> {
   constructor(props: Props) {
     super(props);
 

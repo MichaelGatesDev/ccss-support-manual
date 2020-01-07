@@ -6,9 +6,6 @@ import { connect } from "react-redux";
 import { AppState } from "../../../../redux/store";
 import { SettingsSegment } from "../../SettingsSegment";
 
-interface Props {
-}
-
 const ExportDataSegment = () => (
   <SettingsSegment
     id="export-data"

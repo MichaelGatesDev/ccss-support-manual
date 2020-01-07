@@ -1,7 +1,7 @@
 import { Building } from "@ccss-support-manual/models";
 
 export interface BuildingsState {
-  data?: any,
+  data?: any;
   error?: string;
 
   fetchingBuilding: boolean;

@@ -14,10 +14,7 @@ interface Props {
   search: string;
 }
 
-interface State {
-}
-
-export default class TroubleshootingTips extends PureComponent<Props, State> {
+export default class TroubleshootingTips extends PureComponent<Props> {
   render() {
     const {
       troubleshootingData,

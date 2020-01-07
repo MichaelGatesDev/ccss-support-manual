@@ -19,11 +19,7 @@ import BackupDataSegment from "./Data/BackupDataSegment";
 import RestoreDataSegment from "./Data/RestoreDataSegment";
 import SaveDataSegment from "./Data/SaveDataSegment";
 
-
-interface Props {
-}
-
-const Settings = (props: Props) => {
+const Settings = () => {
 
   useEffect(() => {
   }, []);

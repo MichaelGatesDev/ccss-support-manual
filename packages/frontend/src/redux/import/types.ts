@@ -1,6 +1,6 @@
 export interface ImportState {
   importing: boolean;
-  data: any | undefined,
+  data: any | undefined;
   error: string | undefined;
 }
 

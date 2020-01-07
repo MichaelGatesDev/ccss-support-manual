@@ -7,10 +7,7 @@ interface Props {
   data: TroubleshootingData;
 }
 
-interface State {
-}
-
-export default class TroubleshootingTip extends PureComponent<Props, State> {
+export default class TroubleshootingTip extends PureComponent<Props> {
   render() {
     const { data } = this.props;
     return (

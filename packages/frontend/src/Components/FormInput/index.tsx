@@ -12,10 +12,7 @@ interface Props {
   alwaysSelected?: boolean;
 }
 
-interface State {
-}
-
-class FormInput extends Component<Props, State> {
+class FormInput extends Component<Props> {
   textInput: HTMLInputElement | undefined | null;
 
   constructor(props: Props) {

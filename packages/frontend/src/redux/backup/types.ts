@@ -1,6 +1,6 @@
 export interface BackupState {
   backingUp: boolean;
-  data: any | undefined,
+  data: any | undefined;
   error: string | undefined;
 }
 

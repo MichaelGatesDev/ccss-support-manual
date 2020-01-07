@@ -1,7 +1,7 @@
 import { Room } from "@ccss-support-manual/models";
 
 export interface RoomsState {
-  data?: any,
+  data?: any;
   error?: string;
 
   fetchingRoom: boolean;

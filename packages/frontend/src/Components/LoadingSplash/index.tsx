@@ -2,10 +2,7 @@ import React, { PureComponent } from "react";
 
 import "./style.scss";
 
-interface Props { }
-interface State { }
-
-class LoadingSplash extends PureComponent<Props, State> {
+class LoadingSplash extends PureComponent {
   render() {
     return (
       <div className="LoadingSplash-Component">

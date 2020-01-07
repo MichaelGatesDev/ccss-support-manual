@@ -71,7 +71,7 @@ const BuildingSection = (props: Props) => {
   }, []);
 
 
-  const filterRoomsByName = (rooms: Room[], name: string, filterNumber: boolean = true, filterName: boolean = true, filterBuildingName: boolean = true): Room[] => rooms.filter((room: Room) => {
+  const filterRoomsByName = (rooms: Room[], name: string, filterNumber = true, filterName = true, filterBuildingName = true): Room[] => rooms.filter((room: Room) => {
     const pb = BuildingUtils.getParentBuilding(room, buildingsState.fetchedBuildings ?? []);
     if (pb === undefined) return false;
     return (

@@ -10,10 +10,7 @@ interface Props {
   height: string; // e.g. 100px
 }
 
-interface State {
-}
-
-export default class ImageCarousel extends PureComponent<Props, State> {
+export default class ImageCarousel extends PureComponent<Props> {
   render() {
     const { images, id, height } = this.props;
 
