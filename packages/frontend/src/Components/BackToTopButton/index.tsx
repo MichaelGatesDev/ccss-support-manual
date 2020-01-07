@@ -2,7 +2,8 @@ import "./style.scss";
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleUp } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   minScrollAmt: number;
@@ -50,9 +51,7 @@ export default (props: Props): JSX.Element | null => {
             data-toggle="tooltip"
             title="Back to Top"
           >
-            <span>
-              <i className="fas fa-arrow-alt-circle-up" />
-            </span>
+            <FontAwesomeIcon icon={faArrowCircleUp} />
           </button>
         </motion.div>
       )}
