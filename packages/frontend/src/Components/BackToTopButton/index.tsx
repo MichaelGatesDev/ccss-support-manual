@@ -1,81 +1,61 @@
-import React, { Component } from "react";
-import posed, { PoseGroup } from "react-pose";
-// import shortid from "shortid";
-
 import "./style.scss";
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 interface Props {
   minScrollAmt: number;
-  preventDefault?: boolean;
 }
 
-interface State {
-  visible: boolean;
-}
 
-const BackToTopButtonDiv = posed.div({
-  exit: { opacity: 0 },
-  enter: { opacity: 1 },
-});
+export default (props: Props): JSX.Element | null => {
 
-export default class BackToTopButton extends Component<Props, State> {
-  constructor(props: any) {
-    super(props);
+  const [visible, setVisible] = useState<boolean>(false);
 
-    this.state = {
-      visible: false,
-    };
-
-    this.onClick = this.onClick.bind(this);
-  }
-
-  componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
-
-  onClick(e: React.MouseEvent) {
-    const { preventDefault } = this.props;
-    if (preventDefault) {
-      e.preventDefault();
-    }
+  const onClick = (e: React.MouseEvent): void => {
+    e.preventDefault();
     window.scrollTo(0, 0);
-  }
-
-  handleScroll = () => {
-    const { minScrollAmt } = this.props;
-    const currentScrollAmt = window.scrollY;
-    this.setState({ visible: currentScrollAmt > minScrollAmt });
   };
 
-  render() {
-    const { visible } = this.state;
-    // if (!visible) return null;
-    return (
-      <PoseGroup flipMove={false}>
-        {
-          visible &&
-          (
-            <BackToTopButtonDiv className="BackToTopButton-Component" key="back-to-top-button">
-              <button
-                id="backToTop"
-                type="submit"
-                className="btn btn-primary"
-                onClick={this.onClick}
-                data-toggle="tooltip"
-                title="Back to Top"
-              >
-                <span>
-                  <i className="fas fa-arrow-alt-circle-up" />
-                </span>
-              </button>
-            </BackToTopButtonDiv>
-          )
-        }
-      </PoseGroup>
-    );
-  }
-}
+  const handleScroll = (): void => {
+    const { minScrollAmt } = props;
+    const currentScrollAmt = window.scrollY;
+    setVisible(currentScrollAmt > minScrollAmt);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return (): void => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // if (!visible) return null;
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          className="BackToTopButton-Component"
+          key="back-to-top-button"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <button
+            id="backToTop"
+            type="submit"
+            className="btn btn-primary"
+            onClick={onClick}
+            data-toggle="tooltip"
+            title="Back to Top"
+          >
+            <span>
+              <i className="fas fa-arrow-alt-circle-up" />
+            </span>
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
