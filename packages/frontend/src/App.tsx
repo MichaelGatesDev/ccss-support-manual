@@ -1,5 +1,7 @@
 import React from "react";
-import { Route, Switch, HashRouter } from "react-router-dom";
+import {
+  Route, Switch, HashRouter,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "./App.scss";
@@ -21,6 +23,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "bootstrap/dist/css/bootstrap-reboot.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import "jquery/dist/jquery.slim";
+import HomeV2 from "./Sections/HomeV2";
 
 
 const App = (): JSX.Element => (
@@ -33,6 +36,7 @@ const App = (): JSX.Element => (
       <div className="App">
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/v2" component={HomeV2} />
           <Route path="/settings" component={Settings} />
 
           <Route exact path="/buildings" component={BuildingsSection} />
