@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch, HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "./App.scss";
@@ -26,7 +26,7 @@ import "jquery/dist/jquery.slim";
 export default function App(): JSX.Element {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <HashRouter basename="/">
         {/* Back to top button */}
         <BackToTopButton
           minScrollAmt={50}
@@ -42,7 +42,7 @@ export default function App(): JSX.Element {
             <Route exact path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
           </Switch>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
   );
 }
