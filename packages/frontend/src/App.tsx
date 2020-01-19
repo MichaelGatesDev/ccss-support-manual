@@ -15,34 +15,33 @@ import BackToTopButton from "./Components/BackToTopButton";
 import RoomSection from "./Sections/RoomSection";
 import AddBuildingSection from "./Sections/AddBuildingSection";
 
+import "popper.js/dist/popper.min";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "bootstrap/dist/css/bootstrap-reboot.min.css";
 import "bootstrap/dist/js/bootstrap.min";
-
 import "jquery/dist/jquery.slim";
 
 
-export default function App(): JSX.Element {
-  return (
-    <Provider store={store}>
-      <HashRouter basename="/">
-        {/* Back to top button */}
-        <BackToTopButton
-          minScrollAmt={50}
-        />
-        <div className="App">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/settings" component={Settings} />
+const App = (): JSX.Element => (
+  <Provider store={store}>
+    <HashRouter basename="/">
+      {/* Back to top button */}
+      <BackToTopButton
+        minScrollAmt={50}
+      />
+      <div className="App">
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/settings" component={Settings} />
 
-            <Route exact path="/buildings" component={BuildingsSection} />
-            <Route exact path="/buildings/add" component={AddBuildingSection} />
-            <Route exact path="/buildings/:buildingName" component={BuildingSection} />
-            <Route exact path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
-          </Switch>
-        </div>
-      </HashRouter>
-    </Provider>
-  );
-}
+          <Route exact path="/buildings" component={BuildingsSection} />
+          <Route exact path="/buildings/add" component={AddBuildingSection} />
+          <Route exact path="/buildings/:buildingName" component={BuildingSection} />
+          <Route exact path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
+        </Switch>
+      </div>
+    </HashRouter>
+  </Provider>
+);
+export default App;
