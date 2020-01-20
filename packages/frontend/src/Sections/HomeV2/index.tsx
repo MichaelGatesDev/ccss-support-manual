@@ -70,10 +70,16 @@ export default (): JSX.Element => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
+
+    // fetch buildings
+    // fetch rooms
+
     // focus and keep search focused
     jQuery("#search").focus();
     jQuery("#search").blur(() => { jQuery("#search").focus(); });
   }, [searchQuery]);
+
+  const queries = searchQuery.split(" ").filter((q) => !StringUtils.isBlank(q));
 
   return (
     <>

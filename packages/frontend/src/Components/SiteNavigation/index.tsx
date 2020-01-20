@@ -37,6 +37,27 @@ export const SiteNavigation = (props: Props): JSX.Element => {
 
   return (
     <Navbar fixed="bottom" collapseOnSelect expand="md" className="flex-column" id="site-nav">
+      <Row className="w-100">
+        <Col>
+          <Navbar.Toggle aria-controls="primary-navbar-nav" />
+          <Navbar.Collapse id="primary-navbar-nav">
+            {brandVisible && (
+              <Navbar.Brand as={Link} to="/v2">Classroom Support Manual</Navbar.Brand>
+            )}
+            <Nav as={Col} className="justify-content-start">
+              <Nav.Item><Nav.Link as={Link} to="/buildings">Buildings</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link as={Link} to="/rooms">Rooms</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link as={Link} to="/troubleshooting">Troubleshooting</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link as={Link} to="/settings">Settings</Nav.Link></Nav.Item>
+            </Nav>
+            <Nav as={Col} className="justify-content-end">
+              <Nav.Item><Nav.Link as={Link} to="/">Master Schedule</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link as={Link} to="/">Room Schedule</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link as={Link} to="/">ServiceNow</Nav.Link></Nav.Item>
+            </Nav>
+          </Navbar.Collapse>
+        </Col>
+      </Row>
       <Row className="w-100 pt-1 pb-1">
         <Col>
           <InputGroup className="">
@@ -63,27 +84,6 @@ export const SiteNavigation = (props: Props): JSX.Element => {
               />
             )}
           </InputGroup>
-        </Col>
-      </Row>
-      <Row className="w-100">
-        <Col>
-          <Navbar.Toggle aria-controls="primary-navbar-nav" />
-          <Navbar.Collapse id="primary-navbar-nav">
-            {brandVisible && (
-              <Navbar.Brand as={Link} to="/v2">Classroom Support Manual</Navbar.Brand>
-            )}
-            <Nav as={Col} className="justify-content-start">
-              <Nav.Item><Nav.Link as={Link} to="/buildings">Buildings</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link as={Link} to="/rooms">Rooms</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link as={Link} to="/troubleshooting">Troubleshooting</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link as={Link} to="/settings">Settings</Nav.Link></Nav.Item>
-            </Nav>
-            <Nav as={Col} className="justify-content-end">
-              <Nav.Item><Nav.Link as={Link} to="/">Master Schedule</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link as={Link} to="/">Room Schedule</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link as={Link} to="/">ServiceNow</Nav.Link></Nav.Item>
-            </Nav>
-          </Navbar.Collapse>
         </Col>
       </Row>
     </Navbar>
