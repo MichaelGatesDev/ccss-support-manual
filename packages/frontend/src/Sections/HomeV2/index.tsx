@@ -94,17 +94,17 @@ const HomeV2 = (props: Props): JSX.Element => {
             <DefaultSection
               onSearchChange={(newValue: string): void => {
                 setSearchQuery(newValue);
-                setTimeout(() => jQuery("#search").focus(), 10);
+                setTimeout(() => jQuery("#search").focus(), 1);
               }}
             />
           )
           :
           (
             <div id="search-results">
-              <BuildingCardsDeck
+              {/* <BuildingCardsDeck
                 buildings={buildingsState.fetchedBuildings}
                 buildingsImages={[]}
-              />
+              /> */}
               <RoomCardsDeck
                 rooms={rooms}
                 roomsImages={[]}
