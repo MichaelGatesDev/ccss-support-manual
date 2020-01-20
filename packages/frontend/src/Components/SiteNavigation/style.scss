@@ -1,0 +1,13 @@
+#site-nav {
+  button {
+    &.navbar-toggler.collapsed,
+    &.navbar-toggler {
+      width: 100%;
+    }
+  }
+
+  .navbar-collapse {
+    z-index: 9999;
+    background-color: #ffffff;
+  }
+}

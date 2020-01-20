@@ -1,3 +1,5 @@
+import "./style.scss";
+
 import React from "react";
 import {
   Navbar, Row, Nav, Col, InputGroup, FormControl, FormControlProps,
@@ -8,6 +10,7 @@ import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontaw
 interface Props {
   brandVisible?: boolean;
 
+  searchID: string;
   searchVisible?: boolean;
   searchPrependIcon?: FontAwesomeIconProps["icon"];
   searchPlaceholder?: string;
@@ -29,10 +32,11 @@ export const SiteNavigation = (props: Props): JSX.Element => {
     searchAriaDescribedBy,
     onSearchChange,
     searchValue,
+    searchID,
   } = props;
 
   return (
-    <Navbar fixed="bottom" collapseOnSelect expand="md" className="flex-column">
+    <Navbar fixed="bottom" collapseOnSelect expand="md" className="flex-column" id="site-nav">
       <Row className="w-100 pt-1 pb-1">
         <Col>
           <InputGroup className="">
@@ -45,6 +49,7 @@ export const SiteNavigation = (props: Props): JSX.Element => {
             )}
             {searchVisible && (
               <FormControl
+                id={searchID}
                 placeholder={searchPlaceholder}
                 aria-label={searchAriaLabel}
                 aria-describedby={searchAriaDescribedBy}
