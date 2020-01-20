@@ -25,7 +25,6 @@ import {
     OperatingSystem
 } from "@ccss-support-manual/models";
 import { BuildingUtils } from "./building-utils";
-import _ from "lodash";
 
 export class RoomUtils {
 

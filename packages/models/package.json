@@ -1,16 +1,16 @@
 {
   "name": "@ccss-support-manual/models",
   "version": "0.0.0-dev",
+  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "description": "",
-  "private": true,
+  "files": [
+    "dist"
+  ],  
   "scripts": {
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@michaelgatesdev/common": "^1.1.4"
   },

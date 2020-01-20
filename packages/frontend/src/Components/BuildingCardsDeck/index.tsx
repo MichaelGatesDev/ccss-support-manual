@@ -9,7 +9,7 @@ import { CardDeck } from "../CardDeck";
 import { Card, HoverEffect } from "../Card";
 
 interface Props {
-  buildings: Building[];
+  buildings?: Building[];
   buildingsImages: BuildingImage[];
 }
 
@@ -20,7 +20,7 @@ export const BuildingCardsDeck = (props: Props) => {
   } = props;
   return (
     <CardDeck center>
-      {buildings.map((building) => {
+      {buildings !== undefined && buildings.map((building) => {
         const coverImages = buildingsImages.filter((image) => image.buildingName === building.internalName);
         return (
           <Card

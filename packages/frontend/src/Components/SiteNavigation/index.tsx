@@ -37,7 +37,7 @@ export const SiteNavigation = (props: Props): JSX.Element => {
 
   return (
     <Navbar fixed="bottom" collapseOnSelect expand="md" className="flex-column" id="site-nav">
-      <Row className="w-100">
+      <Row className="w-100 no-gutters">
         <Col>
           <Navbar.Toggle aria-controls="primary-navbar-nav" />
           <Navbar.Collapse id="primary-navbar-nav">

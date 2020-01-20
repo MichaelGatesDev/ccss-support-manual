@@ -2,8 +2,8 @@
   "name": "@ccss-support-manual/utilities",
   "version": "0.0.0-dev",
   "private": true,
-  "main": "./dist/index",
-  "types": "./dist/index",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "description": "",
   "files": [
     "dist"
