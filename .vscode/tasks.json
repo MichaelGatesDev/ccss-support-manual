@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "tsc-build-all",
-            "type": "shell",
-            "command": "yarn tsc",
+            "label": "transpile-all",
+            "type": "npm",
+            "script": "tsc",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -18,40 +18,28 @@
             "type": "shell",
             "command": "yarn build",
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "label": "build-app-linux",
             "type": "shell",
             "command": "yarn build:linux",
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "label": "build-app-windows",
             "type": "shell",
             "command": "yarn build:windows",
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "label": "build-app-mac",
             "type": "shell",
             "command": "yarn build:mac",
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         }
     ]
 }

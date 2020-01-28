@@ -9,12 +9,10 @@
   ],
   "references": [
     {
-      "path": "../models",
-      "prepend": false
+      "path": "../models/tsconfig.build.json"
     },
     {
-      "path": "../utilities",
-      "prepend": false
+      "path": "../utilities/tsconfig.build.json"
     }
   ]
 }
