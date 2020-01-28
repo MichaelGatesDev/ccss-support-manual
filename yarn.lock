@@ -4165,13 +4165,6 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/popper.js@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@types/popper.js/-/popper.js-1.11.0.tgz#217a9231953ded26b15a6264f9942e963a8f6e69"
-  integrity sha512-1SDEDA6VacGAqDOmwbMcJD39bg0sHbM8y6LHOV3CMxyDBRrwTodRyIIj5f4eR/nlgpeyPoG1fKXqbkRmg+5yRg==
-  dependencies:
-    popper.js "*"
-
 "@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
@@ -13663,7 +13656,7 @@ popmotion@9.0.0-beta-8:
     style-value-types "^3.1.6"
     tslib "^1.10.0"
 
-popper.js@*, popper.js@^1.14.1, popper.js@^1.15.0, popper.js@^1.16.0:
+popper.js@^1.14.1, popper.js@^1.15.0, popper.js@^1.16.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.0.tgz#2e1816bcbbaa518ea6c2e15a466f4cb9c6e2fbb3"
   integrity sha512-+G+EkOPoE5S/zChTpmBSSDYmhXJ5PsW8eMhH8cP/CQHMFPBG/kC9Y5IIw6qNYgdJ+/COf0ddY2li28iHaZRSjw==

@@ -17,7 +17,7 @@ import BackToTopButton from "./Components/BackToTopButton";
 import RoomSection from "./Sections/RoomSection";
 import AddBuildingSection from "./Sections/AddBuildingSection";
 
-import "popper.js/dist/popper.min";
+import "popper.js/dist/umd/popper.min";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "bootstrap/dist/css/bootstrap-reboot.min.css";
