@@ -7,7 +7,7 @@
     "tsc": "tsc -b --force tsconfig.build.json",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/main.ts",
     "dev:inspect": "ts-node-dev --inspect --respawn --transpileOnly ./src/main.ts",
-    "prod": "yarn tsc && node ./build/src/main.js",
+    "prod": "yarn tsc && node ./dist/main.js",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
   },
   "pkg": {

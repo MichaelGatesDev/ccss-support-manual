@@ -6,7 +6,7 @@
         "packages/*"
     ],
     "scripts": {
-      "start:backend": "yarn workspace @ccss-support-manual/backend run start:dev",
+      "start:backend": "yarn workspace @ccss-support-manual/backend run dev",
       "start:frontend": "yarn workspace @ccss-support-manual/frontend run start",
       "tsc": "lerna run tsc",
       "clean": "tsnd scripts/clean.ts",
