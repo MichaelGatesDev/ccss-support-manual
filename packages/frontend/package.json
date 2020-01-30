@@ -1,8 +1,9 @@
 {
   "name": "@ccss-support-manual/frontend",
-  "version": "0.0.0-dev",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
+    "tsc": "",
     "eslint": "npx eslint --ext .ts,.tsx ./",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
@@ -10,8 +11,8 @@
   },
   "dependencies": {
     "@babel/core": "7.7.7",
-    "@ccss-support-manual/models": "0.0.0-dev",
-    "@ccss-support-manual/utilities": "0.0.0-dev",
+    "@ccss-support-manual/models": "1.0.0",
+    "@ccss-support-manual/utilities": "1.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/react-fontawesome": "^0.1.8",
