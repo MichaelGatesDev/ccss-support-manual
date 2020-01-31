@@ -2,13 +2,14 @@
   "name": "@ccss-support-manual/models",
   "version": "1.0.0",
   "private": true,
+  "main": "dist/index",
   "types": "dist/index",
   "files": [
     "dist"
   ],
   "scripts": {
-    "tsc": "tsc -b --force tsconfig.build.json",
-    "clean": "tsc -b --force tsconfig.build.json --clean",
+    "tsc": "tsc -p tsconfig.build.json",
+    "clean": "tsc -p tsconfig.build.json --clean",
     "lint": "eslint . --ext .js,.ts --ignore-path='../../.eslintignore'",
     "test": "jest --coverage --passWithNoTests",
     "typecheck": "tsc -p tsconfig.json --noEmit"
