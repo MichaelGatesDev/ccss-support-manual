@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "tsc": "",
     "eslint": "npx eslint --ext .ts,.tsx ./",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
