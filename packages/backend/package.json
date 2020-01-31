@@ -15,9 +15,9 @@
     "assets": [
       "views/**/*",
       "build/dist/**/*",
-      "node_modules/@ccss-support-manual/models/lib/**/*.js",
+      "node_modules/@ccss-support-manual/models/dist/**/*.js",
       "node_modules/@ccss-support-manual/models/package.json",
-      "node_modules/@ccss-support-manual/utilities/lib/**/*.js",
+      "node_modules/@ccss-support-manual/utilities/dist/**/*.js",
       "node_modules/@ccss-support-manual/utilities/package.json"
     ]
   },
