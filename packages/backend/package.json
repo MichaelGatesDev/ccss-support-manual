@@ -11,6 +11,9 @@
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
   },
   "pkg": {
+    "targets": [
+      "node10"
+    ],
     "scripts": "build/**/*.js",
     "assets": [
       "views/**/*",

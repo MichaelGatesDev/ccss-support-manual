@@ -3,6 +3,8 @@ import fs from "fs";
 import { compile } from "nexe";
 import path from "path";
 
+import rootPackageJson from "../package.json";
+
 const rootDir = path.join(__dirname, "..");
 const finalBuildDir = path.join(rootDir, "build");
 const frontendDir = path.join(rootDir, "packages", "frontend");
@@ -12,25 +14,23 @@ const backendBuildDir = path.join(backendDir, "build");
 
 // cleanup old files
 console.log("Performing cleanup...");
-execSync("yarn run clean");
+execSync("yarn run clean", { stdio: "inherit" });
 
 // transpile files
 console.log("Transpiling Typescript files...");
-execSync("yarn run tsc");
+execSync("yarn run tsc", { stdio: "inherit" });
 
 // build frontend
 console.log("Building frontend files...");
-execSync("yarn workspace @ccss-support-manual/frontend run build");
+execSync("yarn workspace @ccss-support-manual/frontend run build", { stdio: "inherit" });
 console.log("Moving frontend build files to backend dist folder...");
 fs.renameSync(frontendBuildDir, path.join(backendBuildDir, "dist"));
 
-// compile executable
-console.log("Compiling binaries...");
 
 function compileNEXE(platform: string): Promise<void> {
     return compile({
         input: "packages/backend/build/main.js",
-        output: `${finalBuildDir}/${require("../package.json").name}-${platform}`,
+        output: `${finalBuildDir}/${rootPackageJson.name}-${platform}`,
         resources: [
             "packages/backend/views/**/*",
             "packages/backend/build/dist/**/*",
@@ -52,9 +52,14 @@ function compileNEXE(platform: string): Promise<void> {
 }
 
 function compilePKG(platform: string): void {
-    const cmd = `yarn run pkg packages/backend/build/main.js --output=${finalBuildDir}/${require("../package.json").name}-${platform}`;
-    execSync(`${cmd} --target=${platform}`);
+    const cmd = `yarn run pkg ${backendDir}`;
+    const outputParam = `--output=${path.join(finalBuildDir, rootPackageJson.name)}-${platform}`;
+    const targetParam = `--targets=node10-${platform}`;
+    execSync(`${cmd} ${outputParam} ${targetParam}`, { stdio: "inherit" });
 }
+
+// compile executable
+console.log("Compiling binaries...");
 
 const args = process.argv;
 const target: string | undefined = args.find((arg) => arg.startsWith("--target"));
