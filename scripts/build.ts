@@ -20,15 +20,15 @@ execSync("yarn run tsc");
 
 // build frontend
 console.log("Building frontend files...");
-execSync("yarn run compile:frontend");
+execSync("yarn workspace @ccss-support-manual/frontend run build");
 console.log("Moving frontend build files to backend dist folder...");
 fs.renameSync(frontendBuildDir, path.join(backendBuildDir, "dist"));
 
 // compile executable
 console.log("Compiling binaries...");
 
-function compileNEXE(platform: string) {
-    compile({
+function compileNEXE(platform: string): Promise<void> {
+    return compile({
         input: "packages/backend/build/main.js",
         output: `${finalBuildDir}/${require("../package.json").name}-${platform}`,
         resources: [
@@ -51,7 +51,7 @@ function compileNEXE(platform: string) {
     });
 }
 
-function compilePKG(platform: string) {
+function compilePKG(platform: string): void {
     const cmd = `yarn run pkg packages/backend/build/main.js --output=${finalBuildDir}/${require("../package.json").name}-${platform}`;
     execSync(`${cmd} --target=${platform}`);
 }

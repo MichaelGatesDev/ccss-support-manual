@@ -39,6 +39,7 @@ module.exports = {
     "no-restricted-syntax": 0,
     "no-shadow": 0,
     "operator-linebreak": 0,
+    "linebreak-style": 0,
     "jsx-a11y/no-static-element-interactions": 0,
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/control-has-associated-label": 0,

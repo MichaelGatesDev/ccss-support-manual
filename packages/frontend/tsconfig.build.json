@@ -1,18 +1,21 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-      "declaration": false,
-      "declarationMap": false,
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "resolveJsonModule": true
-  },
-  "include": [
-      "src"
-  ],
-  "references": [
-      {
-          "path": "../common/tsconfig.build.json"
-      }
-  ]
+    "extends": "../../tsconfig.build.json",
+    "compilerOptions": {
+        "declaration": false,
+        "declarationMap": false,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "resolveJsonModule": true
+    },
+    "include": [
+        "src"
+    ],
+    "references": [
+        {
+            "path": "../models/tsconfig.build.json"
+        },
+        {
+            "path": "../utilities/tsconfig.build.json"
+        }
+    ]
 }

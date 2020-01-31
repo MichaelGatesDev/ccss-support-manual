@@ -1,5 +1,5 @@
 {
-    "name": "@ccss-support-manual/ccss-support-manual",
+    "name": "ccss-support-manual",
     "private": true,
     "version": "1.3.25",
     "workspaces": [
@@ -14,7 +14,8 @@
         "lint": "eslint . --ext .js,.ts",
         "lint-fix": "eslint . --ext .js,.ts --fix",
         "postinstall": "lerna bootstrap && yarn tsc && lerna link",
-        "test": "lerna run test --concurrency 1"
+        "test": "lerna run test --concurrency 1",
+        "build": "tsnd scripts/build.ts --target=all --system=pkg"
     },
     "devDependencies": {
         "@types/jest": "^25.1.0",
