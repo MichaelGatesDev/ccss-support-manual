@@ -1,5 +1,6 @@
 import { ServerWrapper } from "./server";
 import { app } from "./app";
+import nodeCleanup from "node-cleanup";
 
 
 // create new server wrapper
@@ -9,4 +10,7 @@ myServer.init();
 // initialize the application
 app.initialize();
 
-process.on('SIGINT', () => app.deinitialize());
+nodeCleanup(function (exitCode, signal) {
+    // release resources here before node exits
+    app.deinitialize();
+});
