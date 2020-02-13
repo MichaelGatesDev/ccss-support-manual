@@ -51,12 +51,12 @@ const BackupDataSegment = (props: Props) => {
     performBackup,
   } = props;
 
+  useEffect(() => {
+  }, []);
+
   if (backupState === undefined) {
     return <p>Waiting for backup state..</p>; // TODO splash screen
   }
-
-  useEffect(() => {
-  }, []);
 
   const modifyAll = (type: BackupSettingsType, active: boolean): void => {
     switch (type) {
