@@ -1,7 +1,6 @@
 *.tsbuildinfo
 build
 dist
-public
 .yarn
 .yarnrc
 

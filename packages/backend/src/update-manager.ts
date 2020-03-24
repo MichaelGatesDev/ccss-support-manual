@@ -1,212 +1,209 @@
-import fetch from "node-fetch";
-import os from "os";
+// import fetch from "node-fetch";
+// import os from "os";
 
-import { Logger } from "@michaelgatesdev/common";
-import { WebDownloader, FileUtils } from "@michaelgatesdev/common-io";
+// import { Logger } from "@michaelgatesdev/common";
+// import { WebDownloader, FileUtils } from "@michaelgatesdev/common-io";
 
-import { app } from "./app";
+// import { app } from "./app";
 
-interface ReleaseDownload {
-    name: string;
-    url: string;
-}
+// interface ReleaseDownload {
+//     name: string;
+//     url: string;
+// }
 
-interface Release {
-    version: string;
-    downloads: ReleaseDownload[];
-}
+// interface Release {
+//     version: string;
+//     downloads: ReleaseDownload[];
+// }
 
-enum VersionComparisonResult {
-    Lower,
-    Equal,
-    Greater,
-    Unknown,
-}
+// enum VersionComparisonResult {
+//     Lower,
+//     Equal,
+//     Greater,
+//     Unknown,
+// }
 
-export class UpdateManager {
+// export class UpdateManager {
 
-    private versionPattern = /((\d+)\.(\d+)\.(\d+))/;
+//     private versionPattern = /((\d+)\.(\d+)\.(\d+))/;
 
-    public latestVersion: Release | undefined;
+//     public latestVersion: Release | undefined;
 
+//     public async initialize(): Promise<void> {
+//         const oldFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".old"));
+//         if (oldFiles.length > 0) {
+//             const names = oldFiles.map((file) => file.path);
+//             Logger.debug(`Found old application files, deleting:\n${names.join("\n")}\n`);
+//             await Promise.all(names.map((name) => FileUtils.delete(name)));
+//         }
 
-    public async initialize(): Promise<void> {
-        const oldFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".old"));
-        if (oldFiles.length > 0) {
-            const names = oldFiles.map((file) => file.path);
-            Logger.debug(`Found old application files, deleting:\n${names.join("\n")}\n`);
-            await Promise.all(names.map((name) => FileUtils.delete(name)));
-        }
+//         const updateFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".update"));
+//         if (updateFiles.length > 0) {
+//             const first = updateFiles[0];
+//             Logger.debug(`Found new application file: ${first.path}`);
+//             //TODO apply old downloaded file
+//         }
+//     }
 
-        const updateFiles = (await FileUtils.list(app.ROOT_DIR)).filter((file) => file.path.toLowerCase().includes(".update"));
-        if (updateFiles.length > 0) {
-            const first = updateFiles[0];
-            Logger.debug(`Found new application file: ${first.path}`);
-            //TODO apply old downloaded file
-        }
-    }
+//     public async getLatestUpdate(): Promise<Release> {
+//         const config = app.configManager.appConfig;
+//         if (config === undefined) throw new Error("Application configuration not found!");
+//         const url = config.programReleaseURL;
 
+//         const json: any[] = await fetch(url).then((body) => body.json());
+//         if (json.length < 1) throw new Error("There are no releases!");
 
-    public async getLatestUpdate(): Promise<Release> {
-        const config = app.configManager.appConfig;
-        if (config === undefined) throw new Error("Application configuration not found!");
-        const url = config.programReleaseURL;
+//         const newest = json[0];
+//         const version = newest.tag_name; // i.e. v1.3.6
 
-        const json: any[] = await fetch(url).then((body) => body.json());
-        if (json.length < 1) throw new Error("There are no releases!");
+//         const assets = newest.assets;
 
-        const newest = json[0];
-        const version = newest.tag_name; // i.e. v1.3.6
+//         const downloads: ReleaseDownload[] = [];
+//         for (const asset of assets) {
+//             const assetName: string = asset.name;
+//             const assetDownloadURL: string = asset.browser_download_url;
+//             downloads.push({
+//                 name: assetName,
+//                 url: assetDownloadURL,
+//             });
+//         }
 
-        const assets = newest.assets;
+//         return {
+//             version,
+//             downloads,
+//         };
+//     }
 
-        const downloads: ReleaseDownload[] = [];
-        for (const asset of assets) {
-            const assetName: string = asset.name;
-            const assetDownloadURL: string = asset.browser_download_url;
-            downloads.push({
-                name: assetName,
-                url: assetDownloadURL,
-            });
-        }
+//     public async check(): Promise<boolean> {
+//         try {
+//             const latest = await this.getLatestUpdate();
 
-        return {
-            version,
-            downloads,
-        };
-    }
+//             const masterPackageJSON = app.masterPackageJSON;
+//             if (masterPackageJSON === undefined) {
+//                 throw new Error("Master package.json not found");
+//             }
 
-    public async check(): Promise<boolean> {
-        try {
-            const latest = await this.getLatestUpdate();
+//             let currentVersion = masterPackageJSON.version;
+//             let latestVersion = latest.version;
+//             {
+//                 const match = currentVersion.match(this.versionPattern);
+//                 if (match && match.length >= 1) {
+//                     currentVersion = match[0];
+//                 }
+//             }
+//             {
+//                 const match = latestVersion.match(this.versionPattern);
+//                 if (match && match.length >= 1) {
+//                     latestVersion = match[0];
+//                 }
+//             }
 
-            const masterPackageJSON = app.masterPackageJSON;
-            if (masterPackageJSON === undefined) {
-                throw new Error("Master package.json not found");
-            }
+//             // same version
+//             if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Equal) return false;
+//             // current version is higher than latest release version
+//             if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Greater) return false;
 
-            let currentVersion = masterPackageJSON.version;
-            let latestVersion = latest.version;
-            {
-                const match = currentVersion.match(this.versionPattern);
-                if (match && match.length >= 1) {
-                    currentVersion = match[0];
-                }
-            }
-            {
-                const match = latestVersion.match(this.versionPattern);
-                if (match && match.length >= 1) {
-                    latestVersion = match[0];
-                }
-            }
+//             this.latestVersion = latest;
+//             return true;
+//         } catch (error) {
+//             Logger.error("There was an error fetching the latest update!");
+//             Logger.error(error);
+//             return false;
+//         }
+//     }
 
-            // same version
-            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Equal) return false;
-            // current version is higher than latest release version
-            if (this.versionCompare(currentVersion, latestVersion) === VersionComparisonResult.Greater) return false;
+//     public async forceDownloadLatest(): Promise<void> {
+//         await this.downloadAndApplyUpdate(await this.getLatestUpdate());
+//     }
 
-            this.latestVersion = latest;
-            return true;
-        } catch (error) {
-            Logger.error("There was an error fetching the latest update!");
-            Logger.error(error);
-            return false;
-        }
-    }
+//     public async downloadAndApplyUpdate(release: Release | undefined = this.latestVersion): Promise<void> {
 
-    public async forceDownloadLatest(): Promise<void> {
-        await this.downloadAndApplyUpdate(await this.getLatestUpdate());
-    }
+//         await this.download(release);
 
-    public async downloadAndApplyUpdate(release: Release | undefined = this.latestVersion): Promise<void> {
+//         await this.apply();
 
-        await this.download(release);
+//         await this.afterUpdate();
+//     }
 
-        await this.apply();
+//     private async download(release: Release | undefined = this.latestVersion): Promise<void> {
+//         if (release === undefined) {
+//             throw new Error("There is no release to download & apply");
+//         }
 
-        await this.afterUpdate();
-    }
+//         let download: ReleaseDownload | undefined = undefined;
+//         switch (os.type().toLowerCase()) {
+//             case "linux":
+//                 download = release.downloads.find((download) => download.name.includes("linux"));
+//                 break;
+//             case "darwin":
+//                 download = release.downloads.find((download) => download.name.includes("mac"));
+//                 break;
+//             case "windows_nt":
+//                 download = release.downloads.find((download) => download.name.includes("win"));
+//                 break;
+//         }
+//         if (download === undefined) throw new Error("Download is undefined!");
 
-    private async download(release: Release | undefined = this.latestVersion): Promise<void> {
-        if (release === undefined) {
-            throw new Error("There is no release to download & apply");
-        }
+//         // download update file
+//         Logger.info(`Downloading ${download.name}...`);
+//         const updateFilePath = `${app.masterPackageJSON.name}.update`;
+//         await new WebDownloader(download.url, updateFilePath).download();
+//         Logger.info("Download complete!");
+//     }
 
-        let download: ReleaseDownload | undefined = undefined;
-        switch (os.type().toLowerCase()) {
-            case "linux":
-                download = release.downloads.find((download) => download.name.includes("linux"));
-                break;
-            case "darwin":
-                download = release.downloads.find((download) => download.name.includes("mac"));
-                break;
-            case "windows_nt":
-                download = release.downloads.find((download) => download.name.includes("win"));
-                break;
-        }
-        if (download === undefined) throw new Error("Download is undefined!");
+//     private async apply(): Promise<void> {
 
-        // download update file
-        Logger.info(`Downloading ${download.name}...`);
-        const updateFilePath = `${app.masterPackageJSON.name}.update`;
-        await new WebDownloader(download.url, updateFilePath).download();
-        Logger.info("Download complete!");
-    }
+//         if (this.latestVersion === undefined) {
+//             throw new Error("Latest version is undefined!");
+//         }
 
-    private async apply(): Promise<void> {
+//         let appName = app.masterPackageJSON.name;
+//         if (os.type().toLowerCase() === "windows_nt") {
+//             appName += ".exe";
+//         }
 
-        if (this.latestVersion === undefined) {
-            throw new Error("Latest version is undefined!");
-        }
+//         // rename current process to append .old
+//         app.rename(appName, `${appName}.old`);
+//         Logger.debug(`Renamed file: ${appName} -> ${appName}.old`);
 
-        let appName = app.masterPackageJSON.name;
-        if (os.type().toLowerCase() === "windows_nt") {
-            appName += ".exe";
-        }
+//         // rename downloaded file to original process name
+//         app.rename(`${appName}.update`, `${appName}`);
+//         Logger.debug(`Renamed file: ${appName}.update -> ${appName}`);
+//     }
 
-        // rename current process to append .old
-        app.rename(appName, `${appName}.old`);
-        Logger.debug(`Renamed file: ${appName} -> ${appName}.old`);
+//     public async afterUpdate(): Promise<void> {
+//         return new Promise(() => {
+//             Logger.info("To complete the update, the application must exit. You will need to reopen it manually.")
+//             let remaining = 5;
+//             const timer = setInterval(() => {
+//                 if (remaining <= 0) {
+//                     clearInterval(timer);
+//                     process.exit(0);
+//                     // return;
+//                 }
+//                 Logger.info(`Application will close in ${remaining} seconds`);
+//                 remaining--;
+//             }, 1000);
+//         });
+//     }
 
-        // rename downloaded file to original process name
-        app.rename(`${appName}.update`, `${appName}`);
-        Logger.debug(`Renamed file: ${appName}.update -> ${appName}`);
-    }
+//     /**
+//      * Returns the version comparison for the left compared to the right
+//      */
+//     private versionCompare = (left: string, right: string): VersionComparisonResult => {
+//         const a = left.split('.');
+//         const b = right.split('.');
+//         const len = Math.max(a.length, b.length);
+//         let i = 0;
 
-    public async afterUpdate(): Promise<void> {
-        return new Promise(() => {
-            Logger.info("To complete the update, the application must exit. You will need to reopen it manually.")
-            let remaining = 5;
-            const timer = setInterval(() => {
-                if (remaining <= 0) {
-                    clearInterval(timer);
-                    process.exit(0);
-                    // return;
-                }
-                Logger.info(`Application will close in ${remaining} seconds`);
-                remaining--;
-            }, 1000);
-        });
-    }
+//         for (; i < len; i++) {
+//             if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
+//                 return VersionComparisonResult.Greater;
+//             } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
+//                 return VersionComparisonResult.Lower;
+//             }
+//         }
 
-
-    /**
-     * Returns the version comparison for the left compared to the right
-     */
-    private versionCompare = (left: string, right: string): VersionComparisonResult => {
-        const a = left.split('.');
-        const b = right.split('.');
-        const len = Math.max(a.length, b.length);
-        let i = 0;
-
-        for (; i < len; i++) {
-            if ((a[i] && !b[i] && parseInt(a[i]) > 0) || (parseInt(a[i]) > parseInt(b[i]))) {
-                return VersionComparisonResult.Greater;
-            } else if ((b[i] && !a[i] && parseInt(b[i]) > 0) || (parseInt(a[i]) < parseInt(b[i]))) {
-                return VersionComparisonResult.Lower;
-            }
-        }
-
-        return VersionComparisonResult.Equal;
-    };
-}
+//         return VersionComparisonResult.Equal;
+//     };
+// }

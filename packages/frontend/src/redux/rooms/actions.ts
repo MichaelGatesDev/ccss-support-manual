@@ -9,13 +9,18 @@ import {
   REQUEST_FETCH_ROOM_SUCCESS,
 } from "./types";
 
-
-export const fetchRooms = (buildingName?: string) => async (dispatch: Dispatch) => {
+export const fetchRooms = (buildingName?: string) => async (
+  dispatch: Dispatch
+) => {
   dispatch({
     type: REQUEST_FETCH_ROOMS,
   });
   try {
-    const response = await fetch(buildingName !== undefined ? `/api/v1/buildings/${buildingName}/rooms/` : "/api/v1/rooms");
+    const response = await fetch(
+      buildingName !== undefined
+        ? `http://localhost:3001/api/v1/buildings/${buildingName}/rooms/`
+        : "http://localhost:3001/api/v1/rooms"
+    );
     // Bad response (error)
     if (!response.ok) {
       const error = await response.text();
@@ -31,8 +36,7 @@ export const fetchRooms = (buildingName?: string) => async (dispatch: Dispatch) 
       type: REQUEST_FETCH_ROOMS_SUCCESS,
       data: json as Room[],
     });
-  }
-  catch (error) {
+  } catch (error) {
     dispatch({
       type: REQUEST_FETCH_ROOMS_FAILURE,
       error,
@@ -40,12 +44,17 @@ export const fetchRooms = (buildingName?: string) => async (dispatch: Dispatch) 
   }
 };
 
-export const fetchRoom = (buildingName: string, roomNumber: string | number) => async (dispatch: Dispatch) => {
+export const fetchRoom = (
+  buildingName: string,
+  roomNumber: string | number
+) => async (dispatch: Dispatch) => {
   dispatch({
     type: REQUEST_FETCH_ROOM,
   });
   try {
-    const response = await fetch(`/api/v1/buildings/${buildingName}/rooms/${roomNumber}`);
+    const response = await fetch(
+      `http://localhost:3001/api/v1/buildings/${buildingName}/rooms/${roomNumber}`
+    );
     // Bad response (error)
     if (!response.ok) {
       const error = await response.text();
@@ -61,8 +70,7 @@ export const fetchRoom = (buildingName: string, roomNumber: string | number) => 
       type: REQUEST_FETCH_ROOM_SUCCESS,
       data: json as Room,
     });
-  }
-  catch (error) {
+  } catch (error) {
     dispatch({
       type: REQUEST_FETCH_ROOM_FAILURE,
       error,

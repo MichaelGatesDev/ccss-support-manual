@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Route, Switch, HashRouter,
-} from "react-router-dom";
+import { Route, Switch, HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import "./App.scss";
@@ -25,14 +23,11 @@ import "bootstrap/dist/js/bootstrap.min";
 import "jquery/dist/jquery.slim";
 import HomeV2 from "./Sections/HomeV2";
 
-
 const App = (): JSX.Element => (
   <Provider store={store}>
     <HashRouter basename="/">
       {/* Back to top button */}
-      <BackToTopButton
-        minScrollAmt={50}
-      />
+      <BackToTopButton minScrollAmt={50} />
       <div className="App">
         <Switch>
           <Route exact path="/" component={Home} />
@@ -41,8 +36,16 @@ const App = (): JSX.Element => (
 
           <Route exact path="/buildings" component={BuildingsSection} />
           <Route exact path="/buildings/add" component={AddBuildingSection} />
-          <Route exact path="/buildings/:buildingName" component={BuildingSection} />
-          <Route exact path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} />
+          <Route
+            exact
+            path="/buildings/:buildingName"
+            component={BuildingSection}
+          />
+          <Route
+            exact
+            path="/buildings/:buildingName/rooms/:roomNumber"
+            component={RoomSection}
+          />
         </Switch>
       </div>
     </HashRouter>

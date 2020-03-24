@@ -10,27 +10,29 @@ import {
 
 export function fetchRestoreOptions() {
   return (dispatch: Dispatch) => {
-    fetch("/api/v1/restore")
-      .then((response) => response.json())
+    fetch("http://localhost:3001/api/v1/restore")
+      .then(response => response.json())
       .then((options: string[]): void => {
         dispatch({
           type: FETCH_RESTORE_OPTIONS,
           payload: options,
         });
-      }).catch((error) => {
+      })
+      .catch(error => {
         console.error("Failed to fetch restore options");
         console.error(error);
       });
   };
 }
 
-export const performRestore = (options: BackupRestoreOptions) => async (dispatch: Dispatch) => {
-
+export const performRestore = (options: BackupRestoreOptions) => async (
+  dispatch: Dispatch
+) => {
   dispatch({
     type: PERFORM_RESTORE,
   });
   try {
-    const response = await fetch("/api/v1/restore", {
+    const response = await fetch("http://localhost:3001/api/v1/restore", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -54,8 +56,7 @@ export const performRestore = (options: BackupRestoreOptions) => async (dispatch
       type: PERFORM_RESTORE_SUCCESS,
       data: undefined,
     });
-  }
-  catch (error) {
+  } catch (error) {
     dispatch({
       type: PERFORM_RESTORE_FAILURE,
       error,

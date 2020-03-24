@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
+    "composite": false,
+    "rootDir": "src",
+    "outDir": "dist",
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -10,14 +13,11 @@
     "types": ["node"],
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src", "typings", "tests"],
+  "include": ["src"],
   "exclude": ["node_modules", "src/public/"],
   "references": [
     {
-      "path": "../models/tsconfig.build.json"
-    },
-    {
-      "path": "../utilities/tsconfig.build.json"
+      "path": "../backend/tsconfig.build.json"
     }
   ]
 }

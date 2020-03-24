@@ -9,11 +9,7 @@ interface Props {
 }
 
 export const SettingsSegment = (props: Props) => {
-  const {
-    id,
-    title,
-    children,
-  } = props;
+  const { id, title, children } = props;
 
   return (
     <div className="Component-SettingsSegment row segment" id={id}>

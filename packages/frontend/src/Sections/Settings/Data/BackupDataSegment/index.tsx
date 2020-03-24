@@ -28,31 +28,42 @@ enum BackupSettingsType {
 }
 
 const BackupDataSegment = (props: Props) => {
-
   const [backupName, setBackupName] = useState<string>("");
 
   const [backupBuildings, setBackupBuildings] = useState<boolean>(true);
   const [backupRooms, setBackupRooms] = useState<boolean>(true);
-  const [backupTroubleshooting, setBackupTroubleshooting] = useState<boolean>(true);
+  const [backupTroubleshooting, setBackupTroubleshooting] = useState<boolean>(
+    true
+  );
 
-  const [backupBuildingImages, setBackupBuildingImages] = useState<boolean>(true);
-  const [backupRoomEquipmentImages, setBackupRoomEquipmentImages] = useState<boolean>(true);
-  const [backupRoomPanoramicImages, setBackupRoomPanoramicImages] = useState<boolean>(true);
-  const [backupRoomTitleImages, setBackupRoomTitleImages] = useState<boolean>(true);
-  const [backupRoomCoverImages, setBackupRoomCoverImages] = useState<boolean>(true);
+  const [backupBuildingImages, setBackupBuildingImages] = useState<boolean>(
+    true
+  );
+  const [backupRoomEquipmentImages, setBackupRoomEquipmentImages] = useState<
+    boolean
+  >(true);
+  const [backupRoomPanoramicImages, setBackupRoomPanoramicImages] = useState<
+    boolean
+  >(true);
+  const [backupRoomTitleImages, setBackupRoomTitleImages] = useState<boolean>(
+    true
+  );
+  const [backupRoomCoverImages, setBackupRoomCoverImages] = useState<boolean>(
+    true
+  );
 
-  const [backupApplicationConfig, setBackupApplicationConfig] = useState<boolean>(true);
+  const [backupApplicationConfig, setBackupApplicationConfig] = useState<
+    boolean
+  >(true);
   const [backupImagesConfig, setBackupImagesConfig] = useState<boolean>(true);
-  const [backupTroubleshootingKeywordsConfig, setBackupTroubleshootingKeywordsConfig] = useState<boolean>(true);
+  const [
+    backupTroubleshootingKeywordsConfig,
+    setBackupTroubleshootingKeywordsConfig,
+  ] = useState<boolean>(true);
 
+  const { backupState, performBackup } = props;
 
-  const {
-    backupState,
-    performBackup,
-  } = props;
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   if (backupState === undefined) {
     return <p>Waiting for backup state..</p>; // TODO splash screen
@@ -60,7 +71,8 @@ const BackupDataSegment = (props: Props) => {
 
   const modifyAll = (type: BackupSettingsType, active: boolean): void => {
     switch (type) {
-      default: break;
+      default:
+        break;
       case BackupSettingsType.Data:
         setBackupBuildings(active);
         setBackupRooms(active);
@@ -109,7 +121,13 @@ const BackupDataSegment = (props: Props) => {
           troubleshooting: backupTroubleshooting,
         },
         images: {
-          all: backupBuildingImages && backupRoomEquipmentImages && backupRoomEquipmentImages && backupRoomPanoramicImages && backupRoomTitleImages && backupRoomCoverImages,
+          all:
+            backupBuildingImages &&
+            backupRoomEquipmentImages &&
+            backupRoomEquipmentImages &&
+            backupRoomPanoramicImages &&
+            backupRoomTitleImages &&
+            backupRoomCoverImages,
           buildingImages: backupBuildingImages,
           room_equipmentImages: backupRoomEquipmentImages,
           room_panoramicImages: backupRoomPanoramicImages,
@@ -117,7 +135,10 @@ const BackupDataSegment = (props: Props) => {
           room_coverImages: backupRoomCoverImages,
         },
         settings: {
-          all: backupApplicationConfig && backupImagesConfig && backupTroubleshootingKeywordsConfig,
+          all:
+            backupApplicationConfig &&
+            backupImagesConfig &&
+            backupTroubleshootingKeywordsConfig,
           applicationConfig: backupApplicationConfig,
           imagesConfig: backupImagesConfig,
           troubleshootingKeywordsConfig: backupTroubleshootingKeywordsConfig,
@@ -132,24 +153,18 @@ const BackupDataSegment = (props: Props) => {
   };
 
   return (
-    <SettingsSegment
-      id="backup-data"
-      title="Backup Data"
-    >
+    <SettingsSegment id="backup-data" title="Backup Data">
       <>
         {/* Error messages row */}
-        {
-          backupState !== undefined && backupState.error &&
-          (
-            <div className="row">
-              <div className="col">
-                <div className="alert alert-danger" role="alert">
-                  {backupState.error}
-                </div>
+        {backupState !== undefined && backupState.error && (
+          <div className="row">
+            <div className="col">
+              <div className="alert alert-danger" role="alert">
+                {backupState.error}
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
 
         {/* Backup File Name */}
         <NamedRow
@@ -181,7 +196,9 @@ const BackupDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(BackupSettingsType.Data, true); }}
+                        onClick={() => {
+                          modifyAll(BackupSettingsType.Data, true);
+                        }}
                         preventDefault
                       >
                         <span>Select All</span>
@@ -190,7 +207,9 @@ const BackupDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(BackupSettingsType.Data, false); }}
+                        onClick={() => {
+                          modifyAll(BackupSettingsType.Data, false);
+                        }}
                         preventDefault
                       >
                         <span>Select None</span>
@@ -237,7 +256,9 @@ const BackupDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(BackupSettingsType.Images, true); }}
+                        onClick={() => {
+                          modifyAll(BackupSettingsType.Images, true);
+                        }}
                         preventDefault
                       >
                         <span>Select All</span>
@@ -246,7 +267,9 @@ const BackupDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(BackupSettingsType.Images, false); }}
+                        onClick={() => {
+                          modifyAll(BackupSettingsType.Images, false);
+                        }}
                         preventDefault
                       >
                         <span>Select None</span>
@@ -311,7 +334,9 @@ const BackupDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(BackupSettingsType.Settings, true); }}
+                        onClick={() => {
+                          modifyAll(BackupSettingsType.Settings, true);
+                        }}
                         preventDefault
                       >
                         <span>Select All</span>
@@ -320,7 +345,9 @@ const BackupDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(BackupSettingsType.Settings, false); }}
+                        onClick={() => {
+                          modifyAll(BackupSettingsType.Settings, false);
+                        }}
                         preventDefault
                       >
                         <span>Select None</span>
@@ -376,25 +403,22 @@ const BackupDataSegment = (props: Props) => {
           </div>
         </div>
         {/* Progress Bar */}
-        {
-          backupState.backingUp &&
-          (
-            <div className="row">
-              <div className="col">
-                <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-striped progress-bar-animated"
-                    role="progressbar"
-                    aria-valuenow={100}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    style={{ width: "100%" }}
-                  />
-                </div>
+        {backupState.backingUp && (
+          <div className="row">
+            <div className="col">
+              <div className="progress">
+                <div
+                  className="progress-bar progress-bar-striped progress-bar-animated"
+                  role="progressbar"
+                  aria-valuenow={100}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  style={{ width: "100%" }}
+                />
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
       </>
     </SettingsSegment>
   );
@@ -404,12 +428,8 @@ const mapStateToProps = (state: AppState) => ({
   backupState: state.backup,
 });
 
-
 export const mapDispatchToProps = {
   performBackup,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(BackupDataSegment);
+export default connect(mapStateToProps, mapDispatchToProps)(BackupDataSegment);
