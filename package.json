@@ -6,17 +6,15 @@
     "packages/*"
   ],
   "scripts": {
-    "start:backend": "yarn workspace @ccss-support-manual/backend run dev",
-    "start:frontend": "yarn workspace @ccss-support-manual/frontend run start",
-    "build:backend": "yarn workspace @ccss-support-manual/backend run build",
-    "build:frontend": "yarn workspace @ccss-support-manual/frontend run build",
-    "move:frontend": "tsnd scripts/move-frontend.ts",
-    "move:backend": "tsnd scripts/move-backend.ts",
-    "tsc": "lerna run tsc",
     "clean": "tsnd scripts/clean.ts",
+    "tsc": "lerna run tsc",
     "postinstall": "lerna bootstrap && yarn tsc && lerna link",
     "test": "lerna run test --concurrency 1",
-    "build": ""
+    "build": "",
+    "build:frontend": "yarn workspace @ccss-support-manual/frontend run build",
+    "start:backend": "yarn workspace @ccss-support-manual/backend run dev",
+    "start:frontend": "yarn workspace @ccss-support-manual/frontend run start",
+    "move:frontend": "tsnd scripts/move-frontend.ts"
   },
   "devDependencies": {
     "@types/jest": "^25.1.2",

@@ -1,13 +1,8 @@
-import express, { Response, Request } from "express";
-import createError from "http-errors";
 import path from "path";
-import cookieParser from "cookie-parser";
-import logger from "morgan";
-import cors from "cors";
+import nodeCleanup from "node-cleanup";
 import { Logger } from "@michaelgatesdev/common";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
-import indexRoute from "./routes/index";
 import { ConfigManager } from "./config-manager";
 import { BuildingManager } from "./building-manager";
 import { RoomManager } from "./room-manager";
@@ -17,8 +12,6 @@ import { SpreadsheetManager } from "./spreadsheet-manager";
 import { DataManager } from "./data-manager";
 import { BackupManager } from "./backup-manager";
 // import { UpdateManager } from "./update-manager";
-
-export const expressApp: express.Application = express();
 
 export class App {
   // detect running mode (dev or prod)
@@ -81,11 +74,6 @@ export class App {
     // Logger.debug(`>> Application Version: ${this.masterPackageJSON?.version}`);
     Logger.debug(`>> Production Mode: ${this.isProduction}`);
     Logger.debug("");
-
-    // Setup express stuff
-    Logger.debug("Setting up express server...");
-    this.setupExpress();
-    Logger.debug("Finished setting up express server.");
 
     // create directories
     await this.setupDirectories();
@@ -152,68 +140,6 @@ export class App {
     await this.imageManager.initialize();
   }
 
-  public setupExpress(): void {
-    Logger.debug("Setting up views");
-    // view engine setup
-    // expressApp.set("views", path.join(__dirname, "..", "views"));
-    // expressApp.set("view engine", "ejs");
-
-    expressApp.use(cors());
-    expressApp.options("*", cors());
-
-    Logger.debug("Using dev logger");
-    expressApp.use(logger("dev"));
-
-    Logger.debug("Setting up middleware");
-    expressApp.use(express.json());
-    expressApp.use(
-      express.urlencoded({
-        extended: true,
-      })
-    );
-    expressApp.use(cookieParser());
-
-    Logger.debug("Setting up static directories");
-    expressApp.use("/images", express.static(path.join("public", "images")));
-    expressApp.use(express.static(path.join(__dirname, "dist")));
-
-    Logger.debug("Setting up routes");
-    expressApp.use("/", indexRoute);
-
-    Logger.debug("Setting up static files to serve");
-    expressApp.use("*", (_req: Request, res: express.Response): void => {
-      res.sendFile(path.join(__dirname, "dist", "index.html"));
-    });
-
-    Logger.debug("Setting up error handling");
-    //catch 404 and forward to error handler
-    expressApp.use((next: express.NextFunction): void => {
-      next(createError(404));
-    });
-
-    // development error handler
-    // will print stacktrace
-    if (expressApp.get("env") === "development") {
-      expressApp.use((err: any, res: express.Response): void => {
-        res.status(err["status"] || 500);
-        res.render("error", {
-          message: err.message,
-          error: err,
-        });
-      });
-    }
-
-    // production error handler
-    // no stacktraces leaked to user
-    expressApp.use((err: any, res: Response): void => {
-      res.status(err.status || 500);
-      res.render("error", {
-        message: err.message,
-        error: {},
-      });
-    });
-  }
-
   public async setupDirectories(): Promise<void> {
     await Promise.all([
       this.createDirectory(this.PUBLIC_DIR),
@@ -256,5 +182,13 @@ export class App {
 }
 
 export const app = new App();
+
+nodeCleanup(function(exitCode, signal) {
+  Logger.debug(`Exiting program. Exit code: ${exitCode}, Signal: ${signal}`);
+  console.log(exitCode);
+  console.log(signal);
+  // release resources here before node exits
+  // app.deinitialize();
+});
 
 // ------------------------------------------------------ \\

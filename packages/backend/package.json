@@ -5,7 +5,6 @@
   "scripts": {
     "build": "yarn run tsc",
     "tsc": "tsc -p tsconfig.build.json",
-    "postbuild": "cd ../../ && yarn move:backend",
     "dev": "tsnd -r tsconfig-paths/register --respawn --transpileOnly ./src/main.ts",
     "dev:inspect": "tsnd --inspect -r tsconfig-paths/register --respawn --transpileOnly ./src/main.ts",
     "prod": "yarn tsc && node -r tsconfig-paths/register ./dist/main.js",
