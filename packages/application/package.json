@@ -44,6 +44,11 @@
       ]
     }
   },
+  "dependencies": {
+    "@ccss-support-manual/backend": "1.0.0",
+    "electron": "8.2.0",
+    "electron-squirrel-startup": "^1.0.0"
+  },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.50",
     "@electron-forge/maker-deb": "6.0.0-beta.50",
@@ -55,10 +60,5 @@
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.0",
     "typescript": "^3.7.0"
-  },
-  "dependencies": {
-    "@ccss-support-manual/backend": "1.0.0",
-    "electron": "8.2.0",
-    "electron-squirrel-startup": "^1.0.0"
   }
 }
