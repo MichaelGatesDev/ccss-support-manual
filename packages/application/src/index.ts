@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from "electron";
-import * as path from "path";
 import { ExpressServer } from "@ccss-support-manual/backend";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -20,7 +19,7 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "index.html"));
+  mainWindow.loadURL("https://localhost:3001");
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

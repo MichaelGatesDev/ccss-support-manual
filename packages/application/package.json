@@ -1,9 +1,16 @@
 {
-  "name": "application",
-  "productName": "application",
+  "name": "@ccss-support-manual/application",
   "version": "1.0.0",
+  "private": true,
+  "productName": "application",
   "description": "My Electron application description",
   "main": "dist/index.js",
+  "keywords": [],
+  "author": {
+    "name": "Michael Gates",
+    "email": "michaelgatesdev@gmail.com"
+  },
+  "license": "MIT",
   "scripts": {
     "start": "tsc && electron-forge start",
     "package": "electron-forge package",
@@ -11,12 +18,11 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts ."
   },
-  "keywords": [],
-  "author": {
-    "name": "Michael Gates",
-    "email": "michaelgatesdev@gmail.com"
+  "workspaces": {
+    "nohoist": [
+      "**/electron**"
+    ]
   },
-  "license": "MIT",
   "config": {
     "forge": {
       "packagerConfig": {},
@@ -45,9 +51,7 @@
     }
   },
   "dependencies": {
-    "@ccss-support-manual/backend": "1.0.0",
-    "electron": "8.2.0",
-    "electron-squirrel-startup": "^1.0.0"
+    "@ccss-support-manual/backend": "1.0.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.50",
@@ -57,6 +61,8 @@
     "@electron-forge/maker-zip": "6.0.0-beta.50",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
+    "electron": "^8.2.0",
+    "electron-squirrel-startup": "^1.0.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.0",
     "typescript": "^3.7.0"

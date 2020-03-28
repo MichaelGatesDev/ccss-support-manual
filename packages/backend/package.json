@@ -2,6 +2,11 @@
   "name": "@ccss-support-manual/backend",
   "version": "1.0.0",
   "private": true,
+  "main": "dist/index",
+  "types": "dist/index",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "yarn run tsc",
     "tsc": "tsc -p tsconfig.build.json",
