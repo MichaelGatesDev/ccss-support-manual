@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+
 import { ExpressServer } from "@ccss-support-manual/backend";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -7,22 +8,29 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-// create server
-const webServer = new ExpressServer();
-webServer.init();
-
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 1600,
+    width: 900,
   });
-
-  // and load the index.html of the app.
-  mainWindow.loadURL("https://localhost:3001");
+  mainWindow.maximize();
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // create web server
+  const webServer = new ExpressServer();
+  webServer
+    .init()
+    .then(() => {
+      console.log("Web server initialized!");
+      // when server is ready, load the
+      mainWindow?.loadURL("http://localhost:3001");
+    })
+    .catch(() => {
+      console.error("Failed to start web server!");
+    });
 };
 
 // This method will be called when Electron has finished

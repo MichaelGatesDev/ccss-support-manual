@@ -18,73 +18,83 @@ export class ExpressServer {
 
   public expressApp: express.Application = express();
 
-  public init(): void {
-    // Get port from environment and store in Express.
-    const port = process.env.PORT
-      ? this.normalizePort(process.env.PORT)
-      : this.FALLBACK_PORT;
-    this.expressApp.set("port", port);
+  public init(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // Get port from environment and store in Express.
+      const port = process.env.PORT
+        ? this.normalizePort(process.env.PORT)
+        : this.FALLBACK_PORT;
+      this.expressApp.set("port", port);
 
-    // Create HTTP Server
-    this.server = http.createServer(this.expressApp);
+      // Create HTTP Server
+      this.server = http.createServer(this.expressApp);
 
-    // Listen on provided port, on all network interfaces.
-    this.server.listen(port);
-    this.server.on("error", this.onError.bind(this));
-    this.server.on("listening", this.onListening.bind(this));
+      // Listen on provided port, on all network interfaces.
+      this.server.listen(port);
+      this.server.on("error", this.onError.bind(this));
+      this.server.on("error", () => {
+        return reject();
+      });
+      this.server.on("listening", this.onListening.bind(this));
+      this.server.on("listening", () => {
+        return resolve();
+      });
 
-    // Configure express server
+      // === Configure express server ===
 
-    // Logger.debug("Setting up views");
-    // view engine setup
-    // expressApp.set("views", path.join(__dirname, "..", "views"));
-    // expressApp.set("view engine", "ejs");
+      // view engine setup
+      this.expressApp.set("views", path.join(__dirname, "views"));
+      this.expressApp.set("view engine", "ejs");
 
-    this.expressApp.use(cors());
-    this.expressApp.options("*", cors());
+      this.expressApp.use(cors());
+      this.expressApp.options("*", cors());
 
-    this.expressApp.use(logger("dev"));
+      this.expressApp.use(logger("dev"));
 
-    this.expressApp.use(express.json());
-    this.expressApp.use(
-      express.urlencoded({
-        extended: true,
-      })
-    );
-    this.expressApp.use(cookieParser());
+      this.expressApp.use(express.json());
+      this.expressApp.use(
+        express.urlencoded({
+          extended: true,
+        })
+      );
+      this.expressApp.use(cookieParser());
 
-    this.expressApp.use(
-      "/images",
-      express.static(path.join("public", "images"))
-    );
-    this.expressApp.use(express.static(path.join(__dirname, "dist")));
+      this.expressApp.use("/", indexRoute);
 
-    this.expressApp.use("/", indexRoute);
+      //catch 404 and forward to error handler
+      this.expressApp.use((next: express.NextFunction): void => {
+        next(createError(404));
+      });
 
-    //catch 404 and forward to error handler
-    this.expressApp.use((next: express.NextFunction): void => {
-      next(createError(404));
-    });
+      // development error handler
+      // will print stacktrace
+      if (this.expressApp.get("env") === "development") {
+        this.expressApp.use(
+          (
+            err: any,
+            res: express.Response,
+            next: express.NextFunction
+          ): void => {
+            if (res.headersSent) {
+              return next(err);
+            }
+            res.status(err["status"] || 500);
+            res.render("error", {
+              message: err.message,
+              error: err,
+            });
+          }
+        );
+      }
 
-    // development error handler
-    // will print stacktrace
-    if (this.expressApp.get("env") === "development") {
-      this.expressApp.use((err: any, res: express.Response): void => {
-        res.status(err["status"] || 500);
+      // production error handler
+      // no stacktraces leaked to user
+      this.expressApp.use((err: any, res: Response): void => {
+        res.status(err.status || 500);
         res.render("error", {
           message: err.message,
-          error: err,
+          error: {},
         });
-      });
-    }
-
-    // production error handler
-    // no stacktraces leaked to user
-    this.expressApp.use((err: any, res: Response): void => {
-      res.status(err.status || 500);
-      res.render("error", {
-        message: err.message,
-        error: {},
       });
     });
   }

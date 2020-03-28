@@ -12,7 +12,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "tsc && electron-forge start",
+    "parent-tsc": "cd ../../ && yarn run tsc",
+    "tsc": "tsc -p tsconfig.build.json",
+    "start": "yarn run parent-tsc && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

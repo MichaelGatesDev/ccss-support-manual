@@ -185,8 +185,6 @@ export const app = new App();
 
 nodeCleanup(function(exitCode, signal) {
   Logger.debug(`Exiting program. Exit code: ${exitCode}, Signal: ${signal}`);
-  console.log(exitCode);
-  console.log(signal);
   // release resources here before node exits
   // app.deinitialize();
 });

@@ -10,9 +10,9 @@
   "scripts": {
     "build": "yarn run tsc",
     "tsc": "tsc -p tsconfig.build.json",
-    "dev": "tsnd -r tsconfig-paths/register --respawn --transpileOnly ./src/main.ts",
-    "dev:inspect": "tsnd --inspect -r tsconfig-paths/register --respawn --transpileOnly ./src/main.ts",
-    "prod": "yarn tsc && node -r tsconfig-paths/register ./dist/main.js",
+    "dev": "tsnd -r tsconfig-paths/register --respawn --transpileOnly ./src/entrypoint.ts",
+    "dev:inspect": "tsnd --inspect -r tsconfig-paths/register --respawn --transpileOnly ./src/entrypoint.ts",
+    "prod": "yarn tsc && node -r tsconfig-paths/register ./dist/entrypoint.js",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests"
   },
   "jest": {
