@@ -21,23 +21,21 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
 
-  // create web server
-  const webServer = new ExpressServer();
-  webServer
-    .init()
-    .then(() => {
-      console.log("Web server initialized!");
-      // when server is ready, load the
-
-      if (electronIsDev) {
-        mainWindow?.loadURL("http://localhost:3000");
-      } else {
+  if (electronIsDev) {
+    mainWindow?.loadURL("http://localhost:3000");
+  } else {
+    // create web server
+    const webServer = new ExpressServer();
+    webServer
+      .init()
+      .then(() => {
+        console.log("Web server initialized!");
         mainWindow?.loadFile(path.join(__dirname, "index.html"));
-      }
-    })
-    .catch(() => {
-      console.error("Failed to start web server!");
-    });
+      })
+      .catch(() => {
+        console.error("Failed to start web server!");
+      });
+  }
 };
 
 // This method will be called when Electron has finished

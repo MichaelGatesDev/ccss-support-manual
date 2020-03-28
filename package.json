@@ -13,10 +13,12 @@
     "build": "",
     "build:frontend": "yarn workspace @ccss-support-manual/frontend run build",
     "start:application": "yarn workspace @ccss-support-manual/application run start",
-    "start:backend": "yarn workspace @ccss-support-manual/backend run dev",
+    "start:application:dev": "yarn workspace @ccss-support-manual/application run start:dev",
+    "start:backend": "yarn workspace @ccss-support-manual/backend run start",
+    "start:backend:dev": "yarn workspace @ccss-support-manual/backend run start:dev",
     "start:frontend": "yarn workspace @ccss-support-manual/frontend run start",
     "start:frontend:headless": "yarn workspace @ccss-support-manual/frontend run start:headless",
-    "start:dev": "concurrently \"yarn start:frontend:headless\" \"wait-on http://localhost:3000 && yarn start:application\"",
+    "start:dev": "concurrently \"yarn start:backend:dev\" \"wait-on http://localhost:3001\" \"yarn start:frontend:headless\" \"wait-on http://localhost:3000 && yarn start:application:dev\"",
     "move:frontend": "tsnd scripts/move-frontend.ts"
   },
   "devDependencies": {
