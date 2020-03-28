@@ -1,4 +1,6 @@
 import { app, BrowserWindow } from "electron";
+import electronIsDev from "electron-is-dev";
+import path from "path";
 
 import { ExpressServer } from "@ccss-support-manual/backend";
 
@@ -26,7 +28,12 @@ const createWindow = () => {
     .then(() => {
       console.log("Web server initialized!");
       // when server is ready, load the
-      mainWindow?.loadURL("http://localhost:3001");
+
+      if (electronIsDev) {
+        mainWindow?.loadURL("http://localhost:3000");
+      } else {
+        mainWindow?.loadFile(path.join(__dirname, "index.html"));
+      }
     })
     .catch(() => {
       console.error("Failed to start web server!");
