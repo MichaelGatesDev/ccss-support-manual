@@ -14,28 +14,25 @@ import { BackupManager } from "./backup-manager";
 // import { UpdateManager } from "./update-manager";
 
 export class App {
-  // detect running mode (dev or prod)
-  public isProduction = !process.title.toLowerCase().includes("node");
-  // root package.json file
-  //   public masterPackageJSON: {
-  //     name: string;
-  //     version: string;
-  //   } = require("../../../package.json");
-
   // ------------------------------------------------------ \\
   //              Directories
   // ------------------------------------------------------ \\
-  // public ROOT_DIR: string = path.resolve(this.isProduction ? path.resolve(process.execPath.replace(process.title.split(path.sep).slice(-1)[0], "")) : "./");
-  public ROOT_DIR: string = path.resolve("./");
-  public PUBLIC_DIR: string = path.join(this.ROOT_DIR, "public");
-  public TEMP_DIR: string = path.join(this.ROOT_DIR, "temp");
-  public DOWNLOADS_DIR: string = path.join(this.PUBLIC_DIR, "downloads");
-  public UPLOADS_DIR: string = path.join(this.PUBLIC_DIR, "uploads");
-  public BACKUPS_DIR: string = path.join(this.PUBLIC_DIR, "backups");
-  public DATA_DIR: string = path.join(this.PUBLIC_DIR, "data");
-  public SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "settings");
-  public IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "images");
-  public BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "buildings");
+  public readonly ROOT_DIR: string = path.resolve("./");
+  public readonly PUBLIC_DIR: string = path.join(this.ROOT_DIR, "public");
+  public readonly TEMP_DIR: string = path.join(this.ROOT_DIR, "temp");
+  public readonly DOWNLOADS_DIR: string = path.join(
+    this.PUBLIC_DIR,
+    "downloads"
+  );
+  public readonly UPLOADS_DIR: string = path.join(this.PUBLIC_DIR, "uploads");
+  public readonly BACKUPS_DIR: string = path.join(this.PUBLIC_DIR, "backups");
+  public readonly DATA_DIR: string = path.join(this.PUBLIC_DIR, "data");
+  public readonly SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "settings");
+  public readonly IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "images");
+  public readonly BUILDING_IMAGES_DIR: string = path.join(
+    this.IMAGES_DIR,
+    "buildings"
+  );
 
   // ------------------------------------------------------ \\
   //              Managers
@@ -48,18 +45,16 @@ export class App {
   public troubleshootingDataManager: TroubleshootingDataManager;
   public dataManager: DataManager;
   public backupManager: BackupManager;
-  // public updateManager: UpdateManager;
 
   public constructor() {
-    this.spreadsheetManager = new SpreadsheetManager();
-    this.configManager = new ConfigManager();
-    this.imageManager = new ImageManager();
-    this.buildingManager = new BuildingManager();
-    this.roomManager = new RoomManager(this.buildingManager);
-    this.troubleshootingDataManager = new TroubleshootingDataManager();
-    this.dataManager = new DataManager();
-    this.backupManager = new BackupManager();
-    // this.updateManager = new UpdateManager();
+    this.spreadsheetManager = new SpreadsheetManager(this);
+    this.configManager = new ConfigManager(this);
+    this.imageManager = new ImageManager(this);
+    this.buildingManager = new BuildingManager(this);
+    this.roomManager = new RoomManager(this);
+    this.troubleshootingDataManager = new TroubleshootingDataManager(this);
+    this.dataManager = new DataManager(this);
+    this.backupManager = new BackupManager(this);
   }
 
   public async initialize(): Promise<void> {
@@ -70,9 +65,6 @@ export class App {
     Logger.debug("| * Classroom & Customer Support Services Manual * |");
     Logger.debug("|--------------------------------------------------|");
     Logger.debug("|==================================================|");
-    Logger.debug("");
-    // Logger.debug(`>> Application Version: ${this.masterPackageJSON?.version}`);
-    Logger.debug(`>> Production Mode: ${this.isProduction}`);
     Logger.debug("");
 
     // create directories
@@ -86,30 +78,6 @@ export class App {
     } catch (error) {
       Logger.error(error);
     }
-
-    // // cleanup updates
-    // await this.updateManager.initialize();
-    // // check for updates
-    // if (this.configManager.appConfig?.checkUpdates && this.isProduction) {
-    //     try {
-    //         Logger.info(`Current version: ${this.masterPackageJSON?.version}`);
-
-    //         Logger.info("Checking for updates...");
-    //         const available = await this.updateManager.check();
-    //         if (available) {
-    //             Logger.info(`New version found: ${this.updateManager?.latestVersion?.version}`);
-    //             if (this.configManager.appConfig.applyUpdates) {
-    //                 Logger.info("Downloading new update...")
-    //                 await this.updateManager.downloadAndApplyUpdate();
-    //             }
-    //         } else {
-    //             Logger.info("Application is up-to-date!");
-    //         }
-    //     } catch (error) {
-    //         Logger.error("There was an error checking for updates");
-    //         Logger.error(error);
-    //     }
-    // }
 
     // load data
     await this.dataManager.initialize();

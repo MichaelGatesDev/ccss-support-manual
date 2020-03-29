@@ -37,8 +37,8 @@ import {
   TroubleshootingSpreadsheetVersion,
 } from "@ccss-support-manual/models";
 import { FileUtils } from "@michaelgatesdev/common-io";
-import { app } from "./app";
 import _ from "lodash";
+import { App } from "./app";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace SpreadsheetVersions {
@@ -283,9 +283,14 @@ export interface TroubleshootingSpreadsheetImportResult
 }
 
 export class SpreadsheetManager {
+  private readonly app: App;
   private static VersionPattern = /((Summer|Winter)\s20[0-9]{2})/gi;
 
-  public static async getSpreadsheetVersion(
+  constructor(app: App) {
+    this.app = app;
+  }
+
+  public async getSpreadsheetVersion(
     type: SpreadsheetType,
     path: string
   ): Promise<
@@ -297,7 +302,7 @@ export class SpreadsheetManager {
       throw new Error(`File not found: ${path}`);
 
     const dict = await this.convertSpreadsheetToJson(path);
-    const infoTab = dict.find(obj => obj.sheetName === "INFO")?.json;
+    const infoTab = dict.find((obj: any) => obj.sheetName === "INFO")?.json;
     if (infoTab === undefined) throw new Error(`Failed to find 'info' tab!`);
     if (infoTab.length === 0) throw new Error(`No info data found!`);
     const row = infoTab[0];
@@ -307,14 +312,14 @@ export class SpreadsheetManager {
     return this.matchVersion(type, version);
   }
 
-  public static matchVersion(
+  public matchVersion(
     type: SpreadsheetType,
     rawVersion: string
   ):
     | ClassroomChecksSpreadsheetVersion
     | TroubleshootingSpreadsheetVersion
     | undefined {
-    const matches = rawVersion.match(this.VersionPattern);
+    const matches = rawVersion.match(SpreadsheetManager.VersionPattern);
     if (matches === null || matches.length !== 1)
       throw new Error("No version match found for spreadsheet");
 
@@ -328,10 +333,10 @@ export class SpreadsheetManager {
     }
   }
 
-  public static matchClassroomChecksVersion(
+  public matchClassroomChecksVersion(
     rawVersion: string
   ): ClassroomChecksSpreadsheetVersion {
-    const matches = rawVersion.match(this.VersionPattern);
+    const matches = rawVersion.match(SpreadsheetManager.VersionPattern);
     if (matches === null || matches.length !== 1)
       throw new Error("No version match found for spreadsheet");
     const version = EnumUtils.parse(
@@ -345,10 +350,10 @@ export class SpreadsheetManager {
     return version;
   }
 
-  public static matchTroubleshootingVersion(
+  public matchTroubleshootingVersion(
     rawVersion: string
   ): TroubleshootingSpreadsheetVersion {
-    const matches = rawVersion.match(this.VersionPattern);
+    const matches = rawVersion.match(SpreadsheetManager.VersionPattern);
     if (matches === null || matches.length !== 1)
       throw new Error("No version match found for spreadsheet");
     const version = EnumUtils.parse(
@@ -362,7 +367,7 @@ export class SpreadsheetManager {
     return version;
   }
 
-  public static async convertSpreadsheetToJson(
+  public async convertSpreadsheetToJson(
     path: string
   ): Promise<{ sheetName: string; json: any }[]> {
     Logger.debug("Converting spreadsheet to json...");
@@ -387,7 +392,7 @@ export class SpreadsheetManager {
     return result;
   }
 
-  public static async importSpreadsheet(
+  public async importSpreadsheet(
     path: string,
     type: SpreadsheetType,
     importMode: SpreadsheetImportMode
@@ -423,11 +428,11 @@ export class SpreadsheetManager {
             break;
           case SpreadsheetImportMode.ClearAndWrite:
             Logger.debug("Clearing all data");
-            app.buildingManager.clear();
-            app.roomManager.clear();
+            this.app.buildingManager.clear();
+            this.app.roomManager.clear();
             Logger.debug("Writing new data");
-            app.buildingManager.addBuildings(result.buildings);
-            app.roomManager.addRooms(result.rooms);
+            this.app.buildingManager.addBuildings(result.buildings);
+            this.app.roomManager.addRooms(result.rooms);
             break;
           case SpreadsheetImportMode.OverwriteAndAppend:
             Logger.debug("Overwrite and Append data");
@@ -454,9 +459,11 @@ export class SpreadsheetManager {
             break;
           case SpreadsheetImportMode.ClearAndWrite:
             Logger.debug("Clearing all data");
-            app.troubleshootingDataManager.clear();
+            this.app.troubleshootingDataManager.clear();
             Logger.debug("Writing new data");
-            app.troubleshootingDataManager.addAll(result.troubleshootingData);
+            this.app.troubleshootingDataManager.addAll(
+              result.troubleshootingData
+            );
             break;
           case SpreadsheetImportMode.OverwriteAndAppend:
             Logger.debug("Overwrite and Append data");
@@ -467,7 +474,7 @@ export class SpreadsheetManager {
     }
   }
 
-  private static async importClassroomChecks(
+  private async importClassroomChecks(
     path: string
   ): Promise<ClassroomChecksSpreadsheetImportResult> {
     const dict = await this.convertSpreadsheetToJson(path);
@@ -912,7 +919,9 @@ export class SpreadsheetManager {
       ) {
         for (const row of roomsSheet) {
           const buildingName = row[ss.roomsListBuildingHeader];
-          const building = app.buildingManager.getBuildingByName(buildingName);
+          const building = this.app.buildingManager.getBuildingByName(
+            buildingName
+          );
           if (building === undefined) continue; // invalid building name
           const roomNumber = row[ss.roomsListNumberHeader];
           const room: SimpleRoom = {
@@ -921,7 +930,7 @@ export class SpreadsheetManager {
           };
 
           const found = _.find(importedRooms, (toCheck: Room) => {
-            const checkBuilding = app.buildingManager.getBuildingByName(
+            const checkBuilding = this.app.buildingManager.getBuildingByName(
               toCheck.buildingName
             );
             if (checkBuilding === undefined) return undefined;
@@ -953,7 +962,7 @@ export class SpreadsheetManager {
     };
   }
 
-  public static async importTroubleshooting(
+  public async importTroubleshooting(
     path: string
   ): Promise<TroubleshootingSpreadsheetImportResult> {
     const dict = await this.convertSpreadsheetToJson(path);

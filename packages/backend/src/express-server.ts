@@ -1,7 +1,6 @@
 import debug from "debug";
 import http from "http";
-import express, { Response } from "express";
-import createError from "http-errors";
+import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -60,42 +59,6 @@ export class ExpressServer {
       this.expressApp.use(cookieParser());
 
       this.expressApp.use("/", indexRoute);
-
-      //catch 404 and forward to error handler
-      this.expressApp.use((next: express.NextFunction): void => {
-        next(createError(404));
-      });
-
-      // development error handler
-      // will print stacktrace
-      if (this.expressApp.get("env") === "development") {
-        this.expressApp.use(
-          (
-            err: any,
-            res: express.Response,
-            next: express.NextFunction
-          ): void => {
-            if (res.headersSent) {
-              return next(err);
-            }
-            res.status(err["status"] || 500);
-            res.render("error", {
-              message: err.message,
-              error: err,
-            });
-          }
-        );
-      }
-
-      // production error handler
-      // no stacktraces leaked to user
-      this.expressApp.use((err: any, res: Response): void => {
-        res.status(err.status || 500);
-        res.render("error", {
-          message: err.message,
-          error: {},
-        });
-      });
     });
   }
 
