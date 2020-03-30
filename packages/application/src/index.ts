@@ -30,7 +30,7 @@ const createWindow = () => {
       .init()
       .then(() => {
         console.log("Web server initialized!");
-        mainWindow?.loadFile(path.join(__dirname, "index.html"));
+        mainWindow?.loadFile(path.join(__dirname, "public/index.html"));
       })
       .catch(() => {
         console.error("Failed to start web server!");

@@ -1,3 +1,3 @@
 import fs from "fs";
 
-fs.renameSync("packages/frontend/build", "packages/electron/dist/public");
+fs.renameSync("packages/frontend/build", "packages/application/dist/public");
