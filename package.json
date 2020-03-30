@@ -18,7 +18,7 @@
     "start:backend:dev": "yarn workspace @ccss-support-manual/backend run start:dev",
     "start:frontend": "yarn workspace @ccss-support-manual/frontend run start",
     "start:frontend:headless": "yarn workspace @ccss-support-manual/frontend run start:headless",
-    "start:dev": "concurrently \"yarn start:backend:dev\" \"wait-on http://localhost:3001\" \"yarn start:frontend:headless\" \"wait-on http://localhost:3000 && yarn start:application:dev\"",
+    "start:dev": "concurrently \"yarn start:backend:dev\" \"wait-on http://localhost:3001\" \"yarn start:frontend\" \"wait-on http://localhost:3000\"",
     "move:frontend": "tsnd scripts/move-frontend.ts"
   },
   "devDependencies": {
