@@ -1,5 +1,5 @@
 import { Router, Response } from "express";
-import { BuildingRoomRequest } from "packages/backend/src/models/building-room-request";
+import { BuildingRoomRequest } from "../../../../../models/building-room-request";
 
 const router: Router = Router();
 
