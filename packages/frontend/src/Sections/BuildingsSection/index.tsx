@@ -5,6 +5,9 @@ import _ from "lodash";
 import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+
 import "./style.scss";
 
 import NavBar from "../../Components/NavBar";
@@ -15,7 +18,10 @@ import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
-import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
+import {
+  FloatingGroup,
+  FloatingGroupOrientation,
+} from "../../Components/FloatingGroup";
 import { AnchorButton } from "../../Components/AnchorButton";
 import { ButtonType } from "../../Components/Button";
 import { BuildingCardsDeck } from "../../Components/BuildingCardsDeck";
@@ -29,7 +35,6 @@ interface Props {
 }
 
 const BuildingsSection = (props: Props) => {
-
   const [filterSearch, setFilterSearch] = useState<string>("");
 
   const { buildingsState, imagesState } = props;
@@ -40,11 +45,16 @@ const BuildingsSection = (props: Props) => {
     fetchImages();
   }, []);
 
+  const isLoading = (): boolean =>
+    buildingsState.fetchingBuildings || imagesState.imagesLoading;
 
-  const isLoading = (): boolean => buildingsState.fetchingBuildings || imagesState.imagesLoading;
-
-  const filterBuildingsByName = (buildings: Building[], name: string): Building[] => buildings.filter((building: Building) => BuildingUtils.hasName(building, name));
-
+  const filterBuildingsByName = (
+    buildings: Building[],
+    name: string
+  ): Building[] =>
+    buildings.filter((building: Building) =>
+      BuildingUtils.hasName(building, name)
+    );
 
   // Display splash when loading
   if (isLoading()) {
@@ -54,7 +64,9 @@ const BuildingsSection = (props: Props) => {
   const query = filterSearch;
   const queries = query.split(" ");
 
-  let filteredBuildings = _.sortBy(buildingsState.fetchedBuildings, ["internalName"]);
+  let filteredBuildings = _.sortBy(buildingsState.fetchedBuildings, [
+    "internalName",
+  ]);
 
   if (queries.length > 0) {
     for (let query of queries) {
@@ -74,15 +86,18 @@ const BuildingsSection = (props: Props) => {
       />
       {/* Main content */}
       <section className="container-fluid" id="home-section">
-
         {/* Breadcrumbs */}
         <div className="container">
           <div className="row">
             <div className="col">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                  <li className="breadcrumb-item active" aria-current="page">Buildings</li>
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Buildings
+                  </li>
                 </ol>
               </nav>
             </div>
@@ -94,14 +109,15 @@ const BuildingsSection = (props: Props) => {
           buildingsImages={imagesState.buildingImages}
         />
 
-        <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
-          <AnchorButton
-            href="buildings/add"
-            buttonType={ButtonType.Success}
-          >
+        <FloatingGroup
+          orientation={FloatingGroupOrientation.Horizontal}
+          bottom
+          left
+        >
+          <AnchorButton href="buildings/add" buttonType={ButtonType.Success}>
             <>
               <span>
-                <i className="fas fa-plus" />
+                <FontAwesomeIcon icon={faPlusCircle} />
                 &nbsp;Add Building
               </span>
             </>
@@ -117,7 +133,6 @@ const mapStateToProps = (state: AppState) => ({
   imagesState: state.images,
 });
 
-export default connect(
-  mapStateToProps,
-  { fetchBuildings, fetchImages },
-)(BuildingsSection);
+export default connect(mapStateToProps, { fetchBuildings, fetchImages })(
+  BuildingsSection
+);

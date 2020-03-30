@@ -5,12 +5,18 @@ import roomsRoute from "./rooms";
 
 const router: Router = Router();
 
-
 router.get("/", (_req, res): void => {
-    res.status(200).json(app.imageManager.buildingImages);
+  res.status(200).json(app.imageManager.buildingImages);
 });
 
-router.param("buildingName", (req: any, _res: Response, next: NextFunction, buildingName: string): void => {
+router.param(
+  "buildingName",
+  (
+    req: any,
+    _res: Response,
+    next: NextFunction,
+    buildingName: string
+  ): void => {
     req.buildingName = buildingName;
     next();
     // let building = app.buildingManager.getBuildingByName(buildingName);
@@ -21,11 +27,11 @@ router.param("buildingName", (req: any, _res: Response, next: NextFunction, buil
     // }
     // next(new Error(`Failed to find building: ${buildingName}`));
     // return;
-});
-
+  }
+);
 
 router.get("/:buildingName", (req: any, res): void => {
-    res.status(200).json(app.imageManager.getImagesForBuilding(req.buildingName));
+  res.status(200).json(app.imageManager.getImagesForBuilding(req.buildingName));
 });
 
 router.use("/:buildingName/rooms", roomsRoute);

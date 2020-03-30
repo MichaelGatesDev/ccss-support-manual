@@ -3,7 +3,6 @@ import "./style.scss";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-
 import NavBar from "../../Components/NavBar";
 
 import { AppState } from "../../redux/store";
@@ -20,21 +19,14 @@ import RestoreDataSegment from "./Data/RestoreDataSegment";
 import SaveDataSegment from "./Data/SaveDataSegment";
 
 const Settings = () => {
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
       {/* Top navigation */}
-      <NavBar
-        title="CCSS Support Manual"
-        fixed
-      />
+      <NavBar title="CCSS Support Manual" fixed />
       {/* Main content */}
       <section className="container" id="settings-section">
-
-
         {/* Data Header */}
         <div className="row">
           <div className="col">
@@ -56,7 +48,6 @@ const Settings = () => {
 
         {/* Save Data */}
         <SaveDataSegment />
-
       </section>
     </>
   );
@@ -70,7 +61,4 @@ export const mapDispatchToProps = {
   performSave,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

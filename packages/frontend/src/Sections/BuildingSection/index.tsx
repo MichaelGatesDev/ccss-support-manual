@@ -6,6 +6,9 @@ import _ from "lodash";
 import { Room, ImageType, Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+
 import "./style.scss";
 
 import NavBar from "../../Components/NavBar";
@@ -18,13 +21,19 @@ import {
   updateBuilding,
   removeBuilding,
 } from "../../redux/buildings/actions";
-import { fetchBuildingImages, fetchRoomImagesForBuilding } from "../../redux/images/actions";
+import {
+  fetchBuildingImages,
+  fetchRoomImagesForBuilding,
+} from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import ImageCarousel from "../../Components/ImageCarousel";
 import Button, { ButtonType } from "../../Components/Button";
 import { showEditPrompt, showConfirmPrompt } from "../../utils/WindowUtils";
-import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
+import {
+  FloatingGroup,
+  FloatingGroupOrientation,
+} from "../../Components/FloatingGroup";
 import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
 
 interface Props {
@@ -45,7 +54,6 @@ interface Props {
 }
 
 const BuildingSection = (props: Props) => {
-
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const {
@@ -70,21 +78,30 @@ const BuildingSection = (props: Props) => {
     fetchRoomImagesForBuilding(buildingName);
   }, []);
 
+  const filterRoomsByName = (
+    rooms: Room[],
+    name: string,
+    filterNumber = true,
+    filterName = true,
+    filterBuildingName = true
+  ): Room[] =>
+    rooms.filter((room: Room) => {
+      const pb = BuildingUtils.getParentBuilding(
+        room,
+        buildingsState.fetchedBuildings ?? []
+      );
+      if (pb === undefined) return false;
+      return (
+        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
+        (filterName && room.name.toLocaleLowerCase().includes(name)) ||
+        (filterBuildingName && BuildingUtils.hasName(pb, name))
+      );
+    });
 
-  const filterRoomsByName = (rooms: Room[], name: string, filterNumber = true, filterName = true, filterBuildingName = true): Room[] => rooms.filter((room: Room) => {
-    const pb = BuildingUtils.getParentBuilding(room, buildingsState.fetchedBuildings ?? []);
-    if (pb === undefined) return false;
-    return (
-      (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
-      (filterName && room.name.toLocaleLowerCase().includes(name)) ||
-      (filterBuildingName && BuildingUtils.hasName(pb, name))
-    );
-  });
-
-  const isLoading = (): boolean => (
-    (buildingsState.fetchingBuilding || buildingsState.fetchingBuildings)
-    || (imagesState.imagesLoading)
-  );
+  const isLoading = (): boolean =>
+    buildingsState.fetchingBuilding ||
+    buildingsState.fetchingBuildings ||
+    imagesState.imagesLoading;
 
   // if loading
   if (isLoading()) {
@@ -107,7 +124,9 @@ const BuildingSection = (props: Props) => {
     }
   }
 
-  const roomsImages = imagesState.roomImages.filter((image) => image.type === ImageType.Room);
+  const roomsImages = imagesState.roomImages.filter(
+    image => image.type === ImageType.Room
+  );
   console.log(roomsImages.length);
 
   return (
@@ -121,16 +140,21 @@ const BuildingSection = (props: Props) => {
       />
       {/* Main content */}
       <section className="container" id="building-section">
-
         {/* Breadcrumbs */}
         <div className="container">
           <div className="row">
             <div className="col">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                  <li className="breadcrumb-item"><Link to="/buildings">Buildings</Link></li>
-                  <li className="breadcrumb-item active" aria-current="page">{building.officialName}</li>
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to="/buildings">Buildings</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    {building.officialName}
+                  </li>
                 </ol>
               </nav>
             </div>
@@ -144,7 +168,9 @@ const BuildingSection = (props: Props) => {
             <ImageCarousel
               id="building-panoramas-carousel"
               height="300px"
-              images={imagesState.buildingImages.filter((image) => image.type === ImageType.Building).map((image) => image.path)}
+              images={imagesState.buildingImages
+                .filter(image => image.type === ImageType.Building)
+                .map(image => image.path)}
             />
           </div>
           {/* Info */}
@@ -160,10 +186,17 @@ const BuildingSection = (props: Props) => {
                     preventDefault
                     buttonType={ButtonType.Primary}
                     onClick={() => {
-                      const newName: string | undefined = showEditPrompt(building.officialName);
+                      const newName: string | undefined = showEditPrompt(
+                        building.officialName
+                      );
                       if (newName === undefined) return;
-                      console.log(`Updating building name from ${building.officialName} to ${newName}`);
-                      updateBuilding(building, { ...building, officialName: newName });
+                      console.log(
+                        `Updating building name from ${building.officialName} to ${newName}`
+                      );
+                      updateBuilding(building, {
+                        ...building,
+                        officialName: newName,
+                      });
                     }}
                   >
                     <span>Edit</span>
@@ -184,10 +217,7 @@ const BuildingSection = (props: Props) => {
               </div>
               <div className="col">
                 <div className="d-flex justify-content-end">
-                  <Button
-                    preventDefault
-                    buttonType={ButtonType.Primary}
-                  >
+                  <Button preventDefault buttonType={ButtonType.Primary}>
                     <span>Edit</span>
                   </Button>
                 </div>
@@ -196,9 +226,7 @@ const BuildingSection = (props: Props) => {
             {/* Nicknames */}
             <div className="row">
               <div className="col">
-                <p>
-                  {building.nicknames.join(", ")}
-                </p>
+                <p>{building.nicknames.join(", ")}</p>
               </div>
             </div>
             {/* Description Header */}
@@ -208,10 +236,7 @@ const BuildingSection = (props: Props) => {
               </div>
               <div className="col">
                 <div className="d-flex justify-content-end">
-                  <Button
-                    buttonType={ButtonType.Primary}
-                    preventDefault
-                  >
+                  <Button buttonType={ButtonType.Primary} preventDefault>
                     <span>Edit</span>
                   </Button>
                 </div>
@@ -223,8 +248,9 @@ const BuildingSection = (props: Props) => {
                 <p>
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                   Earum quibusdam nisi nihil repudiandae quidem ipsam?
-                  Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum libero animi nulla et consequatur corporis.
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Perferendis aliquid, eum cupiditate temporibus qui eos totam
+                  laborum libero animi nulla et consequatur corporis. Lorem
+                  ipsum dolor sit amet consectetur, adipisicing elit.
                 </p>
               </div>
             </div>
@@ -240,42 +266,38 @@ const BuildingSection = (props: Props) => {
         {/* Room Cards */}
         <div className="row">
           <div className="col">
-            {
-              rooms.length > 0 ?
-                (
-                  <RoomCardsDeck
-                    rooms={rooms}
-                    roomsImages={roomsImages}
-                  />
-                )
-                :
-                (
-                  <>
-                    <p className="my-0">
-                      There are no rooms for this building.
-                      &nbsp;
-                      <Link to="rooms/add">Add Room</Link>
-                    </p>
-                  </>
-                )
-            }
+            {rooms.length > 0 ? (
+              <RoomCardsDeck rooms={rooms} roomsImages={roomsImages} />
+            ) : (
+              <>
+                <p className="my-0">
+                  There are no rooms for this building. &nbsp;
+                  <Link to="rooms/add">Add Room</Link>
+                </p>
+              </>
+            )}
           </div>
         </div>
-
       </section>
 
-      <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
+      <FloatingGroup
+        orientation={FloatingGroupOrientation.Horizontal}
+        bottom
+        left
+      >
         <Button
           preventDefault
           buttonType={ButtonType.Danger}
           onClick={() => {
-            const confirmDelete = showConfirmPrompt("Are you sure that you want to delete this building?\n\nNote: This action can not be undone.");
+            const confirmDelete = showConfirmPrompt(
+              "Are you sure that you want to delete this building?\n\nNote: This action can not be undone."
+            );
             if (!confirmDelete) return;
             removeBuilding(buildingName);
           }}
         >
           <span>
-            <i className="fas fa-minus" />
+            <FontAwesomeIcon icon={faMinusCircle} />
             &nbsp;Delete Building
           </span>
         </Button>
@@ -291,15 +313,12 @@ const mapStateToProps = (state: AppState, props: Props) => ({
   buildingName: props.match.params.buildingName,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    fetchBuildings,
-    fetchBuilding,
-    updateBuilding,
-    removeBuilding,
+export default connect(mapStateToProps, {
+  fetchBuildings,
+  fetchBuilding,
+  updateBuilding,
+  removeBuilding,
 
-    fetchBuildingImages,
-    fetchRoomImagesForBuilding,
-  },
-)(BuildingSection);
+  fetchBuildingImages,
+  fetchRoomImagesForBuilding,
+})(BuildingSection);

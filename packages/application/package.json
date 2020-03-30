@@ -1,0 +1,74 @@
+{
+  "name": "@ccss-support-manual/application",
+  "version": "1.0.0",
+  "private": true,
+  "productName": "application",
+  "description": "My Electron application description",
+  "main": "dist/index.js",
+  "keywords": [],
+  "author": {
+    "name": "Michael Gates",
+    "email": "michaelgatesdev@gmail.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "parent-tsc": "cd ../../ && yarn run tsc",
+    "tsc": "tsc -p tsconfig.build.json",
+    "start": "yarn run parent-tsc && electron-forge start",
+    "start:dev": "yarn run tsc && electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts ."
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/electron**"
+    ]
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "application"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "@ccss-support-manual/backend": "1.0.0",
+    "electron-is-dev": "^1.1.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.50",
+    "@electron-forge/maker-deb": "6.0.0-beta.50",
+    "@electron-forge/maker-rpm": "6.0.0-beta.50",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.50",
+    "@electron-forge/maker-zip": "6.0.0-beta.50",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
+    "electron": "^8.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.0",
+    "typescript": "^3.7.0"
+  }
+}

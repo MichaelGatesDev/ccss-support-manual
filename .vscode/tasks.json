@@ -1,45 +1,17 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "transpile-all",
-            "type": "npm",
-            "script": "tsc",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "build-app-all",
-            "type": "shell",
-            "command": "yarn build",
-            "problemMatcher": [],
-            "group": "build"
-        },
-        {
-            "label": "build-app-linux",
-            "type": "shell",
-            "command": "yarn build:linux",
-            "problemMatcher": [],
-            "group": "build"
-        },
-        {
-            "label": "build-app-windows",
-            "type": "shell",
-            "command": "yarn build:windows",
-            "problemMatcher": [],
-            "group": "build"
-        },
-        {
-            "label": "build-app-mac",
-            "type": "shell",
-            "command": "yarn build:mac",
-            "problemMatcher": [],
-            "group": "build"
-        }
-    ]
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "transpile-all",
+      "type": "npm",
+      "script": "tsc",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
 }

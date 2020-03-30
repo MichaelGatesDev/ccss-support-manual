@@ -1,14 +1,19 @@
 import { Dispatch } from "redux";
 import { BackupRestoreOptions } from "@ccss-support-manual/models";
-import { PERFORM_BACKUP, PERFORM_BACKUP_SUCCESS, PERFORM_BACKUP_FAILURE } from "./types";
+import {
+  PERFORM_BACKUP,
+  PERFORM_BACKUP_SUCCESS,
+  PERFORM_BACKUP_FAILURE,
+} from "./types";
 
-export const performBackup = (options: BackupRestoreOptions) => async (dispatch: Dispatch) => {
-
+export const performBackup = (options: BackupRestoreOptions) => async (
+  dispatch: Dispatch
+) => {
   dispatch({
     type: PERFORM_BACKUP,
   });
   try {
-    const response = await fetch("/api/v1/backup", {
+    const response = await fetch("http://localhost:3001/api/v1/backup", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -32,8 +37,7 @@ export const performBackup = (options: BackupRestoreOptions) => async (dispatch:
       type: PERFORM_BACKUP_SUCCESS,
       data: undefined,
     });
-  }
-  catch (error) {
+  } catch (error) {
     dispatch({
       type: PERFORM_BACKUP_FAILURE,
       error,

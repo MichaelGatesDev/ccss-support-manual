@@ -1,12 +1,10 @@
 {
-    "extends": "./tsconfig.build.json",
-    "compilerOptions": {
-        "resolveJsonModule": true,
-        "baseUrl": ".",
-        "paths": {
-            "@ccss-support-manual/*": [
-                "packages/*/src"
-            ]
-        }
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ccss-support-manual/*": ["packages/*/src"]
     }
+  }
 }
