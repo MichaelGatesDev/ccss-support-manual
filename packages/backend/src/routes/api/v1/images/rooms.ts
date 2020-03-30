@@ -3,12 +3,13 @@ import { app } from "../../../../app";
 
 const router: Router = Router();
 
-
 router.get("/", (_req, res): void => {
-    res.status(200).json(app.imageManager.roomImages);
+  res.status(200).json(app.imageManager.roomImages);
 });
 
-router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNumber: string): void => {
+router.param(
+  "roomNumber",
+  (req: any, _res: Response, next: NextFunction, roomNumber: string): void => {
     req.roomNumber = roomNumber;
     next();
     // let building = app.buildingManager.getBuildingByName(req.buildingName);
@@ -22,13 +23,14 @@ router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNu
     // }
     // next(new Error("Failed to find room: " + roomNumber));
     // return;
-});
+  }
+);
 
 router.get("/:roomNumber", (req: any, res): void => {
-    const buildingName = req.buildingName;
-    const roomNumber = req.roomNumber;
-    const images = app.imageManager.getImagesForRoom(buildingName, roomNumber);
-    res.status(200).json(images);
+  const buildingName = req.buildingName;
+  const roomNumber = req.roomNumber;
+  const images = app.imageManager.getImagesForRoom(buildingName, roomNumber);
+  res.status(200).json(images);
 });
 
 export default router;

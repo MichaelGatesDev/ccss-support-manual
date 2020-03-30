@@ -1,10 +1,10 @@
 import { Router, Response } from "express";
-import { Room } from "@ccss-support-manual/models";
+import { BuildingRoomRequest } from "packages/backend/src/models/building-room-request";
 
 const router: Router = Router();
 
-router.get("/", (req: any, res: Response): void => {
-    res.status(200).json(req.body.room as Room);
+router.get("/", (req: BuildingRoomRequest, res: Response): void => {
+  res.status(200).json(req.room);
 });
 
 export default router;

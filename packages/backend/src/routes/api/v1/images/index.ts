@@ -6,7 +6,7 @@ import buildingsRoute from "./buildings";
 const router: Router = Router();
 
 router.get("/", (_req, res): void => {
-    res.status(200).json(app.imageManager.getAllImages());
+  res.status(200).json(app.imageManager.getAllImages());
 });
 
 router.use("/buildings", buildingsRoute);
