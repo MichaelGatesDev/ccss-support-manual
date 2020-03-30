@@ -4,6 +4,15 @@ import { Provider } from "react-redux";
 
 import "./App.scss";
 
+// -- START BOOTSTRAP --
+import "popper.js/dist/umd/popper.min";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap-grid.min.css";
+import "bootstrap/dist/css/bootstrap-reboot.min.css";
+import "bootstrap/dist/js/bootstrap.min";
+import "jquery/dist/jquery.slim";
+// -- END BOOTSTRAP --
+
 import { store } from "./redux/store";
 
 import Home from "./Sections/Home";
@@ -14,13 +23,6 @@ import BuildingsSection from "./Sections/BuildingsSection";
 import BackToTopButton from "./Components/BackToTopButton";
 import RoomSection from "./Sections/RoomSection";
 import AddBuildingSection from "./Sections/AddBuildingSection";
-
-import "popper.js/dist/umd/popper.min";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/css/bootstrap-grid.min.css";
-import "bootstrap/dist/css/bootstrap-reboot.min.css";
-import "bootstrap/dist/js/bootstrap.min";
-import "jquery/dist/jquery.slim";
 import HomeV2 from "./Sections/HomeV2";
 
 const App = (): JSX.Element => (
