@@ -138,11 +138,15 @@ const HomeV2 = (props: Props): JSX.Element => {
           </>
         ) : (
           <Row>
-            <Col>
-              <RoomCardsDeck
-                rooms={rooms}
-                roomsImages={imagesState.allRoomImages}
-              />
+            <Col className="text-center">
+              {rooms.length > 0 ? (
+                <RoomCardsDeck
+                  rooms={rooms}
+                  roomsImages={imagesState.allRoomImages}
+                />
+              ) : (
+                <p>No results found :(</p>
+              )}
             </Col>
           </Row>
         )}
