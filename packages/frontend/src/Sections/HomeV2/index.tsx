@@ -94,7 +94,7 @@ const HomeV2 = (props: Props): JSX.Element => {
   return (
     <>
       <Container fluid as="section" id="home-v2">
-        {StringUtils.isBlank(searchQuery) && (
+        {StringUtils.isBlank(searchQuery) ? (
           <>
             <Row className="pb-4">
               <Col className="text-center">
@@ -136,6 +136,15 @@ const HomeV2 = (props: Props): JSX.Element => {
               </Col>
             </Row>
           </>
+        ) : (
+          <Row>
+            <Col>
+              <RoomCardsDeck
+                rooms={rooms}
+                roomsImages={imagesState.allRoomImages}
+              />
+            </Col>
+          </Row>
         )}
       </Container>
       <SiteNavigation
