@@ -15,7 +15,6 @@ import {
   FontAwesomeIcon,
   FontAwesomeIconProps,
 } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   topNavigationVisible?: boolean;
@@ -97,8 +96,9 @@ export const SiteNavigation = (props: Props): JSX.Element => {
                     </InputGroup.Prepend>
                   )}
                   <FormControl
-                    className="h-auto"
                     id={searchID}
+                    className="h-auto"
+                    autoFocus
                     placeholder={searchPlaceholder}
                     aria-label={searchAriaLabel}
                     aria-describedby={searchAriaDescribedBy}

@@ -52,20 +52,7 @@ const HomeV2 = (props: Props): JSX.Element => {
   useEffect(() => {
     // fetch buildings (and rooms)
     fetchBuildings();
-
-    jQuery("#search").focus();
-    jQuery("#search-lg").focus();
   }, []);
-
-  // keep search focused
-  jQuery("#search-lg").blur(() => {
-    jQuery("#search-lg").focus();
-  });
-
-  // keep search focused
-  jQuery("#search").blur(() => {
-    jQuery("#search").focus();
-  });
 
   const isLoading = (): boolean => buildingsState.fetchingBuildings;
   if (isLoading()) {
@@ -107,51 +94,49 @@ const HomeV2 = (props: Props): JSX.Element => {
   return (
     <>
       <Container fluid as="section" id="home-v2">
-        <div
-          id="temp-search"
-          style={{
-            display: !StringUtils.isBlank(searchQuery) ? "none" : "block",
-          }}
-        >
-          <Row className="pb-4">
-            <Col className="text-center">
-              <NavbarBrand>
-                <h1>Classroom Support Manual</h1>
-              </NavbarBrand>
-            </Col>
-          </Row>
-          <Row className="justify-content-md-center">
-            <Col xs={12} md={9}>
-              <div id="search-container">
-                <InputGroup className="">
-                  <InputGroup.Prepend>
-                    <InputGroup.Text id="searchIcon">
-                      <FontAwesomeIcon icon={faSearch} />
-                    </InputGroup.Text>
-                  </InputGroup.Prepend>
-                  <FormControl
-                    id="search-lg"
-                    placeholder="Search for a building or room (e.g. Granite Hall, Granite 072D)"
-                    aria-label="location"
-                    aria-describedby="searchIcon"
-                    size="lg"
-                    onChange={(event: any): void => {
-                      const { value } = event.target;
-                      setSearchQuery(value);
-                    }}
-                  />
-                </InputGroup>
-                <Nav>
-                  <Nav.Item>
-                    <Nav.Link as={Link} to="/search">
-                      Advanced Search
-                    </Nav.Link>
-                  </Nav.Item>
-                </Nav>
-              </div>
-            </Col>
-          </Row>
-        </div>
+        {StringUtils.isBlank(searchQuery) && (
+          <>
+            <Row className="pb-4">
+              <Col className="text-center">
+                <NavbarBrand>
+                  <h1>Classroom Support Manual</h1>
+                </NavbarBrand>
+              </Col>
+            </Row>
+            <Row className="justify-content-md-center">
+              <Col xs={12} md={9}>
+                <div id="search-container">
+                  <InputGroup className="">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="searchIcon">
+                        <FontAwesomeIcon icon={faSearch} />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                      id="search-lg"
+                      placeholder="Search for a building or room (e.g. Granite Hall, Granite 072D)"
+                      size="lg"
+                      autoFocus
+                      aria-label="location"
+                      aria-describedby="searchIcon"
+                      onChange={(event: any): void => {
+                        const { value } = event.target;
+                        setSearchQuery(value);
+                      }}
+                    />
+                  </InputGroup>
+                  <Nav>
+                    <Nav.Item>
+                      <Nav.Link as={Link} to="/search">
+                        Advanced Search
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                </div>
+              </Col>
+            </Row>
+          </>
+        )}
       </Container>
       <SiteNavigation
         searchID="search"
