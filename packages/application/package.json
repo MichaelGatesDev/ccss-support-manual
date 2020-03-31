@@ -16,13 +16,14 @@
     "tsc": "tsc -p tsconfig.build.json",
     "start": "yarn run parent-tsc && electron-forge start",
     "start:dev": "yarn run tsc && electron-forge start",
+    "build": "yarn make",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish"
   },
   "workspaces": {
     "nohoist": [
-      "**/electron**"
+      "**"
     ]
   },
   "config": {

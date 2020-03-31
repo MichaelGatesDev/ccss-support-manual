@@ -1,3 +1,7 @@
-import fs from "fs";
+import fs from "fs-extra";
+import path from "path";
 
-fs.renameSync("packages/frontend/build", "packages/application/dist/public");
+fs.copy(
+  path.resolve("./packages/frontend/build"),
+  path.resolve("./packages/application/dist")
+);
