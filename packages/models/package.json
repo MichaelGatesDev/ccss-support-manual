@@ -11,7 +11,7 @@
     "tsc": "tsc -p tsconfig.build.json",
     "clean": "tsc -p tsconfig.build.json --clean",
     "lint": "eslint . --ext .js,.ts --ignore-path='../../.eslintignore'",
-    "test": "jest --coverage --passWithNoTests",
+    "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   }
 }
