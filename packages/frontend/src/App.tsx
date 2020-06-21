@@ -5,11 +5,11 @@ import { Provider } from "react-redux";
 import "./App.scss";
 
 // -- START BOOTSTRAP --
-import "popper.js/dist/umd/popper.min";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "bootstrap/dist/css/bootstrap-reboot.min.css";
-import "bootstrap/dist/js/bootstrap.min";
+import "popper.js/dist/umd/popper.min";
+import "bootstrap/dist/js/bootstrap";
 import "jquery/dist/jquery.slim";
 // -- END BOOTSTRAP --
 
