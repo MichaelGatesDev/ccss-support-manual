@@ -1,4 +1,3 @@
-import debug from "debug";
 import http from "http";
 import express from "express";
 import path from "path";
@@ -82,10 +81,10 @@ export class ExpressServer {
     // handle specific listen errors with friendly messages
     switch (error.code) {
       case "EACCES":
-        Logger.error(bind + " requires elevated privileges");
+        Logger.error(`${bind} requires elevated privileges`);
         return process.exit(1);
       case "EADDRINUSE":
-        Logger.error(bind + " is already in use");
+        Logger.error(`${bind} is already in use`);
         return process.exit(1);
       default:
         throw error;
@@ -109,8 +108,7 @@ export class ExpressServer {
     }
 
     const bind =
-      typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-    debug("Listening on " + bind);
+      typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
 
     Logger.debug(`Server running on ${bind}`);
   }
