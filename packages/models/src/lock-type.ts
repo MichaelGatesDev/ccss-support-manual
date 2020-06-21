@@ -1,8 +1,8 @@
 export enum LockType {
-    Key,
-    Swipe,
-    Electronic,
-    Button,
-    Other,
-    None
+  Key,
+  Swipe,
+  Electronic,
+  Button,
+  Other,
+  None,
 }

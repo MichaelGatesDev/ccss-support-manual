@@ -8,7 +8,7 @@ import { BuildingManager } from "./building-manager";
 import { RoomManager } from "./room-manager";
 import { ImageManager } from "./image-manager";
 import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
-import { SpreadsheetManager } from "./spreadsheet-manager";
+// import { SpreadsheetManager } from "./spreadsheet-manager";
 import { DataManager } from "./data-manager";
 import { BackupManager } from "./backup-manager";
 // import { UpdateManager } from "./update-manager";
@@ -37,7 +37,7 @@ export class App {
   // ------------------------------------------------------ \\
   //              Managers
   // ------------------------------------------------------ \\
-  public spreadsheetManager: SpreadsheetManager;
+  // public spreadsheetManager: SpreadsheetManager;
   public configManager: ConfigManager;
   public imageManager: ImageManager;
   public buildingManager: BuildingManager;
@@ -47,7 +47,7 @@ export class App {
   public backupManager: BackupManager;
 
   public constructor() {
-    this.spreadsheetManager = new SpreadsheetManager(this);
+    // this.spreadsheetManager = new SpreadsheetManager(this);
     this.configManager = new ConfigManager(this);
     this.imageManager = new ImageManager(this);
     this.buildingManager = new BuildingManager(this);
@@ -151,7 +151,7 @@ export class App {
 
 export const app = new App();
 
-nodeCleanup(function(exitCode, signal) {
+nodeCleanup(function (exitCode, signal) {
   Logger.debug(`Exiting program. Exit code: ${exitCode}, Signal: ${signal}`);
   // release resources here before node exits
   // app.deinitialize();

@@ -1,4 +1,4 @@
 export enum SpreadsheetType {
-    ClassroomChecks,
-    Troubleshooting
+  ClassroomChecks,
+  Troubleshooting,
 }
