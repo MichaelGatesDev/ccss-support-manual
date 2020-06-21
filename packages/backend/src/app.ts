@@ -1,5 +1,4 @@
 import path from "path";
-import nodeCleanup from "node-cleanup";
 import { Logger } from "@michaelgatesdev/common";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
@@ -86,10 +85,6 @@ export class App {
     await this.imageManager.initialize();
   }
 
-  public deinitialize(): void {
-    Logger.debug("TODO: deinitialize application");
-  }
-
   public async reinitialize(): Promise<void> {
     // create directories
     await this.setupDirectories();
@@ -150,11 +145,5 @@ export class App {
 }
 
 export const app = new App();
-
-nodeCleanup(function (exitCode, signal) {
-  Logger.debug(`Exiting program. Exit code: ${exitCode}, Signal: ${signal}`);
-  // release resources here before node exits
-  // app.deinitialize();
-});
 
 // ------------------------------------------------------ \\

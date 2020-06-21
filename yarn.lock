@@ -3936,6 +3936,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/fs-extra@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "@types/fs-extra@npm:9.0.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: a7c0f7373620b5045fb5fc6ccc28c8752a08f93c03127036e292cfa35bf123bd2cdbe534aaac5800a8383af37490c8b8d1192361ea24a4c7e4177ebe97c3b429
+  languageName: node
+  linkType: hard
+
 "@types/glob@npm:*, @types/glob@npm:^7.1.1":
   version: 7.1.2
   resolution: "@types/glob@npm:7.1.2"
@@ -6486,6 +6495,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "classroom-support-manual@workspace:."
   dependencies:
+    "@types/fs-extra": ^9.0.1
     "@types/jest": ^25.2.3
     "@types/node": ^13.13.12
     "@types/rimraf": ^2.0.4
