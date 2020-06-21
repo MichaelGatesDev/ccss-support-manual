@@ -1,55 +1,62 @@
-import { Building, BuildingFactory, Room, RoomFactory, SimpleRoom } from "@ccss-support-manual/models";
-import { BuildingManager } from "../building-manager";
+import {
+  Building,
+  BuildingFactory,
+  Room,
+  RoomFactory,
+  SimpleRoom,
+} from "@ccss-support-manual/models";
 import { RoomManager } from "../room-manager";
+import { app } from "../app";
 
-const buildingManager = new BuildingManager();
-const roomManager = new RoomManager(buildingManager);
+const roomManager = new RoomManager(app);
 const buildingOfficialName = "My Cool Building";
-const building: Building = new BuildingFactory().withOfficialName(buildingOfficialName).build();
-buildingManager.addBuilding(building);
-
+const building: Building = new BuildingFactory()
+  .withOfficialName(buildingOfficialName)
+  .build();
+app.buildingManager.addBuilding(building);
 
 let exampleRoom: Room;
 
 test("creates a room", (): void => {
-    exampleRoom = new RoomFactory()
-        .withBuildingName(building.internalName)
-        .withNumber("200")
-        .build();
-    expect(exampleRoom).toBeDefined();
+  exampleRoom = new RoomFactory()
+    .withBuildingName(building.internalName)
+    .withNumber("200")
+    .build();
+  expect(exampleRoom).toBeDefined();
 });
 
 test("adds room to building", (): void => {
-    // should add room
-    expect(roomManager.addRoom(exampleRoom)).toBe(true);
+  // should add room
+  expect(roomManager.addRoom(exampleRoom)).toBe(true);
 });
 
 test("does not add duplicate rooms", (): void => {
-    // should not add duplicate room
-    expect(roomManager.addRoom(exampleRoom)).toBe(false);
+  // should not add duplicate room
+  expect(roomManager.addRoom(exampleRoom)).toBe(false);
 });
 
 test("gets room via number", (): void => {
-    // should have room with example room number
-    expect(roomManager.getRoom(building.internalName, exampleRoom.number)).toBeDefined()
+  // should have room with example room number
+  expect(
+    roomManager.getRoom(building.internalName, exampleRoom.number)
+  ).toBeDefined();
 });
 
 test("gets simplified version of room", (): void => {
-    const simplified: SimpleRoom = new RoomFactory()
-        .withBuildingName(exampleRoom.buildingName)
-        .withNumber(exampleRoom.number)
-        .buildSimple();
+  const simplified: SimpleRoom = new RoomFactory()
+    .withBuildingName(exampleRoom.buildingName)
+    .withNumber(exampleRoom.number)
+    .buildSimple();
 
-    // should have same building name
-    expect(simplified.buildingName).toBe(exampleRoom.buildingName);
-    // should have same number
-    expect(simplified.number).toBe(exampleRoom.number);
+  // should have same building name
+  expect(simplified.buildingName).toBe(exampleRoom.buildingName);
+  // should have same number
+  expect(simplified.number).toBe(exampleRoom.number);
 });
 
 test("removes room from building", (): void => {
-    // should remove the example room
-    expect(roomManager.removeRoom(exampleRoom)).toBe(true);
-    // should not remove a room that it does not contain
-    expect(roomManager.removeRoom(exampleRoom)).toBe(false);
+  // should remove the example room
+  expect(roomManager.removeRoom(exampleRoom)).toBe(true);
+  // should not remove a room that it does not contain
+  expect(roomManager.removeRoom(exampleRoom)).toBe(false);
 });
-
