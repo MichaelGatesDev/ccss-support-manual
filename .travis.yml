@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - "stable"
 cache: yarn
+before_install:
+  - yarn set version 2
 on:
   branch: master
 script:
