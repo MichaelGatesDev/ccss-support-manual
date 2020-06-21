@@ -14,8 +14,8 @@
     "dev:inspect": "tsnd --inspect -r tsconfig-paths/register --respawn --transpileOnly ./src/entrypoint.ts",
     "prod": "yarn tsc && node -r tsconfig-paths/register ./dist/entrypoint.js",
     "test": "jest --forceExit --coverage --verbose --detectOpenHandles --passWithNoTests",
-    "start:dev": "yarn run dev",
-    "start": "yarn run prod"
+    "start": "yarn run prod",
+    "start:dev": "yarn run dev"
   },
   "jest": {
     "modulePathIgnorePatterns": [
