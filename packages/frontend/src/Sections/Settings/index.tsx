@@ -3,8 +3,6 @@ import "./style.scss";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import NavBar from "../../Components/NavBar";
-
 import { AppState } from "../../redux/store";
 
 import { RestoreState } from "../../redux/restore/types";
@@ -23,8 +21,6 @@ const Settings = () => {
 
   return (
     <>
-      {/* Top navigation */}
-      <NavBar title="CCSS Support Manual" fixed />
       {/* Main content */}
       <section className="container" id="settings-section">
         {/* Data Header */}

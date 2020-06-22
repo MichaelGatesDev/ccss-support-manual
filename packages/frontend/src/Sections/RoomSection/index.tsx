@@ -2,16 +2,14 @@ import "./style.scss";
 
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { ImageType, RoomType, Classroom } from "@ccss-support-manual/models";
 import {
-  ImageType,
-  RoomType,
-  Classroom,
-} from "@ccss-support-manual/models";
-import { RoomUtils, TroubleshootingDataUtils } from "@ccss-support-manual/utilities";
+  RoomUtils,
+  TroubleshootingDataUtils,
+} from "@ccss-support-manual/utilities";
 import { StringUtils } from "@michaelgatesdev/common";
 import _ from "lodash";
 
-import NavBar from "../../Components/NavBar";
 import LoadingSplash from "../../Components/LoadingSplash";
 
 import { AppState } from "../../redux/store";
@@ -29,7 +27,6 @@ import SearchBox from "../../Components/SearchBox";
 import TroubleshootingTips from "../../Components/TroubleshootingTips";
 import FilterBox from "../../Components/FilterBox";
 
-
 interface Props {
   match?: any;
 
@@ -43,16 +40,29 @@ interface Props {
 
   fetchBuilding: (name: string) => void;
   fetchRoom: (buildingName: string, roomNumber: string | number) => void;
-  fetchRoomImagesForRoom: (buildingName: string, roomNumber: string | number) => void;
-  fetchTroubleshootingDataForRoom: (buildingName: string, roomNumber: string | number) => void;
+  fetchRoomImagesForRoom: (
+    buildingName: string,
+    roomNumber: string | number
+  ) => void;
+  fetchTroubleshootingDataForRoom: (
+    buildingName: string,
+    roomNumber: string | number
+  ) => void;
 }
 
 const RoomSection = (props: Props) => {
-
-  const [activeTroubleshootingTypeFilters, setActiveTroubleshootingTypeFilters] = useState<string[]>([]);
-  const [activeTroubleshootingTagFilters, setActiveTroubleshootingTagFilters] = useState<string[]>([]);
-  const [activeTroubleshootingSearchQuery, setActiveTroubleshootingSearchQuery] = useState<string>("");
-
+  const [
+    activeTroubleshootingTypeFilters,
+    setActiveTroubleshootingTypeFilters,
+  ] = useState<string[]>([]);
+  const [
+    activeTroubleshootingTagFilters,
+    setActiveTroubleshootingTagFilters,
+  ] = useState<string[]>([]);
+  const [
+    activeTroubleshootingSearchQuery,
+    setActiveTroubleshootingSearchQuery,
+  ] = useState<string>("");
 
   const {
     buildingName,
@@ -76,7 +86,6 @@ const RoomSection = (props: Props) => {
     fetchRoomImagesForRoom(buildingName, roomNumber);
   }, []);
 
-
   const building = buildingsState.fetchedBuilding;
   if (building === undefined) {
     return <p>Building not found</p>;
@@ -92,28 +101,21 @@ const RoomSection = (props: Props) => {
     return <p>Troubleshooting Data not found</p>;
   }
 
-
-  const isLoading = (): boolean => (buildingsState.fetchingBuilding || roomsState.fetchingRoom || troubleshootingState.loading || imagesState.imagesLoading);
-
+  const isLoading = (): boolean =>
+    buildingsState.fetchingBuilding ||
+    roomsState.fetchingRoom ||
+    troubleshootingState.loading ||
+    imagesState.imagesLoading;
 
   // Display splash when loading
   if (isLoading()) {
     return <LoadingSplash />;
   }
 
-
   return (
     <>
-      {/* Top navigation */}
-      <NavBar
-        title="CCSS Support Manual"
-        fixed
-      />
-
       {/* Main content */}
       <section className="container" id="room-section">
-
-
         {/* Room Title */}
         <div className="row">
           <div className="col text-center">
@@ -134,7 +136,6 @@ const RoomSection = (props: Props) => {
 
         {/* 3 Column Meta */}
         <div className="row">
-
           <div className="col-lg">
             <div className="row">
               <div className="col text-center">
@@ -143,7 +144,11 @@ const RoomSection = (props: Props) => {
             </div>
             <div className="row">
               <div className="col text-center">
-                <p className="capitalized">{StringUtils.splitCompressedTitle(RoomType[room.roomType]).join(" ")}</p>
+                <p className="capitalized">
+                  {StringUtils.splitCompressedTitle(
+                    RoomType[room.roomType]
+                  ).join(" ")}
+                </p>
               </div>
             </div>
           </div>
@@ -156,7 +161,9 @@ const RoomSection = (props: Props) => {
             </div>
             <div className="row">
               <div className="col text-center">
-                <p className="capitalized">{room.capacity === -1 ? "N/A" : `${room.capacity}`}</p>
+                <p className="capitalized">
+                  {room.capacity === -1 ? "N/A" : `${room.capacity}`}
+                </p>
               </div>
             </div>
           </div>
@@ -170,20 +177,15 @@ const RoomSection = (props: Props) => {
             <div className="row">
               <div className="col text-center">
                 <p className="capitalized">
-                  {
-                    !RoomUtils.isClassroom(room) || (room as Classroom).phone.extension === "0000"
-                      ?
-                      "N/A"
-                      :
-                      (room as Classroom).phone.extension
-                  }
+                  {!RoomUtils.isClassroom(room) ||
+                  (room as Classroom).phone.extension === "0000"
+                    ? "N/A"
+                    : (room as Classroom).phone.extension}
                 </p>
               </div>
             </div>
           </div>
-
         </div>
-
 
         {/* Panorama Photos */}
         <div className="row" id="panoramas-row">
@@ -191,7 +193,9 @@ const RoomSection = (props: Props) => {
             <ImageCarousel
               id="room-panoramas-carousel"
               height="200px"
-              images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomPanorama).map((image) => image.path)}
+              images={imagesState.roomImages
+                .filter(image => image.type === ImageType.RoomPanorama)
+                .map(image => image.path)}
             />
           </div>
         </div>
@@ -203,7 +207,9 @@ const RoomSection = (props: Props) => {
             <ImageCarousel
               id="room-carousel-titles"
               height="300px"
-              images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomTitle).map((image) => image.path)}
+              images={imagesState.roomImages
+                .filter(image => image.type === ImageType.RoomTitle)
+                .map(image => image.path)}
             />
           </div>
           {/* Photos */}
@@ -211,7 +217,9 @@ const RoomSection = (props: Props) => {
             <ImageCarousel
               id="room-carousel-room"
               height="300px"
-              images={imagesState.roomImages.filter((image) => image.type === ImageType.Room).map((image) => image.path)}
+              images={imagesState.roomImages
+                .filter(image => image.type === ImageType.Room)
+                .map(image => image.path)}
             />
           </div>
           {/* Photos */}
@@ -219,11 +227,12 @@ const RoomSection = (props: Props) => {
             <ImageCarousel
               id="room-carousel-equipment"
               height="300px"
-              images={imagesState.roomImages.filter((image) => image.type === ImageType.RoomEquipment).map((image) => image.path)}
+              images={imagesState.roomImages
+                .filter(image => image.type === ImageType.RoomEquipment)
+                .map(image => image.path)}
             />
           </div>
         </div>
-
 
         {/* Troubleshooting */}
         <div className="row" id="troubleshooting-row">
@@ -257,7 +266,6 @@ const RoomSection = (props: Props) => {
             />
           </div>
         </div>
-
       </section>
     </>
   );
@@ -273,12 +281,9 @@ const mapStateToProps = (state: AppState, props: Props) => ({
   roomNumber: props.match.params.roomNumber,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    fetchBuilding,
-    fetchRoom,
-    fetchTroubleshootingDataForRoom,
-    fetchRoomImagesForRoom,
-  },
-)(RoomSection);
+export default connect(mapStateToProps, {
+  fetchBuilding,
+  fetchRoom,
+  fetchTroubleshootingDataForRoom,
+  fetchRoomImagesForRoom,
+})(RoomSection);

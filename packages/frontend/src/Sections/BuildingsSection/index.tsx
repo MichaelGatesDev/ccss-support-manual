@@ -10,7 +10,6 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 import "./style.scss";
 
-import NavBar from "../../Components/NavBar";
 import LoadingSplash from "../../Components/LoadingSplash";
 
 import { AppState } from "../../redux/store";
@@ -77,13 +76,6 @@ const BuildingsSection = (props: Props) => {
 
   return (
     <>
-      {/* Top navigation */}
-      <NavBar
-        title="CCSS Support Manual"
-        searchable
-        onSearch={setFilterSearch}
-        fixed
-      />
       {/* Main content */}
       <section className="container-fluid" id="home-section">
         {/* Breadcrumbs */}

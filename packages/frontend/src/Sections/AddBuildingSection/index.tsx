@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 
 import { Building } from "@ccss-support-manual/models";
 
-import NavBar from "../../Components/NavBar";
 import { LabeledFormInput } from "../../Components/LabeledFormInput";
 import { LabeledInputList } from "../../Components/LabeledInputList";
 import { Alert, AlertType } from "../../Components/Alert/alert";
@@ -21,14 +20,10 @@ interface Props {
 }
 
 const AddBuildingSection = (props: Props) => {
-
   const [officialName, setOfficialName] = useState<string>("");
   const [nicknames, setNicknames] = useState<string[]>([]);
 
-  const {
-    buildingsState,
-    addBuilding,
-  } = props;
+  const { buildingsState, addBuilding } = props;
 
   const performAddBuilding = () => {
     // if (StringUtils.isBlank(officialName)) {
@@ -42,23 +37,23 @@ const AddBuildingSection = (props: Props) => {
 
   return (
     <>
-      {/* Top navigation */}
-      <NavBar
-        title="CCSS Support Manual"
-        fixed
-      />
       {/* Main content */}
       <section className="container" id="add-building-section">
-
         {/* Breadcrumbs */}
         <div className="container">
           <div className="row">
             <div className="col">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                  <li className="breadcrumb-item"><Link to="/buildings">Buildings</Link></li>
-                  <li className="breadcrumb-item active" aria-current="page">Add Building</li>
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
+                  </li>
+                  <li className="breadcrumb-item">
+                    <Link to="/buildings">Buildings</Link>
+                  </li>
+                  <li className="breadcrumb-item active" aria-current="page">
+                    Add Building
+                  </li>
                 </ol>
               </nav>
             </div>
@@ -72,12 +67,18 @@ const AddBuildingSection = (props: Props) => {
               <Alert alertType={AlertType.Success} id="info-alert">
                 <p>Succesfully addded new building!</p>
                 <p>
-                  <span style={{ fontWeight: "bold" }}>Official Name:&nbsp;</span>
+                  <span style={{ fontWeight: "bold" }}>
+                    Official Name:&nbsp;
+                  </span>
                   <span>{building.officialName}</span>
                 </p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Nicknames:&nbsp;</span>
-                  <span>{building.nicknames.length > 0 ? building.nicknames.join(", ") : "(none specified)"}</span>
+                  <span>
+                    {building.nicknames.length > 0
+                      ? building.nicknames.join(", ")
+                      : "(none specified)"}
+                  </span>
                 </p>
               </Alert>
             )}
@@ -103,7 +104,6 @@ const AddBuildingSection = (props: Props) => {
               id="building-official-name"
               onChange={setOfficialName}
               value={officialName}
-
               title="Official Name"
               titleLeft
             />
@@ -135,7 +135,6 @@ const AddBuildingSection = (props: Props) => {
             </Button>
           </div>
         </div>
-
       </section>
     </>
   );
@@ -145,9 +144,6 @@ const mapStateToProps = (state: AppState) => ({
   buildingsState: state.buildings,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    addBuilding,
-  },
-)(AddBuildingSection);
+export default connect(mapStateToProps, {
+  addBuilding,
+})(AddBuildingSection);
