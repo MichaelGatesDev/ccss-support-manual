@@ -95,7 +95,10 @@ const Home = (props: Props): JSX.Element => {
 
   let searchInput: HTMLInputElement | undefined | null;
   const selectSearch = () => {
-    searchInput?.focus();
+    if (!searchInput) return;
+    setTimeout(() => {
+      searchInput?.focus();
+    }, 0);
   };
 
   const SearchBoxComponent = (): JSX.Element => {
