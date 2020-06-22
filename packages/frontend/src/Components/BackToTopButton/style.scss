@@ -1,8 +1,10 @@
+@import "../../globals";
+
 .BackToTopButton-Component {
   position: fixed;
 
-  right: 1em;
-  bottom: 1em;
+  right: 2em;
+  bottom: $navbarHeight;
 
   z-index: 999 !important;
 
