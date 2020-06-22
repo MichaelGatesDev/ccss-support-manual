@@ -24,6 +24,7 @@ import {
 import { AnchorButton } from "../../Components/AnchorButton";
 import { ButtonType } from "../../Components/Button";
 import { BuildingCardsDeck } from "../../Components/BuildingCardsDeck";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 interface Props {
   buildingsState: BuildingsState;
@@ -78,24 +79,6 @@ const BuildingsSection = (props: Props) => {
     <>
       {/* Main content */}
       <section className="container-fluid" id="home-section">
-        {/* Breadcrumbs */}
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Buildings
-                  </li>
-                </ol>
-              </nav>
-            </div>
-          </div>
-        </div>
-
         <BuildingCardsDeck
           buildings={filteredBuildings}
           buildingsImages={imagesState.buildingImages}

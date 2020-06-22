@@ -24,6 +24,7 @@ import RoomSection from "./Sections/RoomSection";
 import AddBuildingSection from "./Sections/AddBuildingSection";
 import Home from "./Sections/Home";
 import { SiteNavigation } from "./Components/SiteNavigation";
+import Breadcrumbs from "./Components/Breadcrumbs";
 
 const App = (): JSX.Element => (
   <Provider store={store}>
@@ -31,7 +32,11 @@ const App = (): JSX.Element => (
       {/* Back to top button */}
       <BackToTopButton minScrollAmt={50} />
       <SiteNavigation />
+
       <div className="App">
+        <div className="container">
+          <Breadcrumbs />
+        </div>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/settings" component={Settings} />

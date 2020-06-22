@@ -39,27 +39,6 @@ const AddBuildingSection = (props: Props) => {
     <>
       {/* Main content */}
       <section className="container" id="add-building-section">
-        {/* Breadcrumbs */}
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <nav aria-label="breadcrumb">
-                <ol className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <Link to="/buildings">Buildings</Link>
-                  </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Add Building
-                  </li>
-                </ol>
-              </nav>
-            </div>
-          </div>
-        </div>
-
         <div className="row">
           <div className="col">
             {/* Info alert */}

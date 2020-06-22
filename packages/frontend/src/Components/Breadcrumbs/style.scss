@@ -1,0 +1,21 @@
+#breadcrumbs {
+  background: none;
+  .breadcrumb {
+    background-color: #f2f2f2;
+
+    .breadcrumb-item {
+      text-transform: capitalize;
+
+      a {
+        color: #6b6b6b;
+        text-decoration: none;
+      }
+
+      &.active {
+        a {
+          color: #2e2e2e;
+        }
+      }
+    }
+  }
+}
