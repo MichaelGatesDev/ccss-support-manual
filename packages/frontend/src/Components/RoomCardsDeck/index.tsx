@@ -55,16 +55,6 @@ export const RoomCardsDeck = (props: Props) => {
                 )}
               </>
             }
-            footer={
-              classroom === undefined ||
-              StringUtils.isBlank(
-                classroom.lastChecked as string
-              ) ? undefined : (
-                <>
-                  <p className="m-0 p-0">{classroom.lastChecked}</p>
-                </>
-              )
-            }
           />
         );
       })}
