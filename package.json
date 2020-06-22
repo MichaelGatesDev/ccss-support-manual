@@ -5,6 +5,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "engines": {
+    "pm": "yarn@2.0.0-rc.32"
+  },
   "scripts": {
     "clean": "tsnd scripts/clean.ts",
     "tsc": "tsnd scripts/tsc.ts",
