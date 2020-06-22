@@ -1,24 +1,35 @@
+import "./style.scss";
+
 import React, { useState, useEffect } from "react";
+import {
+  Row,
+  Col,
+  Container as div,
+  Nav,
+  InputGroup,
+  FormControl,
+  NavbarBrand,
+  Container,
+  Button,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import jQuery from "jquery";
+import { StringUtils } from "@michaelgatesdev/common";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import {
-  Room,
-  Building,
-  ImageType,
-} from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
+import { Room, Building } from "@ccss-support-manual/models";
 
-import "./style.scss";
-
-import NavBar from "../../Components/NavBar";
-import LoadingSplash from "../../Components/LoadingSplash";
-
-import { AppState } from "../../redux/store";
 import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
+import { SiteNavigation } from "../../Components/SiteNavigation";
+import { AppState } from "../../redux/store";
+import { BuildingCardsDeck } from "../../Components/BuildingCardsDeck";
 import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
 
 interface Props {
@@ -29,41 +40,52 @@ interface Props {
   fetchImages: () => void;
 }
 
-const Home = (props: Props) => {
+const Home = (props: Props): JSX.Element => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const [filterSearch, setFilterSearch] = useState<string>("");
+  const {
+    buildingsState,
+    fetchBuildings,
 
-  const { fetchBuildings, fetchImages } = props;
-  const { buildingsState, imagesState } = props;
+    imagesState,
+    fetchImages,
+  } = props;
 
   useEffect(() => {
+    // fetch buildings (and rooms)
     fetchBuildings();
-    fetchImages();
   }, []);
 
-  const isLoading = (): boolean => buildingsState.fetchingBuildings || imagesState.imagesLoading;
-
-  const filterRoomsByName = (rooms: Room[], name: string, filterNumber = true, filterName = true, filterBuildingName = true): Room[] => rooms.filter((room: Room) => {
-    const pb: Building | undefined = BuildingUtils.getParentBuilding(room, buildingsState.fetchedBuildings ?? []);
-    if (pb === undefined) return false;
-    return (
-      (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
-      (filterName && room.name.toLocaleLowerCase().includes(name)) ||
-      (filterBuildingName && BuildingUtils.hasName(pb, name))
-    );
-  });
-
-
-  // Display splash when loading
+  const isLoading = (): boolean => buildingsState.fetchingBuildings;
   if (isLoading()) {
-    return <LoadingSplash />;
+    return <p>Loading...</p>;
   }
 
-  const query = filterSearch;
-  const queries = query.split(" ");
+  const filterRoomsByName = (
+    rooms: Room[],
+    name: string,
+    filterNumber = true,
+    filterName = true,
+    filterBuildingName = true
+  ): Room[] =>
+    rooms.filter((room: Room) => {
+      const pb: Building | undefined = BuildingUtils.getParentBuilding(
+        room,
+        buildingsState.fetchedBuildings ?? []
+      );
+      if (pb === undefined) return false;
+      return (
+        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
+        (filterName && room.name.toLocaleLowerCase().includes(name)) ||
+        (filterBuildingName && BuildingUtils.hasName(pb, name))
+      );
+    });
 
-  let rooms = _.sortBy(BuildingUtils.getAllRooms(buildingsState.fetchedBuildings ?? []), ["buildingName", "number"]);
-
+  const queries = searchQuery.split(" ").filter(q => !StringUtils.isBlank(q));
+  let rooms = _.sortBy(
+    BuildingUtils.getAllRooms(buildingsState.fetchedBuildings ?? []),
+    ["buildingName", "number"]
+  );
   if (queries.length > 0) {
     for (let query of queries) {
       query = query.toLocaleLowerCase();
@@ -71,31 +93,101 @@ const Home = (props: Props) => {
     }
   }
 
-  const roomsImages = imagesState.roomImages.filter((image) => image.type === ImageType.Room);
+  const SearchBoxComponent = (): JSX.Element => {
+    return (
+      <div
+        id="search-container"
+        className={searchQuery != "" ? "stick-bottom" : ""}
+      >
+        <InputGroup id="search-group">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="searchIcon">
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            id="search-input"
+            placeholder="Search for a building or room (e.g. Granite Hall, Granite 072D)"
+            size="lg"
+            autoFocus
+            aria-label="location"
+            aria-describedby="searchIcon"
+            value={searchQuery}
+            onChange={(event: any): void => {
+              const { value } = event.target;
+              setSearchQuery(value);
+            }}
+          />
+          <InputGroup.Append>
+            <InputGroup.Text
+              id="searchClearIcon"
+              onClick={() => {
+                setSearchQuery("");
+              }}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </InputGroup.Text>
+          </InputGroup.Append>
+        </InputGroup>
+      </div>
+    );
+  };
+
+  const WelcomeContainerComponent = (): JSX.Element => {
+    return (
+      <div id="landing">
+        <Row className="pb-4">
+          <Col className="text-center">
+            <h1>Classroom Support Manual</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <SearchBoxComponent />
+            <Nav>
+              <Nav.Item>
+                <Nav.Link as={Link} to="/search">
+                  Advanced Search
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+        </Row>
+      </div>
+    );
+  };
+
+  const SearchResultsComponent = (): JSX.Element => {
+    return (
+      <div id="search-results">
+        <SearchBoxComponent />
+        <Row>
+          <Col className="text-center">
+            {rooms.length > 0 ? (
+              <RoomCardsDeck
+                rooms={rooms}
+                roomsImages={imagesState.allRoomImages}
+              />
+            ) : (
+              <p>No results found :(</p>
+            )}
+          </Col>
+        </Row>
+      </div>
+    );
+  };
 
   return (
     <>
-      {/* Top navigation */}
-      <NavBar
-        title="CCSS Support Manual"
-        searchable
-        onSearch={setFilterSearch}
-        fixed
-      />
-      {/* Main content */}
-      <section className="containegonna container-fluid" id="home-section">
-        <div className="row">
-          <div className="col">
-            <RoomCardsDeck
-              rooms={rooms}
-              roomsImages={roomsImages}
-            />
-          </div>
-        </div>
-      </section>
+      <Container fluid as="section" id="home">
+        {StringUtils.isBlank(searchQuery) ? (
+          <WelcomeContainerComponent />
+        ) : (
+          <SearchResultsComponent />
+        )}
+      </Container>
     </>
   );
-
 };
 
 const mapStateToProps = (state: AppState) => ({
@@ -103,7 +195,7 @@ const mapStateToProps = (state: AppState) => ({
   imagesState: state.images,
 });
 
-export default connect(
-  mapStateToProps,
-  { fetchBuildings, fetchImages },
-)(Home);
+export default connect(mapStateToProps, {
+  fetchBuildings,
+  fetchImages,
+})(Home);

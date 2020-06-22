@@ -15,7 +15,6 @@ import "jquery/dist/jquery.slim";
 
 import { store } from "./redux/store";
 
-import Home from "./Sections/Home";
 import Settings from "./Sections/Settings";
 import BuildingSection from "./Sections/BuildingSection";
 import BuildingsSection from "./Sections/BuildingsSection";
@@ -23,17 +22,18 @@ import BuildingsSection from "./Sections/BuildingsSection";
 import BackToTopButton from "./Components/BackToTopButton";
 import RoomSection from "./Sections/RoomSection";
 import AddBuildingSection from "./Sections/AddBuildingSection";
-import HomeV2 from "./Sections/HomeV2";
+import Home from "./Sections/Home";
+import { SiteNavigation } from "./Components/SiteNavigation";
 
 const App = (): JSX.Element => (
   <Provider store={store}>
     <HashRouter basename="/">
       {/* Back to top button */}
       <BackToTopButton minScrollAmt={50} />
+      <SiteNavigation />
       <div className="App">
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/v2" component={HomeV2} />
           <Route path="/settings" component={Settings} />
 
           <Route exact path="/buildings" component={BuildingsSection} />
