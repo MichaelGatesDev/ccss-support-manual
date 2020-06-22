@@ -10,5 +10,4 @@ install:
 on:
   branch: master
 script:
-  - yarn tsc
   - yarn test
