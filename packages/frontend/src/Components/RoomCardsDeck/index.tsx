@@ -23,7 +23,7 @@ interface Props {
 export const RoomCardsDeck = (props: Props) => {
   const { rooms, roomsImages } = props;
   return (
-    <CardDeck center>
+    <CardDeck>
       {rooms.map(room => {
         const coverImages = roomsImages.filter(
           image =>
@@ -57,9 +57,9 @@ export const RoomCardsDeck = (props: Props) => {
             }
             footer={
               classroom === undefined ||
-              StringUtils.isBlank(classroom.lastChecked as string) ? (
-                undefined
-              ) : (
+              StringUtils.isBlank(
+                classroom.lastChecked as string
+              ) ? undefined : (
                 <>
                   <p className="m-0 p-0">{classroom.lastChecked}</p>
                 </>

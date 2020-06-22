@@ -1,8 +1,10 @@
+@import "../../globals";
+
 #home {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 70px);
+  height: calc(100vh - #{$navbarHeight});
   justify-content: center;
   align-items: center;
   overflow-y: auto;
@@ -25,7 +27,7 @@
   }
 
   #landing {
-    width: 80%;
+    // width: 80%;
     h1 {
       font-size: 72px;
     }
@@ -44,18 +46,14 @@
     height: 100%;
     // display: flex;
     // justify-content: center;
+    #results {
+      margin-bottom: $navbarHeight;
+    }
   }
 }
 
-.stick-below-navbar {
-  position: absolute;
-  left: 0;
-  top: 70px;
-  right: 0;
-}
-
 .stick-bottom {
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
   right: 0;

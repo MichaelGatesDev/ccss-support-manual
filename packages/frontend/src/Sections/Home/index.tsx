@@ -93,6 +93,11 @@ const Home = (props: Props): JSX.Element => {
     }
   }
 
+  let searchInput: HTMLInputElement | undefined | null;
+  const selectSearch = () => {
+    searchInput?.focus();
+  };
+
   const SearchBoxComponent = (): JSX.Element => {
     return (
       <div
@@ -110,12 +115,18 @@ const Home = (props: Props): JSX.Element => {
             placeholder="Search for a building or room (e.g. Granite Hall, Granite 072D)"
             size="lg"
             autoFocus
-            aria-label="location"
+            aria-label="search"
             aria-describedby="searchIcon"
             value={searchQuery}
+            ref={(elem: HTMLInputElement | null | undefined) => {
+              searchInput = elem;
+            }}
             onChange={(event: any): void => {
               const { value } = event.target;
               setSearchQuery(value);
+            }}
+            onBlur={e => {
+              selectSearch();
             }}
           />
           <InputGroup.Append>
@@ -161,7 +172,7 @@ const Home = (props: Props): JSX.Element => {
     return (
       <div id="search-results">
         <SearchBoxComponent />
-        <Row>
+        <Row id="results">
           <Col className="text-center">
             {rooms.length > 0 ? (
               <RoomCardsDeck

@@ -25,7 +25,6 @@ export enum HoverEffect {
 }
 
 export const Card = (props: Props) => {
-
   const {
     className,
     hoverEffect,
@@ -41,38 +40,42 @@ export const Card = (props: Props) => {
     footer,
   } = props;
 
-  const hoverClass = hoverEffect !== undefined ? HoverEffect[hoverEffect].toLowerCase() : "";
+  const hoverClass =
+    hoverEffect !== undefined ? HoverEffect[hoverEffect].toLowerCase() : "";
 
   return (
-    <div className={`Card-Component card mb-4 text-center ${className} ${hoverClass}`} style={{ minWidth: width, maxWidth: width }}>
-      {/* Header */}
-      {
-        header !== undefined && (
+    <div className="col d-flex justify-content-center">
+      <div
+        className={`Card-Component card mb-4 text-center ${className} ${hoverClass}`}
+        style={{ minWidth: width, maxWidth: width }}
+      >
+        {/* Header */}
+        {header !== undefined && (
           <div className="card-header py-1 text-center">{header}</div>
-        )
-      }
-      {/* Image */}
-      <img src={img} className="card-img-top" alt="" style={{ width: "100%", height: "200px", objectFit: "cover" }} />
-      {/* Body */}
-      {(title !== undefined || body !== undefined) && (
-        <div className="card-body">
-          {/* Title */}
-          <h5 className="card-title mb-0">{title}</h5>
-          {/* Body */}
-          {body !== undefined && body}
-        </div>
-      )}
-      {/* Footer */}
-      {
-        footer !== undefined && (
-          <div className="card-footer">{footer}</div>
-        )
-      }
-      {/* URL to wrap */}
-      {
-        wrappedURL !== undefined &&
-        <Link to={wrappedURL} className="stretched-link" />
-      }
+        )}
+        {/* Image */}
+        <img
+          src={img}
+          className="card-img-top"
+          alt=""
+          style={{ width: "100%", height: "200px", objectFit: "cover" }}
+        />
+        {/* Body */}
+        {(title !== undefined || body !== undefined) && (
+          <div className="card-body">
+            {/* Title */}
+            <h5 className="card-title mb-0">{title}</h5>
+            {/* Body */}
+            {body !== undefined && body}
+          </div>
+        )}
+        {/* Footer */}
+        {footer !== undefined && <div className="card-footer">{footer}</div>}
+        {/* URL to wrap */}
+        {wrappedURL !== undefined && (
+          <Link to={wrappedURL} className="stretched-link" />
+        )}
+      </div>
     </div>
   );
 };
