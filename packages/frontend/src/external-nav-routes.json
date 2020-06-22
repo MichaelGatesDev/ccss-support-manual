@@ -1,0 +1,5 @@
+{
+  "master_schedule": "https://banner.plattsburgh.edu/pls/prod/psu_genweb.master_sched_search",
+  "room_schedule": "https://booking.plattsburgh.edu/",
+  "servicenow": "https://suny.service-now.com/navpage.do"
+}
