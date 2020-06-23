@@ -25,7 +25,7 @@ export class RoomManager {
    */
   public addRoom(room: Room): boolean {
     if (this.hasRoom(room)) return false;
-    const building = this.buildingManager.getBuildingByName(room.buildingName);
+    const building = this.buildingManager.getBuildingByName(room.building.name);
     if (building === undefined) return false;
     if (building.rooms === undefined) building.rooms = [];
     building.rooms.push(room);
@@ -47,7 +47,7 @@ export class RoomManager {
    * @param room The remove to remove
    */
   public removeRoom(room: Room): boolean {
-    const building = this.buildingManager.getBuildingByName(room.buildingName);
+    const building = this.buildingManager.getBuildingByName(room.building.name);
     if (building === undefined) return false;
     if (building.rooms === undefined) building.rooms = [];
     if (!this.hasRoom(room)) return false;
@@ -56,10 +56,7 @@ export class RoomManager {
     return true;
   }
 
-  public removeRoomByBuildingNameAndNumber(
-    buildingName: string,
-    number: string | number
-  ): boolean {
+  public removeRoomByBuildingNameAndNumber(buildingName: string, number: string | number): boolean {
     const building = this.buildingManager.getBuildingByName(buildingName);
     if (building === undefined) return false;
     const room = this.getRoom(buildingName, number);
@@ -90,17 +87,10 @@ export class RoomManager {
    * @param buildingName The name of the building
    * @param roomNumber The room number
    */
-  public getRoom(
-    buildingName: string,
-    roomNumber: string | number
-  ): Room | undefined {
+  public getRoom(buildingName: string, roomNumber: string | number): Room | undefined {
     const building = this.buildingManager.getBuildingByName(buildingName);
     if (building === undefined) return undefined;
-    return this.getRooms().find(
-      (room: Room) =>
-        BuildingUtils.hasName(building, room.buildingName) &&
-        room.number === roomNumber
-    );
+    return this.getRooms().find((room: Room) => BuildingUtils.hasName(building, room.building.name) && room.number === roomNumber);
   }
 
   /**
@@ -120,7 +110,7 @@ export class RoomManager {
    * @return True if it exists, otherwise false
    */
   public hasRoom(room: Room): boolean {
-    return this.getRoom(room.buildingName, room.number) !== undefined;
+    return this.getRoom(room.building.name, room.number) !== undefined;
   }
 
   /**
@@ -129,10 +119,7 @@ export class RoomManager {
    * @param number The number of the room
    * @return True if it exists, otherwise false
    */
-  public hasRoomWithBuildingNameAndNumber(
-    buildingName: string,
-    number: string | number
-  ): boolean {
+  public hasRoomWithBuildingNameAndNumber(buildingName: string, number: string | number): boolean {
     const building = this.buildingManager.getBuildingByName(buildingName);
     if (building === undefined) return false;
     const room = this.getRoom(buildingName, number);
@@ -146,6 +133,6 @@ export class RoomManager {
    * @return The display name of the room (official building name + number) e.g. "Awesome Building 131D"
    */
   public getRoomDisplayName(building: Building, room: Room): string {
-    return building.officialName + " " + `${room.number}`.toLocaleUpperCase();
+    return building.name + " " + `${room.number}`.toLocaleUpperCase();
   }
 }

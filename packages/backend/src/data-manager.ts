@@ -2,16 +2,8 @@ import path from "path";
 import { Logger } from "@michaelgatesdev/common";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
-import {
-  BuildingUtils,
-  RoomUtils,
-  TroubleshootingDataUtils,
-} from "@ccss-support-manual/utilities";
-import {
-  Building,
-  Room,
-  TroubleshootingData,
-} from "@ccss-support-manual/models";
+import { BuildingUtils, RoomUtils, TroubleshootingDataUtils } from "@ccss-support-manual/utilities";
+import { Building, Room, TroubleshootingData } from "@ccss-support-manual/models";
 
 import { App } from "./app";
 
@@ -30,21 +22,14 @@ export class DataManager {
 
   public async initialize(): Promise<void> {
     // buildings file
-    this.buildingsFilePath = path.join(
-      this.app.DATA_DIR,
-      this.buildingsFileName
-    );
+    this.buildingsFilePath = path.join(this.app.DATA_DIR, this.buildingsFileName);
     if (!(await FileUtils.checkExists(this.buildingsFilePath))) {
-      Logger.info(
-        `No buildings file found at ${this.buildingsFilePath}. Creating default...`
-      );
+      Logger.info(`No buildings file found at ${this.buildingsFilePath}. Creating default...`);
       try {
         await this.createDefaultBuildingsFile();
         Logger.info("Created default buildings file");
       } catch (error) {
-        Logger.error(
-          "There was an error while trying to create the default buildings file"
-        );
+        Logger.error("There was an error while trying to create the default buildings file");
         Logger.error(error);
       }
     }
@@ -55,16 +40,12 @@ export class DataManager {
     // rooms file
     this.roomsFilePath = path.join(this.app.DATA_DIR, this.roomsFileName);
     if (!(await FileUtils.checkExists(this.roomsFilePath))) {
-      Logger.info(
-        `No rooms file found at ${this.roomsFilePath}. Creating default...`
-      );
+      Logger.info(`No rooms file found at ${this.roomsFilePath}. Creating default...`);
       try {
         await this.createDefaultRoomsFile();
         Logger.info("Created default rooms file");
       } catch (error) {
-        Logger.error(
-          "There was an error while trying to create the default rooms file"
-        );
+        Logger.error("There was an error while trying to create the default rooms file");
         Logger.error(error);
       }
     }
@@ -73,21 +54,14 @@ export class DataManager {
     Logger.info(`Loaded ${loadedRooms.length} rooms`);
 
     // troubleshooting data file
-    this.troubleshootingFilePath = path.join(
-      this.app.DATA_DIR,
-      this.troubleshootingFileName
-    );
+    this.troubleshootingFilePath = path.join(this.app.DATA_DIR, this.troubleshootingFileName);
     if (!(await FileUtils.checkExists(this.troubleshootingFilePath))) {
-      Logger.info(
-        `No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`
-      );
+      Logger.info(`No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`);
       try {
         await this.createDefaultTroubleshootingDataFile();
         Logger.info("Created default troubleshooting data file");
       } catch (error) {
-        Logger.error(
-          "There was an error while trying to create the default troubleshooting data file"
-        );
+        Logger.error("There was an error while trying to create the default troubleshooting data file");
         Logger.error(error);
       }
     }
@@ -138,16 +112,11 @@ export class DataManager {
    * @returns true if successful otherwise false
    */
   private async writeBuildingsFile(buildings: Building[]): Promise<void> {
-    if (this.buildingsFilePath === undefined)
-      throw new Error("Buildings file path is undefined");
-    return FileUtils.writeJSON(
-      this.buildingsFilePath,
-      buildings,
-      (key: any, value: any): any => {
-        if (key === "rooms") return undefined;
-        return value;
-      }
-    );
+    if (this.buildingsFilePath === undefined) throw new Error("Buildings file path is undefined");
+    return FileUtils.writeJSON(this.buildingsFilePath, buildings, (key: any, value: any): any => {
+      if (key === "rooms") return undefined;
+      return value;
+    });
   }
 
   /**
@@ -155,8 +124,7 @@ export class DataManager {
    * @returns an array of the loaded buildings
    */
   private async loadBuildingsFile(): Promise<Building[]> {
-    if (this.buildingsFilePath === undefined)
-      throw new Error("Buildings file path is undefined");
+    if (this.buildingsFilePath === undefined) throw new Error("Buildings file path is undefined");
     const json = await FileUtils.readJSON<Building[]>(this.buildingsFilePath);
     if (json === undefined) throw new Error("Buildings data is corrupted");
     return json;
@@ -175,11 +143,7 @@ export class DataManager {
    * @returns true if successful otherwise false
    */
   private async createDefaultRoomsFile(): Promise<void> {
-    await this.writeRoomsFile([
-      RoomUtils.exampleRoom,
-      RoomUtils.exampleClassroom,
-      RoomUtils.exampleSmartClassroom,
-    ]);
+    await this.writeRoomsFile([RoomUtils.exampleRoom]);
   }
 
   /**
@@ -189,8 +153,7 @@ export class DataManager {
    * @returns true if successful otherwise false
    */
   private async writeRoomsFile(rooms: Room[]): Promise<void> {
-    if (this.roomsFilePath === undefined)
-      throw new Error("Rooms file path is undefined");
+    if (this.roomsFilePath === undefined) throw new Error("Rooms file path is undefined");
     return FileUtils.writeJSON(this.roomsFilePath, rooms);
   }
 
@@ -199,8 +162,7 @@ export class DataManager {
    * @returns an array of the loaded rooms
    */
   private async loadRoomsFile(): Promise<Room[]> {
-    if (this.roomsFilePath === undefined)
-      throw new Error("Rooms file path is undefined");
+    if (this.roomsFilePath === undefined) throw new Error("Rooms file path is undefined");
     const json = await FileUtils.readJSON<Room[]>(this.roomsFilePath);
     if (json === undefined) throw new Error("Rooms data is corrupted");
     return json;
@@ -211,9 +173,7 @@ export class DataManager {
    * @returns true if successful otherwise false
    */
   public async saveTroubleshootingData(): Promise<void> {
-    await this.writeTroubleshootingDataFile(
-      this.app.troubleshootingDataManager.getTroubleshootingData()
-    );
+    await this.writeTroubleshootingDataFile(this.app.troubleshootingDataManager.getTroubleshootingData());
   }
 
   /**
@@ -221,9 +181,7 @@ export class DataManager {
    * @returns true if successful otherwise false
    */
   private async createDefaultTroubleshootingDataFile(): Promise<void> {
-    await this.writeTroubleshootingDataFile([
-      TroubleshootingDataUtils.exampleData,
-    ]);
+    await this.writeTroubleshootingDataFile([TroubleshootingDataUtils.exampleData]);
   }
 
   /**
@@ -232,11 +190,8 @@ export class DataManager {
    * @param data The troubleshooting data to be written to the file
    * @returns true if successful otherwise false
    */
-  private async writeTroubleshootingDataFile(
-    data: TroubleshootingData[]
-  ): Promise<void> {
-    if (this.troubleshootingFilePath === undefined)
-      throw new Error("Troubleshooting Data file path is undefined");
+  private async writeTroubleshootingDataFile(data: TroubleshootingData[]): Promise<void> {
+    if (this.troubleshootingFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
     return await FileUtils.writeJSON(this.troubleshootingFilePath, data);
   }
 
@@ -245,13 +200,9 @@ export class DataManager {
    * @returns an array of the loaded troubleshooting data
    */
   private async loadTroubleshootingDataFile(): Promise<TroubleshootingData[]> {
-    if (this.troubleshootingFilePath === undefined)
-      throw new Error("Troubleshooting Data file path is undefined");
-    const json = await FileUtils.readJSON<TroubleshootingData[]>(
-      this.troubleshootingFilePath
-    );
-    if (json === undefined)
-      throw new Error("Troubleshooting Data is corrupted");
+    if (this.troubleshootingFilePath === undefined) throw new Error("Troubleshooting Data file path is undefined");
+    const json = await FileUtils.readJSON<TroubleshootingData[]>(this.troubleshootingFilePath);
+    if (json === undefined) throw new Error("Troubleshooting Data is corrupted");
     return json;
   }
 

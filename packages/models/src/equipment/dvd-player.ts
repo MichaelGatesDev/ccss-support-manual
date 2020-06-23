@@ -1,8 +1,5 @@
 import { Device } from "./device";
 
-/**
- *
- */
 export interface DVDPlayer extends Device {
   /**
    * The type of player (pc, player, etc.)

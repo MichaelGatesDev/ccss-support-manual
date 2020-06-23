@@ -20,9 +20,7 @@ export class ConfigManager {
 
   public async initialize(): Promise<void> {
     // Create app config
-    const appConfigResult: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<
-      AppConfig
-    >(AppConfig, [path.join(this.app.SETTINGS_DIR, "application-config.json")]);
+    const appConfigResult: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<AppConfig>(AppConfig, [path.join(this.app.SETTINGS_DIR, "application-config.json")]);
     if (appConfigResult.wasCreated) {
       Logger.info("Created application config!");
     }
@@ -30,9 +28,7 @@ export class ConfigManager {
     Logger.info("Loaded application config");
 
     // Create images config
-    const imagesConfigResult: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<
-      ImagesConfig
-    >(ImagesConfig, [path.join(this.app.SETTINGS_DIR, "images-config.json")]);
+    const imagesConfigResult: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<ImagesConfig>(ImagesConfig, [path.join(this.app.SETTINGS_DIR, "images-config.json")]);
     if (imagesConfigResult.wasCreated) {
       Logger.info("Created images config!");
     }
@@ -40,9 +36,7 @@ export class ConfigManager {
     Logger.info("Loaded images config");
 
     // Create troubleshooting keywords
-    const troubleshootingConfigResult: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<
-      TroubleshootingKeywords
-    >(TroubleshootingKeywords, [
+    const troubleshootingConfigResult: ConfigIOResult = await ConfigurationUtilities.createIfNotExistsAndLoad<TroubleshootingKeywords>(TroubleshootingKeywords, [
       path.join(this.app.SETTINGS_DIR, "troubleshooting-keywords-config.json"),
     ]);
     if (troubleshootingConfigResult.wasCreated) {

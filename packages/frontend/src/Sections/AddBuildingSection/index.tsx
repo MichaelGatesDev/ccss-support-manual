@@ -33,7 +33,11 @@ const AddBuildingSection = (props: Props) => {
     addBuilding(officialName, nicknames);
   };
 
-  const building = buildingsState.data as Building;
+  const buildings = buildingsState.fetchedBuildings;
+  if (buildings == null || buildings.length == 0) {
+    return <p>Loading buildings...</p>;
+  }
+  const building = buildings[0];
 
   return (
     <>
@@ -42,22 +46,16 @@ const AddBuildingSection = (props: Props) => {
         <div className="row">
           <div className="col">
             {/* Info alert */}
-            {buildingsState.data && (
+            {building && (
               <Alert alertType={AlertType.Success} id="info-alert">
                 <p>Succesfully addded new building!</p>
                 <p>
-                  <span style={{ fontWeight: "bold" }}>
-                    Official Name:&nbsp;
-                  </span>
+                  <span style={{ fontWeight: "bold" }}>Official Name:&nbsp;</span>
                   <span>{building.officialName}</span>
                 </p>
                 <p>
                   <span style={{ fontWeight: "bold" }}>Nicknames:&nbsp;</span>
-                  <span>
-                    {building.nicknames.length > 0
-                      ? building.nicknames.join(", ")
-                      : "(none specified)"}
-                  </span>
+                  <span>{building.nicknames.length > 0 ? building.nicknames.join(", ") : "(none specified)"}</span>
                 </p>
               </Alert>
             )}
@@ -79,37 +77,20 @@ const AddBuildingSection = (props: Props) => {
         {/* Official Name */}
         <div className="row">
           <div className="col">
-            <LabeledFormInput
-              id="building-official-name"
-              onChange={setOfficialName}
-              value={officialName}
-              title="Official Name"
-              titleLeft
-            />
+            <LabeledFormInput id="building-official-name" onChange={setOfficialName} value={officialName} title="Official Name" titleLeft />
           </div>
         </div>
 
         {/* Nicknames */}
         <div className="row">
           <div className="col">
-            <LabeledInputList
-              id="building-nicknames"
-              values={nicknames}
-              title="Nicknames"
-              titleLeft
-              onChange={setNicknames}
-            />
+            <LabeledInputList id="building-nicknames" values={nicknames} title="Nicknames" titleLeft onChange={setNicknames} />
           </div>
         </div>
 
         <div className="row">
           <div className="col">
-            <Button
-              buttonType={ButtonType.Success}
-              preventDefault
-              fullWidth
-              onClick={performAddBuilding}
-            >
+            <Button buttonType={ButtonType.Success} preventDefault fullWidth onClick={performAddBuilding}>
               <span className="w-100">Add Building</span>
             </Button>
           </div>

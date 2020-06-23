@@ -1,10 +1,7 @@
 import { Dispatch } from "redux";
-import { Building } from "@ccss-support-manual/models";
+import { Building, FullyConditionalInterface } from "@ccss-support-manual/models";
 
 import {
-  REQUEST_FETCH_BUILDING,
-  REQUEST_FETCH_BUILDING_SUCCESS,
-  REQUEST_FETCH_BUILDING_FAILURE,
   REQUEST_FETCH_BUILDINGS,
   REQUEST_FETCH_BUILDINGS_SUCCESS,
   REQUEST_FETCH_BUILDINGS_FAILURE,
@@ -18,71 +15,39 @@ import {
   REQUEST_REMOVE_BUILDING_FAILURE,
   REQUEST_REMOVE_BUILDING_SUCCESS,
 } from "./types";
+import { SuccessPayload, FailurePayload } from "../payloads";
 
-export const fetchBuilding = (name: string) => async (dispatch: Dispatch) => {
-  dispatch({
-    type: REQUEST_FETCH_BUILDING,
-  });
-  try {
-    const response = await fetch(
-      `http://localhost:3001/api/v1/buildings/${name}`
-    );
-    // Bad response (error)
-    if (!response.ok) {
-      const error = await response.text();
-      dispatch({
-        type: REQUEST_FETCH_BUILDING_FAILURE,
-        error,
-      });
-      return;
-    }
-
-    const json = await response.json();
-    dispatch({
-      type: REQUEST_FETCH_BUILDING_SUCCESS,
-      data: json as Building,
-    });
-  } catch (error) {
-    dispatch({
-      type: REQUEST_FETCH_BUILDING_FAILURE,
-      error,
-    });
-  }
-};
-
-export const fetchBuildings = () => async (dispatch: Dispatch) => {
+export const fetchBuildings = (options?: FullyConditionalInterface<Building>) => async (dispatch: Dispatch): Promise<SuccessPayload<Building[]> | FailurePayload> => {
   dispatch({
     type: REQUEST_FETCH_BUILDINGS,
   });
   try {
-    const response = await fetch("http://localhost:3001/api/v1/buildings/");
+    const queryStr = options !== undefined ? `?${new URLSearchParams(options as any).toString()}` : "";
+
+    const response = await fetch(`http://localhost:3001/api/v1/buildings${queryStr}`);
     // Bad response (error)
     if (!response.ok) {
       const error = await response.text();
-      dispatch({
+      return dispatch({
         type: REQUEST_FETCH_BUILDINGS_FAILURE,
         error,
       });
-      return;
     }
 
     const json = await response.json();
-    dispatch({
+    return dispatch({
       type: REQUEST_FETCH_BUILDINGS_SUCCESS,
       data: json as Building[],
     });
   } catch (error) {
-    dispatch({
+    return dispatch({
       type: REQUEST_FETCH_BUILDINGS_FAILURE,
       error,
     });
   }
 };
 
-export const addBuilding = (
-  officialName: string,
-  nicknames: string[]
-) => async (dispatch: Dispatch) => {
+export const addBuilding = (officialName: string, nicknames: string[]) => async (dispatch: Dispatch) => {
   dispatch({
     type: REQUEST_ADD_BUILDING,
   });
@@ -120,24 +85,18 @@ export const addBuilding = (
   }
 };
 
-export const updateBuilding = (
-  building: Building,
-  newProperties: Building
-) => async (dispatch: Dispatch) => {
+export const updateBuilding = (building: Building, newProperties: Building) => async (dispatch: Dispatch) => {
   dispatch({
     type: REQUEST_UPDATE_BUILDING,
   });
   try {
-    const response = await fetch(
-      `http://localhost:3001/api/v1/buildings/${building.internalName}/update`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(newProperties), // TODO
-      }
-    );
+    const response = await fetch(`http://localhost:3001/api/v1/buildings/${building.internalName}/update`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newProperties), // TODO
+    });
 
     // Bad response (error)
     if (!response.ok) {
@@ -163,22 +122,17 @@ export const updateBuilding = (
   }
 };
 
-export const removeBuilding = (buildingName: string) => async (
-  dispatch: Dispatch
-) => {
+export const removeBuilding = (buildingName: string) => async (dispatch: Dispatch) => {
   dispatch({
     type: REQUEST_REMOVE_BUILDING,
   });
   try {
-    const response = await fetch(
-      `http://localhost:3001/api/v1/buildings/${buildingName}/remove`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`http://localhost:3001/api/v1/buildings/${buildingName}/remove`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
 
     // Bad response (error)
     if (!response.ok) {

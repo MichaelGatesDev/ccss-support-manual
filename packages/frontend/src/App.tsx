@@ -41,18 +41,10 @@ const App = (): JSX.Element => (
           <Route exact path="/" component={Home} />
           <Route path="/settings" component={Settings} />
 
-          <Route exact path="/buildings" component={BuildingsSection} />
-          <Route exact path="/buildings/add" component={AddBuildingSection} />
-          <Route
-            exact
-            path="/buildings/:buildingName"
-            component={BuildingSection}
-          />
-          <Route
-            exact
-            path="/buildings/:buildingName/rooms/:roomNumber"
-            component={RoomSection}
-          />
+          {/* <Route exact path="/buildings" component={BuildingsSection} /> */}
+          {/* <Route exact path="/buildings/add" component={AddBuildingSection} /> */}
+          {/* <Route exact path="/buildings/:buildingName" component={BuildingSection} /> */}
+          {/* <Route exact path="/buildings/:buildingName/rooms/:roomNumber" component={RoomSection} /> */}
         </Switch>
       </div>
     </HashRouter>

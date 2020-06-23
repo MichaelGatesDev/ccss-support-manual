@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import { Room, ImageType, Building } from "@ccss-support-manual/models";
+import { Room, ImageType, Building, FullyConditionalInterface } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,26 +14,16 @@ import "./style.scss";
 import LoadingSplash from "../../Components/LoadingSplash";
 
 import { AppState } from "../../redux/store";
-import {
-  fetchBuilding,
-  fetchBuildings,
-  updateBuilding,
-  removeBuilding,
-} from "../../redux/buildings/actions";
-import {
-  fetchBuildingImages,
-  fetchRoomImagesForBuilding,
-} from "../../redux/images/actions";
+import { fetchBuildings, updateBuilding, removeBuilding } from "../../redux/buildings/actions";
+import { fetchBuildingImages, fetchRoomImagesForBuilding } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
 import ImageCarousel from "../../Components/ImageCarousel";
 import Button, { ButtonType } from "../../Components/Button";
 import { showEditPrompt, showConfirmPrompt } from "../../utils/WindowUtils";
-import {
-  FloatingGroup,
-  FloatingGroupOrientation,
-} from "../../Components/FloatingGroup";
+import { FloatingGroup, FloatingGroupOrientation } from "../../Components/FloatingGroup";
 import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
+import { SuccessPayload, FailurePayload } from "../../redux/payloads";
 
 interface Props {
   match?: any;
@@ -41,20 +31,17 @@ interface Props {
   buildingName: string;
 
   buildingsState: BuildingsState;
-  imagesState: ImagesState;
-
-  fetchBuildings: () => void;
-  fetchBuilding: (buildingName: string) => void;
+  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
   updateBuilding: (building: Building, newProps: Building) => Promise<void>;
   removeBuilding: (buildingName: string) => void;
+
+  imagesState: ImagesState;
 
   fetchBuildingImages: (buildingName: string) => void;
   fetchRoomImagesForBuilding: (buildingName: string) => void;
 }
 
 const BuildingSection = (props: Props) => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
   const {
     buildingsState,
     imagesState,
@@ -62,7 +49,6 @@ const BuildingSection = (props: Props) => {
     buildingName,
 
     fetchBuildings,
-    fetchBuilding,
     updateBuilding,
     removeBuilding,
 
@@ -71,36 +57,18 @@ const BuildingSection = (props: Props) => {
   } = props;
 
   useEffect(() => {
-    fetchBuildings();
-    fetchBuilding(buildingName);
+    fetchBuildings({ internalName: buildingName });
     fetchBuildingImages(buildingName);
     fetchRoomImagesForBuilding(buildingName);
   }, []);
 
-  const filterRoomsByName = (
-    rooms: Room[],
-    name: string,
-    filterNumber = true,
-    filterName = true,
-    filterBuildingName = true
-  ): Room[] =>
-    rooms.filter((room: Room) => {
-      const pb = BuildingUtils.getParentBuilding(
-        room,
-        buildingsState.fetchedBuildings ?? []
-      );
-      if (pb === undefined) return false;
-      return (
-        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
-        (filterName && room.name.toLocaleLowerCase().includes(name)) ||
-        (filterBuildingName && BuildingUtils.hasName(pb, name))
-      );
-    });
+  const buildings = buildingsState.fetchedBuildings;
+  if (buildings == null || buildings.length == 0) {
+    return <p>Loading buildings...</p>;
+  }
+  const building = buildings[0];
 
-  const isLoading = (): boolean =>
-    buildingsState.fetchingBuilding ||
-    buildingsState.fetchingBuildings ||
-    imagesState.imagesLoading;
+  const isLoading = (): boolean => buildingsState.fetchingBuildings || imagesState.imagesLoading;
 
   // if loading
   if (isLoading()) {
@@ -108,25 +76,9 @@ const BuildingSection = (props: Props) => {
     return <LoadingSplash />;
   }
 
-  const building = buildingsState.fetchedBuilding;
-  if (building === undefined) {
-    return <p>Building not found</p>; // TODO make this nicer
-  }
-
   let rooms = _.sortBy(building.rooms, ["number"]);
 
-  const queries = searchQuery.split(" ");
-  if (queries.length > 0) {
-    for (let query of queries) {
-      query = query.toLocaleLowerCase();
-      rooms = filterRoomsByName(rooms, query);
-    }
-  }
-
-  const roomsImages = imagesState.roomImages.filter(
-    image => image.type === ImageType.Room
-  );
-  console.log(roomsImages.length);
+  const roomsImages = imagesState.roomImages.filter(image => image.type === ImageType.Room);
 
   return (
     <>
@@ -136,13 +88,7 @@ const BuildingSection = (props: Props) => {
         <div className="row">
           {/* Photos */}
           <div className="col-12 col-lg-5 mb-4">
-            <ImageCarousel
-              id="building-panoramas-carousel"
-              height="300px"
-              images={imagesState.buildingImages
-                .filter(image => image.type === ImageType.Building)
-                .map(image => image.path)}
-            />
+            <ImageCarousel id="building-panoramas-carousel" height="300px" images={imagesState.buildingImages.filter(image => image.type === ImageType.Building).map(image => image.path)} />
           </div>
           {/* Info */}
           <div className="col">
@@ -157,13 +103,9 @@ const BuildingSection = (props: Props) => {
                     preventDefault
                     buttonType={ButtonType.Primary}
                     onClick={() => {
-                      const newName: string | undefined = showEditPrompt(
-                        building.officialName
-                      );
+                      const newName: string | undefined = showEditPrompt(building.officialName);
                       if (newName === undefined) return;
-                      console.log(
-                        `Updating building name from ${building.officialName} to ${newName}`
-                      );
+                      console.log(`Updating building name from ${building.officialName} to ${newName}`);
                       updateBuilding(building, {
                         ...building,
                         officialName: newName,
@@ -217,11 +159,8 @@ const BuildingSection = (props: Props) => {
             <div className="row">
               <div className="col">
                 <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Earum quibusdam nisi nihil repudiandae quidem ipsam?
-                  Perferendis aliquid, eum cupiditate temporibus qui eos totam
-                  laborum libero animi nulla et consequatur corporis. Lorem
-                  ipsum dolor sit amet consectetur, adipisicing elit.
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Earum quibusdam nisi nihil repudiandae quidem ipsam? Perferendis aliquid, eum cupiditate temporibus qui eos totam laborum
+                  libero animi nulla et consequatur corporis. Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                 </p>
               </div>
             </div>
@@ -251,18 +190,12 @@ const BuildingSection = (props: Props) => {
         </div>
       </section>
 
-      <FloatingGroup
-        orientation={FloatingGroupOrientation.Horizontal}
-        bottom
-        left
-      >
+      <FloatingGroup orientation={FloatingGroupOrientation.Horizontal} bottom left>
         <Button
           preventDefault
           buttonType={ButtonType.Danger}
           onClick={() => {
-            const confirmDelete = showConfirmPrompt(
-              "Are you sure that you want to delete this building?\n\nNote: This action can not be undone."
-            );
+            const confirmDelete = showConfirmPrompt("Are you sure that you want to delete this building?\n\nNote: This action can not be undone.");
             if (!confirmDelete) return;
             removeBuilding(buildingName);
           }}
@@ -286,7 +219,6 @@ const mapStateToProps = (state: AppState, props: Props) => ({
 
 export default connect(mapStateToProps, {
   fetchBuildings,
-  fetchBuilding,
   updateBuilding,
   removeBuilding,
 

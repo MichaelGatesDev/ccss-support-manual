@@ -1,40 +1,30 @@
 import "./style.scss";
 
 import React, { useState, useEffect } from "react";
-import {
-  Row,
-  Col,
-  Container as div,
-  Nav,
-  InputGroup,
-  FormControl,
-  NavbarBrand,
-  Container,
-  Button,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Row, Col, Nav, InputGroup, FormControl, Container } from "react-bootstrap";
+import { Link, withRouter } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
-import jQuery from "jquery";
 import { StringUtils } from "@michaelgatesdev/common";
 import { connect } from "react-redux";
 import _ from "lodash";
 
 import { BuildingUtils } from "@ccss-support-manual/utilities";
-import { Room, Building } from "@ccss-support-manual/models";
+import { Room, Building, FullyConditionalInterface } from "@ccss-support-manual/models";
 
 import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
 import { BuildingsState } from "../../redux/buildings/types";
 import { ImagesState } from "../../redux/images/types";
-import { SiteNavigation } from "../../Components/SiteNavigation";
 import { AppState } from "../../redux/store";
-import { BuildingCardsDeck } from "../../Components/BuildingCardsDeck";
 import { RoomCardsDeck } from "../../Components/RoomCardsDeck";
+import { SuccessPayload, FailurePayload } from "../../redux/payloads";
+import { ThunkDispatch } from "redux-thunk";
+import { Action } from "redux";
 
 interface Props {
   buildingsState: BuildingsState;
-  fetchBuildings: () => void;
+  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
 
   imagesState: ImagesState;
   fetchImages: () => void;
@@ -48,7 +38,6 @@ const Home = (props: Props): JSX.Element => {
     fetchBuildings,
 
     imagesState,
-    fetchImages,
   } = props;
 
   useEffect(() => {
@@ -61,31 +50,17 @@ const Home = (props: Props): JSX.Element => {
     return <p>Loading...</p>;
   }
 
-  const filterRoomsByName = (
-    rooms: Room[],
-    name: string,
-    filterNumber = true,
-    filterName = true,
-    filterBuildingName = true
-  ): Room[] =>
+  const filterRoomsByName = (rooms: Room[], name: string, filterNumber = true, filterName = true, filterBuildingName = true): Room[] =>
     rooms.filter((room: Room) => {
-      const pb: Building | undefined = BuildingUtils.getParentBuilding(
-        room,
-        buildingsState.fetchedBuildings ?? []
-      );
+      const pb: Building | undefined = BuildingUtils.getParentBuilding(room, buildingsState.fetchedBuildings ?? []);
       if (pb === undefined) return false;
       return (
-        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) ||
-        (filterName && room.name.toLocaleLowerCase().includes(name)) ||
-        (filterBuildingName && BuildingUtils.hasName(pb, name))
+        (filterNumber && `${room.number}`.toLocaleLowerCase().includes(name)) || (filterName && room.name.toLocaleLowerCase().includes(name)) || (filterBuildingName && BuildingUtils.hasName(pb, name))
       );
     });
 
   const queries = searchQuery.split(" ").filter(q => !StringUtils.isBlank(q));
-  let rooms = _.sortBy(
-    BuildingUtils.getAllRooms(buildingsState.fetchedBuildings ?? []),
-    ["buildingName", "number"]
-  );
+  let rooms = _.sortBy(BuildingUtils.getAllRooms(buildingsState.fetchedBuildings ?? []), ["buildingName", "number"]);
   if (queries.length > 0) {
     for (let query of queries) {
       query = query.toLocaleLowerCase();
@@ -103,10 +78,7 @@ const Home = (props: Props): JSX.Element => {
 
   const SearchBoxComponent = (): JSX.Element => {
     return (
-      <div
-        id="search-container"
-        className={searchQuery != "" ? "stick-bottom" : ""}
-      >
+      <div id="search-container" className={searchQuery != "" ? "stick-bottom" : ""}>
         <InputGroup id="search-group">
           <InputGroup.Prepend>
             <InputGroup.Text id="searchIcon">
@@ -128,7 +100,7 @@ const Home = (props: Props): JSX.Element => {
               const { value } = event.target;
               setSearchQuery(value);
             }}
-            onBlur={e => {
+            onBlur={() => {
               selectSearch();
             }}
           />
@@ -176,16 +148,7 @@ const Home = (props: Props): JSX.Element => {
       <div id="search-results">
         <SearchBoxComponent />
         <Row id="results">
-          <Col className="text-center">
-            {rooms.length > 0 ? (
-              <RoomCardsDeck
-                rooms={rooms}
-                roomsImages={imagesState.allRoomImages}
-              />
-            ) : (
-              <p>No results found :(</p>
-            )}
-          </Col>
+          <Col className="text-center">{rooms.length > 0 ? <RoomCardsDeck rooms={rooms} roomsImages={imagesState.allRoomImages} /> : <p>No results found :(</p>}</Col>
         </Row>
       </div>
     );
@@ -194,11 +157,7 @@ const Home = (props: Props): JSX.Element => {
   return (
     <>
       <Container fluid as="section" id="home">
-        {StringUtils.isBlank(searchQuery) ? (
-          <WelcomeContainerComponent />
-        ) : (
-          <SearchResultsComponent />
-        )}
+        {StringUtils.isBlank(searchQuery) ? <WelcomeContainerComponent /> : <SearchResultsComponent />}
       </Container>
     </>
   );
@@ -209,7 +168,13 @@ const mapStateToProps = (state: AppState) => ({
   imagesState: state.images,
 });
 
-export default connect(mapStateToProps, {
-  fetchBuildings,
-  fetchImages,
-})(Home);
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
+  fetchBuildings(options?: FullyConditionalInterface<Building>): Promise<SuccessPayload<Building[]> | FailurePayload> {
+    return dispatch(fetchBuildings(options));
+  },
+  fetchImages() {
+    return dispatch(fetchImages());
+  },
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

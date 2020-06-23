@@ -1,49 +1,33 @@
 import {
   BuildingsState,
   BuildingsActionTypes,
-
-  REQUEST_FETCH_BUILDING, REQUEST_FETCH_BUILDING_FAILURE, REQUEST_FETCH_BUILDING_SUCCESS,
-  REQUEST_FETCH_BUILDINGS, REQUEST_FETCH_BUILDINGS_SUCCESS, REQUEST_FETCH_BUILDINGS_FAILURE,
-  REQUEST_ADD_BUILDING, REQUEST_ADD_BUILDING_FAILURE, REQUEST_ADD_BUILDING_SUCCESS,
-  REQUEST_UPDATE_BUILDING, REQUEST_UPDATE_BUILDING_FAILURE, REQUEST_UPDATE_BUILDING_SUCCESS,
-  REQUEST_REMOVE_BUILDING, REQUEST_REMOVE_BUILDING_FAILURE, REQUEST_REMOVE_BUILDING_SUCCESS,
-
+  REQUEST_FETCH_BUILDINGS,
+  REQUEST_FETCH_BUILDINGS_SUCCESS,
+  REQUEST_FETCH_BUILDINGS_FAILURE,
+  REQUEST_ADD_BUILDING,
+  REQUEST_ADD_BUILDING_FAILURE,
+  REQUEST_ADD_BUILDING_SUCCESS,
+  REQUEST_UPDATE_BUILDING,
+  REQUEST_UPDATE_BUILDING_FAILURE,
+  REQUEST_UPDATE_BUILDING_SUCCESS,
+  REQUEST_REMOVE_BUILDING,
+  REQUEST_REMOVE_BUILDING_FAILURE,
+  REQUEST_REMOVE_BUILDING_SUCCESS,
 } from "./types";
 
 const initialState: BuildingsState = {
-  fetchingBuilding: false,
-
   fetchingBuildings: false,
-
+  fetchedBuildings: [],
   addingBuilding: false,
-
   removingBuilding: false,
-
   updatingBuilding: false,
 };
 
 export function buildingsReducer(state = initialState, action: BuildingsActionTypes): BuildingsState {
   switch (action.type) {
     // DEFAULT
-    default: return state;
-    // FETCH SINGLE BUILDING
-    case REQUEST_FETCH_BUILDING:
-      return {
-        ...state,
-        fetchingBuilding: true,
-      };
-    case REQUEST_FETCH_BUILDING_SUCCESS:
-      return {
-        ...state,
-        fetchingBuilding: false,
-        fetchedBuilding: action.data,
-      };
-    case REQUEST_FETCH_BUILDING_FAILURE:
-      return {
-        ...state,
-        fetchingBuilding: false,
-        error: action.error,
-      };
+    default:
+      return state;
     // FETCH ALL BUILDINGS
     case REQUEST_FETCH_BUILDINGS:
       return {
@@ -67,12 +51,12 @@ export function buildingsReducer(state = initialState, action: BuildingsActionTy
       return {
         ...state,
         addingBuilding: true,
+        // fetchedBuildings: action.data,
       };
     case REQUEST_ADD_BUILDING_SUCCESS:
       return {
         ...state,
         addingBuilding: false,
-        data: action.data,
       };
     case REQUEST_ADD_BUILDING_FAILURE:
       return {

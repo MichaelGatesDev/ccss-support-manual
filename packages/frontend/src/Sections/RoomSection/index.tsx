@@ -2,11 +2,8 @@ import "./style.scss";
 
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { ImageType, RoomType, Classroom } from "@ccss-support-manual/models";
-import {
-  RoomUtils,
-  TroubleshootingDataUtils,
-} from "@ccss-support-manual/utilities";
+import { ImageType, RoomType, Classroom, FullyConditionalInterface, Building } from "@ccss-support-manual/models";
+import { RoomUtils, TroubleshootingDataUtils } from "@ccss-support-manual/utilities";
 import { StringUtils } from "@michaelgatesdev/common";
 import _ from "lodash";
 
@@ -17,7 +14,6 @@ import { BuildingsState } from "../../redux/buildings/types";
 import { TroubleshootingState } from "../../redux/troubleshooting/types";
 import { RoomsState } from "../../redux/rooms/types";
 import { ImagesState } from "../../redux/images/types";
-import { fetchBuilding } from "../../redux/buildings/actions";
 import { fetchRoom } from "../../redux/rooms/actions";
 import { fetchRoomImagesForRoom } from "../../redux/images/actions";
 import { fetchTroubleshootingDataForRoom } from "../../redux/troubleshooting/actions";
@@ -26,6 +22,7 @@ import ImageCarousel from "../../Components/ImageCarousel";
 import SearchBox from "../../Components/SearchBox";
 import TroubleshootingTips from "../../Components/TroubleshootingTips";
 import FilterBox from "../../Components/FilterBox";
+import { SuccessPayload, FailurePayload } from "../../redux/payloads";
 
 interface Props {
   match?: any;
@@ -38,31 +35,16 @@ interface Props {
   troubleshootingState: TroubleshootingState;
   imagesState: ImagesState;
 
-  fetchBuilding: (name: string) => void;
+  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
   fetchRoom: (buildingName: string, roomNumber: string | number) => void;
-  fetchRoomImagesForRoom: (
-    buildingName: string,
-    roomNumber: string | number
-  ) => void;
-  fetchTroubleshootingDataForRoom: (
-    buildingName: string,
-    roomNumber: string | number
-  ) => void;
+  fetchRoomImagesForRoom: (buildingName: string, roomNumber: string | number) => void;
+  fetchTroubleshootingDataForRoom: (buildingName: string, roomNumber: string | number) => void;
 }
 
 const RoomSection = (props: Props) => {
-  const [
-    activeTroubleshootingTypeFilters,
-    setActiveTroubleshootingTypeFilters,
-  ] = useState<string[]>([]);
-  const [
-    activeTroubleshootingTagFilters,
-    setActiveTroubleshootingTagFilters,
-  ] = useState<string[]>([]);
-  const [
-    activeTroubleshootingSearchQuery,
-    setActiveTroubleshootingSearchQuery,
-  ] = useState<string>("");
+  const [activeTroubleshootingTypeFilters, setActiveTroubleshootingTypeFilters] = useState<string[]>([]);
+  const [activeTroubleshootingTagFilters, setActiveTroubleshootingTagFilters] = useState<string[]>([]);
+  const [activeTroubleshootingSearchQuery, setActiveTroubleshootingSearchQuery] = useState<string>("");
 
   const {
     buildingName,
@@ -73,23 +55,24 @@ const RoomSection = (props: Props) => {
     troubleshootingState,
     imagesState,
 
-    fetchBuilding,
+    fetchBuildings,
     fetchRoom,
     fetchTroubleshootingDataForRoom,
     fetchRoomImagesForRoom,
   } = props;
 
   useEffect(() => {
-    fetchBuilding(buildingName);
+    fetchBuildings({ internalName: buildingName });
     fetchRoom(buildingName, roomNumber);
     fetchTroubleshootingDataForRoom(buildingName, roomNumber);
     fetchRoomImagesForRoom(buildingName, roomNumber);
   }, []);
 
-  const building = buildingsState.fetchedBuilding;
-  if (building === undefined) {
-    return <p>Building not found</p>;
+  const buildings = buildingsState.fetchedBuildings;
+  if (buildings == null || buildings.length == 0) {
+    return <p>Loading buildings...</p>;
   }
+  const building = buildings[0];
 
   const room = roomsState.fetchedRoom;
   if (room === undefined) {
@@ -101,11 +84,7 @@ const RoomSection = (props: Props) => {
     return <p>Troubleshooting Data not found</p>;
   }
 
-  const isLoading = (): boolean =>
-    buildingsState.fetchingBuilding ||
-    roomsState.fetchingRoom ||
-    troubleshootingState.loading ||
-    imagesState.imagesLoading;
+  const isLoading = (): boolean => buildingsState.fetchingBuildings || roomsState.fetchingRoom || troubleshootingState.loading || imagesState.imagesLoading;
 
   // Display splash when loading
   if (isLoading()) {
@@ -144,11 +123,7 @@ const RoomSection = (props: Props) => {
             </div>
             <div className="row">
               <div className="col text-center">
-                <p className="capitalized">
-                  {StringUtils.splitCompressedTitle(
-                    RoomType[room.roomType]
-                  ).join(" ")}
-                </p>
+                <p className="capitalized">{StringUtils.splitCompressedTitle(RoomType[room.roomType]).join(" ")}</p>
               </div>
             </div>
           </div>
@@ -161,9 +136,7 @@ const RoomSection = (props: Props) => {
             </div>
             <div className="row">
               <div className="col text-center">
-                <p className="capitalized">
-                  {room.capacity === -1 ? "N/A" : `${room.capacity}`}
-                </p>
+                <p className="capitalized">{room.capacity === -1 ? "N/A" : `${room.capacity}`}</p>
               </div>
             </div>
           </div>
@@ -176,12 +149,7 @@ const RoomSection = (props: Props) => {
             </div>
             <div className="row">
               <div className="col text-center">
-                <p className="capitalized">
-                  {!RoomUtils.isClassroom(room) ||
-                  (room as Classroom).phone.extension === "0000"
-                    ? "N/A"
-                    : (room as Classroom).phone.extension}
-                </p>
+                <p className="capitalized">{!RoomUtils.isClassroom(room) || (room as Classroom).phone.extension === "0000" ? "N/A" : (room as Classroom).phone.extension}</p>
               </div>
             </div>
           </div>
@@ -190,13 +158,7 @@ const RoomSection = (props: Props) => {
         {/* Panorama Photos */}
         <div className="row" id="panoramas-row">
           <div className="col">
-            <ImageCarousel
-              id="room-panoramas-carousel"
-              height="200px"
-              images={imagesState.roomImages
-                .filter(image => image.type === ImageType.RoomPanorama)
-                .map(image => image.path)}
-            />
+            <ImageCarousel id="room-panoramas-carousel" height="200px" images={imagesState.roomImages.filter(image => image.type === ImageType.RoomPanorama).map(image => image.path)} />
           </div>
         </div>
 
@@ -204,66 +166,27 @@ const RoomSection = (props: Props) => {
         <div className="row">
           {/* Photos */}
           <div className="col-4">
-            <ImageCarousel
-              id="room-carousel-titles"
-              height="300px"
-              images={imagesState.roomImages
-                .filter(image => image.type === ImageType.RoomTitle)
-                .map(image => image.path)}
-            />
+            <ImageCarousel id="room-carousel-titles" height="300px" images={imagesState.roomImages.filter(image => image.type === ImageType.RoomTitle).map(image => image.path)} />
           </div>
           {/* Photos */}
           <div className="col-4">
-            <ImageCarousel
-              id="room-carousel-room"
-              height="300px"
-              images={imagesState.roomImages
-                .filter(image => image.type === ImageType.Room)
-                .map(image => image.path)}
-            />
+            <ImageCarousel id="room-carousel-room" height="300px" images={imagesState.roomImages.filter(image => image.type === ImageType.Room).map(image => image.path)} />
           </div>
           {/* Photos */}
           <div className="col-4">
-            <ImageCarousel
-              id="room-carousel-equipment"
-              height="300px"
-              images={imagesState.roomImages
-                .filter(image => image.type === ImageType.RoomEquipment)
-                .map(image => image.path)}
-            />
+            <ImageCarousel id="room-carousel-equipment" height="300px" images={imagesState.roomImages.filter(image => image.type === ImageType.RoomEquipment).map(image => image.path)} />
           </div>
         </div>
 
         {/* Troubleshooting */}
         <div className="row" id="troubleshooting-row">
           <div className="col-sm-3">
-            <SearchBox
-              label="Search"
-              buttonText="Clear"
-              onChange={setActiveTroubleshootingSearchQuery}
-              value={activeTroubleshootingSearchQuery}
-            />
-            <FilterBox
-              label="Type Filters"
-              keys={_.sortBy(TroubleshootingDataUtils.getAllTypes(tsData))}
-              buttonText="Reset"
-              onChange={setActiveTroubleshootingTypeFilters}
-              enabledByDefault
-            />
-            <FilterBox
-              label="Tag Filters"
-              keys={_.sortBy(TroubleshootingDataUtils.getAllTags(tsData))}
-              buttonText="Reset"
-              onChange={setActiveTroubleshootingTagFilters}
-            />
+            <SearchBox label="Search" buttonText="Clear" onChange={setActiveTroubleshootingSearchQuery} value={activeTroubleshootingSearchQuery} />
+            <FilterBox label="Type Filters" keys={_.sortBy(TroubleshootingDataUtils.getAllTypes(tsData))} buttonText="Reset" onChange={setActiveTroubleshootingTypeFilters} enabledByDefault />
+            <FilterBox label="Tag Filters" keys={_.sortBy(TroubleshootingDataUtils.getAllTags(tsData))} buttonText="Reset" onChange={setActiveTroubleshootingTagFilters} />
           </div>
           <div className="col">
-            <TroubleshootingTips
-              troubleshootingData={tsData}
-              typeFilters={activeTroubleshootingTypeFilters}
-              tagFilters={activeTroubleshootingTagFilters}
-              search={activeTroubleshootingSearchQuery}
-            />
+            <TroubleshootingTips troubleshootingData={tsData} typeFilters={activeTroubleshootingTypeFilters} tagFilters={activeTroubleshootingTagFilters} search={activeTroubleshootingSearchQuery} />
           </div>
         </div>
       </section>
@@ -282,7 +205,7 @@ const mapStateToProps = (state: AppState, props: Props) => ({
 });
 
 export default connect(mapStateToProps, {
-  fetchBuilding,
+  fetchBuildings,
   fetchRoom,
   fetchTroubleshootingDataForRoom,
   fetchRoomImagesForRoom,

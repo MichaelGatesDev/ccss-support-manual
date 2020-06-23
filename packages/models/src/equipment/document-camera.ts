@@ -1,8 +1,5 @@
 import { Device } from "./device";
 
-/**
- * A Document Camera
- */
 export interface DocumentCamera extends Device {
   hasMicrophone?: boolean;
 }

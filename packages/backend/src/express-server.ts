@@ -19,9 +19,7 @@ export class ExpressServer {
   public init(): Promise<void> {
     return new Promise((resolve, reject) => {
       // Get port from environment and store in Express.
-      const port = process.env.PORT
-        ? this.normalizePort(process.env.PORT)
-        : this.FALLBACK_PORT;
+      const port = process.env.PORT ? this.normalizePort(process.env.PORT) : this.FALLBACK_PORT;
       this.expressApp.set("port", port);
 
       // Create HTTP Server
@@ -107,8 +105,7 @@ export class ExpressServer {
       return;
     }
 
-    const bind =
-      typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+    const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
 
     Logger.debug(`Server running on ${bind}`);
   }

@@ -19,19 +19,13 @@ export class App {
   public readonly ROOT_DIR: string = path.resolve("./");
   public readonly PUBLIC_DIR: string = path.join(this.ROOT_DIR, "public");
   public readonly TEMP_DIR: string = path.join(this.ROOT_DIR, "temp");
-  public readonly DOWNLOADS_DIR: string = path.join(
-    this.PUBLIC_DIR,
-    "downloads"
-  );
+  public readonly DOWNLOADS_DIR: string = path.join(this.PUBLIC_DIR, "downloads");
   public readonly UPLOADS_DIR: string = path.join(this.PUBLIC_DIR, "uploads");
   public readonly BACKUPS_DIR: string = path.join(this.PUBLIC_DIR, "backups");
   public readonly DATA_DIR: string = path.join(this.PUBLIC_DIR, "data");
   public readonly SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "settings");
   public readonly IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "images");
-  public readonly BUILDING_IMAGES_DIR: string = path.join(
-    this.IMAGES_DIR,
-    "buildings"
-  );
+  public readonly BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "buildings");
 
   // ------------------------------------------------------ \\
   //              Managers

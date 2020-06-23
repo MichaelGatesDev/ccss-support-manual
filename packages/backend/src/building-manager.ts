@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { StringUtils } from "@michaelgatesdev/common";
 
 import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
@@ -28,6 +27,8 @@ export class BuildingManager {
    */
   public addBuilding(building: Building): boolean {
     if (this.hasBuilding(building)) return false;
+    if (building.rooms === undefined) building.rooms = [];
+    if (building.nicknames === undefined) building.nicknames = [];
     this.buildings.push(building);
     return true;
   }
@@ -38,7 +39,6 @@ export class BuildingManager {
    */
   public addBuildings(buildings: Building[]): void {
     for (const building of buildings) {
-      if (building.rooms === undefined) building.rooms = [];
       this.addBuilding(building);
     }
   }
@@ -74,12 +74,10 @@ export class BuildingManager {
    */
   public updateBuilding(building: Building, updated: Building): boolean {
     if (!this.hasBuilding(building)) return false;
-    const fetched = this.getBuildingByName(building.internalName);
+    const fetched = this.getBuildingByName(building.name);
     if (fetched === undefined) return false;
-    fetched.officialName = StringUtils.capitalizeFirstLetter(
-      updated.officialName
-    );
-    fetched.internalName = StringUtils.internalize(updated.internalName);
+    fetched.name = updated.name;
+    fetched.nicknames = updated.nicknames;
     return true;
   }
 
@@ -96,9 +94,7 @@ export class BuildingManager {
    * @returns The resulting building, otherwise undefined
    */
   public getBuildingByName(name: string): Building | undefined {
-    return this.buildings.find(building =>
-      BuildingUtils.hasName(building, name)
-    );
+    return this.buildings.find(building => BuildingUtils.hasName(building, name));
   }
 
   /**
@@ -107,7 +103,7 @@ export class BuildingManager {
    * @returns true if the building exists, otherwise false
    */
   public hasBuilding(building: Building): boolean {
-    return this.getBuildingByName(building.internalName) !== undefined;
+    return this.getBuildingByName(building.name) !== undefined;
   }
 
   /**

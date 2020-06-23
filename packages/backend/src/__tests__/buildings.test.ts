@@ -1,48 +1,14 @@
-import { StringUtils } from "@michaelgatesdev/common";
-import _ from "lodash";
-
-import { Building, BuildingFactory } from "@ccss-support-manual/models";
+import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import { app } from "../app";
 
-let building: Building;
-const buildingOfficialName = "My Cool Building";
-const buildingNicknames: string[] = ["my", "cool", "building", "mcb"];
-
-test("shouuld create a building", (): void => {
-  building = new BuildingFactory()
-    .withOfficialName(buildingOfficialName)
-    .withInternalName(StringUtils.internalize(buildingOfficialName))
-    .withNicknames(buildingNicknames)
-    .build();
-  expect(building).toBeDefined();
-});
-
-test("should set the building's internal name", (): void => {
-  expect(
-    building.internalName === StringUtils.internalize(building.officialName)
-  );
-});
-
-test("should validate the building's nicknames", (): void => {
-  // expect amount of nicknames
-  expect(building.nicknames.length === buildingNicknames.length);
-
-  // expect random [nick]name exists
-  const randomNick: string | undefined = _.sample(buildingNicknames);
-  expect(randomNick).toBeDefined();
-  expect(BuildingUtils.hasName(building, randomNick!));
-});
+let building = BuildingUtils.exampleBuilding;
 
 test("should add the building to the building manager", () => {
-  expect(
-    app.buildingManager.getBuildingByName(building.internalName)
-  ).toBeUndefined();
+  expect(app.buildingManager.getBuildingByName(building.name)).toBeUndefined();
   expect(app.buildingManager.addBuilding(building)).toBe(true);
-  expect(
-    app.buildingManager.getBuildingByName(building.internalName)
-  ).toBeDefined();
+  expect(app.buildingManager.getBuildingByName(building.name)).toBeDefined();
 });
 
 test("should not add duplicate buildings", () => {
@@ -62,9 +28,9 @@ test("should clear all buildings", () => {
 });
 
 test("should add multiple buildings", () => {
-  const a = new BuildingFactory().withOfficialName("building a").build();
-  const b = new BuildingFactory().withOfficialName("building b").build();
-  const c = new BuildingFactory().withOfficialName("building c").build();
+  const a = { name: "building a" } as Building;
+  const b = { name: "building b" } as Building;
+  const c = { name: "building c" } as Building;
   app.buildingManager.addBuildings([a, b, c]);
   expect(app.buildingManager.buildings.length).toBe(3);
 });

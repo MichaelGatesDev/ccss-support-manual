@@ -1,8 +1,5 @@
 import { Device } from "./device";
 
-/**
- * A printer
- */
 export interface Printer extends Device {
   /**
    * The identifying Symquest number if there is one

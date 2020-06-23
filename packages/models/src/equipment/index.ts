@@ -1,4 +1,3 @@
-export * from "./audio";
 export * from "./computer";
 export * from "./device";
 export * from "./document-camera";
@@ -6,6 +5,6 @@ export * from "./dvd-player";
 export * from "./phone";
 export * from "./printer";
 export * from "./projector";
-export * from "./speakers";
+export * from "./speaker-type";
 export * from "./teaching-station";
-export * from "./video";
+export * from "./video-display-type";

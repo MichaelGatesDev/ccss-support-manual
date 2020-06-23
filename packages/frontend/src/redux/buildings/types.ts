@@ -1,34 +1,14 @@
 import { Building } from "@ccss-support-manual/models";
 
 export interface BuildingsState {
-  data?: any;
-  error?: string;
-
-  fetchingBuilding: boolean;
-  fetchedBuilding?: Building;
-
   fetchingBuildings: boolean;
   fetchedBuildings?: Building[];
 
   addingBuilding: boolean;
   removingBuilding: boolean;
   updatingBuilding: boolean;
-}
 
-// FETCH SINGLE BUILDING
-export const REQUEST_FETCH_BUILDING = "REQUEST_FETCH_BUILDING";
-interface RequestFetchBuildingAction {
-  type: typeof REQUEST_FETCH_BUILDING;
-}
-export const REQUEST_FETCH_BUILDING_SUCCESS = "REQUEST_FETCH_BUILDING_SUCCESS";
-interface RequestFetchBuildingSuccessAction {
-  type: typeof REQUEST_FETCH_BUILDING_SUCCESS;
-  data: Building;
-}
-export const REQUEST_FETCH_BUILDING_FAILURE = "REQUEST_FETCH_BUILDING_FAILURE";
-interface RequestFetchBuildingFailureAction {
-  type: typeof REQUEST_FETCH_BUILDING_FAILURE;
-  error: string;
+  error?: string;
 }
 
 // FETCH ALL BUILDINGS
@@ -95,11 +75,16 @@ interface RequestRemoveBuildingFailureAction {
   error: string;
 }
 
-
-export type BuildingsActionTypes = (
-  RequestFetchBuildingAction | RequestFetchBuildingSuccessAction | RequestFetchBuildingFailureAction
-  | RequestFetchBuildingsAction | RequestFetchBuildingsSuccessAction | RequestFetchBuildingsFailureAction
-  | RequestAddBuildingAction | RequestAddBuildingSuccessAction | RequestAddBuildingFailureAction
-  | RequestUPDATEBuildingAction | RequestUPDATEBuildingSuccessAction | RequestUPDATEBuildingFailureAction
-  | RequestRemoveBuildingAction | RequestRemoveBuildingSuccessAction | RequestRemoveBuildingFailureAction
-);
+export type BuildingsActionTypes =
+  | RequestFetchBuildingsAction
+  | RequestFetchBuildingsSuccessAction
+  | RequestFetchBuildingsFailureAction
+  | RequestAddBuildingAction
+  | RequestAddBuildingSuccessAction
+  | RequestAddBuildingFailureAction
+  | RequestUPDATEBuildingAction
+  | RequestUPDATEBuildingSuccessAction
+  | RequestUPDATEBuildingFailureAction
+  | RequestRemoveBuildingAction
+  | RequestRemoveBuildingSuccessAction
+  | RequestRemoveBuildingFailureAction;

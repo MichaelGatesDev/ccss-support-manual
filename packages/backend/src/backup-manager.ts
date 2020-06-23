@@ -17,8 +17,7 @@ export class BackupManager {
   }
 
   public async backup(options: BackupRestoreOptions): Promise<void> {
-    if (StringUtils.isBlank(options.name))
-      throw new Error("The backup name can not be blank!");
+    if (StringUtils.isBlank(options.name)) throw new Error("The backup name can not be blank!");
     const destDir = path.join(this.app.BACKUPS_DIR, options.name);
     Logger.info(`Performing backup (${destDir})`);
     await this.app.createDirectory(destDir);
@@ -30,24 +29,15 @@ export class BackupManager {
         Logger.info("Copied all data");
       } else {
         if (dataOptions.buildings) {
-          await this.app.copy(
-            path.join(this.app.DATA_DIR, this.buildingsFileName),
-            path.join(destDir, "data", this.buildingsFileName)
-          );
+          await this.app.copy(path.join(this.app.DATA_DIR, this.buildingsFileName), path.join(destDir, "data", this.buildingsFileName));
           Logger.info("Copied buildings data");
         }
         if (dataOptions.rooms) {
-          await this.app.copy(
-            path.join(this.app.DATA_DIR, this.roomsFileName),
-            path.join(destDir, "data", this.roomsFileName)
-          );
+          await this.app.copy(path.join(this.app.DATA_DIR, this.roomsFileName), path.join(destDir, "data", this.roomsFileName));
           Logger.info("Copied rooms data");
         }
         if (dataOptions.troubleshooting) {
-          await this.app.copy(
-            path.join(this.app.DATA_DIR, this.troubleshootingFileName),
-            path.join(destDir, "data", this.troubleshootingFileName)
-          );
+          await this.app.copy(path.join(this.app.DATA_DIR, this.troubleshootingFileName), path.join(destDir, "data", this.troubleshootingFileName));
           Logger.info("Copied troubleshooting data");
         }
       }
@@ -66,10 +56,7 @@ export class BackupManager {
     const settingsOptions = options.settings;
     if (settingsOptions !== undefined) {
       if (settingsOptions.all) {
-        await this.app.copy(
-          this.app.SETTINGS_DIR,
-          path.join(destDir, "settings")
-        );
+        await this.app.copy(this.app.SETTINGS_DIR, path.join(destDir, "settings"));
         Logger.info("Copied all settings");
       } else {
         //TODO implement specific image type
@@ -88,8 +75,7 @@ export class BackupManager {
 
   public async restore(options: BackupRestoreOptions): Promise<void> {
     const dir = path.join(this.app.BACKUPS_DIR, options.name);
-    if (StringUtils.isBlank(options.name))
-      throw new Error("The restore name can not be blank!");
+    if (StringUtils.isBlank(options.name)) throw new Error("The restore name can not be blank!");
     Logger.info(`Performing restore (${this.app.BACKUPS_DIR}/${options.name})`);
 
     const dataOptions = options.data;
@@ -101,24 +87,15 @@ export class BackupManager {
         Logger.info("Copied all data");
       } else {
         if (dataOptions.buildings) {
-          this.app.copy(
-            path.join(dir, "data", this.buildingsFileName),
-            path.join(this.app.DATA_DIR, this.buildingsFileName)
-          );
+          this.app.copy(path.join(dir, "data", this.buildingsFileName), path.join(this.app.DATA_DIR, this.buildingsFileName));
           Logger.info("Copied buildings data");
         }
         if (dataOptions.rooms) {
-          this.app.copy(
-            path.join(dir, "data", this.roomsFileName),
-            path.join(this.app.DATA_DIR, this.roomsFileName)
-          );
+          this.app.copy(path.join(dir, "data", this.roomsFileName), path.join(this.app.DATA_DIR, this.roomsFileName));
           Logger.info("Copied rooms data");
         }
         if (dataOptions.troubleshooting) {
-          this.app.copy(
-            path.join(dir, "data", this.troubleshootingFileName),
-            path.join(this.app.DATA_DIR, this.troubleshootingFileName)
-          );
+          this.app.copy(path.join(dir, "data", this.troubleshootingFileName), path.join(this.app.DATA_DIR, this.troubleshootingFileName));
           Logger.info("Copied troubleshooting data");
         }
       }
