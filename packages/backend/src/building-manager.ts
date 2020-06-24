@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { Building } from "@ccss-support-manual/models";
+import { Building, FullyConditionalInterface } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 import { App } from "./app";
 
@@ -62,22 +62,21 @@ export class BuildingManager {
   public removeBuildingByName(name: string): boolean {
     if (!this.hasBuildingWithName(name)) return false;
     const fetched = this.getBuildingByName(name);
-    if (fetched === undefined) return false;
-    return this.removeBuilding(fetched);
+    return fetched == null ? false : this.removeBuilding(fetched);
   }
 
   /**
    * Updates a a building object's properties
-   * @param building The object to update
+   * @param buildingToUpdate The object to update
    * @param updated The object with the new properties
    * @returns True if updated, otherwise false
    */
-  public updateBuilding(building: Building, updated: Building): boolean {
-    if (!this.hasBuilding(building)) return false;
-    const fetched = this.getBuildingByName(building.name);
+  public updateBuilding(buildingToUpdate: Building, updated: FullyConditionalInterface<Building>): boolean {
+    if (!this.hasBuilding(buildingToUpdate)) return false;
+    const fetched = this.getBuildingByName(buildingToUpdate.name);
     if (fetched === undefined) return false;
-    fetched.name = updated.name;
-    fetched.nicknames = updated.nicknames;
+    if (updated.name != null) fetched.name = updated.name;
+    if (updated.nicknames != null) fetched.nicknames = updated.nicknames;
     return true;
   }
 
@@ -103,7 +102,7 @@ export class BuildingManager {
    * @returns true if the building exists, otherwise false
    */
   public hasBuilding(building: Building): boolean {
-    return this.getBuildingByName(building.name) !== undefined;
+    return this.getBuildingByName(building.name) != null;
   }
 
   /**
@@ -112,6 +111,6 @@ export class BuildingManager {
    * @returns true if the building exists, otherwise false
    */
   public hasBuildingWithName(name: string): boolean {
-    return this.getBuildingByName(name) !== undefined;
+    return this.getBuildingByName(name) != null;
   }
 }
