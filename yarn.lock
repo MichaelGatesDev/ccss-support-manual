@@ -57,7 +57,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.1.0, @babel/core@npm:^7.10.3, @babel/core@npm:^7.4.5, @babel/core@npm:^7.7.5":
+"@babel/core@npm:^7.1.0, @babel/core@npm:^7.4.5, @babel/core@npm:^7.7.5":
   version: 7.10.3
   resolution: "@babel/core@npm:7.10.3"
   dependencies:
@@ -1239,7 +1239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-typescript@npm:^7.10.1, @babel/plugin-transform-typescript@npm:^7.9.0":
+"@babel/plugin-transform-typescript@npm:^7.9.0":
   version: 7.10.3
   resolution: "@babel/plugin-transform-typescript@npm:7.10.3"
   dependencies:
@@ -1345,7 +1345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:^7.10.3, @babel/preset-env@npm:^7.4.5":
+"@babel/preset-env@npm:^7.4.5":
   version: 7.10.3
   resolution: "@babel/preset-env@npm:7.10.3"
   dependencies:
@@ -1479,18 +1479,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-typescript@npm:^7.10.1":
-  version: 7.10.1
-  resolution: "@babel/preset-typescript@npm:7.10.1"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.10.1
-    "@babel/plugin-transform-typescript": ^7.10.1
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 2/7f2aadd75ee6b12011ba0299470db761aaae71e45f95a8ef6678deca78bdce62c64180c9bd915facb603d1fff44f4c9f21d79624981efea02fbbe5a1b8068b66
-  languageName: node
-  linkType: hard
-
 "@babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.8.3":
   version: 7.10.3
   resolution: "@babel/runtime-corejs3@npm:7.10.3"
@@ -1590,9 +1578,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ccss-support-manual/backend@workspace:packages/backend"
   dependencies:
-    "@babel/core": ^7.10.3
-    "@babel/preset-env": ^7.10.3
-    "@babel/preset-typescript": ^7.10.1
     "@ccss-support-manual/models": 1.0.0
     "@ccss-support-manual/utilities": 1.0.0
     "@michaelgatesdev/common": ^1.1.4
