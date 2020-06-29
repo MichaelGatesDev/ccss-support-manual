@@ -1,5 +1,5 @@
 import { Dispatch } from "redux";
-import { Building, FullyConditionalInterface } from "@ccss-support-manual/models";
+import { Building } from "@ccss-support-manual/models";
 
 import {
   REQUEST_FETCH_BUILDINGS,
@@ -17,7 +17,7 @@ import {
 } from "./types";
 import { SuccessPayload, FailurePayload } from "../payloads";
 
-export const fetchBuildings = (options?: FullyConditionalInterface<Building>) => async (dispatch: Dispatch): Promise<SuccessPayload<Building[]> | FailurePayload> => {
+export const fetchBuildings = (options?: Partial<Building>) => async (dispatch: Dispatch): Promise<SuccessPayload<Building[]> | FailurePayload> => {
   dispatch({
     type: REQUEST_FETCH_BUILDINGS,
   });

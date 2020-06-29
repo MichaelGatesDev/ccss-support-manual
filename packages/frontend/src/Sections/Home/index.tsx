@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 
 import { BuildingUtils } from "@ccss-support-manual/utilities";
-import { Room, Building, FullyConditionalInterface } from "@ccss-support-manual/models";
+import { Room, Building } from "@ccss-support-manual/models";
 
 import { fetchBuildings } from "../../redux/buildings/actions";
 import { fetchImages } from "../../redux/images/actions";
@@ -24,7 +24,7 @@ import { Action } from "redux";
 
 interface Props {
   buildingsState: BuildingsState;
-  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
+  fetchBuildings: (options?: Partial<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
 
   imagesState: ImagesState;
   fetchImages: () => void;
@@ -169,7 +169,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  fetchBuildings(options?: FullyConditionalInterface<Building>): Promise<SuccessPayload<Building[]> | FailurePayload> {
+  fetchBuildings(options?: Partial<Building>): Promise<SuccessPayload<Building[]> | FailurePayload> {
     return dispatch(fetchBuildings(options));
   },
   fetchImages() {

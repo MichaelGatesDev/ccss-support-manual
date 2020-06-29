@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import { Room, ImageType, Building, FullyConditionalInterface } from "@ccss-support-manual/models";
-import { BuildingUtils } from "@ccss-support-manual/utilities";
+import { ImageType, Building } from "@ccss-support-manual/models";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -31,7 +30,7 @@ interface Props {
   buildingName: string;
 
   buildingsState: BuildingsState;
-  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
+  fetchBuildings: (options?: Partial<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
   updateBuilding: (building: Building, newProps: Building) => Promise<void>;
   removeBuilding: (buildingName: string) => void;
 

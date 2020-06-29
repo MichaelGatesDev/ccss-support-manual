@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
-import { Building, FullyConditionalInterface } from "@ccss-support-manual/models";
+import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,7 +27,7 @@ import { SuccessPayload, FailurePayload } from "../../redux/payloads";
 
 interface Props {
   buildingsState: BuildingsState;
-  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
+  fetchBuildings: (options?: Partial<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
 
   imagesState: ImagesState;
   fetchImages: Function;
@@ -92,7 +92,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  fetchBuildings(options?: FullyConditionalInterface<Building>): Promise<SuccessPayload<Building[]> | FailurePayload> {
+  fetchBuildings(options?: Partial<Building>): Promise<SuccessPayload<Building[]> | FailurePayload> {
     return dispatch(fetchBuildings(options));
   },
   fetchImages() {

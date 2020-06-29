@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { Building, FullyConditionalInterface } from "@ccss-support-manual/models";
+import { Building } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 import { App } from "./app";
 
@@ -71,7 +71,7 @@ export class BuildingManager {
    * @param updated The object with the new properties
    * @returns True if updated, otherwise false
    */
-  public updateBuilding(buildingToUpdate: Building, updated: FullyConditionalInterface<Building>): boolean {
+  public updateBuilding(buildingToUpdate: Building, updated: Partial<Building>): boolean {
     if (!this.hasBuilding(buildingToUpdate)) return false;
     const fetched = this.getBuildingByName(buildingToUpdate.name);
     if (fetched === undefined) return false;

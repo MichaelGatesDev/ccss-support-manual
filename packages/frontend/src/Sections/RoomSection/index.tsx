@@ -2,7 +2,7 @@ import "./style.scss";
 
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { ImageType, RoomType, Classroom, FullyConditionalInterface, Building } from "@ccss-support-manual/models";
+import { ImageType, RoomType, Building } from "@ccss-support-manual/models";
 import { RoomUtils, TroubleshootingDataUtils } from "@ccss-support-manual/utilities";
 import { StringUtils } from "@michaelgatesdev/common";
 import _ from "lodash";
@@ -35,7 +35,7 @@ interface Props {
   troubleshootingState: TroubleshootingState;
   imagesState: ImagesState;
 
-  fetchBuildings: (options?: FullyConditionalInterface<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
+  fetchBuildings: (options?: Partial<Building>) => Promise<SuccessPayload<Building[]> | FailurePayload>;
   fetchRoom: (buildingName: string, roomNumber: string | number) => void;
   fetchRoomImagesForRoom: (buildingName: string, roomNumber: string | number) => void;
   fetchTroubleshootingDataForRoom: (buildingName: string, roomNumber: string | number) => void;
