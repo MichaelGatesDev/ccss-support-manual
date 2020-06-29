@@ -7,6 +7,12 @@
   "files": [
     "dist"
   ],
+  "jest": {
+    "preset": "ts-jest",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
+  },
   "scripts": {
     "tsc": "tsc -p tsconfig.build.json",
     "clean": "tsc -p tsconfig.build.json --clean",
@@ -16,6 +22,9 @@
   },
   "dependencies": {
     "@ccss-support-manual/models": "1.0.0",
-    "@michaelgatesdev/common": "^1.1.4"
+    "@michaelgatesdev/common": "^1.1.4",
+    "@types/jest": "^26.0.3",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1"
   }
 }

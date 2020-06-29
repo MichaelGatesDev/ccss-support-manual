@@ -2,7 +2,7 @@ import { Building, Room } from "@ccss-support-manual/models";
 import { BuildingUtils } from "./building-utils";
 
 export class RoomUtils {
-  public static RoomNumberPattern = /[\d]{3}[A-Za-z]{0,1}/; //TODO make this configurable
+  public static RoomNumberPattern = /^[0-9]{3}[A-Za-z]{0,1}$/; //TODO make this configurable
 
   public static exampleRoom = {
     building: BuildingUtils.exampleBuilding,
