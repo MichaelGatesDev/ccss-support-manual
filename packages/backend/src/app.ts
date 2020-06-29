@@ -60,7 +60,6 @@ export class App {
   }
 
   public async initialize(): Promise<void> {
-    // Console ascii notice
     logger.debug("");
     logger.debug("|==================================================|");
     logger.debug("|--------------------------------------------------|");
