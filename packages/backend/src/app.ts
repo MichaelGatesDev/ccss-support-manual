@@ -28,14 +28,12 @@ export class App {
   //              Directories
   // ------------------------------------------------------ \\
   public readonly ROOT_DIR: string = path.resolve("./");
-  public readonly PUBLIC_DIR: string = path.join(this.ROOT_DIR, "public");
-  public readonly TEMP_DIR: string = path.join(this.ROOT_DIR, "temp");
-  public readonly DOWNLOADS_DIR: string = path.join(this.PUBLIC_DIR, "downloads");
-  public readonly UPLOADS_DIR: string = path.join(this.PUBLIC_DIR, "uploads");
-  public readonly BACKUPS_DIR: string = path.join(this.PUBLIC_DIR, "backups");
-  public readonly DATA_DIR: string = path.join(this.PUBLIC_DIR, "data");
-  public readonly SETTINGS_DIR: string = path.join(this.PUBLIC_DIR, "settings");
-  public readonly IMAGES_DIR: string = path.join(this.PUBLIC_DIR, "images");
+  public readonly APP_DATA_DIR: string = path.join(this.ROOT_DIR, "appdata");
+  public readonly DOWNLOADS_DIR: string = path.join(this.APP_DATA_DIR, "downloads");
+  public readonly BACKUPS_DIR: string = path.join(this.APP_DATA_DIR, "backups");
+  public readonly DATA_DIR: string = path.join(this.APP_DATA_DIR, "data");
+  public readonly SETTINGS_DIR: string = path.join(this.APP_DATA_DIR, "settings");
+  public readonly IMAGES_DIR: string = path.join(this.APP_DATA_DIR, "images");
   public readonly BUILDING_IMAGES_DIR: string = path.join(this.IMAGES_DIR, "buildings");
 
   // ------------------------------------------------------ \\
@@ -110,9 +108,8 @@ export class App {
 
   public async setupDirectories(): Promise<void> {
     await Promise.all([
-      this.createDirectory(this.PUBLIC_DIR),
+      this.createDirectory(this.APP_DATA_DIR),
       this.createDirectory(this.DOWNLOADS_DIR),
-      this.createDirectory(this.UPLOADS_DIR),
       this.createDirectory(this.BACKUPS_DIR),
       this.createDirectory(this.DATA_DIR),
       this.createDirectory(this.SETTINGS_DIR),
@@ -120,29 +117,29 @@ export class App {
     ]);
   }
 
-  public async createDirectory(path: string): Promise<void> {
+  public async createDirectory(targetPath: string): Promise<void> {
     try {
-      if (await FileUtils.checkExists(path)) return;
-      await FileUtils.createDirectory(path);
-      logger.info(`Created directory ${path}`);
+      if (await FileUtils.checkExists(targetPath)) return;
+      await FileUtils.createDirectory(targetPath);
+      logger.info(`Created directory ${path.resolve(targetPath).replace(this.ROOT_DIR, ".\\")}`);
     } catch (error) {
       logger.error(error);
     }
   }
 
-  public async copy(path: string, dest: string): Promise<void> {
+  public async copy(targetPath: string, dest: string): Promise<void> {
     try {
-      await FileUtils.copy(path, dest);
-      logger.info(`Copied directory ${path} to ${dest}`);
+      await FileUtils.copy(targetPath, dest);
+      logger.info(`Copied directory ${targetPath} to ${dest}`);
     } catch (error) {
       logger.error(error);
     }
   }
 
-  public async rename(path: string, dest: string): Promise<void> {
+  public async rename(targetPath: string, dest: string): Promise<void> {
     try {
-      await FileUtils.copy(path, dest);
-      logger.info(`Renamed ${path} to ${dest}`);
+      await FileUtils.copy(targetPath, dest);
+      logger.info(`Renamed ${targetPath} to ${dest}`);
     } catch (error) {
       logger.error(error);
     }

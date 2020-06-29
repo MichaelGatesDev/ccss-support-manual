@@ -50,12 +50,12 @@ export class ImageManager {
     for (const building of this.app.buildingManager.buildings) {
       const buildingImages = this.getImagesForBuilding(building.name);
       if (buildingImages.length === 0) {
-        logger.warning(`Missing building images for: ${building.name}`);
+        logger.warn(`Missing building images for: ${building.name}`);
       }
       for (const room of building.rooms) {
         const roomImages = this.getImagesForRoom(room.building.name, `${room.number}`);
         if (roomImages.length === 0) {
-          logger.warning(`Missing room images for: ${room.building.name} ${room.number}`);
+          logger.warn(`Missing room images for: ${room.building.name} ${room.number}`);
         }
       }
     }
@@ -124,7 +124,7 @@ export class ImageManager {
       const fileName = file.name;
       const filePath = path.join(dir, fileName);
 
-      const newPath = filePath.replace(`${this.app.PUBLIC_DIR}${path.sep}`, "").replace(new RegExp("\\\\", "g"), "/");
+      const newPath = filePath.replace(`${this.app.APP_DATA_DIR}${path.sep}`, "").replace(new RegExp("\\\\", "g"), "/");
       const image = new BuildingImageFactory(
         new ImageFactory()
           .ofType(type)
@@ -151,7 +151,7 @@ export class ImageManager {
       const fileName = file.name;
       const filePath = path.join(dir, fileName);
 
-      const newPath = filePath.replace(`${this.app.PUBLIC_DIR}${path.sep}`, "").replace(new RegExp("\\\\", "g"), "/");
+      const newPath = filePath.replace(`${this.app.APP_DATA_DIR}${path.sep}`, "").replace(new RegExp("\\\\", "g"), "/");
       const image = new RoomImageFactory(
         new ImageFactory()
           .ofType(type)
@@ -173,7 +173,7 @@ export class ImageManager {
     for (const image of this.getAllImages()) {
       if (this.isThumbnail(image.path) || (await this.hasThumbnail(image.actualPath))) continue; // don't create thumbnails for thumbnails
       const thumbnailWidth = this.app.configManager.imagesConfig !== undefined ? this.app.configManager.imagesConfig.buildingImageThumbnailWidth : 350;
-      const promise = this.createThumbnail(path.join(this.app.PUBLIC_DIR, image.path), path.join(this.app.PUBLIC_DIR, image.thumbnail.path), thumbnailWidth);
+      const promise = this.createThumbnail(path.join(this.app.APP_DATA_DIR, image.path), path.join(this.app.APP_DATA_DIR, image.thumbnail.path), thumbnailWidth);
       promises.push(promise);
     }
     await Promise.all(promises);
