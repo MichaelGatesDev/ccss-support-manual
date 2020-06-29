@@ -27,7 +27,4 @@ export type AppState = ReturnType<typeof rootReducer>;
 
 const middleware = [thunk];
 
-export const store = createStore(
-  rootReducer,
-  applyMiddleware(...middleware),
-);
+export const store = createStore(rootReducer, applyMiddleware(...middleware));

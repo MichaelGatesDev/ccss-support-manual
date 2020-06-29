@@ -1,10 +1,7 @@
 import { Dispatch } from "redux";
 import { TroubleshootingData } from "@ccss-support-manual/models";
 
-import {
-  FETCH_TROUBLESHOOTING_DATA,
-  FETCH_TROUBLESHOOTING_DATA_FOR_ROOM,
-} from "./types";
+import { FETCH_TROUBLESHOOTING_DATA, FETCH_TROUBLESHOOTING_DATA_FOR_ROOM } from "./types";
 
 export function fetchTroubleshootingData() {
   return (dispatch: Dispatch) => {
@@ -23,14 +20,9 @@ export function fetchTroubleshootingData() {
   };
 }
 
-export function fetchTroubleshootingDataForRoom(
-  buildingName: string,
-  roomNumber: string | number
-) {
+export function fetchTroubleshootingDataForRoom(buildingName: string, roomNumber: string | number) {
   return (dispatch: Dispatch) => {
-    fetch(
-      `http://localhost:3001/api/v1/troubleshooting-data/buildings/${buildingName}/rooms/${roomNumber}`
-    )
+    fetch(`http://localhost:3001/api/v1/troubleshooting-data/buildings/${buildingName}/rooms/${roomNumber}`)
       .then(response => response.json())
       .then((data: TroubleshootingData[]) => {
         dispatch({
@@ -39,9 +31,7 @@ export function fetchTroubleshootingDataForRoom(
         });
       })
       .catch(error => {
-        console.error(
-          `Failed to fetch troubleshooting data for room: ${buildingName} ${roomNumber}`
-        );
+        console.error(`Failed to fetch troubleshooting data for room: ${buildingName} ${roomNumber}`);
         console.error(error);
       });
   };

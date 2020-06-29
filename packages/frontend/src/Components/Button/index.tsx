@@ -2,7 +2,6 @@ import "./style.scss";
 
 import React, { ReactNode } from "react";
 
-
 export enum ButtonType {
   Primary,
   Secondary,
@@ -49,12 +48,12 @@ const Button: React.FunctionComponent<Props> = (props: Props) => {
   const orientation = vertical ? "vertical" : "horizontal";
 
   return (
-    <div className={`Button-Component ${(fullWidth ? "full-width " : "")}`}>
+    <div className={`Button-Component ${fullWidth ? "full-width " : ""}`}>
       <button
         type="button"
         disabled={disabled}
         onClick={handleClick}
-        className={`btn btn-${ButtonType[buttonType].toLowerCase()} ${(fullWidth ? "btn-block" : "")} ${orientation} ${(disabled ? "disabled" : "")}`}
+        className={`btn btn-${ButtonType[buttonType].toLowerCase()} ${fullWidth ? "btn-block" : ""} ${orientation} ${disabled ? "disabled" : ""}`}
       >
         {children}
       </button>

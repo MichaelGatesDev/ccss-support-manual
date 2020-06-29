@@ -1,6 +1,4 @@
-import {
-  FETCH_TROUBLESHOOTING_DATA, FETCH_TROUBLESHOOTING_DATA_FOR_ROOM, TroubleshootingState, TroubleshootingDataActionTypes,
-} from "./types";
+import { FETCH_TROUBLESHOOTING_DATA, FETCH_TROUBLESHOOTING_DATA_FOR_ROOM, TroubleshootingState, TroubleshootingDataActionTypes } from "./types";
 
 const initialState: TroubleshootingState = {
   loading: true,

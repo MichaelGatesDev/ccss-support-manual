@@ -1,10 +1,4 @@
-import {
-  IMPORT_SPREADSHEET,
-  IMPORT_SPREADSHEET_SUCCESS,
-  IMPORT_SPREADSHEET_FAILURE,
-  ImportState,
-  ImportActionTypes,
-} from "./types";
+import { IMPORT_SPREADSHEET, IMPORT_SPREADSHEET_SUCCESS, IMPORT_SPREADSHEET_FAILURE, ImportState, ImportActionTypes } from "./types";
 
 const initialState: ImportState = {
   importing: false,

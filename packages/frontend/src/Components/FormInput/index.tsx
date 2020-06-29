@@ -18,8 +18,7 @@ class FormInput extends Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this.state = {
-    };
+    this.state = {};
 
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -41,9 +40,7 @@ class FormInput extends Component<Props> {
 
   onBlur() {
     if (!this || !this.textInput) return;
-    const {
-      alwaysSelected,
-    } = this.props;
+    const { alwaysSelected } = this.props;
 
     if (alwaysSelected) {
       this.textInput.focus();
@@ -57,9 +54,7 @@ class FormInput extends Component<Props> {
   }
 
   render() {
-    const {
-      placeholder, value, name,
-    } = this.props;
+    const { placeholder, value, name } = this.props;
     return (
       <div className="FormInput-Component">
         <input
@@ -69,7 +64,9 @@ class FormInput extends Component<Props> {
           placeholder={placeholder}
           onChange={this.onChange}
           value={value}
-          ref={(elem) => { this.textInput = elem; }}
+          ref={elem => {
+            this.textInput = elem;
+          }}
           // onFocus={this.onFocus}
           onBlur={this.onBlur}
         />

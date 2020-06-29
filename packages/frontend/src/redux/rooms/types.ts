@@ -43,8 +43,10 @@ interface RequestFetchRoomsFailureAction {
   error: string;
 }
 
-
-export type RoomsActionTypes = (
-  RequestFetchRoomAction | RequestFetchRoomSuccessAction | RequestFetchRoomFailureAction
-  | RequestFetchRoomsAction | RequestFetchRoomsSuccessAction | RequestFetchRoomsFailureAction
-);
+export type RoomsActionTypes =
+  | RequestFetchRoomAction
+  | RequestFetchRoomSuccessAction
+  | RequestFetchRoomFailureAction
+  | RequestFetchRoomsAction
+  | RequestFetchRoomsSuccessAction
+  | RequestFetchRoomsFailureAction;

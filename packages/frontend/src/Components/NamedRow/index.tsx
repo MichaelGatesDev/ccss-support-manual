@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { } from "react";
+import React from "react";
 
 interface Props {
   id?: string;
@@ -18,13 +18,9 @@ interface Column {
 }
 
 export const NamedRow = (props: Props) => {
-  const {
-    id,
-    columns,
-    headerType,
-  } = props;
+  const { id, columns, headerType } = props;
 
-  const mapped = columns.map((column) => (
+  const mapped = columns.map(column => (
     <div className="col" key={column.title}>
       <div className="row">
         <div className="col">
@@ -38,9 +34,7 @@ export const NamedRow = (props: Props) => {
         </div>
       </div>
       <div className="row">
-        <div className="col">
-          {column.content}
-        </div>
+        <div className="col">{column.content}</div>
       </div>
     </div>
   ));

@@ -40,26 +40,15 @@ export const Card = (props: Props) => {
     footer,
   } = props;
 
-  const hoverClass =
-    hoverEffect !== undefined ? HoverEffect[hoverEffect].toLowerCase() : "";
+  const hoverClass = hoverEffect !== undefined ? HoverEffect[hoverEffect].toLowerCase() : "";
 
   return (
     <div className="col d-flex justify-content-center">
-      <div
-        className={`Card-Component card mb-4 text-center ${className} ${hoverClass}`}
-        style={{ minWidth: width, maxWidth: width }}
-      >
+      <div className={`Card-Component card mb-4 text-center ${className} ${hoverClass}`} style={{ minWidth: width, maxWidth: width }}>
         {/* Header */}
-        {header !== undefined && (
-          <div className="card-header py-1 text-center">{header}</div>
-        )}
+        {header !== undefined && <div className="card-header py-1 text-center">{header}</div>}
         {/* Image */}
-        <img
-          src={img}
-          className="card-img-top"
-          alt=""
-          style={{ width: "100%", height: "200px", objectFit: "cover" }}
-        />
+        <img src={img} className="card-img-top" alt="" style={{ width: "100%", height: "200px", objectFit: "cover" }} />
         {/* Body */}
         {(title !== undefined || body !== undefined) && (
           <div className="card-body">
@@ -72,9 +61,7 @@ export const Card = (props: Props) => {
         {/* Footer */}
         {footer !== undefined && <div className="card-footer">{footer}</div>}
         {/* URL to wrap */}
-        {wrappedURL !== undefined && (
-          <Link to={wrappedURL} className="stretched-link" />
-        )}
+        {wrappedURL !== undefined && <Link to={wrappedURL} className="stretched-link" />}
       </div>
     </div>
   );

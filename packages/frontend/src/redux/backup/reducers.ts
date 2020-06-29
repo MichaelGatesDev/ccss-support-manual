@@ -1,7 +1,4 @@
-import {
-  BackupActionTypes, BackupState,
-  PERFORM_BACKUP, PERFORM_BACKUP_SUCCESS, PERFORM_BACKUP_FAILURE,
-} from "./types";
+import { BackupActionTypes, BackupState, PERFORM_BACKUP, PERFORM_BACKUP_SUCCESS, PERFORM_BACKUP_FAILURE } from "./types";
 
 const initialState: BackupState = {
   backingUp: false,

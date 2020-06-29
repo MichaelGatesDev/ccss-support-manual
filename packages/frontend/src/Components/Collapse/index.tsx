@@ -8,10 +8,7 @@ interface CollapseProps {
 }
 
 export const Collapse = (props: CollapseProps) => {
-  const {
-    id,
-    children,
-  } = props;
+  const { id, children } = props;
   return (
     <div className="Collapse-Component">
       <div className="accordion" id={id}>
@@ -31,14 +28,7 @@ interface CollapseCardProps {
 }
 
 export const CollapseCard = (props: CollapseCardProps) => {
-  const {
-    title,
-    id,
-    headingID,
-    parentID,
-    show,
-    children,
-  } = props;
+  const { title, id, headingID, parentID, show, children } = props;
   return (
     <div className="card" id={id}>
       <div className="card-header" id={headingID}>
@@ -48,10 +38,8 @@ export const CollapseCard = (props: CollapseCardProps) => {
           </button>
         </h2>
       </div>
-      <div id={id} className={`collapse ${(show ? "show " : "")}`} aria-labelledby={headingID} data-parent={`#${parentID}`}>
-        <div className="card-body">
-          {children}
-        </div>
+      <div id={id} className={`collapse ${show ? "show " : ""}`} aria-labelledby={headingID} data-parent={`#${parentID}`}>
+        <div className="card-body">{children}</div>
       </div>
     </div>
   );

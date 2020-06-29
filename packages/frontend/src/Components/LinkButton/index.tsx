@@ -8,8 +8,7 @@ interface Props {
   title: string;
 }
 
-interface State {
-}
+interface State {}
 
 export default class LinkButton extends PureComponent<Props, State> {
   render() {

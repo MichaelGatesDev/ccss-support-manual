@@ -25,17 +25,19 @@ export default class Checkbox extends Component<Props, State> {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, onChange } = this.props;
     const { checked } = this.state;
-    this.setState({
-      checked: e.target.checked,
-    }, () => {
-      onChange(name, checked);
-    });
+    this.setState(
+      {
+        checked: e.target.checked,
+      },
+      () => {
+        onChange(name, checked);
+      }
+    );
   }
 
   render() {
@@ -46,13 +48,7 @@ export default class Checkbox extends Component<Props, State> {
         <label htmlFor={id} className="uppercase">
           {text}
           &nbsp;
-          <input
-            type="checkbox"
-            id={id}
-            name={name}
-            onChange={this.onChange}
-            checked={checked}
-          />
+          <input type="checkbox" id={id} name={name} onChange={this.onChange} checked={checked} />
         </label>
       </div>
     );

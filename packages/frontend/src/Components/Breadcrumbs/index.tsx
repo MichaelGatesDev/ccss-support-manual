@@ -39,14 +39,8 @@ export default () => {
       <ol className="breadcrumb">
         {parts.map((segment: string, idx: number) => {
           return (
-            <li
-              className={
-                "breadcrumb-item " + (idx == parts.length - 1 ? "active" : "")
-              }
-            >
-              <Link to={constructURLTrail(parts, segment)}>
-                {segment == "" ? "home" : segment}
-              </Link>
+            <li className={"breadcrumb-item " + (idx == parts.length - 1 ? "active" : "")}>
+              <Link to={constructURLTrail(parts, segment)}>{segment == "" ? "home" : segment}</Link>
             </li>
           );
         })}

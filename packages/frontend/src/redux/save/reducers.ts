@@ -1,6 +1,4 @@
-import {
-  RestoreActionTypes, SaveState, PERFORM_SAVE_SUCCESS, PERFORM_SAVE_FAILURE, PERFORM_SAVE,
-} from "./types";
+import { RestoreActionTypes, SaveState, PERFORM_SAVE_SUCCESS, PERFORM_SAVE_FAILURE, PERFORM_SAVE } from "./types";
 
 const initialState: SaveState = {
   saving: false,

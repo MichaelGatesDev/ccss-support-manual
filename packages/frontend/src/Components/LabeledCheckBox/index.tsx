@@ -14,9 +14,7 @@ interface Props {
 }
 
 export const LabeledCheckBox = (props: Props) => {
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const {
     id,

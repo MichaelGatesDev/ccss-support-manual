@@ -1,9 +1,12 @@
 import {
   RoomsState,
   RoomsActionTypes,
-
-  REQUEST_FETCH_ROOM, REQUEST_FETCH_ROOM_FAILURE, REQUEST_FETCH_ROOM_SUCCESS,
-  REQUEST_FETCH_ROOMS, REQUEST_FETCH_ROOMS_SUCCESS, REQUEST_FETCH_ROOMS_FAILURE,
+  REQUEST_FETCH_ROOM,
+  REQUEST_FETCH_ROOM_FAILURE,
+  REQUEST_FETCH_ROOM_SUCCESS,
+  REQUEST_FETCH_ROOMS,
+  REQUEST_FETCH_ROOMS_SUCCESS,
+  REQUEST_FETCH_ROOMS_FAILURE,
 } from "./types";
 
 const initialState: RoomsState = {
@@ -14,7 +17,8 @@ const initialState: RoomsState = {
 export function roomsReducer(state = initialState, action: RoomsActionTypes): RoomsState {
   switch (action.type) {
     // DEFAULT
-    default: return state;
+    default:
+      return state;
     // FETCH SINGLE ROOM
     case REQUEST_FETCH_ROOM:
       return {

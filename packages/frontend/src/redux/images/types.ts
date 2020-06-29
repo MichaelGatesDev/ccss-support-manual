@@ -28,7 +28,6 @@ export const FETCH_IMAGES = "FETCH_IMAGES";
 export const FETCH_BUILDING_IMAGES = "FETCH_BUILDING_IMAGES";
 export const FETCH_BUILDING_ROOM_IMAGES = "FETCH_BUILDING_ROOM_IMAGES";
 
-
 interface FetchImagesAction {
   type: typeof FETCH_IMAGES;
   payload: AllImagesFetchedPayload;

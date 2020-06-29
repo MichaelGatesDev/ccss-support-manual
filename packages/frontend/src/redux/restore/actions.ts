@@ -1,12 +1,7 @@
 import { Dispatch } from "redux";
 import { BackupRestoreOptions } from "@ccss-support-manual/models";
 
-import {
-  FETCH_RESTORE_OPTIONS,
-  PERFORM_RESTORE,
-  PERFORM_RESTORE_SUCCESS,
-  PERFORM_RESTORE_FAILURE,
-} from "./types";
+import { FETCH_RESTORE_OPTIONS, PERFORM_RESTORE, PERFORM_RESTORE_SUCCESS, PERFORM_RESTORE_FAILURE } from "./types";
 
 export function fetchRestoreOptions() {
   return (dispatch: Dispatch) => {
@@ -25,9 +20,7 @@ export function fetchRestoreOptions() {
   };
 }
 
-export const performRestore = (options: BackupRestoreOptions) => async (
-  dispatch: Dispatch
-) => {
+export const performRestore = (options: BackupRestoreOptions) => async (dispatch: Dispatch) => {
   dispatch({
     type: PERFORM_RESTORE,
   });

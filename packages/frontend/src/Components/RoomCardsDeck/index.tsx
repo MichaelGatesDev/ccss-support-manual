@@ -1,13 +1,7 @@
 import React from "react";
 import { StringUtils } from "@michaelgatesdev/common";
 
-import {
-  Image,
-  ImageType,
-  Classroom,
-  Room,
-  RoomImage,
-} from "@ccss-support-manual/models";
+import { Image, ImageType, Classroom, Room, RoomImage } from "@ccss-support-manual/models";
 import { RoomUtils } from "@ccss-support-manual/utilities";
 
 import { CardDeck } from "../CardDeck";
@@ -25,36 +19,18 @@ export const RoomCardsDeck = (props: Props) => {
   return (
     <CardDeck>
       {rooms.map(room => {
-        const coverImages = roomsImages.filter(
-          image =>
-            image.buildingName === StringUtils.internalize(room.buildingName) &&
-            image.roomNumber === room.number.toString()
-        );
-        const classroom: Classroom | undefined = RoomUtils.isClassroom(room)
-          ? (room as Classroom)
-          : undefined;
+        const coverImages = roomsImages.filter(image => image.buildingName === StringUtils.internalize(room.buildingName) && image.roomNumber === room.number.toString());
+        const classroom: Classroom | undefined = RoomUtils.isClassroom(room) ? (room as Classroom) : undefined;
         return (
           <Card
             hoverEffect={HoverEffect.Grayscale}
             className="shadow-sm"
-            key={`room-card-${StringUtils.internalize(room.buildingName)}-${
-              room.number
-            }`}
+            key={`room-card-${StringUtils.internalize(room.buildingName)}-${room.number}`}
             width="350px"
-            img={
-              coverImages.length > 0
-                ? `/${escape(coverImages[0].thumbnail.path)}`
-                : placeholder
-            }
+            img={coverImages.length > 0 ? `/${escape(coverImages[0].thumbnail.path)}` : placeholder}
             wrappedURL={`/buildings/${room.buildingName}/rooms/${room.number}`}
             title={`${room.buildingName} ${room.number}`}
-            body={
-              <>
-                {room.name !== undefined && (
-                  <p className="m-0 pt-3">{room.name}</p>
-                )}
-              </>
-            }
+            body={<>{room.name !== undefined && <p className="m-0 pt-3">{room.name}</p>}</>}
           />
         );
       })}

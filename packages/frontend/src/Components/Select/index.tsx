@@ -13,7 +13,6 @@ export interface SelectComponentProps {
 }
 
 export default class Select extends Component<SelectComponentProps> {
-
   onChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
     const { onChange, placeholder } = this.props;
@@ -21,31 +20,17 @@ export default class Select extends Component<SelectComponentProps> {
   };
 
   render() {
-    const {
-      placeholder,
-      values,
-      current,
-      readonly,
-      size,
-    } = this.props;
+    const { placeholder, values, current, readonly, size } = this.props;
     return (
       <div className="Select-Component">
         <select disabled={readonly} value={current} onChange={this.onChange} size={size}>
-          {
-            size !== undefined && size > 0 &&
-            <option>{placeholder}</option>
-          }
-          {
-            values !== undefined &&
-            values.map((value) => (
-              <option
-                key={StringUtils.internalize(value)}
-                value={value}
-              >
+          {size !== undefined && size > 0 && <option>{placeholder}</option>}
+          {values !== undefined &&
+            values.map(value => (
+              <option key={StringUtils.internalize(value)} value={value}>
                 {value}
               </option>
-            ))
-          }
+            ))}
         </select>
       </div>
     );

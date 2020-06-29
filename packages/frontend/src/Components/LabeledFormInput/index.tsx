@@ -19,9 +19,7 @@ interface Props {
 }
 
 export const LabeledFormInput = (props: Props) => {
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const {
     id,
@@ -48,16 +46,7 @@ export const LabeledFormInput = (props: Props) => {
     <div className="Component-LabeledFormInput">
       <label htmlFor={id} className="form-check-label">
         {titleLeft && title}
-        <input
-          name={name}
-          id={id}
-          type="text"
-          className="form-control"
-          placeholder={placeholder}
-          onChange={inputChange}
-          value={value}
-          disabled={disabled}
-        />
+        <input name={name} id={id} type="text" className="form-control" placeholder={placeholder} onChange={inputChange} value={value} disabled={disabled} />
         {titleRight && title}
       </label>
     </div>

@@ -13,22 +13,18 @@ export default class Table extends PureComponent<Props> {
     return (
       <div className="Table-Component">
         <table className="table">
-          {headers !== undefined &&
-            (
-              <thead>
-                <tr>
-                  {
-                    headers.map((header) => (
-                      <th scope="col" key={shortid.generate()}>{header}</th>
-                    ))
-                  }
-                </tr>
-              </thead>
-            )
-          }
-          <tbody>
-            {children}
-          </tbody>
+          {headers !== undefined && (
+            <thead>
+              <tr>
+                {headers.map(header => (
+                  <th scope="col" key={shortid.generate()}>
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          )}
+          <tbody>{children}</tbody>
         </table>
       </div>
     );

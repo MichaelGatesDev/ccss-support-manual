@@ -22,9 +22,7 @@ interface State {
 }
 
 export const LabeledInputList = (props: Props) => {
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const {
     id,
@@ -59,58 +57,37 @@ export const LabeledInputList = (props: Props) => {
     if (onChange !== undefined) onChange(newValues);
   };
 
-
   return (
     <div className="Component-LabeledInputList" id={id}>
-
       {titleLeft && <span className="left">{title}</span>}
 
       {values.length > 0 && (
         <ul>
-          {
-            values.map((el, index) => (
-              /* eslint-disable */
-              <li key={`labeled-input-item-${index}`}>
-                <input
-                  type="text"
-                  value={el || ""}
-                  onChange={handleChange.bind(null, index)}
-                  placeholder={placeholder}
-                />
-                {
-                  (!preventZero || index > 0) &&
-                  (
-                    <Button
-                      buttonType={ButtonType.Danger}
-                      preventDefault
-                      onClick={removeItem.bind(null, index)}
-                    >
-                      <span className="py-0">
-                        <i className="fas fa-minus-circle" />
-                        &nbsp;Remove
-                      </span>
-                    </Button>
-                  )
-                }
-              </li>
-            ))
-          }
+          {values.map((el, index) => (
+            /* eslint-disable */
+            <li key={`labeled-input-item-${index}`}>
+              <input type="text" value={el || ""} onChange={handleChange.bind(null, index)} placeholder={placeholder} />
+              {(!preventZero || index > 0) && (
+                <Button buttonType={ButtonType.Danger} preventDefault onClick={removeItem.bind(null, index)}>
+                  <span className="py-0">
+                    <i className="fas fa-minus-circle" />
+                    &nbsp;Remove
+                  </span>
+                </Button>
+              )}
+            </li>
+          ))}
         </ul>
       )}
 
       {titleRight && <span className="right">{title}</span>}
 
-      <Button
-        buttonType={ButtonType.Secondary}
-        preventDefault
-        onClick={addItem}
-      >
+      <Button buttonType={ButtonType.Secondary} preventDefault onClick={addItem}>
         <span className="py-0">
           <i className="fas fa-plus-circle" />
           &nbsp;Add
         </span>
       </Button>
-
     </div>
   );
 };

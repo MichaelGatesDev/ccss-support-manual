@@ -1,10 +1,4 @@
-import {
-  ImagesActionTypes,
-  ImagesState,
-  FETCH_IMAGES,
-  FETCH_BUILDING_IMAGES,
-  FETCH_BUILDING_ROOM_IMAGES,
-} from "./types";
+import { ImagesActionTypes, ImagesState, FETCH_IMAGES, FETCH_BUILDING_IMAGES, FETCH_BUILDING_ROOM_IMAGES } from "./types";
 
 const initialState: ImagesState = {
   imagesLoading: true,

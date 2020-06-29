@@ -1,6 +1,4 @@
-import {
-  RestoreActionTypes, RestoreState, FETCH_RESTORE_OPTIONS, PERFORM_RESTORE, PERFORM_RESTORE_SUCCESS, PERFORM_RESTORE_FAILURE,
-} from "./types";
+import { RestoreActionTypes, RestoreState, FETCH_RESTORE_OPTIONS, PERFORM_RESTORE, PERFORM_RESTORE_SUCCESS, PERFORM_RESTORE_FAILURE } from "./types";
 
 const initialState: RestoreState = {
   restoring: false,

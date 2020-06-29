@@ -10,8 +10,7 @@ interface Props extends SelectComponentProps {
   fetchRestoreOptions: () => void;
 }
 
-const withRestoreOptions = (WrappedComponent: any) => ((props: Props) => {
-
+const withRestoreOptions = (WrappedComponent: any) => (props: Props) => {
   const { restoreState, fetchRestoreOptions } = props;
 
   useEffect(() => {
@@ -28,8 +27,7 @@ const withRestoreOptions = (WrappedComponent: any) => ((props: Props) => {
       values={restoreState.loadingOptions ? [] : restoreState.options}
     />
   );
-});
-
+};
 
 // ============================================================================================ \\
 

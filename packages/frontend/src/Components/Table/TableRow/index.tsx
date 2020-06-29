@@ -3,7 +3,7 @@ import shortid from "shortid";
 
 export enum TableDataType {
   Header,
-  Data
+  Data,
 }
 
 interface Props {
@@ -16,7 +16,7 @@ export default class TableRow extends PureComponent<Props> {
 
     if (data === undefined) return null;
 
-    const mapped = data.map((item) => {
+    const mapped = data.map(item => {
       switch (item.type) {
         default:
           return null;
@@ -27,10 +27,6 @@ export default class TableRow extends PureComponent<Props> {
       }
     });
 
-    return (
-      <tr className="TableRowComponent">
-        {mapped}
-      </tr>
-    );
+    return <tr className="TableRowComponent">{mapped}</tr>;
   }
 }

@@ -7,24 +7,21 @@ router.get("/", (_req, res): void => {
   res.status(200).json(app.imageManager.roomImages);
 });
 
-router.param(
-  "roomNumber",
-  (req: any, _res: Response, next: NextFunction, roomNumber: string): void => {
-    req.roomNumber = roomNumber;
-    next();
-    // let building = app.buildingManager.getBuildingByName(req.buildingName);
-    // if (building !== undefined) {
-    //     let room = RoomUtils.getRoomByNumber(building, roomNumber);
-    //     if (room !== undefined) {
-    //         req.roomNumber = room.number;
-    //         next();
-    //         return;
-    //     }
-    // }
-    // next(new Error("Failed to find room: " + roomNumber));
-    // return;
-  }
-);
+router.param("roomNumber", (req: any, _res: Response, next: NextFunction, roomNumber: string): void => {
+  req.roomNumber = roomNumber;
+  next();
+  // let building = app.buildingManager.getBuildingByName(req.buildingName);
+  // if (building !== undefined) {
+  //     let room = RoomUtils.getRoomByNumber(building, roomNumber);
+  //     if (room !== undefined) {
+  //         req.roomNumber = room.number;
+  //         next();
+  //         return;
+  //     }
+  // }
+  // next(new Error("Failed to find room: " + roomNumber));
+  // return;
+});
 
 router.get("/:roomNumber", (req: any, res): void => {
   const buildingName = req.buildingName;

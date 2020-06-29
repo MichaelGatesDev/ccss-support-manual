@@ -19,15 +19,7 @@ interface Props {
 }
 
 export const FloatingGroup = (props: Props) => {
-
-  const {
-    children,
-    orientation,
-    top,
-    right,
-    bottom,
-    left,
-  } = props;
+  const { children, orientation, top, right, bottom, left } = props;
 
   let classes = "";
   classes += top ? "top " : "";
@@ -36,12 +28,5 @@ export const FloatingGroup = (props: Props) => {
   classes += left ? "left " : "";
   classes += orientation === FloatingGroupOrientation.Horizontal ? "horizontal " : "vertical ";
 
-  return (
-    <div className={
-      `FloatingGroup-Component ${classes}`
-    }
-    >
-      {children}
-    </div>
-  );
+  return <div className={`FloatingGroup-Component ${classes}`}>{children}</div>;
 };

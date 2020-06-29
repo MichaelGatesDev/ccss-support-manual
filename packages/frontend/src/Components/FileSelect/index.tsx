@@ -26,19 +26,13 @@ export default class FileSelect extends PureComponent<Props> {
 
     let accept;
     if (types !== undefined) {
-      const mappedTypes = types.map((type) => `.${type}`);
+      const mappedTypes = types.map(type => `.${type}`);
       accept = mappedTypes.join(", ");
     }
 
     return (
       <div className="FileSelect-Component">
-        <input
-          type="file"
-          multiple={multiple}
-          className="form-control-file"
-          accept={accept}
-          onChange={this.onChange}
-        />
+        <input type="file" multiple={multiple} className="form-control-file" accept={accept} onChange={this.onChange} />
       </div>
     );
   }

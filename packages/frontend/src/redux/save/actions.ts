@@ -1,10 +1,6 @@
 import { Dispatch } from "redux";
 
-import {
-  PERFORM_SAVE,
-  PERFORM_SAVE_SUCCESS,
-  PERFORM_SAVE_FAILURE,
-} from "./types";
+import { PERFORM_SAVE, PERFORM_SAVE_SUCCESS, PERFORM_SAVE_FAILURE } from "./types";
 
 export function performSave() {
   return async (dispatch: Dispatch) => {

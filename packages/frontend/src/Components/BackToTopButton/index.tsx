@@ -9,9 +9,7 @@ interface Props {
   minScrollAmt: number;
 }
 
-
 export default (props: Props): JSX.Element | null => {
-
   const [visible, setVisible] = useState<boolean>(false);
 
   const onClick = (e: React.MouseEvent): void => {
@@ -36,21 +34,8 @@ export default (props: Props): JSX.Element | null => {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          className="BackToTopButton-Component"
-          key="back-to-top-button"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <button
-            id="backToTop"
-            type="submit"
-            className="btn btn-primary"
-            onClick={onClick}
-            data-toggle="tooltip"
-            title="Back to Top"
-          >
+        <motion.div className="BackToTopButton-Component" key="back-to-top-button" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <button id="backToTop" type="submit" className="btn btn-primary" onClick={onClick} data-toggle="tooltip" title="Back to Top">
             <FontAwesomeIcon icon={faArrowCircleUp} />
           </button>
         </motion.div>

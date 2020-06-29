@@ -54,21 +54,10 @@ export const Alert = (props: Props) => {
   }
 
   return (
-    <div
-      className={`alert alert-${AlertType[alertType].toLowerCase()} ${
-        closeable ? "alert-dismissible fade show" : ""
-      } `}
-      role="alert"
-      id={id}
-    >
+    <div className={`alert alert-${AlertType[alertType].toLowerCase()} ${closeable ? "alert-dismissible fade show" : ""} `} role="alert" id={id}>
       {children}
       {closeable && (
-        <button
-          type="button"
-          className="close"
-          data-dismiss="alert"
-          aria-label="Close"
-        >
+        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       )}

@@ -15,9 +15,7 @@ interface Props {
   children?: ReactNode;
 }
 
-
 export const AnchorButton = (props: Props) => {
-
   const {
     href,
     disabled,
@@ -33,11 +31,7 @@ export const AnchorButton = (props: Props) => {
 
   return (
     <div className="AnchorButton-Component">
-      <Link
-        className={`btn btn-${ButtonType[buttonType].toLowerCase()} ${(fullWidth ? "btn-block " : "")} ${orientation} ${(disabled ? "disabled" : "")}`}
-        to={href}
-        role="button"
-      >
+      <Link className={`btn btn-${ButtonType[buttonType].toLowerCase()} ${fullWidth ? "btn-block " : ""} ${orientation} ${disabled ? "disabled" : ""}`} to={href} role="button">
         {children}
       </Link>
     </div>

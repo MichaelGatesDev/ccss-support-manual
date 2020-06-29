@@ -11,14 +11,7 @@ interface Props {
 }
 
 export const CardDeck = (props: Props) => {
-  const {
-    xsColumns,
-    smColumns,
-    mdColumns,
-    lgColumns,
-    xlColumns,
-    children,
-  } = props;
+  const { xsColumns, smColumns, mdColumns, lgColumns, xlColumns, children } = props;
 
   let classes = "row ";
   if (xsColumns != null) classes += `row-cols-xs-${xsColumns}`;
@@ -27,11 +20,5 @@ export const CardDeck = (props: Props) => {
   if (lgColumns != null) classes += `row-cols-lg-${lgColumns}`;
   if (xlColumns != null) classes += `row-cols-xl-${xlColumns}`;
 
-  return (
-    <div
-      className={`CardDeck-Component row g-4 justify-content-center ${classes}`}
-    >
-      {children}
-    </div>
-  );
+  return <div className={`CardDeck-Component row g-4 justify-content-center ${classes}`}>{children}</div>;
 };

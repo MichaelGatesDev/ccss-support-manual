@@ -18,20 +18,14 @@ export const BuildingCardsDeck = (props: Props) => {
     <CardDeck center>
       {buildings !== undefined &&
         buildings.map(building => {
-          const coverImages = buildingsImages.filter(
-            image => image.buildingName === building.internalName
-          );
+          const coverImages = buildingsImages.filter(image => image.buildingName === building.internalName);
           return (
             <Card
               hoverEffect={HoverEffect.Grayscale}
               className="shadow-sm"
               key={`building-card-${building.internalName}`}
               width="350px"
-              img={
-                coverImages.length > 0
-                  ? `${escape(coverImages[0].thumbnail.path)}`
-                  : placeholder
-              }
+              img={coverImages.length > 0 ? `${escape(coverImages[0].thumbnail.path)}` : placeholder}
               wrappedURL={`/buildings/${building.internalName}`}
               title={`${building.officialName}`}
               body={
