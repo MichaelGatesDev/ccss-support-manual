@@ -1,7 +1,4 @@
 import { Router, Response, Request } from "express";
-// import { Logger } from "@michaelgatesdev/common";
-
-import { RoomFactory } from "@ccss-support-manual/models";
 
 import { app } from "../../../../../app";
 
@@ -20,7 +17,7 @@ router.post(
     //     .send(
     //       `Could not create building with the name "${json.officialName}" because a building with that name already exists!`
     //     );
-    //   Logger.error(
+    //   logger.error(
     //     `Could not create building with the name "${json.officialName}" because a building with that name already exists!`
     //   );
     //   return;

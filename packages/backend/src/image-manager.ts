@@ -1,13 +1,12 @@
 import fs from "fs";
 import jimp from "jimp";
 import path from "path";
-import { Logger } from "@michaelgatesdev/common";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { BuildingImage, RoomImage, BuildingImageFactory, ImageFactory, ImageType, RoomImageFactory, Image } from "@ccss-support-manual/models";
 import { BuildingUtils } from "@ccss-support-manual/utilities";
 
-import { App } from "./app";
+import { App, logger } from "./app";
 
 /**
  * A utility class for managing images
@@ -29,14 +28,14 @@ export class ImageManager {
     await this.app.createDirectory(this.app.BUILDING_IMAGES_DIR);
 
     // load images
-    Logger.info("Loading all images...");
+    logger.info("Loading all images...");
     await this.loadImages();
-    Logger.info("Finished loading images");
+    logger.info("Finished loading images");
 
     // generate thumbnails
-    Logger.info("Creating thumbnails...");
+    logger.info("Creating thumbnails...");
     await this.createThumbnails();
-    Logger.info("Finished creating thumbnails");
+    logger.info("Finished creating thumbnails");
 
     // let us know which images we're missing
     this.logMissing();
@@ -51,12 +50,12 @@ export class ImageManager {
     for (const building of this.app.buildingManager.buildings) {
       const buildingImages = this.getImagesForBuilding(building.name);
       if (buildingImages.length === 0) {
-        Logger.warning(`Missing building images for: ${building.name}`);
+        logger.warning(`Missing building images for: ${building.name}`);
       }
       for (const room of building.rooms) {
         const roomImages = this.getImagesForRoom(room.building.name, `${room.number}`);
         if (roomImages.length === 0) {
-          Logger.warning(`Missing room images for: ${room.building.name} ${room.number}`);
+          logger.warning(`Missing room images for: ${room.building.name} ${room.number}`);
         }
       }
     }
@@ -182,14 +181,14 @@ export class ImageManager {
 
   public async createThumbnail(path: string, dest: string, width: number): Promise<void> {
     try {
-      Logger.debug(`Creating thumbnail for ${path} (width: ${width})...`);
+      logger.debug(`Creating thumbnail for ${path} (width: ${width})...`);
       const img = await jimp.read(path);
       img.resize(width, jimp.AUTO).quality(100);
       await img.writeAsync(dest);
-      // Logger.info(`Created thumbnail for ${path} (width: ${width})`);
+      // logger.info(`Created thumbnail for ${path} (width: ${width})`);
     } catch (error) {
-      Logger.error(`Error while generating thumbnail for ${path}`);
-      Logger.error(error);
+      logger.error(`Error while generating thumbnail for ${path}`);
+      logger.error(error);
     }
   }
 

@@ -3,7 +3,7 @@ import "./style.scss";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-import { Logger, StringUtils } from "@michaelgatesdev/common";
+import { StringUtils } from "@michaelgatesdev/common";
 
 import { BackupRestoreOptions } from "@ccss-support-manual/models";
 
@@ -32,34 +32,17 @@ const BackupDataSegment = (props: Props) => {
 
   const [backupBuildings, setBackupBuildings] = useState<boolean>(true);
   const [backupRooms, setBackupRooms] = useState<boolean>(true);
-  const [backupTroubleshooting, setBackupTroubleshooting] = useState<boolean>(
-    true
-  );
+  const [backupTroubleshooting, setBackupTroubleshooting] = useState<boolean>(true);
 
-  const [backupBuildingImages, setBackupBuildingImages] = useState<boolean>(
-    true
-  );
-  const [backupRoomEquipmentImages, setBackupRoomEquipmentImages] = useState<
-    boolean
-  >(true);
-  const [backupRoomPanoramicImages, setBackupRoomPanoramicImages] = useState<
-    boolean
-  >(true);
-  const [backupRoomTitleImages, setBackupRoomTitleImages] = useState<boolean>(
-    true
-  );
-  const [backupRoomCoverImages, setBackupRoomCoverImages] = useState<boolean>(
-    true
-  );
+  const [backupBuildingImages, setBackupBuildingImages] = useState<boolean>(true);
+  const [backupRoomEquipmentImages, setBackupRoomEquipmentImages] = useState<boolean>(true);
+  const [backupRoomPanoramicImages, setBackupRoomPanoramicImages] = useState<boolean>(true);
+  const [backupRoomTitleImages, setBackupRoomTitleImages] = useState<boolean>(true);
+  const [backupRoomCoverImages, setBackupRoomCoverImages] = useState<boolean>(true);
 
-  const [backupApplicationConfig, setBackupApplicationConfig] = useState<
-    boolean
-  >(true);
+  const [backupApplicationConfig, setBackupApplicationConfig] = useState<boolean>(true);
   const [backupImagesConfig, setBackupImagesConfig] = useState<boolean>(true);
-  const [
-    backupTroubleshootingKeywordsConfig,
-    setBackupTroubleshootingKeywordsConfig,
-  ] = useState<boolean>(true);
+  const [backupTroubleshootingKeywordsConfig, setBackupTroubleshootingKeywordsConfig] = useState<boolean>(true);
 
   const { backupState, performBackup } = props;
 
@@ -121,13 +104,7 @@ const BackupDataSegment = (props: Props) => {
           troubleshooting: backupTroubleshooting,
         },
         images: {
-          all:
-            backupBuildingImages &&
-            backupRoomEquipmentImages &&
-            backupRoomEquipmentImages &&
-            backupRoomPanoramicImages &&
-            backupRoomTitleImages &&
-            backupRoomCoverImages,
+          all: backupBuildingImages && backupRoomEquipmentImages && backupRoomEquipmentImages && backupRoomPanoramicImages && backupRoomTitleImages && backupRoomCoverImages,
           buildingImages: backupBuildingImages,
           room_equipmentImages: backupRoomEquipmentImages,
           room_panoramicImages: backupRoomPanoramicImages,
@@ -135,18 +112,15 @@ const BackupDataSegment = (props: Props) => {
           room_coverImages: backupRoomCoverImages,
         },
         settings: {
-          all:
-            backupApplicationConfig &&
-            backupImagesConfig &&
-            backupTroubleshootingKeywordsConfig,
+          all: backupApplicationConfig && backupImagesConfig && backupTroubleshootingKeywordsConfig,
           applicationConfig: backupApplicationConfig,
           imagesConfig: backupImagesConfig,
           troubleshootingKeywordsConfig: backupTroubleshootingKeywordsConfig,
         },
       });
     } catch (error) {
-      Logger.error("An error occured while attempting to backup data.");
-      Logger.error(error);
+      console.error("An error occured while attempting to backup data.");
+      console.error(error);
     } finally {
       resetBackupForm();
     }
@@ -173,13 +147,7 @@ const BackupDataSegment = (props: Props) => {
           columns={[
             {
               title: "Backup File Name",
-              content: (
-                <FormInput
-                  onChange={setBackupName}
-                  value={backupName}
-                  placeholder="my-cool-backup"
-                />
-              ),
+              content: <FormInput onChange={setBackupName} value={backupName} placeholder="my-cool-backup" />,
             },
           ]}
         />
@@ -218,31 +186,13 @@ const BackupDataSegment = (props: Props) => {
                   </div>
                   <ul>
                     <li>
-                      <LabeledCheckBox
-                        title="Buildings"
-                        id="backupBuildings"
-                        titleRight
-                        onChange={setBackupBuildings}
-                        checked={backupBuildings}
-                      />
+                      <LabeledCheckBox title="Buildings" id="backupBuildings" titleRight onChange={setBackupBuildings} checked={backupBuildings} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="Rooms"
-                        id="backupRooms"
-                        titleRight
-                        onChange={setBackupRooms}
-                        checked={backupRooms}
-                      />
+                      <LabeledCheckBox title="Rooms" id="backupRooms" titleRight onChange={setBackupRooms} checked={backupRooms} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="Troubleshooting"
-                        id="backupTroubleshooting"
-                        titleRight
-                        onChange={setBackupTroubleshooting}
-                        checked={backupTroubleshooting}
-                      />
+                      <LabeledCheckBox title="Troubleshooting" id="backupTroubleshooting" titleRight onChange={setBackupTroubleshooting} checked={backupTroubleshooting} />
                     </li>
                   </ul>
                 </>
@@ -278,49 +228,19 @@ const BackupDataSegment = (props: Props) => {
                   </div>
                   <ul>
                     <li>
-                      <LabeledCheckBox
-                        title="Building Images"
-                        id="backupBuildingImages"
-                        titleRight
-                        onChange={setBackupBuildingImages}
-                        checked={backupBuildingImages}
-                      />
+                      <LabeledCheckBox title="Building Images" id="backupBuildingImages" titleRight onChange={setBackupBuildingImages} checked={backupBuildingImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Equipment Images"
-                        id="backupRoomEquipmentImages"
-                        titleRight
-                        onChange={setBackupRoomEquipmentImages}
-                        checked={backupRoomEquipmentImages}
-                      />
+                      <LabeledCheckBox title="(Room) Equipment Images" id="backupRoomEquipmentImages" titleRight onChange={setBackupRoomEquipmentImages} checked={backupRoomEquipmentImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Panoramic Images"
-                        id="backupRoomPanoramicImages"
-                        titleRight
-                        onChange={setBackupRoomPanoramicImages}
-                        checked={backupRoomPanoramicImages}
-                      />
+                      <LabeledCheckBox title="(Room) Panoramic Images" id="backupRoomPanoramicImages" titleRight onChange={setBackupRoomPanoramicImages} checked={backupRoomPanoramicImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Title Images"
-                        id="backupRoomTitleImages"
-                        titleRight
-                        onChange={setBackupRoomTitleImages}
-                        checked={backupRoomTitleImages}
-                      />
+                      <LabeledCheckBox title="(Room) Title Images" id="backupRoomTitleImages" titleRight onChange={setBackupRoomTitleImages} checked={backupRoomTitleImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Cover Images"
-                        id="backupRoomCoverImages"
-                        titleRight
-                        onChange={setBackupRoomCoverImages}
-                        checked={backupRoomCoverImages}
-                      />
+                      <LabeledCheckBox title="(Room) Cover Images" id="backupRoomCoverImages" titleRight onChange={setBackupRoomCoverImages} checked={backupRoomCoverImages} />
                     </li>
                   </ul>
                 </>
@@ -356,22 +276,10 @@ const BackupDataSegment = (props: Props) => {
                   </div>
                   <ul>
                     <li>
-                      <LabeledCheckBox
-                        title="Application Config"
-                        id="backupBuildingImages"
-                        titleRight
-                        onChange={setBackupApplicationConfig}
-                        checked={backupApplicationConfig}
-                      />
+                      <LabeledCheckBox title="Application Config" id="backupBuildingImages" titleRight onChange={setBackupApplicationConfig} checked={backupApplicationConfig} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="Images Config"
-                        id="backupRoomEquipmentImages"
-                        titleRight
-                        onChange={setBackupImagesConfig}
-                        checked={backupImagesConfig}
-                      />
+                      <LabeledCheckBox title="Images Config" id="backupRoomEquipmentImages" titleRight onChange={setBackupImagesConfig} checked={backupImagesConfig} />
                     </li>
                     <li>
                       <LabeledCheckBox
@@ -392,12 +300,7 @@ const BackupDataSegment = (props: Props) => {
         {/* Button */}
         <div className="row">
           <div className="col">
-            <Button
-              buttonType={ButtonType.Secondary}
-              disabled={backupState.backingUp}
-              onClick={backup}
-              preventDefault
-            >
+            <Button buttonType={ButtonType.Secondary} disabled={backupState.backingUp} onClick={backup} preventDefault>
               <span>Backup</span>
             </Button>
           </div>
@@ -407,14 +310,7 @@ const BackupDataSegment = (props: Props) => {
           <div className="row">
             <div className="col">
               <div className="progress">
-                <div
-                  className="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  aria-valuenow={100}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  style={{ width: "100%" }}
-                />
+                <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100} style={{ width: "100%" }} />
               </div>
             </div>
           </div>

@@ -1,11 +1,10 @@
 import path from "path";
-import { Logger } from "@michaelgatesdev/common";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { BuildingUtils, RoomUtils, TroubleshootingDataUtils } from "@ccss-support-manual/utilities";
 import { Building, Room, TroubleshootingData } from "@ccss-support-manual/models";
 
-import { App } from "./app";
+import { App, logger } from "./app";
 
 export class DataManager {
   private readonly app: App;
@@ -24,50 +23,50 @@ export class DataManager {
     // buildings file
     this.buildingsFilePath = path.join(this.app.DATA_DIR, this.buildingsFileName);
     if (!(await FileUtils.checkExists(this.buildingsFilePath))) {
-      Logger.info(`No buildings file found at ${this.buildingsFilePath}. Creating default...`);
+      logger.info(`No buildings file found at ${this.buildingsFilePath}. Creating default...`);
       try {
         await this.createDefaultBuildingsFile();
-        Logger.info("Created default buildings file");
+        logger.info("Created default buildings file");
       } catch (error) {
-        Logger.error("There was an error while trying to create the default buildings file");
-        Logger.error(error);
+        logger.error("There was an error while trying to create the default buildings file");
+        logger.error(error);
       }
     }
     const loadedBuildings = await this.loadBuildingsFile();
     this.app.buildingManager.addBuildings(loadedBuildings);
-    Logger.info(`Loaded ${loadedBuildings.length} buildings`);
+    logger.info(`Loaded ${loadedBuildings.length} buildings`);
 
     // rooms file
     this.roomsFilePath = path.join(this.app.DATA_DIR, this.roomsFileName);
     if (!(await FileUtils.checkExists(this.roomsFilePath))) {
-      Logger.info(`No rooms file found at ${this.roomsFilePath}. Creating default...`);
+      logger.info(`No rooms file found at ${this.roomsFilePath}. Creating default...`);
       try {
         await this.createDefaultRoomsFile();
-        Logger.info("Created default rooms file");
+        logger.info("Created default rooms file");
       } catch (error) {
-        Logger.error("There was an error while trying to create the default rooms file");
-        Logger.error(error);
+        logger.error("There was an error while trying to create the default rooms file");
+        logger.error(error);
       }
     }
     const loadedRooms = await this.loadRoomsFile();
     this.app.roomManager.addRooms(loadedRooms);
-    Logger.info(`Loaded ${loadedRooms.length} rooms`);
+    logger.info(`Loaded ${loadedRooms.length} rooms`);
 
     // troubleshooting data file
     this.troubleshootingFilePath = path.join(this.app.DATA_DIR, this.troubleshootingFileName);
     if (!(await FileUtils.checkExists(this.troubleshootingFilePath))) {
-      Logger.info(`No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`);
+      logger.info(`No troubleshooting data file found at ${this.troubleshootingFilePath}. Creating default...`);
       try {
         await this.createDefaultTroubleshootingDataFile();
-        Logger.info("Created default troubleshooting data file");
+        logger.info("Created default troubleshooting data file");
       } catch (error) {
-        Logger.error("There was an error while trying to create the default troubleshooting data file");
-        Logger.error(error);
+        logger.error("There was an error while trying to create the default troubleshooting data file");
+        logger.error(error);
       }
     }
     const loadedData = await this.loadTroubleshootingDataFile();
     this.app.troubleshootingDataManager.addAll(loadedData);
-    Logger.info(`Loaded ${loadedData.length} troubleshooting entries`);
+    logger.info(`Loaded ${loadedData.length} troubleshooting entries`);
   }
 
   public async reinitialize(): Promise<void> {
@@ -207,14 +206,14 @@ export class DataManager {
   }
 
   public async save(): Promise<void> {
-    Logger.info("Saving buildings data...");
+    logger.info("Saving buildings data...");
     await this.saveBuildings();
-    Logger.info("Finished saving buildings data");
-    Logger.info("Saving rooms data...");
+    logger.info("Finished saving buildings data");
+    logger.info("Saving rooms data...");
     await this.saveRooms();
-    Logger.info("Finished saving rooms data");
-    Logger.info("Saving troubleshooting data...");
+    logger.info("Finished saving rooms data");
+    logger.info("Saving troubleshooting data...");
     await this.saveTroubleshootingData();
-    Logger.info("Finished saving troubleshooting data");
+    logger.info("Finished saving troubleshooting data");
   }
 }

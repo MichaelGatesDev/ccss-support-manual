@@ -29,7 +29,6 @@ enum RestoreSettingsType {
 }
 
 const RestoreDataSegment = (props: Props) => {
-
   const [restorePoint, setRestorePoint] = useState<string | undefined>();
 
   const [restoreBuildings, setRestoreBuildings] = useState<boolean>(true);
@@ -46,18 +45,14 @@ const RestoreDataSegment = (props: Props) => {
   const [restoreImagesConfig, setRestoreImagesConfig] = useState<boolean>(true);
   const [restoreTroubleshootingKeywordsConfig, setRestoreTroubleshootingKeywordsConfig] = useState<boolean>(true);
 
+  const { restoreState, performRestore } = props;
 
-  const {
-    restoreState,
-    performRestore,
-  } = props;
-
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const modifyAll = (type: RestoreSettingsType, active: boolean): void => {
     switch (type) {
-      default: break;
+      default:
+        break;
       case RestoreSettingsType.Data:
         setRestoreBuildings(active);
         setRestoreRooms(active);
@@ -121,8 +116,8 @@ const RestoreDataSegment = (props: Props) => {
         },
       });
     } catch (error) {
-      Logger.error("An error occured while attempting to restore data.");
-      Logger.error(error);
+      console.error("An error occured while attempting to restore data.");
+      console.error(error);
     } finally {
       resetRestoreForm();
     }
@@ -131,9 +126,7 @@ const RestoreDataSegment = (props: Props) => {
   const SelectWithRestoreOptions = withRestoreOptions(Select);
 
   return (
-    <SettingsSegment
-      title="Restore Data"
-    >
+    <SettingsSegment title="Restore Data">
       <>
         {/* Restore File Name */}
         <NamedRow
@@ -144,24 +137,17 @@ const RestoreDataSegment = (props: Props) => {
               content: (
                 <>
                   {/* Error messages row */}
-                  {
-                    restoreState !== undefined && restoreState.error &&
-                    (
-                      <div className="row">
-                        <div className="col">
-                          <div className="alert alert-danger" role="alert">
-                            {restoreState.error}
-                          </div>
+                  {restoreState !== undefined && restoreState.error && (
+                    <div className="row">
+                      <div className="col">
+                        <div className="alert alert-danger" role="alert">
+                          {restoreState.error}
                         </div>
                       </div>
-                    )
-                  }
+                    </div>
+                  )}
                   {/* Options */}
-                  <SelectWithRestoreOptions
-                    size={1}
-                    onChange={setRestorePoint}
-                    current={restorePoint}
-                  />
+                  <SelectWithRestoreOptions size={1} onChange={setRestorePoint} current={restorePoint} />
                 </>
               ),
             },
@@ -180,7 +166,9 @@ const RestoreDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(RestoreSettingsType.Data, true); }}
+                        onClick={() => {
+                          modifyAll(RestoreSettingsType.Data, true);
+                        }}
                         preventDefault
                       >
                         <span>Select All</span>
@@ -189,7 +177,9 @@ const RestoreDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(RestoreSettingsType.Data, false); }}
+                        onClick={() => {
+                          modifyAll(RestoreSettingsType.Data, false);
+                        }}
                         preventDefault
                       >
                         <span>Select None</span>
@@ -198,31 +188,13 @@ const RestoreDataSegment = (props: Props) => {
                   </div>
                   <ul>
                     <li>
-                      <LabeledCheckBox
-                        title="Buildings"
-                        id="restoreBuildings"
-                        titleRight
-                        onChange={setRestoreBuildings}
-                        checked={restoreBuildings}
-                      />
+                      <LabeledCheckBox title="Buildings" id="restoreBuildings" titleRight onChange={setRestoreBuildings} checked={restoreBuildings} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="Rooms"
-                        id="restoreRooms"
-                        titleRight
-                        onChange={setRestoreRooms}
-                        checked={restoreRooms}
-                      />
+                      <LabeledCheckBox title="Rooms" id="restoreRooms" titleRight onChange={setRestoreRooms} checked={restoreRooms} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="Troubleshooting"
-                        id="restoreTroubleshooting"
-                        titleRight
-                        onChange={setRestoreTroubleshooting}
-                        checked={restoreTroubleshooting}
-                      />
+                      <LabeledCheckBox title="Troubleshooting" id="restoreTroubleshooting" titleRight onChange={setRestoreTroubleshooting} checked={restoreTroubleshooting} />
                     </li>
                   </ul>
                 </>
@@ -236,7 +208,9 @@ const RestoreDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(RestoreSettingsType.Images, true); }}
+                        onClick={() => {
+                          modifyAll(RestoreSettingsType.Images, true);
+                        }}
                         preventDefault
                       >
                         <span>Select All</span>
@@ -245,7 +219,9 @@ const RestoreDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(RestoreSettingsType.Images, false); }}
+                        onClick={() => {
+                          modifyAll(RestoreSettingsType.Images, false);
+                        }}
                         preventDefault
                       >
                         <span>Select None</span>
@@ -254,49 +230,19 @@ const RestoreDataSegment = (props: Props) => {
                   </div>
                   <ul>
                     <li>
-                      <LabeledCheckBox
-                        title="Building Images"
-                        id="restoreBuildingImages"
-                        titleRight
-                        onChange={setRestoreBuildingImages}
-                        checked={restoreBuildingImages}
-                      />
+                      <LabeledCheckBox title="Building Images" id="restoreBuildingImages" titleRight onChange={setRestoreBuildingImages} checked={restoreBuildingImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Equipment Images"
-                        id="restoreRoomEquipmentImages"
-                        titleRight
-                        onChange={setRestoreRoomEquipmentImages}
-                        checked={restoreRoomEquipmentImages}
-                      />
+                      <LabeledCheckBox title="(Room) Equipment Images" id="restoreRoomEquipmentImages" titleRight onChange={setRestoreRoomEquipmentImages} checked={restoreRoomEquipmentImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Panoramic Images"
-                        id="restoreRoomPanoramicImages"
-                        titleRight
-                        onChange={setRestoreRoomPanoramicImages}
-                        checked={restoreRoomPanoramicImages}
-                      />
+                      <LabeledCheckBox title="(Room) Panoramic Images" id="restoreRoomPanoramicImages" titleRight onChange={setRestoreRoomPanoramicImages} checked={restoreRoomPanoramicImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Title Images"
-                        id="restoreRoomTitleImages"
-                        titleRight
-                        onChange={setRestoreRoomTitleImages}
-                        checked={restoreRoomTitleImages}
-                      />
+                      <LabeledCheckBox title="(Room) Title Images" id="restoreRoomTitleImages" titleRight onChange={setRestoreRoomTitleImages} checked={restoreRoomTitleImages} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="(Room) Cover Images"
-                        id="restoreRoomCoverImages"
-                        titleRight
-                        onChange={setRestoreRoomCoverImages}
-                        checked={restoreRoomCoverImages}
-                      />
+                      <LabeledCheckBox title="(Room) Cover Images" id="restoreRoomCoverImages" titleRight onChange={setRestoreRoomCoverImages} checked={restoreRoomCoverImages} />
                     </li>
                   </ul>
                 </>
@@ -310,7 +256,9 @@ const RestoreDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(RestoreSettingsType.Settings, true); }}
+                        onClick={() => {
+                          modifyAll(RestoreSettingsType.Settings, true);
+                        }}
                         preventDefault
                       >
                         <span>Select All</span>
@@ -319,7 +267,9 @@ const RestoreDataSegment = (props: Props) => {
                     <div className="col">
                       <Button
                         buttonType={ButtonType.Secondary}
-                        onClick={() => { modifyAll(RestoreSettingsType.Settings, false); }}
+                        onClick={() => {
+                          modifyAll(RestoreSettingsType.Settings, false);
+                        }}
                         preventDefault
                       >
                         <span>Select None</span>
@@ -328,22 +278,10 @@ const RestoreDataSegment = (props: Props) => {
                   </div>
                   <ul>
                     <li>
-                      <LabeledCheckBox
-                        title="Application Config"
-                        id="restoreBuildingImages"
-                        titleRight
-                        onChange={setRestoreApplicationConfig}
-                        checked={restoreApplicationConfig}
-                      />
+                      <LabeledCheckBox title="Application Config" id="restoreBuildingImages" titleRight onChange={setRestoreApplicationConfig} checked={restoreApplicationConfig} />
                     </li>
                     <li>
-                      <LabeledCheckBox
-                        title="Images Config"
-                        id="restoreRoomEquipmentImages"
-                        titleRight
-                        onChange={setRestoreImagesConfig}
-                        checked={restoreImagesConfig}
-                      />
+                      <LabeledCheckBox title="Images Config" id="restoreRoomEquipmentImages" titleRight onChange={setRestoreImagesConfig} checked={restoreImagesConfig} />
                     </li>
                     <li>
                       <LabeledCheckBox
@@ -364,36 +302,21 @@ const RestoreDataSegment = (props: Props) => {
         {/* Button */}
         <div className="row">
           <div className="col">
-            <Button
-              buttonType={ButtonType.Secondary}
-              disabled={restoreState.restoring}
-              onClick={restore}
-              preventDefault
-            >
+            <Button buttonType={ButtonType.Secondary} disabled={restoreState.restoring} onClick={restore} preventDefault>
               <span>Restore</span>
             </Button>
           </div>
         </div>
         {/* Progress Bar */}
-        {
-          restoreState.restoring &&
-          (
-            <div className="row">
-              <div className="col">
-                <div className="progress">
-                  <div
-                    className="progress-bar progress-bar-striped progress-bar-animated"
-                    role="progressbar"
-                    aria-valuenow={100}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    style={{ width: "100%" }}
-                  />
-                </div>
+        {restoreState.restoring && (
+          <div className="row">
+            <div className="col">
+              <div className="progress">
+                <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100} style={{ width: "100%" }} />
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
       </>
     </SettingsSegment>
   );
@@ -403,12 +326,8 @@ const mapStateToProps = (state: AppState) => ({
   restoreState: state.restore,
 });
 
-
 export const mapDispatchToProps = {
   performRestore,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(RestoreDataSegment);
+export default connect(mapStateToProps, mapDispatchToProps)(RestoreDataSegment);

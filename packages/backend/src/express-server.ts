@@ -2,11 +2,10 @@ import http from "http";
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
-import logger from "morgan";
 import cors from "cors";
-import { Logger } from "@michaelgatesdev/common";
 
 import indexRoute from "./routes/";
+import { logger } from "./app";
 
 export class ExpressServer {
   private readonly FALLBACK_PORT: number = 3001;
@@ -45,8 +44,6 @@ export class ExpressServer {
       this.expressApp.use(cors());
       this.expressApp.options("*", cors());
 
-      this.expressApp.use(logger("dev"));
-
       this.expressApp.use(express.json());
       this.expressApp.use(
         express.urlencoded({
@@ -79,10 +76,10 @@ export class ExpressServer {
     // handle specific listen errors with friendly messages
     switch (error.code) {
       case "EACCES":
-        Logger.error(`${bind} requires elevated privileges`);
+        logger.error(`${bind} requires elevated privileges`);
         return process.exit(1);
       case "EADDRINUSE":
-        Logger.error(`${bind} is already in use`);
+        logger.error(`${bind} is already in use`);
         return process.exit(1);
       default:
         throw error;
@@ -94,19 +91,19 @@ export class ExpressServer {
    */
   private onListening(): void {
     if (this.server === undefined) {
-      Logger.error("Server is undefined!");
+      logger.error("Server is undefined!");
       return;
     }
 
     const addr = this.server.address();
 
     if (addr === null) {
-      Logger.error("Server not running because no address found!");
+      logger.error("Server not running because no address found!");
       return;
     }
 
     const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
 
-    Logger.debug(`Server running on ${bind}`);
+    logger.debug(`Server running on ${bind}`);
   }
 }

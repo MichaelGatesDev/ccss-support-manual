@@ -1,5 +1,5 @@
 import path from "path";
-import { Logger } from "@michaelgatesdev/common";
+import winston from "winston";
 import { FileUtils } from "@michaelgatesdev/common-io";
 
 import { ConfigManager } from "./config-manager";
@@ -11,6 +11,17 @@ import { TroubleshootingDataManager } from "./troubleshooting-data-manager";
 import { DataManager } from "./data-manager";
 import { BackupManager } from "./backup-manager";
 // import { UpdateManager } from "./update-manager";
+
+// create logger
+const loggerFormat = winston.format.printf(({ level, message, timestamp }) => {
+  return `[${timestamp}][${level.toUpperCase()}]: ${message}`;
+});
+
+export const logger = winston.createLogger({
+  level: "debug",
+  format: winston.format.combine(winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }), loggerFormat),
+  transports: [new winston.transports.File({ filename: "error.log", level: "error" }), new winston.transports.Console()],
+});
 
 export class App {
   // ------------------------------------------------------ \\
@@ -52,24 +63,24 @@ export class App {
 
   public async initialize(): Promise<void> {
     // Console ascii notice
-    Logger.debug("");
-    Logger.debug("|==================================================|");
-    Logger.debug("|--------------------------------------------------|");
-    Logger.debug("| * Classroom & Customer Support Services Manual * |");
-    Logger.debug("|--------------------------------------------------|");
-    Logger.debug("|==================================================|");
-    Logger.debug("");
+    logger.debug("");
+    logger.debug("|==================================================|");
+    logger.debug("|--------------------------------------------------|");
+    logger.debug("| * Classroom & Customer Support Services Manual * |");
+    logger.debug("|--------------------------------------------------|");
+    logger.debug("|==================================================|");
+    logger.debug("");
 
     // create directories
     await this.setupDirectories();
 
     // create and load configuration files
     try {
-      Logger.info("Initializing configuration manager...");
+      logger.info("Initializing configuration manager...");
       await this.configManager.initialize();
-      Logger.info("Finished initializing configuration manager");
+      logger.info("Finished initializing configuration manager");
     } catch (error) {
-      Logger.error(error);
+      logger.error(error);
     }
 
     // load data
@@ -85,11 +96,11 @@ export class App {
 
     // create and load configuration files
     try {
-      Logger.info("Initializing configuration manager...");
+      logger.info("Initializing configuration manager...");
       await this.configManager.initialize();
-      Logger.info("Finished initializing configuration manager");
+      logger.info("Finished initializing configuration manager");
     } catch (error) {
-      Logger.error(error);
+      logger.error(error);
     }
 
     await this.dataManager.initialize();
@@ -113,27 +124,27 @@ export class App {
     try {
       if (await FileUtils.checkExists(path)) return;
       await FileUtils.createDirectory(path);
-      Logger.info(`Created directory ${path}`);
+      logger.info(`Created directory ${path}`);
     } catch (error) {
-      Logger.error(error);
+      logger.error(error);
     }
   }
 
   public async copy(path: string, dest: string): Promise<void> {
     try {
       await FileUtils.copy(path, dest);
-      Logger.info(`Copied directory ${path} to ${dest}`);
+      logger.info(`Copied directory ${path} to ${dest}`);
     } catch (error) {
-      Logger.error(error);
+      logger.error(error);
     }
   }
 
   public async rename(path: string, dest: string): Promise<void> {
     try {
       await FileUtils.copy(path, dest);
-      Logger.info(`Renamed ${path} to ${dest}`);
+      logger.info(`Renamed ${path} to ${dest}`);
     } catch (error) {
-      Logger.error(error);
+      logger.error(error);
     }
   }
 }

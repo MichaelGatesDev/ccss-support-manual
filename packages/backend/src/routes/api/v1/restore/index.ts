@@ -1,9 +1,8 @@
 import { Router, Request, Response } from "express";
-import { Logger } from "@michaelgatesdev/common";
 
 import { BackupRestoreOptions } from "@ccss-support-manual/models";
 
-import { app } from "../../../../app";
+import { app, logger } from "../../../../app";
 
 const router: Router = Router();
 
@@ -21,7 +20,7 @@ router.post(
       const options: BackupRestoreOptions | undefined = req.body;
       if (options === undefined) {
         res.status(500).send("No restore options found");
-        Logger.error("No restore options found");
+        logger.error("No restore options found");
         return;
       }
       await app.backupManager.restore(options);
@@ -29,7 +28,7 @@ router.post(
       res.sendStatus(200);
     } catch (error) {
       res.status(500).send(error.message !== undefined ? error.message : error);
-      Logger.error(error);
+      logger.error(error);
     }
   }
 );

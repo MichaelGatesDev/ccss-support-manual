@@ -22,19 +22,14 @@ interface Props {
 }
 
 const ImportDataSegment = (props: Props) => {
-
   const [importURL, setImportSpreadsheetURL] = useState<string>("");
   const [importFile, setImportFile] = useState<File | FileList | undefined>();
   const [importFileType, setImportFileType] = useState<string | undefined>(SpreadsheetType[SpreadsheetType.ClassroomChecks]);
   const [importFileMode, setImportFileMode] = useState<string | undefined>(SpreadsheetImportMode[SpreadsheetImportMode.ClearAndWrite]);
 
-  const {
-    importState,
-    importSpreadsheet,
-  } = props;
+  const { importState, importSpreadsheet } = props;
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   if (importState === undefined) {
     return <p>Waiting for import state..</p>; // TODO splash screen
@@ -49,7 +44,7 @@ const ImportDataSegment = (props: Props) => {
 
   const performImport = async () => {
     if (importSpreadsheet === undefined) {
-      Logger.error("importSpreadsheet function is undefined");
+      console.error("importSpreadsheet function is undefined");
       return;
     }
 
@@ -79,8 +74,7 @@ const ImportDataSegment = (props: Props) => {
     if (hasURL) {
       console.debug(`Attempting to import from URL: ${importURL} ...`);
       data.append("url", importURL);
-    }
-    else {
+    } else {
       console.debug(`Attempting to import local file: ${(importFile as File).name} ...`);
       data.append("file", importFile as File);
     }
@@ -95,34 +89,30 @@ const ImportDataSegment = (props: Props) => {
     }
   };
 
-
   return (
-    <SettingsSegment
-      id="import-data"
-      title="Import Data"
-    >
+    <SettingsSegment id="import-data" title="Import Data">
       <>
         {/* Error messages row */}
-        {
-          importState !== undefined && importState.error &&
-          (
-            <div className="row">
-              <div className="col">
-                <div className="alert alert-danger" role="alert">
-                  {importState.error}
-                </div>
+        {importState !== undefined && importState.error && (
+          <div className="row">
+            <div className="col">
+              <div className="alert alert-danger" role="alert">
+                {importState.error}
               </div>
             </div>
-          )
-        }
-
+          </div>
+        )}
 
         <ul className="nav nav-tabs" id="myTab" role="tablist">
           <li className="nav-item">
-            <a className="nav-link active" id="google-sheets-tab" data-toggle="tab" href="#google-sheets" role="tab" aria-controls="google-sheets" aria-selected="true">Google Sheets</a>
+            <a className="nav-link active" id="google-sheets-tab" data-toggle="tab" href="#google-sheets" role="tab" aria-controls="google-sheets" aria-selected="true">
+              Google Sheets
+            </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" id="spreadsheet-file-tab" data-toggle="tab" href="#spreadsheet-file" role="tab" aria-controls="spreadsheet file" aria-selected="false">Spreadsheet File</a>
+            <a className="nav-link" id="spreadsheet-file-tab" data-toggle="tab" href="#spreadsheet-file" role="tab" aria-controls="spreadsheet file" aria-selected="false">
+              Spreadsheet File
+            </a>
           </li>
         </ul>
         <div className="tab-content" id="myTabContent">
@@ -140,11 +130,7 @@ const ImportDataSegment = (props: Props) => {
                 {/* Input row */}
                 <div className="row">
                   <div className="col">
-                    <FormInput
-                      value={importURL}
-                      placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0"
-                      onChange={setImportSpreadsheetURL}
-                    />
+                    <FormInput value={importURL} placeholder="e.g. https://docs.google.com/spreadsheets/d/1EKOcnPpaXtWpE2T56OtxdFJFF29lK4dHaxLghHAkyHY/edit#gid=0" onChange={setImportSpreadsheetURL} />
                   </div>
                 </div>
               </div>
@@ -161,10 +147,7 @@ const ImportDataSegment = (props: Props) => {
             {/* Input Row */}
             <div className="row">
               <div className="col">
-                <FileSelect
-                  types={["xlsx"]}
-                  onSelect={setImportFile}
-                />
+                <FileSelect types={["xlsx"]} onSelect={setImportFile} />
               </div>
             </div>
           </div>
@@ -197,37 +180,21 @@ const ImportDataSegment = (props: Props) => {
           {/* Import Button */}
           <div className="row">
             <div className="col">
-              <Button
-                buttonType={ButtonType.Secondary}
-                disabled={(importState !== undefined && importState.importing)}
-                onClick={performImport}
-                preventDefault
-              >
+              <Button buttonType={ButtonType.Secondary} disabled={importState !== undefined && importState.importing} onClick={performImport} preventDefault>
                 <span>Import</span>
               </Button>
             </div>
           </div>
-          {
-            importState.importing &&
-            (
-              <div className="row">
-                <div className="col">
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-bar-striped progress-bar-animated"
-                      role="progressbar"
-                      aria-valuenow={100}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      style={{ width: "100%" }}
-                    />
-                  </div>
+          {importState.importing && (
+            <div className="row">
+              <div className="col">
+                <div className="progress">
+                  <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100} style={{ width: "100%" }} />
                 </div>
               </div>
-            )
-          }
+            </div>
+          )}
         </div>
-
       </>
     </SettingsSegment>
   );
@@ -241,7 +208,4 @@ export const mapDispatchToProps = {
   importSpreadsheet,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ImportDataSegment);
+export default connect(mapStateToProps, mapDispatchToProps)(ImportDataSegment);

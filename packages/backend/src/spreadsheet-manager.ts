@@ -370,24 +370,24 @@
 //   public async convertSpreadsheetToJson(
 //     path: string
 //   ): Promise<{ sheetName: string; json: any }[]> {
-//     Logger.debug("Converting spreadsheet to json...");
+//     logger.debug("Converting spreadsheet to json...");
 
-//     Logger.debug("Ensuring file exists...");
+//     logger.debug("Ensuring file exists...");
 //     if (!(await FileUtils.checkExists(path))) throw new Error();
 
 //     const result: { sheetName: string; json: any }[] = [];
 
-//     Logger.debug("Reading file...");
+//     logger.debug("Reading file...");
 //     const workbook = XLSX.readFile(path);
-//     Logger.debug("Finished reading file");
+//     logger.debug("Finished reading file");
 //     const sheets = workbook.SheetNames;
 
-//     Logger.debug("Converting each sheet to json");
+//     logger.debug("Converting each sheet to json");
 //     for (const sheet of sheets) {
 //       const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
 //       result.push({ sheetName: sheet, json: json });
 //     }
-//     Logger.debug("Finished converting sheets to json");
+//     logger.debug("Finished converting sheets to json");
 
 //     return result;
 //   }
@@ -401,7 +401,7 @@
 //       throw new Error(
 //         `Can not import spreadsheet because the file does not exist: ${path}`
 //       );
-//     Logger.debug(
+//     logger.debug(
 //       `Importing ${SpreadsheetType[type]} spreadsheet as mode ${SpreadsheetImportMode[importMode]} from ${path}`
 //     );
 
@@ -411,7 +411,7 @@
 //       case SpreadsheetType.ClassroomChecks: {
 //         const result = await this.importClassroomChecks(path);
 
-//         Logger.debug(
+//         logger.debug(
 //           "Import result:" +
 //             `\nBuildings: ${result.buildings.length}` +
 //             `\nRooms: ${result.rooms.length}`
@@ -419,23 +419,23 @@
 
 //         switch (+importMode) {
 //           default:
-//             Logger.debug(
+//             logger.debug(
 //               "Default import mode. This fires if an invalid import mode is specified."
 //             );
 //             break;
 //           case SpreadsheetImportMode.Append:
-//             Logger.debug("Append data");
+//             logger.debug("Append data");
 //             break;
 //           case SpreadsheetImportMode.ClearAndWrite:
-//             Logger.debug("Clearing all data");
+//             logger.debug("Clearing all data");
 //             this.app.buildingManager.clear();
 //             this.app.roomManager.clear();
-//             Logger.debug("Writing new data");
+//             logger.debug("Writing new data");
 //             this.app.buildingManager.addBuildings(result.buildings);
 //             this.app.roomManager.addRooms(result.rooms);
 //             break;
 //           case SpreadsheetImportMode.OverwriteAndAppend:
-//             Logger.debug("Overwrite and Append data");
+//             logger.debug("Overwrite and Append data");
 //             break;
 //         }
 
@@ -443,30 +443,30 @@
 //       }
 //       case SpreadsheetType.Troubleshooting: {
 //         const result = await this.importTroubleshooting(path);
-//         Logger.debug(
+//         logger.debug(
 //           "Import result:" +
 //             `\nTroubleshooting Data: ${result.troubleshootingData.length}`
 //         );
 
 //         switch (+importMode) {
 //           default:
-//             Logger.debug(
+//             logger.debug(
 //               "Default import mode. This fires if an invalid import mode is specified."
 //             );
 //             break;
 //           case SpreadsheetImportMode.Append:
-//             Logger.debug("Append data");
+//             logger.debug("Append data");
 //             break;
 //           case SpreadsheetImportMode.ClearAndWrite:
-//             Logger.debug("Clearing all data");
+//             logger.debug("Clearing all data");
 //             this.app.troubleshootingDataManager.clear();
-//             Logger.debug("Writing new data");
+//             logger.debug("Writing new data");
 //             this.app.troubleshootingDataManager.addAll(
 //               result.troubleshootingData
 //             );
 //             break;
 //           case SpreadsheetImportMode.OverwriteAndAppend:
-//             Logger.debug("Overwrite and Append data");
+//             logger.debug("Overwrite and Append data");
 //             break;
 //         }
 //         break;
@@ -537,7 +537,7 @@
 //         importedBuildings.push(factory.build());
 //       }
 //     } else {
-//       Logger.debug("No buildings sheet defined");
+//       logger.debug("No buildings sheet defined");
 //     }
 
 //     // rooms
@@ -906,7 +906,7 @@
 //         }
 //       }
 //     } else {
-//       Logger.info("No rooms sheet defined");
+//       logger.info("No rooms sheet defined");
 //     }
 
 //     if (ss.roomsListSheetName !== undefined) {
@@ -948,7 +948,7 @@
 //                 .withNumber(room.number)
 //                 .build()
 //             );
-//             Logger.debug(
+//             logger.debug(
 //               `Adding incomplete room: ${room.buildingName} ${room.number}`
 //             );
 //           }
@@ -1080,7 +1080,7 @@
 //         importedTroubleshootingData.push(dataFactory.build());
 //       }
 //     } else {
-//       Logger.error("No troubleshooting sheet defined");
+//       logger.error("No troubleshooting sheet defined");
 //     }
 
 //     return {
