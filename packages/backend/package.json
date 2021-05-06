@@ -45,7 +45,7 @@
     "node-fetch": "^2.6.0",
     "path": "^0.12.7",
     "request": "^2.88.2",
-    "underscore": "^1.10.2",
+    "underscore": "^1.12.1",
     "xlsx": "^0.15.6"
   },
   "devDependencies": {
